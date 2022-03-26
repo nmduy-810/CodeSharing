@@ -6,6 +6,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeSharing.Utilities", "sr
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeSharing.Server", "src\CodeSharing.Server\CodeSharing.Server.csproj", "{39B0F4C4-20BA-4E9B-8C92-759FD339BFE9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeSharing.WebPortal", "src\CodeSharing.WebPortal\CodeSharing.WebPortal.csproj", "{15B8D38D-8E45-44EB-88B2-1AF69F70DE79}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,5 +26,9 @@ Global
 		{39B0F4C4-20BA-4E9B-8C92-759FD339BFE9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{39B0F4C4-20BA-4E9B-8C92-759FD339BFE9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{39B0F4C4-20BA-4E9B-8C92-759FD339BFE9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{15B8D38D-8E45-44EB-88B2-1AF69F70DE79}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{15B8D38D-8E45-44EB-88B2-1AF69F70DE79}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{15B8D38D-8E45-44EB-88B2-1AF69F70DE79}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{15B8D38D-8E45-44EB-88B2-1AF69F70DE79}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
