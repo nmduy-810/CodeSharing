@@ -24,8 +24,9 @@ public class CategoriesController : BaseController
             ParentCategoryId = x.ParentCategoryId,
             Title = x.Title,
             Slug = x.Slug,
-            SortOrder = x.SortOrder
-        }).ToListAsync();
+            SortOrder = x.SortOrder,
+            IsParent = x.IsParent
+        }).OrderBy(x => x.SortOrder).ToListAsync();
 
         return Ok(items);
     }

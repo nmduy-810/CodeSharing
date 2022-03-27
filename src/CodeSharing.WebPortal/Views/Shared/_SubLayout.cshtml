@@ -1,0 +1,15 @@
+@{
+    Layout = "_Layout";
+}
+
+@section Scripts {
+    @await RenderSectionAsync("scripts", required:false)
+}
+
+@section customHeader {
+    @await Component.InvokeAsync("Header", "Custom")
+}
+
+<div class="container-xl">
+    @RenderBody()
+</div>

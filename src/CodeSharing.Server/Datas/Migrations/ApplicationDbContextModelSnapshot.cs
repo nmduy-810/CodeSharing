@@ -33,6 +33,9 @@ namespace CodeSharing.Server.Datas.Migrations
                     b.Property<DateTime>("CreateDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<bool>("IsParent")
+                        .HasColumnType("bit");
+
                     b.Property<DateTime?>("LastModifiedDate")
                         .HasColumnType("datetime2");
 
