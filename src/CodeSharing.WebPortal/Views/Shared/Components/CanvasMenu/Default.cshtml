@@ -1,0 +1,56 @@
+@model CanvasMenuViewModel
+
+<div class="canvas-menu d-flex align-items-end flex-column">
+  <!-- close button -->
+  <button type="button" class="btn-close" aria-label="Close"></button>
+  <!-- logo -->
+  <div class="logo">
+    <a href="/" class="d-block text-logo">CodeSharing<span class="dot">.</span></a>
+  </div>
+  <!-- menu -->
+  <nav>
+    <ul class="vertical-menu">
+      <li class="active">
+        <a href="/">Home</a>
+      </li>
+      
+       @foreach (var item in Model.Categories)
+       {
+         var url = "/category/" + item.Slug + "-" + item.Id;
+         if (item.ParentCategoryId == null && item.IsParent)
+         {
+           <li>
+             <a href="@url">@item.Title</a>
+             <ul class="submenu">
+               @foreach (var subItem in Model.Categories.Where(x => x.ParentCategoryId == item.Id))
+               {
+                 var subUrl = "/category/" + subItem.Slug + "-" + subItem.Id;
+                 <li>
+                   <a href="@subUrl">@subItem.Title</a>
+                 </li>
+               }
+             </ul>
+           </li>
+         }
+         else if (item.ParentCategoryId == null && !item.IsParent)
+         {
+           <li>
+             <a href="@url">@item.Title</a>
+           </li>
+         }
+       }
+     
+      <li>
+        <a href="/about">About</a>
+      </li>
+      
+      <li>
+        <a href="/contact">Contact</a>
+      </li>
+    </ul>
+  </nav>
+  <!-- social icons -->
+  <ul class="social-icons list-unstyled list-inline mb-0 mt-auto w-100">
+    <partial name="_SocialIcons"/>
+  </ul>
+</div>

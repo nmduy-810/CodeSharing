@@ -12,6 +12,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\CodeSharing.Utilities\CodeSharing.Utilities.csproj" />
       <ProjectReference Include="..\CodeSharing.ViewModels\CodeSharing.ViewModels.csproj" />
     </ItemGroup>
 

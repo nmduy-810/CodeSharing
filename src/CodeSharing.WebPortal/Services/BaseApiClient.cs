@@ -27,4 +27,19 @@ public class BaseApiClient
 
         return datas;
     }
+
+    protected async Task<T> GetAsync<T>(string url)
+    {
+        var client = _httpClientFactory.CreateClient();
+        client.BaseAddress = new Uri(_configuration["ServerUrl"]);
+
+        var response = await client.GetAsync(url);
+
+        var body = await response.Content.ReadAsStringAsync();
+
+        var datas = JsonConvert.DeserializeObject<T>(body);
+
+        return datas;
+
+    }
 }
