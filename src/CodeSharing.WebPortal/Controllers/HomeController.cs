@@ -9,15 +9,25 @@ namespace CodeSharing.WebPortal.Controllers;
 public class HomeController : Controller
 {
     private readonly ILogger<HomeController> _logger;
+    private readonly IPostApiClient _postApiClient;
 
-    public HomeController(ILogger<HomeController> logger)
+    public HomeController(ILogger<HomeController> logger, IPostApiClient postApiClient)
     {
         _logger = logger;
+        _postApiClient = postApiClient;
     }
 
-    public IActionResult Index()
+    public async Task<IActionResult> Index()
     {
-        return View();
+        var latestPosts = await _postApiClient.GetLatestPosts(10);
+        var popularPosts = await _postApiClient.GetPopularPosts(10);
+
+        var items = new HomeViewModel()
+        {
+            LatestPosts = latestPosts,
+        };
+        
+        return View(items);
     }
 
     public IActionResult Privacy()

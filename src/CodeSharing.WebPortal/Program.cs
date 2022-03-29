@@ -1,3 +1,4 @@
+using CodeSharing.WebPortal.Config;
 using CodeSharing.WebPortal.Interfaces;
 using CodeSharing.WebPortal.Services;
 using Microsoft.Extensions.DependencyInjection.Extensions;
@@ -20,6 +21,7 @@ if (enviroment == Environments.Development)
 // Add DI Containers
 builder.Services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddTransient<ICategoryApiClient, CategoryApiClient>();
+builder.Services.AddTransient<IPostApiClient, PostApiClient>();
 
 var app = builder.Build();
 
@@ -38,8 +40,6 @@ app.UseRouting();
 
 app.UseAuthorization();
 
-app.MapControllerRoute(
-    name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+app.UseEndpoints(RouteMapConfig.RoutingBuilder);
 
 app.Run();

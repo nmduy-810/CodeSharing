@@ -1,10 +1,31 @@
-﻿@model HomeViewModel
+@model ListByCategoryIdViewModel
 
+@{
+    Layout = "_Layout";
+}
+
+<section class="page-header">
+  <div class="container-xl">
+    <div class="text-center">
+      <h1 class="mt-0 mb-2">@Html.Raw(Model.Category.Title)</h1>
+      <nav aria-label="breadcrumb">
+        <ol class="breadcrumb justify-content-center mb-0">
+          <li class="breadcrumb-item">
+            <a href="/">Home</a>
+          </li>
+          <li class="breadcrumb-item active" aria-current="page">@Html.Raw(Model.Category.Title)</li>
+        </ol>
+      </nav>
+    </div>
+  </div>
+</section>
+
+<section class="main-content">
 <div class="container-xl">
   <div class="row gy-4">
     <div class="col-lg-8">
-    <div class="row gy-4">
-      @foreach (var item in Model.LatestPosts)
+      <div class="row gy-4">
+      @foreach (var item in Model.Data.Items)
       {
         var detailPostUrl = "/post/" + item.Slug + "-" + item.Id + "/";
         var postsByCategoryUrl = "/category/" + item.CategorySlug + "-" + item.CategoryId;
@@ -28,7 +49,7 @@
                   <a href="#">
                     <img src="~/images/other/author-sm.png" class="author" alt="author" />Katen Doe </a>
                 </li>
-                <li class="list-inline-item">@item.CreateDate.ToString("dd MMMM, yyyy")</li>
+                <li class="list-inline-item">29 March 2021</li>
               </ul>
               <h5 class="post-title mb-3 mt-3">
                 <a href="@detailPostUrl">@Html.Raw(item.Title)</a>
@@ -84,24 +105,15 @@
           </div>
         </div>
       }
+      </div>
+      @await Component.InvokeAsync("Pager", Model.Data)
     </div>
-      <nav>
-        <ul class="pagination justify-content-center">
-          <li class="page-item active" aria-current="page">
-            <span class="page-link">1</span>
-          </li>
-          <li class="page-item">
-            <a class="page-link" href="#">2</a>
-          </li>
-          <li class="page-item">
-            <a class="page-link" href="#">3</a>
-          </li>
-        </ul>
-      </nav>
-    </div>
+
     <div class="col-lg-4">
       <!-- sidebar -->
       @await Component.InvokeAsync("SideBar", "Default")
     </div>
+
   </div>
 </div>
+</section>

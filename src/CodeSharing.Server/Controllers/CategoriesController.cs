@@ -30,4 +30,26 @@ public class CategoriesController : BaseController
 
         return Ok(items);
     }
+
+    [HttpGet("{id:int}")]
+    public async Task<IActionResult> GetById(int id)
+    {
+        var category = await _context.Categories.FindAsync(id);
+        if (category == null)
+        {
+            return NotFound();
+        }
+
+        var items = new CategoryVm()
+        {
+            Id = category.Id,
+            ParentCategoryId = category.ParentCategoryId,
+            Title = category.Title,
+            Slug = category.Slug,
+            SortOrder = category.SortOrder,
+            IsParent = category.IsParent
+        };
+
+        return Ok(items);
+    }
 }

@@ -16,15 +16,17 @@
           </li>
           @foreach (var item in Model.Categories)
           {
+            var url = "/category/" + item.Slug + "-" + item.Id;
             if (item.ParentCategoryId == null && item.IsParent)
             {
               <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#">@item.Title</a>
+                <a class="nav-link dropdown-toggle" href="@url">@item.Title</a>
                 <ul class="dropdown-menu">
                   @foreach (var subItem in Model.Categories.Where(x => x.ParentCategoryId == item.Id))
                   {
+                    var subUrl = "/category/" + subItem.Slug + "-" + subItem.Id;
                     <li>
-                      <a class="dropdown-item" href="#">@subItem.Title</a>
+                      <a class="dropdown-item" href="@subUrl">@subItem.Title</a>
                     </li>
                   }
                 </ul>
@@ -33,46 +35,26 @@
             else if (item.ParentCategoryId == null && !item.IsParent)
             {
               <li class="nav-item">
-                <a class="nav-link" href="#">@item.Title</a>
+                <a class="nav-link" href="@url">@item.Title</a>
               </li>
             }
           }
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/about">About</a>
+          </li>
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/contact">Contact</a>
+          </li>
+          
         </ul>
       </div>
       <!-- header right section -->
       <div class="header-right">
         <!-- social icons -->
         <ul class="social-icons list-unstyled list-inline mb-0">
-          <li class="list-inline-item">
-            <a href="#">
-              <i class="fab fa-facebook-f"></i>
-            </a>
-          </li>
-          <li class="list-inline-item">
-            <a href="#">
-              <i class="fab fa-twitter"></i>
-            </a>
-          </li>
-          <li class="list-inline-item">
-            <a href="#">
-              <i class="fab fa-instagram"></i>
-            </a>
-          </li>
-          <li class="list-inline-item">
-            <a href="#">
-              <i class="fab fa-pinterest"></i>
-            </a>
-          </li>
-          <li class="list-inline-item">
-            <a href="#">
-              <i class="fab fa-medium"></i>
-            </a>
-          </li>
-          <li class="list-inline-item">
-            <a href="#">
-              <i class="fab fa-youtube"></i>
-            </a>
-          </li>
+          <partial name="_SocialIcons"/>
         </ul>
         <!-- header buttons -->
         <div class="header-buttons">
@@ -87,6 +69,3 @@
     </div>
   </nav>
 </header>
-
-<!-- page header -->
-@await Component.InvokeAsync("PageHeader", "Default")
