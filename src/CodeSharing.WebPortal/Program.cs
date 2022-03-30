@@ -22,6 +22,7 @@ if (enviroment == Environments.Development)
 builder.Services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddTransient<ICategoryApiClient, CategoryApiClient>();
 builder.Services.AddTransient<IPostApiClient, PostApiClient>();
+builder.Services.AddTransient<ILabelApiClient, LabelApiClient>();
 
 var app = builder.Build();
 

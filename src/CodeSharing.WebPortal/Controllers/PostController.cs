@@ -8,12 +8,14 @@ public class PostController : Controller
 {
     private readonly IPostApiClient _postApiClient;
     private readonly ICategoryApiClient _categoryApiClient;
+    private readonly ILabelApiClient _labelApiClient;
     private readonly IConfiguration _configuration;
     
-    public PostController(IPostApiClient postApiClient, ICategoryApiClient categoryApiClient, IConfiguration configuration)
+    public PostController(IPostApiClient postApiClient, ICategoryApiClient categoryApiClient, ILabelApiClient labelApiClient, IConfiguration configuration)
     {
         _postApiClient = postApiClient;
         _categoryApiClient = categoryApiClient;
+        _labelApiClient = labelApiClient;
         _configuration = configuration;
     }
     
@@ -38,6 +40,20 @@ public class PostController : Controller
         {
             Data = data,
             Category = category
+        };
+
+        return View(items);
+    }
+
+    public async Task<IActionResult> ListByTagId(string id, int page = 1)
+    {
+        var pageSize = int.Parse(_configuration["PageSize"]);
+        var label = await _labelApiClient.GetById(id);
+        var data = await _postApiClient.GetPostsByTagId(id, page, pageSize);
+        var items = new ListByTagIdViewModel()
+        {
+            Data = data,
+            Label = label
         };
 
         return View(items);

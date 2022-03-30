@@ -190,11 +190,11 @@
       <img src="~/images/wave.svg" class="wave" alt="wave" />
     </div>
     <div class="widget-content">
-      <a href="#" class="tag">#Trending</a>
-      <a href="#" class="tag">#Video</a>
-      <a href="#" class="tag">#Featured</a>
-      <a href="#" class="tag">#Gallery</a>
-      <a href="#" class="tag">#Celebrities</a>
+      @foreach (var item in Model.PopularLabels)
+      {
+        var url = "/tag/" + item.Id;
+        <a href="@url" class="tag">#@Html.Raw(item.Name)</a>
+      }
     </div>
   </div>
 </div>
