@@ -197,4 +197,31 @@ public class PostsController : BaseController
 
         return Ok(pagination);
     }
+
+    [HttpGet("total-post")]
+    public async Task<IActionResult> GetTotalPostInCategory()
+    {
+        var query = from c in _context.Categories
+            join p in _context.Posts on c.Id equals p.CategoryId
+            group new { c.Id, c.Title, c.Slug } by new { c.Id, c.Title, c.Slug }
+            into g
+            select new
+            {
+                g.Key.Id,
+                g.Key.Title,
+                g.Key.Slug,
+                Count = g.Count()
+            };
+        
+        var items = await query.Select(x => new PostQuickVm()
+        {
+            Id = x.Id,
+            Title = x.Title,
+            Slug = x.Slug,
+            TotalPost = x.Count
+        }).ToListAsync();
+
+        return Ok(items);
+    }
+
 }

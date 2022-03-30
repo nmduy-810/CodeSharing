@@ -35,7 +35,11 @@ public class PostApiClient : BaseApiClient, IPostApiClient
 
     public async Task<Pagination<PostQuickVm>> GetPostsByTagId(string tagId, int pageIndex, int pageSize)
     {
-        var apiUrl = $"/api/posts/tags/{tagId}?pageIndex={pageIndex}&pageSize={pageSize}";
-        return await GetAsync<Pagination<PostQuickVm>>(apiUrl);
+        return await GetAsync<Pagination<PostQuickVm>>($"/api/posts/tags/{tagId}?pageIndex={pageIndex}&pageSize={pageSize}");
+    }
+
+    public async Task<List<PostQuickVm>> GetTotalPostInCategory()
+    {
+        return await GetListAsync<PostQuickVm>($"/api/posts/total-post");
     }
 }

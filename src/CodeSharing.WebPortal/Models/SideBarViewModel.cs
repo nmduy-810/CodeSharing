@@ -7,4 +7,5 @@ public class SideBarViewModel
 {
     public List<PostQuickVm> PopularPosts { get; set; }
     public List<LabelVm> PopularLabels { get; set; }
+    public List<PostQuickVm> ExplorerTopics { get; set; }
 }
