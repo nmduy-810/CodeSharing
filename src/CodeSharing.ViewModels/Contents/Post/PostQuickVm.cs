@@ -10,6 +10,7 @@ public class PostQuickVm
     public string Content { get; set; }
     public string Slug { get; set; }
     public int? ViewCount { get; set; } = 0;
+    public int? TotalPost { get; set; }
     public DateTime CreateDate { get; set; }
     public int? NumberOfVotes { get; set; } = 0;
     public int? NumberOfComments { get; set; } = 0;

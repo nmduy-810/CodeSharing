@@ -18,10 +18,12 @@ public class SideBarViewComponent : ViewComponent
     {
         var popularPosts = await _postApiClient.GetPopularPosts(3);
         var popularLabels = await _labelApiClient.GetPopularLabels(5);
+        var explorerTopics = await _postApiClient.GetTotalPostInCategory();
         var items = new SideBarViewModel()
         {
             PopularPosts = popularPosts,
-            PopularLabels = popularLabels
+            PopularLabels = popularLabels,
+            ExplorerTopics = explorerTopics
         };
 
         return View("Default", items);
