@@ -9,4 +9,6 @@ public interface IPostApiClient
     Task<List<PostQuickVm>> GetPopularPosts(int take);
     Task<PostVm> GetDetailsPost(int id);
     Task<Pagination<PostQuickVm>> GetPostsByCategoryId(int categoryId, int pageIndex, int pageSize);
+    Task<Pagination<PostQuickVm>> GetPostsByTagId(string tagId, int pageIndex, int pageSize);
+
 }

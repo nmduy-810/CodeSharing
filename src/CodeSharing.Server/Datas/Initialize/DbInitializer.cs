@@ -199,6 +199,185 @@ public class DbInitializer
                     NumberOfReports = 0,
                     NumberOfVotes = 0,
                     ViewCount = 0
+                },
+                new()
+                {
+                    Id = 11,
+                    CategoryId = 1,
+                    Title = "Lorem Ipsum 11",
+                    Content =
+                        "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, " +
+                        "when an unknown printer took a galley of type and scrambled it to make a type specimen book. ",
+                    Slug = "lorem-ipsum-11",
+                    Note = "",
+                    Labels = "test",
+                    CreateDate = DateTime.Now,
+                    LastModifiedDate = DateTime.Now,
+                    NumberOfComments = 0,
+                    NumberOfReports = 0,
+                    NumberOfVotes = 0,
+                    ViewCount = 0
+                },
+                new()
+                {
+                    Id = 12,
+                    CategoryId = 2,
+                    Title = "Lorem Ipsum 12",
+                    Content =
+                        "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, " +
+                        "when an unknown printer took a galley of type and scrambled it to make a type specimen book. ",
+                    Slug = "lorem-ipsum-12",
+                    Note = "",
+                    Labels = "test",
+                    CreateDate = DateTime.Now,
+                    LastModifiedDate = DateTime.Now,
+                    NumberOfComments = 0,
+                    NumberOfReports = 0,
+                    NumberOfVotes = 0,
+                    ViewCount = 0
+                },
+                new()
+                {
+                    Id = 13,
+                    CategoryId = 3,
+                    Title = "Lorem Ipsum 13",
+                    Content =
+                        "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, " +
+                        "when an unknown printer took a galley of type and scrambled it to make a type specimen book. ",
+                    Slug = "lorem-ipsum-13",
+                    Note = "",
+                    Labels = "test",
+                    CreateDate = DateTime.Now,
+                    LastModifiedDate = DateTime.Now,
+                    NumberOfComments = 0,
+                    NumberOfReports = 0,
+                    NumberOfVotes = 0,
+                    ViewCount = 0
+                },
+                new()
+                {
+                    Id = 14,
+                    CategoryId = 4,
+                    Title = "Lorem Ipsum 14",
+                    Content =
+                        "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, " +
+                        "when an unknown printer took a galley of type and scrambled it to make a type specimen book. ",
+                    Slug = "lorem-ipsum-14",
+                    Note = "",
+                    Labels = "test",
+                    CreateDate = DateTime.Now,
+                    LastModifiedDate = DateTime.Now,
+                    NumberOfComments = 0,
+                    NumberOfReports = 0,
+                    NumberOfVotes = 0,
+                    ViewCount = 0
+                },
+                new()
+                {
+                    Id = 15,
+                    CategoryId = 5,
+                    Title = "Lorem Ipsum 15",
+                    Content =
+                        "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, " +
+                        "when an unknown printer took a galley of type and scrambled it to make a type specimen book. ",
+                    Slug = "lorem-ipsum-15",
+                    Note = "",
+                    Labels = "test",
+                    CreateDate = DateTime.Now,
+                    LastModifiedDate = DateTime.Now,
+                    NumberOfComments = 0,
+                    NumberOfReports = 0,
+                    NumberOfVotes = 0,
+                    ViewCount = 0
+                },
+                new()
+                {
+                    Id = 16,
+                    CategoryId = 4,
+                    Title = "Lorem Ipsum 16",
+                    Content =
+                        "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, " +
+                        "when an unknown printer took a galley of type and scrambled it to make a type specimen book. ",
+                    Slug = "lorem-ipsum-16",
+                    Note = "",
+                    Labels = "test",
+                    CreateDate = DateTime.Now,
+                    LastModifiedDate = DateTime.Now,
+                    NumberOfComments = 0,
+                    NumberOfReports = 0,
+                    NumberOfVotes = 0,
+                    ViewCount = 0
+                },
+                new()
+                {
+                    Id = 17,
+                    CategoryId = 2,
+                    Title = "Lorem Ipsum 17",
+                    Content =
+                        "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, " +
+                        "when an unknown printer took a galley of type and scrambled it to make a type specimen book. ",
+                    Slug = "lorem-ipsum-17",
+                    Note = "",
+                    Labels = "test",
+                    CreateDate = DateTime.Now,
+                    LastModifiedDate = DateTime.Now,
+                    NumberOfComments = 0,
+                    NumberOfReports = 0,
+                    NumberOfVotes = 0,
+                    ViewCount = 0
+                },
+                new()
+                {
+                    Id = 18,
+                    CategoryId = 2,
+                    Title = "Lorem Ipsum 18",
+                    Content =
+                        "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, " +
+                        "when an unknown printer took a galley of type and scrambled it to make a type specimen book. ",
+                    Slug = "lorem-ipsum-18",
+                    Note = "",
+                    Labels = "test",
+                    CreateDate = DateTime.Now,
+                    LastModifiedDate = DateTime.Now,
+                    NumberOfComments = 0,
+                    NumberOfReports = 0,
+                    NumberOfVotes = 0,
+                    ViewCount = 0
+                },new()
+                {
+                    Id = 19,
+                    CategoryId = 3,
+                    Title = "Lorem Ipsum 19",
+                    Content =
+                        "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, " +
+                        "when an unknown printer took a galley of type and scrambled it to make a type specimen book. ",
+                    Slug = "lorem-ipsum-19",
+                    Note = "",
+                    Labels = "test",
+                    CreateDate = DateTime.Now,
+                    LastModifiedDate = DateTime.Now,
+                    NumberOfComments = 0,
+                    NumberOfReports = 0,
+                    NumberOfVotes = 0,
+                    ViewCount = 0
+                },
+                new()
+                {
+                    Id = 20,
+                    CategoryId = 3,
+                    Title = "Lorem Ipsum 20",
+                    Content =
+                        "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, " +
+                        "when an unknown printer took a galley of type and scrambled it to make a type specimen book. ",
+                    Slug = "lorem-ipsum-20",
+                    Note = "",
+                    Labels = "test",
+                    CreateDate = DateTime.Now,
+                    LastModifiedDate = DateTime.Now,
+                    NumberOfComments = 0,
+                    NumberOfReports = 0,
+                    NumberOfVotes = 0,
+                    ViewCount = 0
                 }
             });
             
@@ -213,6 +392,41 @@ public class DbInitializer
                     {
                         Id = "test",
                         Name = "test",
+                    },
+                    new()
+                    {
+                        Id = "tech",
+                        Name = "tech",
+                    },
+                    new()
+                    {
+                        Id = "programming",
+                        Name = "programming",
+                    },
+                    new()
+                    {
+                        Id = "development",
+                        Name = "development",
+                    },
+                    new()
+                    {
+                        Id = "angular",
+                        Name = "angular",
+                    },
+                    new()
+                    {
+                        Id = "csharp",
+                        Name = "c#",
+                    },
+                    new()
+                    {
+                        Id = "net",
+                        Name = "net",
+                    },
+                    new()
+                    {
+                        Id = "sql",
+                        Name = "sql",
                     }
                 });
             }
@@ -231,23 +445,98 @@ public class DbInitializer
                     },
                     new()
                     {
+                        PostId = 1,
+                        LabelId = "csharp",
+                    },
+                    new()
+                    {
+                        PostId = 1,
+                        LabelId = "programming",
+                    },
+                    new()
+                    {
+                        PostId = 1,
+                        LabelId = "tech",
+                    },
+                    new()
+                    {
                         PostId = 2,
-                        LabelId = "test"
+                        LabelId = "development",
+                    },
+                    new()
+                    {
+                        PostId = 2,
+                        LabelId = "csharp",
                     },
                     new()
                     {
                         PostId = 3,
-                        LabelId = "test"
+                        LabelId = "development",
+                    },
+                    new()
+                    {
+                        PostId = 3,
+                        LabelId = "csharp",
                     },
                     new()
                     {
                         PostId = 4,
-                        LabelId = "test"
+                        LabelId = "development",
+                    },
+                    new()
+                    {
+                        PostId = 4,
+                        LabelId = "csharp",
                     },
                     new()
                     {
                         PostId = 5,
-                        LabelId = "test"
+                        LabelId = "development",
+                    },
+                    new()
+                    {
+                        PostId = 6,
+                        LabelId = "csharp",
+                    },
+                    new()
+                    {
+                        PostId = 7,
+                        LabelId = "development",
+                    },
+                    new()
+                    {
+                        PostId = 7,
+                        LabelId = "csharp",
+                    },
+                    new()
+                    {
+                        PostId = 8,
+                        LabelId = "development",
+                    },
+                    new()
+                    {
+                        PostId = 8,
+                        LabelId = "csharp",
+                    },
+                    new()
+                    {
+                        PostId = 9,
+                        LabelId = "development",
+                    },
+                    new()
+                    {
+                        PostId = 9,
+                        LabelId = "csharp",
+                    },
+                    new()
+                    {
+                        PostId = 9,
+                        LabelId = "programming",
+                    },
+                    new()
+                    {
+                        PostId = 10,
+                        LabelId = "programming",
                     },
                 });
             }

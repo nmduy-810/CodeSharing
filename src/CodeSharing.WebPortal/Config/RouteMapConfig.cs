@@ -27,5 +27,10 @@ public static class RouteMapConfig
             name: "listByCategoryId",
             pattern: "/category/{categorySlug}-{id}",
             new { controller = "Post", action = "ListByCategoryId" });
+
+        endpoints.MapControllerRoute(
+            name: "listByTagId",
+            pattern: "/tag/{id}",
+            new { controller = "Post", action = "ListByTagId" });
     }
 }

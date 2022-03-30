@@ -38,7 +38,9 @@ public class PostsController : BaseController
             orderby p.CreateDate descending
             select new { p, c };
 
-        var items = await posts.Take(take).Select(x => new PostQuickVm()
+        var items = await posts
+            .Take(take)
+            .Select(x => new PostQuickVm()
         {
             Id = x.p.Id,
             CategoryId = x.p.CategoryId,
@@ -128,7 +130,8 @@ public class PostsController : BaseController
         }
 
         var totalRecords = await query.CountAsync();
-        var items = await query.Skip((pageIndex - 1) * pageSize)
+        var items = await query
+            .Skip((pageIndex - 1) * pageSize)
             .Take(pageSize)
             .Select(x => new PostQuickVm()
             {
@@ -145,6 +148,46 @@ public class PostsController : BaseController
             }).ToListAsync();
 
         var pagination = new Pagination<PostQuickVm>
+        {
+            PageSize = pageSize,
+            PageIndex = pageIndex,
+            Items = items,
+            TotalRecords = totalRecords
+        };
+
+        return Ok(pagination);
+    }
+
+    [HttpGet("tags/{tagId}")]
+    public async Task<IActionResult> GetPostsByTagId(string tagId, int pageIndex, int pageSize)
+    {
+        var query = from p in _context.Posts
+            join lip in _context.LabelInPosts on p.Id equals lip.PostId
+            join l in _context.Labels on lip.LabelId equals l.Id
+            join c in _context.Categories on p.CategoryId equals c.Id
+            where lip.LabelId == tagId
+            select new { p, l, c };
+
+        var totalRecords = await query.CountAsync();
+
+        var items = await query
+            .Skip((pageIndex - 1) * pageSize)
+            .Take(pageSize)
+            .Select(x => new PostQuickVm()
+            {
+                Id = x.p.Id,
+                CategoryId = x.p.CategoryId,
+                Slug = x.p.Slug,
+                Title = x.p.Title,
+                Content = x.p.Content,
+                CategorySlug = x.c.Slug,
+                CategoryTitle = x.c.Title,
+                NumberOfVotes = x.p.NumberOfVotes,
+                CreateDate = x.p.CreateDate,
+                NumberOfComments = x.p.NumberOfComments
+            }).ToListAsync();
+
+        var pagination = new Pagination<PostQuickVm>()
         {
             PageSize = pageSize,
             PageIndex = pageIndex,
