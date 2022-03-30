@@ -30,7 +30,7 @@ public class PostApiClient : BaseApiClient, IPostApiClient
     public async Task<Pagination<PostQuickVm>> GetPostsByCategoryId(int categoryId, int pageIndex, int pageSize)
     {
         return await GetAsync<Pagination<PostQuickVm>>(
-            $"/api/posts/paging?categoryId={categoryId}&pageIndex={pageIndex}&pageSize={pageSize}");
+            $"/api/posts/category/{categoryId}?pageIndex={pageIndex}&pageSize={pageSize}");
     }
 
     public async Task<Pagination<PostQuickVm>> GetPostsByTagId(string tagId, int pageIndex, int pageSize)
@@ -41,5 +41,10 @@ public class PostApiClient : BaseApiClient, IPostApiClient
     public async Task<List<PostQuickVm>> GetTotalPostInCategory()
     {
         return await GetListAsync<PostQuickVm>($"/api/posts/total-post");
+    }
+
+    public async Task<Pagination<PostQuickVm>> SearchPosts(string keyword, int pageIndex, int pageSize)
+    {
+        return await GetAsync<Pagination<PostQuickVm>>($"/api/posts/filter?filter={keyword}&pageIndex={pageIndex}&pageSize={pageSize}");
     }
 }

@@ -11,5 +11,5 @@ public interface IPostApiClient
     Task<Pagination<PostQuickVm>> GetPostsByCategoryId(int categoryId, int pageIndex, int pageSize);
     Task<Pagination<PostQuickVm>> GetPostsByTagId(string tagId, int pageIndex, int pageSize);
     Task<List<PostQuickVm>> GetTotalPostInCategory();
-
+    Task<Pagination<PostQuickVm>> SearchPosts(string keyword, int pageIndex, int pageSize);
 }

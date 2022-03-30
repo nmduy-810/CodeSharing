@@ -32,5 +32,10 @@ public static class RouteMapConfig
             name: "listByTagId",
             pattern: "/tag/{id}",
             new { controller = "Post", action = "ListByTagId" });
+        
+        endpoints.MapControllerRoute(
+            name: "Search",
+            pattern: "/search",
+            new { controller = "Post", action = "Search" });
     }
 }
