@@ -58,4 +58,16 @@ public class PostController : Controller
 
         return View(items);
     }
+    
+    public async Task<IActionResult> Search(string keyword, int page = 1)
+    {
+        var pageSize = int.Parse(_configuration["PageSize"]);
+        var data = await _postApiClient.SearchPosts(keyword, page, pageSize);
+        var items = new SearchPostViewModel()
+        {
+            Data = data,
+            Keyword = keyword
+        };
+        return View(items);
+    }
 }
