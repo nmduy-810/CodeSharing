@@ -1,8 +1,9 @@
+using CodeSharing.Utilities.Commons;
 using CodeSharing.ViewModels.Contents.Post;
 
 namespace CodeSharing.WebPortal.Models;
 
 public class HomeViewModel
 {
-    public List<PostQuickVm> LatestPosts { get; set; }
+    public Pagination<PostQuickVm> LatestPosts { get; set; }
 }

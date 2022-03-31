@@ -4,7 +4,7 @@
   <div class="row gy-4">
     <div class="col-lg-8">
     <div class="row gy-4">
-      @foreach (var item in Model.LatestPosts)
+      @foreach (var item in Model.LatestPosts.Items)
       {
         var detailPostUrl = "/post/" + item.Slug + "-" + item.Id + "/";
         var postsByCategoryUrl = "/category/" + item.CategorySlug + "-" + item.CategoryId;
@@ -85,19 +85,7 @@
         </div>
       }
     </div>
-      <nav>
-        <ul class="pagination justify-content-center">
-          <li class="page-item active" aria-current="page">
-            <span class="page-link">1</span>
-          </li>
-          <li class="page-item">
-            <a class="page-link" href="#">2</a>
-          </li>
-          <li class="page-item">
-            <a class="page-link" href="#">3</a>
-          </li>
-        </ul>
-      </nav>
+      @await Component.InvokeAsync("Pager", Model.LatestPosts)
     </div>
     <div class="col-lg-4">
       <!-- sidebar -->

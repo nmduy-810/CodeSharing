@@ -1,3 +1,4 @@
+using System.Text;
 using CodeSharing.Utilities.Commons;
 using CodeSharing.ViewModels.Contents.Post;
 using CodeSharing.WebPortal.Interfaces;
@@ -12,11 +13,6 @@ public class PostApiClient : BaseApiClient, IPostApiClient
         
     }
     
-    public async Task<List<PostQuickVm>> GetLatestPosts(int take)
-    {
-        return await GetListAsync<PostQuickVm>($"/api/posts/latest/{take}");
-    }
-
     public async Task<List<PostQuickVm>> GetPopularPosts(int take)
     {
         return await GetListAsync<PostQuickVm>($"/api/posts/popular/{take}");
@@ -45,6 +41,16 @@ public class PostApiClient : BaseApiClient, IPostApiClient
 
     public async Task<Pagination<PostQuickVm>> SearchPosts(string keyword, int pageIndex, int pageSize)
     {
-        return await GetAsync<Pagination<PostQuickVm>>($"/api/posts/filter?filter={keyword}&pageIndex={pageIndex}&pageSize={pageSize}");
+        if (!string.IsNullOrEmpty(keyword))
+        {
+            return await GetAsync<Pagination<PostQuickVm>>($"/api/posts/filter?filter={keyword}&pageIndex={pageIndex}&pageSize={pageSize}");
+        }
+
+        return await GetAsync<Pagination<PostQuickVm>>($"/api/posts/paging?pageIndex={pageIndex}&pageSize={pageSize}");
+    }
+
+    public async Task<Pagination<PostQuickVm>> GetLatestPostsPaging(int pageIndex, int pageSize)
+    {
+        return await GetAsync<Pagination<PostQuickVm>>($"/api/posts/paging?pageIndex={pageIndex}&pageSize={pageSize}");
     }
 }
