@@ -1,7 +1,6 @@
 using CodeSharing.Server.Datas.Provider;
 using CodeSharing.Utilities.Commons;
 using CodeSharing.ViewModels.Contents.Post;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -239,6 +238,42 @@ public class PostsController : BaseController
         {
             query = query.Where(x => x.p.CategoryId == categoryId.Value);
         }
+        var totalRecords = await query.CountAsync();
+        var items = await query.Skip((pageIndex - 1) * pageSize)
+            .Take(pageSize)
+            .Select(x => new PostQuickVm()
+            {
+                Id = x.p.Id,
+                CategoryId = x.p.CategoryId,
+                Slug = x.p.Slug,
+                Title = x.p.Title,
+                Content = x.p.Content,
+                CategorySlug = x.c.Slug,
+                CategoryTitle = x.c.Title,
+                NumberOfVotes = x.p.NumberOfVotes,
+                CreateDate = x.p.CreateDate,
+                NumberOfComments = x.p.NumberOfComments
+            })
+            .ToListAsync();
+
+        var pagination = new Pagination<PostQuickVm>
+        {
+            PageSize = pageSize,
+            PageIndex = pageIndex,
+            Items = items,
+            TotalRecords = totalRecords,
+        };
+        return Ok(pagination);
+    }
+    
+    [HttpGet("paging")]
+    public async Task<IActionResult> GetPostsPaging(int pageIndex, int pageSize)
+    {
+        var query = from p in _context.Posts
+            join c in _context.Categories on p.CategoryId equals c.Id
+            orderby p.CreateDate descending
+            select new { p, c };
+        
         var totalRecords = await query.CountAsync();
         var items = await query.Skip((pageIndex - 1) * pageSize)
             .Take(pageSize)
