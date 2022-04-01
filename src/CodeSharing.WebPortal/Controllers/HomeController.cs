@@ -1,5 +1,4 @@
 ﻿using System.Diagnostics;
-using CodeSharing.ViewModels.Contents.Category;
 using CodeSharing.WebPortal.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using CodeSharing.WebPortal.Models;
@@ -10,17 +9,19 @@ public class HomeController : Controller
 {
     private readonly ILogger<HomeController> _logger;
     private readonly IPostApiClient _postApiClient;
-
-    public HomeController(ILogger<HomeController> logger, IPostApiClient postApiClient)
+    private readonly IConfiguration _configuration;
+    
+    public HomeController(ILogger<HomeController> logger, IPostApiClient postApiClient, IConfiguration configuration)
     {
         _logger = logger;
         _postApiClient = postApiClient;
+        _configuration = configuration;
     }
 
-    public async Task<IActionResult> Index()
+    public async Task<IActionResult> Index(int page = 1)
     {
-        var latestPosts = await _postApiClient.GetLatestPosts(10);
-        var popularPosts = await _postApiClient.GetPopularPosts(10);
+        var pageSize = int.Parse(_configuration["PageIndexSize"]);
+        var latestPosts = await _postApiClient.GetLatestPostsPaging(page, pageSize);
 
         var items = new HomeViewModel()
         {
