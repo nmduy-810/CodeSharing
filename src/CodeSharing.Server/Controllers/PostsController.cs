@@ -16,7 +16,7 @@ public class PostsController : BaseController
     }
     
     [HttpGet]
-    public async Task<IActionResult> GetKnowledgeBases()
+    public async Task<IActionResult> GetPosts()
     {
         var items = await _context.Posts.Select(u => new PostQuickVm()
         {
@@ -100,6 +100,7 @@ public class PostsController : BaseController
             Id = post.Id,
             CategoryId = post.CategoryId,
             CategoryTitle = category.Title,
+            CategorySlug = category.Slug,
             Title = post.Title,
             Content = post.Content,
             Slug = post.Slug,
