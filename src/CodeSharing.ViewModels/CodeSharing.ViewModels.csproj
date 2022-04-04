@@ -8,7 +8,6 @@
 
     <ItemGroup>
       <Folder Include="Statistics" />
-      <Folder Include="Systems" />
     </ItemGroup>
 
 </Project>

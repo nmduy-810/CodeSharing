@@ -1,6 +1,9 @@
+using CodeSharing.Server.Authorization;
 using CodeSharing.Server.Datas.Provider;
 using CodeSharing.Utilities.Commons;
+using CodeSharing.Utilities.Constants;
 using CodeSharing.ViewModels.Contents.Post;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -15,6 +18,7 @@ public class PostsController : BaseController
         _context = context;
     }
     
+    [AllowAnonymous]
     [HttpGet]
     public async Task<IActionResult> GetPosts()
     {
@@ -30,6 +34,7 @@ public class PostsController : BaseController
         return Ok(items);
     }
 
+    [AllowAnonymous]
     [HttpGet("latest/{take:int}")]
     public async Task<IActionResult> GetLatestPosts(int take)
     {
@@ -56,6 +61,7 @@ public class PostsController : BaseController
         return Ok(items);
     }
     
+    [AllowAnonymous]
     [HttpGet("popular/{take:int}")]
     public async Task<IActionResult> GetPopularPosts(int take)
     {
@@ -81,6 +87,7 @@ public class PostsController : BaseController
         return Ok(items);
     }
 
+    [AllowAnonymous]
     [HttpGet("{id:int}")]
     public async Task<IActionResult> GetById(int id)
     {
@@ -116,6 +123,7 @@ public class PostsController : BaseController
         return Ok(items);
     }
 
+    [AllowAnonymous]
     [HttpGet("category/{categoryId:int}")]
     public async Task<IActionResult> GetPostsByCategoryId(int? categoryId, int pageIndex, int pageSize)
     {
@@ -159,6 +167,7 @@ public class PostsController : BaseController
         return Ok(pagination);
     }
 
+    [AllowAnonymous]
     [HttpGet("tags/{tagId}")]
     public async Task<IActionResult> GetPostsByTagId(string tagId, int pageIndex, int pageSize)
     {
@@ -199,6 +208,7 @@ public class PostsController : BaseController
         return Ok(pagination);
     }
 
+    [AllowAnonymous]
     [HttpGet("total-post")]
     public async Task<IActionResult> GetTotalPostInCategory()
     {
@@ -225,6 +235,7 @@ public class PostsController : BaseController
         return Ok(items);
     }
     
+    [AllowAnonymous]
     [HttpGet("filter")]
     public async Task<IActionResult> GetPostsPaging(string filter, int? categoryId, int pageIndex, int pageSize)
     {
@@ -267,6 +278,7 @@ public class PostsController : BaseController
         return Ok(pagination);
     }
     
+    [AllowAnonymous]
     [HttpGet("paging")]
     public async Task<IActionResult> GetPostsPaging(int pageIndex, int pageSize)
     {
