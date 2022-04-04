@@ -3,6 +3,7 @@ using CodeSharing.Server.Datas.Provider;
 using CodeSharing.Utilities.Commons;
 using CodeSharing.Utilities.Constants;
 using CodeSharing.ViewModels.Contents.Post;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -17,8 +18,8 @@ public class PostsController : BaseController
         _context = context;
     }
     
+    [AllowAnonymous]
     [HttpGet]
-    [ClaimRequirement(FunctionCodeConstants.CONTENT_POST, CommandCodeConstants.VIEW)]
     public async Task<IActionResult> GetPosts()
     {
         var items = await _context.Posts.Select(u => new PostQuickVm()
@@ -33,8 +34,8 @@ public class PostsController : BaseController
         return Ok(items);
     }
 
+    [AllowAnonymous]
     [HttpGet("latest/{take:int}")]
-    [ClaimRequirement(FunctionCodeConstants.CONTENT_POST, CommandCodeConstants.VIEW)]
     public async Task<IActionResult> GetLatestPosts(int take)
     {
         var posts = from p in _context.Posts
@@ -60,8 +61,8 @@ public class PostsController : BaseController
         return Ok(items);
     }
     
+    [AllowAnonymous]
     [HttpGet("popular/{take:int}")]
-    [ClaimRequirement(FunctionCodeConstants.CONTENT_POST, CommandCodeConstants.VIEW)]
     public async Task<IActionResult> GetPopularPosts(int take)
     {
         var posts = from p in _context.Posts
@@ -86,8 +87,8 @@ public class PostsController : BaseController
         return Ok(items);
     }
 
+    [AllowAnonymous]
     [HttpGet("{id:int}")]
-    [ClaimRequirement(FunctionCodeConstants.CONTENT_POST, CommandCodeConstants.VIEW)]
     public async Task<IActionResult> GetById(int id)
     {
         var post = await _context.Posts.FindAsync(id);
@@ -122,8 +123,8 @@ public class PostsController : BaseController
         return Ok(items);
     }
 
+    [AllowAnonymous]
     [HttpGet("category/{categoryId:int}")]
-    [ClaimRequirement(FunctionCodeConstants.CONTENT_POST, CommandCodeConstants.VIEW)]
     public async Task<IActionResult> GetPostsByCategoryId(int? categoryId, int pageIndex, int pageSize)
     {
         var query = from p in _context.Posts
@@ -166,8 +167,8 @@ public class PostsController : BaseController
         return Ok(pagination);
     }
 
+    [AllowAnonymous]
     [HttpGet("tags/{tagId}")]
-    [ClaimRequirement(FunctionCodeConstants.CONTENT_POST, CommandCodeConstants.VIEW)]
     public async Task<IActionResult> GetPostsByTagId(string tagId, int pageIndex, int pageSize)
     {
         var query = from p in _context.Posts
@@ -207,8 +208,8 @@ public class PostsController : BaseController
         return Ok(pagination);
     }
 
+    [AllowAnonymous]
     [HttpGet("total-post")]
-    [ClaimRequirement(FunctionCodeConstants.CONTENT_POST, CommandCodeConstants.VIEW)]
     public async Task<IActionResult> GetTotalPostInCategory()
     {
         var query = from c in _context.Categories
@@ -234,8 +235,8 @@ public class PostsController : BaseController
         return Ok(items);
     }
     
+    [AllowAnonymous]
     [HttpGet("filter")]
-    [ClaimRequirement(FunctionCodeConstants.CONTENT_POST, CommandCodeConstants.VIEW)]
     public async Task<IActionResult> GetPostsPaging(string filter, int? categoryId, int pageIndex, int pageSize)
     {
         var query = from p in _context.Posts
@@ -277,8 +278,8 @@ public class PostsController : BaseController
         return Ok(pagination);
     }
     
+    [AllowAnonymous]
     [HttpGet("paging")]
-    [ClaimRequirement(FunctionCodeConstants.CONTENT_POST, CommandCodeConstants.VIEW)]
     public async Task<IActionResult> GetPostsPaging(int pageIndex, int pageSize)
     {
         var query = from p in _context.Posts

@@ -3,6 +3,7 @@ using CodeSharing.Server.Datas.Entities;
 using CodeSharing.Server.Datas.Provider;
 using CodeSharing.Utilities.Constants;
 using CodeSharing.ViewModels.Contents.Category;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -17,8 +18,8 @@ public class CategoriesController : BaseController
         _context = context;
     }
 
+    [AllowAnonymous]
     [HttpGet]
-    [ClaimRequirement(FunctionCodeConstants.CONTENT_CATEGORY, CommandCodeConstants.VIEW)]
     public async Task<IActionResult> GetCategories()
     {
         var items = await _context.Categories.Select(x => new CategoryVm()
@@ -34,8 +35,8 @@ public class CategoriesController : BaseController
         return Ok(items);
     }
 
+    [AllowAnonymous]
     [HttpGet("{id:int}")]
-    [ClaimRequirement(FunctionCodeConstants.CONTENT_CATEGORY, CommandCodeConstants.VIEW)]
     public async Task<IActionResult> GetById(int id)
     {
         var category = await _context.Categories.FindAsync(id);

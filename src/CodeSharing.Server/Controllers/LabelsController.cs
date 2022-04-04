@@ -2,6 +2,7 @@ using CodeSharing.Server.Authorization;
 using CodeSharing.Server.Datas.Provider;
 using CodeSharing.Utilities.Constants;
 using CodeSharing.ViewModels.Contents.Label;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -16,6 +17,7 @@ public class LabelsController : BaseController
         _context = context;
     }
 
+    [AllowAnonymous]
     [HttpGet("popular/{take:int}")]
     public async Task<List<LabelVm>> GetPopularLabels(int take)
     {
@@ -39,6 +41,7 @@ public class LabelsController : BaseController
         return items;
     }
     
+    [AllowAnonymous]
     [HttpGet("{id}")]
     public async Task<IActionResult> GetById(string id)
     {
