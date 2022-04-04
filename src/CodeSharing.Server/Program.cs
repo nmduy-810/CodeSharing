@@ -3,6 +3,7 @@ using CodeSharing.Server.Datas.Initialize;
 using CodeSharing.Server.Datas.Provider;
 using CodeSharing.Server.IdentityServer;
 using CodeSharing.Server.Services;
+using IdentityServer4.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
@@ -33,6 +34,7 @@ builder.Services.AddIdentityServer(options =>
     .AddInMemoryIdentityResources(Config.Ids)
     .AddInMemoryApiScopes(Config.ApiScopes)
     .AddAspNetIdentity<User>()
+    .AddProfileService<IdentityProfileService>()
     .AddDeveloperSigningCredential();
 
 builder.Services.Configure<IdentityOptions>(options =>

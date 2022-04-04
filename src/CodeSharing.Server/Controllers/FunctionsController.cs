@@ -1,4 +1,6 @@
+using CodeSharing.Server.Authorization;
 using CodeSharing.Server.Datas.Provider;
+using CodeSharing.Utilities.Constants;
 using CodeSharing.ViewModels.Systems.Function;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -15,6 +17,7 @@ public class FunctionsController : BaseController
     }
     
     [HttpGet]
+    [ClaimRequirement(FunctionCodeConstants.SYSTEM_FUNCTION, CommandCodeConstants.VIEW)]
     public async Task<IActionResult> GetFunctions()
     {
         var items = await _context.Functions.Select(u => new FunctionVm()
@@ -31,6 +34,7 @@ public class FunctionsController : BaseController
     }
     
     [HttpGet("{id}")]
+    [ClaimRequirement(FunctionCodeConstants.SYSTEM_FUNCTION, CommandCodeConstants.VIEW)]
     public async Task<IActionResult> GetById(string id)
     {
         var function = await _context.Functions.FindAsync(id);
@@ -52,6 +56,7 @@ public class FunctionsController : BaseController
     }
     
     [HttpGet("{functionId}/parents")]
+    [ClaimRequirement(FunctionCodeConstants.SYSTEM_FUNCTION, CommandCodeConstants.VIEW)]
     public async Task<IActionResult> GetFunctionsByParentId(string functionId)
     {
         var items = await _context.Functions

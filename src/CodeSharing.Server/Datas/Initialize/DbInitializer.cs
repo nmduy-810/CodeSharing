@@ -42,7 +42,7 @@ public class DbInitializer
         #region User
         if (!_userManager.Users.Any())
         {
-            var result = await _userManager.CreateAsync(new User
+            var admin = await _userManager.CreateAsync(new User
             {
                 Id = Guid.NewGuid().ToString(),
                 UserName = "admin",
@@ -51,10 +51,25 @@ public class DbInitializer
                 Email = "codesharing@hotmail.com",
                 LockoutEnabled = false
             }, "Admin@123");
-            if (result.Succeeded)
+            if (admin.Succeeded)
             {
                 var user = await _userManager.FindByNameAsync("admin");
                 await _userManager.AddToRoleAsync(user, AdminRoleName);
+            }
+            
+            var member = await _userManager.CreateAsync(new User
+            {
+                Id = Guid.NewGuid().ToString(),
+                UserName = "member",
+                FirstName = "Thành viên",
+                LastName = "1",
+                Email = "member@hotmail.com",
+                LockoutEnabled = false
+            }, "Member@123");
+            if (member.Succeeded)
+            {
+                var user = await _userManager.FindByNameAsync("member");
+                await _userManager.AddToRoleAsync(user, UserRoleName);
             }
         }
         #endregion User
@@ -257,6 +272,12 @@ public class DbInitializer
                 _context.Permissions.Add(new Permission(function.Id, adminRole.Id, "UPDATE"));
                 _context.Permissions.Add(new Permission(function.Id, adminRole.Id, "DELETE"));
                 _context.Permissions.Add(new Permission(function.Id, adminRole.Id, "VIEW"));
+            }
+
+            var memberRole = await _roleManager.FindByNameAsync(UserRoleName);
+            foreach (var function in functions)
+            {
+                _context.Permissions.Add(new Permission(function.Id, memberRole.Id, "VIEW"));
             }
         }
         #endregion CommandInFunction

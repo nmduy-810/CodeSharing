@@ -1,5 +1,7 @@
+using CodeSharing.Server.Authorization;
 using CodeSharing.Server.Datas.Entities;
 using CodeSharing.Server.Datas.Provider;
+using CodeSharing.Utilities.Constants;
 using CodeSharing.ViewModels.Contents.Category;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -16,6 +18,7 @@ public class CategoriesController : BaseController
     }
 
     [HttpGet]
+    [ClaimRequirement(FunctionCodeConstants.CONTENT_CATEGORY, CommandCodeConstants.VIEW)]
     public async Task<IActionResult> GetCategories()
     {
         var items = await _context.Categories.Select(x => new CategoryVm()
@@ -32,6 +35,7 @@ public class CategoriesController : BaseController
     }
 
     [HttpGet("{id:int}")]
+    [ClaimRequirement(FunctionCodeConstants.CONTENT_CATEGORY, CommandCodeConstants.VIEW)]
     public async Task<IActionResult> GetById(int id)
     {
         var category = await _context.Categories.FindAsync(id);
@@ -51,5 +55,28 @@ public class CategoriesController : BaseController
         };
 
         return Ok(items);
+    }
+
+    [HttpPost]
+    [ClaimRequirement(FunctionCodeConstants.CONTENT_CATEGORY, CommandCodeConstants.CREATE)]
+    public async Task<IActionResult> PostCategory([FromBody] CategoryCreateRequest request)
+    {
+        var item = new Category()
+        {
+            ParentCategoryId = request.ParentCategoryId,
+            Title = request.Title,
+            Slug = request.Slug,
+            SortOrder = request.SortOrder,
+            IsParent = request.IsParent
+        };
+        _context.Categories.Add(item);
+
+        var result = await _context.SaveChangesAsync();
+        if (result > 0)
+        {
+            return CreatedAtAction(nameof(GetById), new { id = item.Id }, request);
+        }
+
+        return BadRequest();
     }
 }

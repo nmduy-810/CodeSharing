@@ -1,3 +1,5 @@
+using CodeSharing.Server.Authorization;
+using CodeSharing.Utilities.Constants;
 using CodeSharing.ViewModels.Systems.Role;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -15,6 +17,7 @@ public class RolesController : BaseController
     }
     
     [HttpGet]
+    [ClaimRequirement(FunctionCodeConstants.SYSTEM_ROLE, CommandCodeConstants.VIEW)]
     public async Task<IActionResult> GetRoles()
     {
         var items = await _roleManager.Roles
@@ -28,6 +31,7 @@ public class RolesController : BaseController
     }
     
     [HttpGet("{id}")]
+    [ClaimRequirement(FunctionCodeConstants.SYSTEM_ROLE, CommandCodeConstants.VIEW)]
     public async Task<IActionResult> GetById(string id)
     {
         var role = await _roleManager.FindByIdAsync(id);

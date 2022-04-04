@@ -1,5 +1,7 @@
 using System.Linq;
+using CodeSharing.Server.Authorization;
 using CodeSharing.Server.Datas.Entities;
+using CodeSharing.Utilities.Constants;
 using CodeSharing.ViewModels.Systems.User;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -17,6 +19,7 @@ public class UsersController : BaseController
     }
     
     [HttpGet]
+    [ClaimRequirement(FunctionCodeConstants.SYSTEM_USER, CommandCodeConstants.VIEW)]
     public async Task<IActionResult> GetUsers()
     {
         var items = await _userManager.Users.Select(u => new UserVm()
@@ -35,6 +38,7 @@ public class UsersController : BaseController
     }
     
     [HttpGet("{id}")]
+    [ClaimRequirement(FunctionCodeConstants.SYSTEM_USER, CommandCodeConstants.VIEW)]
     public async Task<IActionResult> GetById(string id)
     {
         var user = await _userManager.FindByIdAsync(id);

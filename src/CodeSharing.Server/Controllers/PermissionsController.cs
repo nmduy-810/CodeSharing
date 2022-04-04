@@ -1,4 +1,6 @@
 using System.Data;
+using CodeSharing.Server.Authorization;
+using CodeSharing.Utilities.Constants;
 using CodeSharing.ViewModels.Systems.Permission;
 using Dapper;
 using Microsoft.AspNetCore.Mvc;
@@ -16,6 +18,7 @@ public class PermissionsController : BaseController
     }
     
     [HttpGet]
+    [ClaimRequirement(FunctionCodeConstants.SYSTEM_PERMISSION, CommandCodeConstants.VIEW)]
     public async Task<IActionResult> GetCommandViews()
     {
         await using var connection = new SqlConnection(_configuration.GetConnectionString("DefaultConnection"));
