@@ -1,9 +1,10 @@
 using System.ComponentModel.DataAnnotations;
+using CodeSharing.Server.Datas.Interfaces;
 using Microsoft.AspNetCore.Identity;
 
 namespace CodeSharing.Server.Datas.Entities;
 
-public class User : IdentityUser
+public class User : IdentityUser, IDateTracking
 {
     [Required]
     [MaxLength(50)]
@@ -15,4 +16,14 @@ public class User : IdentityUser
 
     [Required]
     public DateTime Birthday { get; set; }
+    
+    public int? NumberOfKnowledgeBases { get; set; }
+
+    public int? NumberOfVotes { get; set; }
+
+    public int? NumberOfReports { get; set; }
+
+    public DateTime CreateDate { get; set; }
+    
+    public DateTime? LastModifiedDate { get; set; }
 }
