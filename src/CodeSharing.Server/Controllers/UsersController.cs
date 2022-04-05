@@ -2,6 +2,7 @@ using System.Linq;
 using CodeSharing.Server.Authorization;
 using CodeSharing.Server.Datas.Entities;
 using CodeSharing.Utilities.Constants;
+using CodeSharing.Utilities.Helpers;
 using CodeSharing.ViewModels.Systems.User;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -44,7 +45,7 @@ public class UsersController : BaseController
         var user = await _userManager.FindByIdAsync(id);
         if (user == null)
         {
-            return NotFound();
+            return NotFound(new ApiNotFoundResponse($"User with id: {id} is not found"));
         }
 
         var item = new UserVm()

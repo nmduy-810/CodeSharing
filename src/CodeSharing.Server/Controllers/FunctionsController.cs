@@ -1,6 +1,7 @@
 using CodeSharing.Server.Authorization;
 using CodeSharing.Server.Datas.Provider;
 using CodeSharing.Utilities.Constants;
+using CodeSharing.Utilities.Helpers;
 using CodeSharing.ViewModels.Systems.Function;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -40,7 +41,7 @@ public class FunctionsController : BaseController
         var function = await _context.Functions.FindAsync(id);
         if (function == null)
         {
-            return NotFound();
+            return NotFound(new ApiNotFoundResponse($"Function with id: {id} is not found"));
         }
         
         var items = new FunctionVm()

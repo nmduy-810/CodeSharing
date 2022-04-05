@@ -2,6 +2,7 @@ using CodeSharing.Server.Authorization;
 using CodeSharing.Server.Datas.Entities;
 using CodeSharing.Server.Datas.Provider;
 using CodeSharing.Utilities.Constants;
+using CodeSharing.Utilities.Helpers;
 using CodeSharing.ViewModels.Contents.Category;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -42,7 +43,7 @@ public class CategoriesController : BaseController
         var category = await _context.Categories.FindAsync(id);
         if (category == null)
         {
-            return NotFound();
+            return NotFound(new ApiNotFoundResponse($"Category with id: {id} is not found"));
         }
 
         var items = new CategoryVm()
@@ -78,6 +79,6 @@ public class CategoriesController : BaseController
             return CreatedAtAction(nameof(GetById), new { id = item.Id }, request);
         }
 
-        return BadRequest();
+        return BadRequest(new ApiBadRequestResponse("Create category failed"));
     }
 }

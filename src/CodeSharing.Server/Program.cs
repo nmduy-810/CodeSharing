@@ -1,11 +1,13 @@
 using CodeSharing.Server.Datas.Entities;
 using CodeSharing.Server.Datas.Initialize;
 using CodeSharing.Server.Datas.Provider;
+using CodeSharing.Server.Extensions;
 using CodeSharing.Server.IdentityServer;
 using CodeSharing.Server.Services;
 using IdentityServer4.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using Serilog;
@@ -50,6 +52,11 @@ builder.Services.Configure<IdentityOptions>(options =>
     options.Password.RequireDigit = true;
     options.Password.RequireUppercase = true;
     options.User.RequireUniqueEmail = true;
+});
+
+builder.Services.Configure<ApiBehaviorOptions>(options =>
+{
+    options.SuppressModelStateInvalidFilter = true;
 });
 
 builder.Services.AddControllersWithViews();
@@ -158,6 +165,8 @@ if (app.Environment.IsDevelopment())
         c.SwaggerEndpoint("/swagger/v1/swagger.json", "CodeSharing API V1");
     });
 }
+
+app.UseErrorWrapping();
 
 app.UseStaticFiles();
 

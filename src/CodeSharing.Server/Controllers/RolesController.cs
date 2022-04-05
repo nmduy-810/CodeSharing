@@ -1,5 +1,6 @@
 using CodeSharing.Server.Authorization;
 using CodeSharing.Utilities.Constants;
+using CodeSharing.Utilities.Helpers;
 using CodeSharing.ViewModels.Systems.Role;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -37,7 +38,7 @@ public class RolesController : BaseController
         var role = await _roleManager.FindByIdAsync(id);
         if (role == null)
         {
-            return NotFound();
+            return NotFound(new ApiNotFoundResponse($"Role with id: {id} is not found"));
         }
 
         var items = new RoleVm()

@@ -2,6 +2,7 @@ using CodeSharing.Server.Authorization;
 using CodeSharing.Server.Datas.Provider;
 using CodeSharing.Utilities.Commons;
 using CodeSharing.Utilities.Constants;
+using CodeSharing.Utilities.Helpers;
 using CodeSharing.ViewModels.Contents.Post;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -98,9 +99,10 @@ public class PostsController : BaseController
         }
 
         var category = _context.Categories.FirstOrDefault(x => x.Id == post.CategoryId);
-
-        if (category == null) 
-            return NotFound();
+        if (category == null)
+        {
+            return NotFound(new ApiNotFoundResponse($"Post with id: {id} is not found"));
+        }
         
         var items = new PostVm()
         {
