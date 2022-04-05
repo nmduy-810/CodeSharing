@@ -18,7 +18,7 @@ public class PostsController : BaseController
     public PostsController(ApplicationDbContext context, ILogger<PostsController> logger)
     {
         _context = context;
-        _logger = logger ?? throw new ArgumentException(nameof(logger));
+        _logger = logger ?? throw new ArgumentException(null, nameof(logger));
     }
     
     [AllowAnonymous]

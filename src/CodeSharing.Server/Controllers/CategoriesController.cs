@@ -18,7 +18,7 @@ public class CategoriesController : BaseController
     public CategoriesController(ApplicationDbContext context, ILogger<CategoriesController> logger)
     {
         _context = context;
-        _logger = logger ?? throw new ArgumentException(nameof(logger));
+        _logger = logger ?? throw new ArgumentException(null, nameof(logger));
     }
 
     [AllowAnonymous]

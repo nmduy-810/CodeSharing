@@ -1,12 +1,26 @@
+using CodeSharing.WebPortal.Interfaces;
+using CodeSharing.WebPortal.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CodeSharing.WebPortal.Controllers;
 
 public class ContactController : Controller
 {
-    // GET
-    public IActionResult Index()
+    private readonly IContactApiClient _contactApiClient;
+
+    public ContactController(IContactApiClient contactApiClient)
     {
-        return View();
+        _contactApiClient = contactApiClient;
+    }
+    
+    public async Task<IActionResult> Index()
+    {
+        var contact = await _contactApiClient.GetContacts();
+        var items = new ContactViewModel()
+        {
+            Contacts = contact
+        };
+        
+        return View(items);
     }
 }

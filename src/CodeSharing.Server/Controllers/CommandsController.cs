@@ -15,7 +15,7 @@ public class CommandsController : BaseController
     public CommandsController(ApplicationDbContext context, ILogger<CommandsController> logger)
     {
         _context = context;
-        _logger = logger ?? throw new ArgumentException(nameof(logger));
+        _logger = logger ?? throw new ArgumentException(null, nameof(logger));
     }
     
     [HttpGet]

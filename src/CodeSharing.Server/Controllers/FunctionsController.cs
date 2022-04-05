@@ -16,7 +16,7 @@ public class FunctionsController : BaseController
     public FunctionsController(ApplicationDbContext context, ILogger<FunctionsController> logger)
     {
         _context = context;
-        _logger = logger ?? throw new ArgumentException(nameof(logger));
+        _logger = logger ?? throw new ArgumentException(null, nameof(logger));
     }
     
     [HttpGet]

@@ -16,7 +16,7 @@ public class RolesController : BaseController
     public RolesController(RoleManager<IdentityRole> roleManager, ILogger<RolesController> logger)
     {
         _roleManager = roleManager;
-        _logger = logger ?? throw new ArgumentException(nameof(logger));
+        _logger = logger ?? throw new ArgumentException(null, nameof(logger));
     }
     
     [HttpGet]

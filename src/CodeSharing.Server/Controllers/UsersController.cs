@@ -18,7 +18,7 @@ public class UsersController : BaseController
     public UsersController(UserManager<User> userManager, ILogger<UsersController> logger)
     {
         _userManager = userManager;
-        _logger = logger ?? throw new ArgumentException(nameof(logger));
+        _logger = logger ?? throw new ArgumentException(null, nameof(logger));
     }
     
     [HttpGet]

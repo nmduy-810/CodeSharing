@@ -17,7 +17,7 @@ public class LabelsController : BaseController
     public LabelsController(ApplicationDbContext context, ILogger<LabelsController> logger)
     {
         _context = context;
-        _logger = logger ?? throw new ArgumentException(nameof(logger));
+        _logger = logger ?? throw new ArgumentException(null, nameof(logger));
     }
 
     [AllowAnonymous]

@@ -16,7 +16,7 @@ public class PermissionsController : BaseController
     public PermissionsController(IConfiguration configuration, ILogger<PermissionsController> logger)
     {
         _configuration = configuration;
-        _logger = logger ?? throw new ArgumentException(nameof(logger));
+        _logger = logger ?? throw new ArgumentException(null, nameof(logger));
     }
     
     [HttpGet]
