@@ -13,10 +13,12 @@ namespace CodeSharing.Server.Controllers;
 public class PostsController : BaseController
 {
     private readonly ApplicationDbContext _context;
-
-    public PostsController(ApplicationDbContext context)
+    private readonly ILogger<PostsController> _logger;
+    
+    public PostsController(ApplicationDbContext context, ILogger<PostsController> logger)
     {
         _context = context;
+        _logger = logger ?? throw new ArgumentException(nameof(logger));
     }
     
     [AllowAnonymous]
@@ -32,6 +34,7 @@ public class PostsController : BaseController
             Content = u.Content,
         }).ToListAsync();
 
+        _logger.LogInformation("Successful execution of get posts request");
         return Ok(items);
     }
 
@@ -59,6 +62,7 @@ public class PostsController : BaseController
             CreateDate = x.p.CreateDate
         }).ToListAsync();
 
+        _logger.LogInformation("Successful execution of get latest posts request");
         return Ok(items);
     }
     
@@ -85,6 +89,7 @@ public class PostsController : BaseController
                 CreateDate = x.p.CreateDate
             }).ToListAsync();
 
+        _logger.LogInformation("Successful execution of get popular posts request");
         return Ok(items);
     }
 
@@ -95,13 +100,13 @@ public class PostsController : BaseController
         var post = await _context.Posts.FindAsync(id);
         if (post == null)
         {
-            return NotFound();
+            return NotFound(new ApiNotFoundResponse($"Can't found post item for id = {id} in database"));
         }
 
         var category = _context.Categories.FirstOrDefault(x => x.Id == post.CategoryId);
         if (category == null)
         {
-            return NotFound(new ApiNotFoundResponse($"Post with id: {id} is not found"));
+            return NotFound(new ApiNotFoundResponse($"Can't found category item for id = {id} in database"));
         }
         
         var items = new PostVm()
@@ -122,6 +127,7 @@ public class PostsController : BaseController
             NumberOfReports = post.NumberOfReports
         };
 
+        _logger.LogInformation("Successful execution of get post by id request");
         return Ok(items);
     }
 
@@ -166,6 +172,7 @@ public class PostsController : BaseController
             TotalRecords = totalRecords
         };
 
+        _logger.LogInformation("Successful execution of get posts by category id request");
         return Ok(pagination);
     }
 
@@ -207,6 +214,7 @@ public class PostsController : BaseController
             TotalRecords = totalRecords
         };
 
+        _logger.LogInformation("Successful execution of get posts by tag id request");
         return Ok(pagination);
     }
 
@@ -234,6 +242,7 @@ public class PostsController : BaseController
             TotalPost = x.Count
         }).ToListAsync();
 
+        _logger.LogInformation("Successful execution of get total post in category request");
         return Ok(items);
     }
     
@@ -277,6 +286,8 @@ public class PostsController : BaseController
             Items = items,
             TotalRecords = totalRecords,
         };
+        
+        _logger.LogInformation("Successful execution of get posts in paging have filter request");
         return Ok(pagination);
     }
     
@@ -314,6 +325,8 @@ public class PostsController : BaseController
             Items = items,
             TotalRecords = totalRecords,
         };
+        
+        _logger.LogInformation("Successful execution of get posts in paging no filter request");
         return Ok(pagination);
     }
 }

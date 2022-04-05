@@ -19,6 +19,7 @@ public class ApiResponse
     {
         return statusCode switch
         {
+            401 => "Unauthorized",
             404 => "Resource not found",
             500 => "An unhandled error occured",
             _ => null

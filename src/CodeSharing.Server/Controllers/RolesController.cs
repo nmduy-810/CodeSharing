@@ -11,10 +11,12 @@ namespace CodeSharing.Server.Controllers;
 public class RolesController : BaseController
 {
     private readonly RoleManager<IdentityRole> _roleManager;
+    private readonly ILogger<RolesController> _logger;
     
-    public RolesController(RoleManager<IdentityRole> roleManager)
+    public RolesController(RoleManager<IdentityRole> roleManager, ILogger<RolesController> logger)
     {
         _roleManager = roleManager;
+        _logger = logger ?? throw new ArgumentException(nameof(logger));
     }
     
     [HttpGet]
@@ -28,6 +30,7 @@ public class RolesController : BaseController
             Name = r.Name
         }).ToListAsync();
 
+        _logger.LogInformation("Successful execution of get roles request");
         return Ok(items);
     }
     
@@ -38,7 +41,7 @@ public class RolesController : BaseController
         var role = await _roleManager.FindByIdAsync(id);
         if (role == null)
         {
-            return NotFound(new ApiNotFoundResponse($"Role with id: {id} is not found"));
+            return NotFound(new ApiNotFoundResponse($"Can't found role item for id = {id} in database"));
         }
 
         var items = new RoleVm()
@@ -46,6 +49,8 @@ public class RolesController : BaseController
             Id = role.Id,
             Name = role.Name,
         };
+        
+        _logger.LogInformation("Successful execution of get role by id request");
         return Ok(items);
     }
 }

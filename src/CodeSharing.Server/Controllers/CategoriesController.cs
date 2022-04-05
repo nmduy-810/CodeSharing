@@ -13,10 +13,12 @@ namespace CodeSharing.Server.Controllers;
 public class CategoriesController : BaseController
 {
     private readonly ApplicationDbContext _context;
+    private readonly ILogger<CategoriesController> _logger;
 
-    public CategoriesController(ApplicationDbContext context)
+    public CategoriesController(ApplicationDbContext context, ILogger<CategoriesController> logger)
     {
         _context = context;
+        _logger = logger ?? throw new ArgumentException(nameof(logger));
     }
 
     [AllowAnonymous]
@@ -33,6 +35,7 @@ public class CategoriesController : BaseController
             IsParent = x.IsParent
         }).OrderBy(x => x.SortOrder).ToListAsync();
 
+        _logger.LogInformation("Successful execution of get categories request");
         return Ok(items);
     }
 
@@ -43,7 +46,7 @@ public class CategoriesController : BaseController
         var category = await _context.Categories.FindAsync(id);
         if (category == null)
         {
-            return NotFound(new ApiNotFoundResponse($"Category with id: {id} is not found"));
+            return NotFound(new ApiNotFoundResponse($"Can't found category item for id = {id} in database"));
         }
 
         var items = new CategoryVm()
@@ -56,6 +59,7 @@ public class CategoriesController : BaseController
             IsParent = category.IsParent
         };
 
+        _logger.LogInformation("Successful execution of get categories request");
         return Ok(items);
     }
 
