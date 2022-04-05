@@ -1,6 +1,7 @@
 using CodeSharing.Server.Authorization;
 using CodeSharing.Server.Datas.Provider;
 using CodeSharing.Utilities.Constants;
+using CodeSharing.Utilities.Helpers;
 using CodeSharing.ViewModels.Systems.Function;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -10,10 +11,12 @@ namespace CodeSharing.Server.Controllers;
 public class FunctionsController : BaseController
 {
     private readonly ApplicationDbContext _context;
+    private readonly ILogger<FunctionsController> _logger;
     
-    public FunctionsController(ApplicationDbContext context)
+    public FunctionsController(ApplicationDbContext context, ILogger<FunctionsController> logger)
     {
         _context = context;
+        _logger = logger ?? throw new ArgumentException(null, nameof(logger));
     }
     
     [HttpGet]
@@ -30,6 +33,7 @@ public class FunctionsController : BaseController
             Icon = u.Icon
         }).ToListAsync();
 
+        _logger.LogInformation("Successful execution of get functions request");
         return Ok(items);
     }
     
@@ -40,7 +44,7 @@ public class FunctionsController : BaseController
         var function = await _context.Functions.FindAsync(id);
         if (function == null)
         {
-            return NotFound();
+            return NotFound(new ApiNotFoundResponse($"Can't found function item for id = {id} in database"));
         }
         
         var items = new FunctionVm()
@@ -52,6 +56,8 @@ public class FunctionsController : BaseController
             ParentId = function.ParentId,
             Icon = function.Icon
         };
+        
+        _logger.LogInformation("Successful execution of get function by id request");
         return Ok(items);
     }
     
@@ -71,6 +77,7 @@ public class FunctionsController : BaseController
             Icon = u.Icon
         }).ToListAsync();
 
+        _logger.LogInformation("Successful execution of get function by parent id request");
         return Ok(items);
     }
 }

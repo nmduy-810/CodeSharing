@@ -2,6 +2,7 @@ using CodeSharing.Server.Authorization;
 using CodeSharing.Server.Datas.Entities;
 using CodeSharing.Server.Datas.Provider;
 using CodeSharing.Utilities.Constants;
+using CodeSharing.Utilities.Helpers;
 using CodeSharing.ViewModels.Contents.Category;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -12,10 +13,12 @@ namespace CodeSharing.Server.Controllers;
 public class CategoriesController : BaseController
 {
     private readonly ApplicationDbContext _context;
+    private readonly ILogger<CategoriesController> _logger;
 
-    public CategoriesController(ApplicationDbContext context)
+    public CategoriesController(ApplicationDbContext context, ILogger<CategoriesController> logger)
     {
         _context = context;
+        _logger = logger ?? throw new ArgumentException(null, nameof(logger));
     }
 
     [AllowAnonymous]
@@ -32,6 +35,7 @@ public class CategoriesController : BaseController
             IsParent = x.IsParent
         }).OrderBy(x => x.SortOrder).ToListAsync();
 
+        _logger.LogInformation("Successful execution of get categories request");
         return Ok(items);
     }
 
@@ -42,7 +46,7 @@ public class CategoriesController : BaseController
         var category = await _context.Categories.FindAsync(id);
         if (category == null)
         {
-            return NotFound();
+            return NotFound(new ApiNotFoundResponse($"Can't found category item for id = {id} in database"));
         }
 
         var items = new CategoryVm()
@@ -55,6 +59,7 @@ public class CategoriesController : BaseController
             IsParent = category.IsParent
         };
 
+        _logger.LogInformation("Successful execution of get categories request");
         return Ok(items);
     }
 
@@ -78,6 +83,6 @@ public class CategoriesController : BaseController
             return CreatedAtAction(nameof(GetById), new { id = item.Id }, request);
         }
 
-        return BadRequest();
+        return BadRequest(new ApiBadRequestResponse("Create category failed"));
     }
 }

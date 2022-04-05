@@ -807,6 +807,20 @@ public class DbInitializer
             #endregion LabelInPost
         }
         #endregion Post
+
+        #region Contact
+
+        if (!_context.Contacts.Any())
+        {
+            _context.Contacts.AddRange(new Contact()
+            {
+                Email = "codesharing@hotmail.com",
+                Location = "Thành phố Hồ Chí Minh, Việt Nam",
+                Phone = "0969 772 069"
+            });
+        }
+
+        #endregion Contact
         
         await _context.SaveChangesAsync();
     }

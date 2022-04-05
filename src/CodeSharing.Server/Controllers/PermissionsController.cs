@@ -11,10 +11,12 @@ namespace CodeSharing.Server.Controllers;
 public class PermissionsController : BaseController
 {
     private readonly IConfiguration _configuration;
+    private readonly ILogger<PermissionsController> _logger;
     
-    public PermissionsController(IConfiguration configuration)
+    public PermissionsController(IConfiguration configuration, ILogger<PermissionsController> logger)
     {
         _configuration = configuration;
+        _logger = logger ?? throw new ArgumentException(null, nameof(logger));
     }
     
     [HttpGet]
@@ -46,7 +48,8 @@ public class PermissionsController : BaseController
                             f.Id, f.Name, f.ParentId
                          ORDER BY 
                             f.ParentId";
-
+        
+        _logger.LogInformation("Successful execution of get commands view request");
         var result = await connection.QueryAsync<PermissionScreenVm>(sql, null, null, 120, CommandType.Text);
         return Ok(result.ToList());
     }

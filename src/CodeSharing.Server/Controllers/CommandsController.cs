@@ -10,10 +10,12 @@ namespace CodeSharing.Server.Controllers;
 public class CommandsController : BaseController
 {
     private readonly ApplicationDbContext _context;
-
-    public CommandsController(ApplicationDbContext context)
+    private readonly ILogger<CommandsController> _logger;
+    
+    public CommandsController(ApplicationDbContext context, ILogger<CommandsController> logger)
     {
         _context = context;
+        _logger = logger ?? throw new ArgumentException(null, nameof(logger));
     }
     
     [HttpGet]
@@ -25,6 +27,7 @@ public class CommandsController : BaseController
             Name = u.Name,
         }).ToListAsync();
 
+        _logger.LogInformation("Successful execution of get commands request");
         return Ok(items);
     }
 }

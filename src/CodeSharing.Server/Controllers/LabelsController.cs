@@ -1,6 +1,7 @@
 using CodeSharing.Server.Authorization;
 using CodeSharing.Server.Datas.Provider;
 using CodeSharing.Utilities.Constants;
+using CodeSharing.Utilities.Helpers;
 using CodeSharing.ViewModels.Contents.Label;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -11,10 +12,12 @@ namespace CodeSharing.Server.Controllers;
 public class LabelsController : BaseController
 {
     private readonly ApplicationDbContext _context;
-
-    public LabelsController(ApplicationDbContext context)
+    private readonly ILogger<LabelsController> _logger;
+    
+    public LabelsController(ApplicationDbContext context, ILogger<LabelsController> logger)
     {
         _context = context;
+        _logger = logger ?? throw new ArgumentException(null, nameof(logger));
     }
 
     [AllowAnonymous]
@@ -38,6 +41,7 @@ public class LabelsController : BaseController
             Name = x.Name
         }).ToListAsync();
 
+        _logger.LogInformation("Successful execution of get popular labels request");
         return items;
     }
     
@@ -48,7 +52,7 @@ public class LabelsController : BaseController
         var label = await _context.Labels.FindAsync(id);
         if (label == null)
         {
-            return NotFound();
+            return NotFound(new ApiNotFoundResponse($"Can't found label item for id = {id} in database"));
         }
         
         var labelVm = new LabelVm()
@@ -57,6 +61,7 @@ public class LabelsController : BaseController
             Name = label.Name
         };
 
+        _logger.LogInformation("Successful execution of get label by id request");
         return Ok(labelVm);
     }
 }

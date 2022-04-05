@@ -2,6 +2,7 @@ using System.Linq;
 using CodeSharing.Server.Authorization;
 using CodeSharing.Server.Datas.Entities;
 using CodeSharing.Utilities.Constants;
+using CodeSharing.Utilities.Helpers;
 using CodeSharing.ViewModels.Systems.User;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -12,10 +13,12 @@ namespace CodeSharing.Server.Controllers;
 public class UsersController : BaseController
 {
     private readonly UserManager<User> _userManager;
+    private readonly ILogger<UsersController> _logger;
     
-    public UsersController(UserManager<User> userManager)
+    public UsersController(UserManager<User> userManager, ILogger<UsersController> logger)
     {
         _userManager = userManager;
+        _logger = logger ?? throw new ArgumentException(null, nameof(logger));
     }
     
     [HttpGet]
@@ -34,6 +37,7 @@ public class UsersController : BaseController
             CreateDate = u.CreateDate
         }).ToListAsync();
 
+        _logger.LogInformation("Successful execution of get users request");
         return Ok(items);
     }
     
@@ -44,7 +48,7 @@ public class UsersController : BaseController
         var user = await _userManager.FindByIdAsync(id);
         if (user == null)
         {
-            return NotFound();
+            return NotFound(new ApiNotFoundResponse($"Can't found user item for id = {id} in database"));
         }
 
         var item = new UserVm()
@@ -58,6 +62,8 @@ public class UsersController : BaseController
             LastName = user.LastName,
             CreateDate = user.CreateDate
         };
+        
+        _logger.LogInformation("Successful execution of get use by id request");
         return Ok(item);
     }
 }
