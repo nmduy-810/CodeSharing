@@ -1,6 +1,10 @@
+using CodeSharing.Server.Authorization;
 using CodeSharing.Server.Datas.Provider;
 using CodeSharing.Utilities.Commons;
+using CodeSharing.Utilities.Constants;
+using CodeSharing.Utilities.Helpers;
 using CodeSharing.ViewModels.Contents.Post;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -9,12 +13,15 @@ namespace CodeSharing.Server.Controllers;
 public class PostsController : BaseController
 {
     private readonly ApplicationDbContext _context;
-
-    public PostsController(ApplicationDbContext context)
+    private readonly ILogger<PostsController> _logger;
+    
+    public PostsController(ApplicationDbContext context, ILogger<PostsController> logger)
     {
         _context = context;
+        _logger = logger ?? throw new ArgumentException(null, nameof(logger));
     }
     
+    [AllowAnonymous]
     [HttpGet]
     public async Task<IActionResult> GetPosts()
     {
@@ -27,9 +34,11 @@ public class PostsController : BaseController
             Content = u.Content,
         }).ToListAsync();
 
+        _logger.LogInformation("Successful execution of get posts request");
         return Ok(items);
     }
 
+    [AllowAnonymous]
     [HttpGet("latest/{take:int}")]
     public async Task<IActionResult> GetLatestPosts(int take)
     {
@@ -53,9 +62,11 @@ public class PostsController : BaseController
             CreateDate = x.p.CreateDate
         }).ToListAsync();
 
+        _logger.LogInformation("Successful execution of get latest posts request");
         return Ok(items);
     }
     
+    [AllowAnonymous]
     [HttpGet("popular/{take:int}")]
     public async Task<IActionResult> GetPopularPosts(int take)
     {
@@ -78,22 +89,25 @@ public class PostsController : BaseController
                 CreateDate = x.p.CreateDate
             }).ToListAsync();
 
+        _logger.LogInformation("Successful execution of get popular posts request");
         return Ok(items);
     }
 
+    [AllowAnonymous]
     [HttpGet("{id:int}")]
     public async Task<IActionResult> GetById(int id)
     {
         var post = await _context.Posts.FindAsync(id);
         if (post == null)
         {
-            return NotFound();
+            return NotFound(new ApiNotFoundResponse($"Can't found post item for id = {id} in database"));
         }
 
         var category = _context.Categories.FirstOrDefault(x => x.Id == post.CategoryId);
-
-        if (category == null) 
-            return NotFound();
+        if (category == null)
+        {
+            return NotFound(new ApiNotFoundResponse($"Can't found category item for id = {id} in database"));
+        }
         
         var items = new PostVm()
         {
@@ -113,9 +127,11 @@ public class PostsController : BaseController
             NumberOfReports = post.NumberOfReports
         };
 
+        _logger.LogInformation("Successful execution of get post by id request");
         return Ok(items);
     }
 
+    [AllowAnonymous]
     [HttpGet("category/{categoryId:int}")]
     public async Task<IActionResult> GetPostsByCategoryId(int? categoryId, int pageIndex, int pageSize)
     {
@@ -156,9 +172,11 @@ public class PostsController : BaseController
             TotalRecords = totalRecords
         };
 
+        _logger.LogInformation("Successful execution of get posts by category id request");
         return Ok(pagination);
     }
 
+    [AllowAnonymous]
     [HttpGet("tags/{tagId}")]
     public async Task<IActionResult> GetPostsByTagId(string tagId, int pageIndex, int pageSize)
     {
@@ -196,9 +214,11 @@ public class PostsController : BaseController
             TotalRecords = totalRecords
         };
 
+        _logger.LogInformation("Successful execution of get posts by tag id request");
         return Ok(pagination);
     }
 
+    [AllowAnonymous]
     [HttpGet("total-post")]
     public async Task<IActionResult> GetTotalPostInCategory()
     {
@@ -222,9 +242,11 @@ public class PostsController : BaseController
             TotalPost = x.Count
         }).ToListAsync();
 
+        _logger.LogInformation("Successful execution of get total post in category request");
         return Ok(items);
     }
     
+    [AllowAnonymous]
     [HttpGet("filter")]
     public async Task<IActionResult> GetPostsPaging(string filter, int? categoryId, int pageIndex, int pageSize)
     {
@@ -264,9 +286,12 @@ public class PostsController : BaseController
             Items = items,
             TotalRecords = totalRecords,
         };
+        
+        _logger.LogInformation("Successful execution of get posts in paging have filter request");
         return Ok(pagination);
     }
     
+    [AllowAnonymous]
     [HttpGet("paging")]
     public async Task<IActionResult> GetPostsPaging(int pageIndex, int pageSize)
     {
@@ -300,6 +325,8 @@ public class PostsController : BaseController
             Items = items,
             TotalRecords = totalRecords,
         };
+        
+        _logger.LogInformation("Successful execution of get posts in paging no filter request");
         return Ok(pagination);
     }
 }
