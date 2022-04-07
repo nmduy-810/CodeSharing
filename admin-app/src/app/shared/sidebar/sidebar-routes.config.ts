@@ -3,24 +3,35 @@ import { RouteInfo } from './sidebar.metadata';
 //Sidebar menu Routes and data
 export const ROUTES: RouteInfo[] = [
 
+    { path: '', title: 'Dashboard', icon: 'bx bx-home-circle', class: '', badge: '', badgeClass: '', isExternalLink: false, submenu: [] },
+    { path: '/user-profile', title: 'Profile', icon: 'bx bx-user-circle', class: '', badge: '', badgeClass: '', isExternalLink: false, submenu: [] },
     {
-        path: '', title: 'Dashboard', icon: 'bx bx-home-circle', class: 'sub', badge: '', badgeClass: '', isExternalLink: false, submenu: [
-            { path: '/dashboard/default', title: 'Default', icon: 'bx bx-right-arrow-alt', class: '', badge: '', badgeClass: '', isExternalLink: false, submenu: [] },
-            { path: '/dashboard/alternate', title: 'Alternate', icon: 'bx bx-right-arrow-alt', class: '', badge: '', badgeClass: '', isExternalLink: false, submenu: [] },
-        ]
-    },
-    {
-        path: '', title: 'Application', icon: 'bx bx-category', class: 'sub', badge: '', badgeClass: '', isExternalLink: false,
+        path: '', title: 'Systems', icon: 'bx bx-cog', class: 'sub', badge: '', badgeClass: '', isExternalLink: false,
         submenu: [
-            { path: '/application/email-app', title: 'Email', icon: 'bx bx-right-arrow-alt', class: '', badge: '', badgeClass: '', isExternalLink: false, submenu: [] },
-            { path: '/application/chat-box', title: 'Chat Box', icon: 'bx bx-right-arrow-alt', class: '', badge: '', badgeClass: '', isExternalLink: false, submenu: [] },
-            { path: '/application/file-manager', title: 'File Manager', icon: 'bx bx-right-arrow-alt', class: '', badge: '', badgeClass: '', isExternalLink: false, submenu: [] },
-            { path: '/application/contatcs', title: 'Contatcs', icon: 'bx bx-right-arrow-alt', class: '', badge: '', badgeClass: '', isExternalLink: false, submenu: [] },
-            { path: '/application/invoice', title: 'Invoice', icon: 'bx bx-right-arrow-alt', class: '', badge: '', badgeClass: '', isExternalLink: false, submenu: [] },
-            { path: '/application/calendar', title: 'Calendar', icon: 'bx bx-right-arrow-alt', class: '', badge: '', badgeClass: '', isExternalLink: false, submenu: [] },
+            { path: '/systems/users', title: 'Users', icon: 'bx bx-user', class: '', badge: '', badgeClass: '', isExternalLink: false, submenu: [] },
+            { path: '/systems/permissions', title: 'Permissions', icon: 'bx bx-food-menu', class: '', badge: '', badgeClass: '', isExternalLink: false, submenu: [] },
+            { path: '/systems/roles', title: 'Roles', icon: 'bx bx-shield-alt-2', class: '', badge: '', badgeClass: '', isExternalLink: false, submenu: [] },
+            { path: '/systems/functions', title: 'Functions', icon: 'bx bx-add-to-queue', class: '', badge: '', badgeClass: '', isExternalLink: false, submenu: [] },
         ]
     },
-    { path: '/widgets', title: 'Widgets', icon: 'bx bx-cookie', class: '', badge: '', badgeClass: '', isExternalLink: false, submenu: []},
+    {
+        path: '', title: 'Contents', icon: 'bx bx-book', class: 'sub', badge: '', badgeClass: '', isExternalLink: false,
+        submenu: [
+            { path: '/contents/categories', title: 'Categories', icon: 'bx bx-building', class: '', badge: '', badgeClass: '', isExternalLink: false, submenu: [] },
+            { path: '/contents/posts', title: 'Posts', icon: 'bx bx-message-square-edit', class: '', badge: '', badgeClass: '', isExternalLink: false, submenu: [] },
+            { path: '/contents/comments', title: 'Comments', icon: 'bx bx-message-rounded-detail', class: '', badge: '', badgeClass: '', isExternalLink: false, submenu: [] },
+            { path: '/contents/contacts', title: 'Contacts', icon: 'bx bx-phone', class: '', badge: '', badgeClass: '', isExternalLink: false, submenu: [] },
+            { path: '/contents/abouts', title: 'Abouts', icon: 'bx bx-note', class: '', badge: '', badgeClass: '', isExternalLink: false, submenu: [] },
+        ]
+    },
+    {
+        path: '', title: 'Statistics', icon: 'bx bx-bar-chart', class: 'sub', badge: '', badgeClass: '', isExternalLink: false,
+        submenu: [
+            { path: '/statistics/monthly-new-members', title: 'New Members', icon: 'bx bx-walk', class: '', badge: '', badgeClass: '', isExternalLink: false, submenu: [] },
+            { path: '/statistics/monthly-new-posts', title: 'New Posts', icon: 'bx bx-message-add', class: '', badge: '', badgeClass: '', isExternalLink: false, submenu: [] },
+            { path: '/statistics/monthly-new-comments', title: 'New Comments', icon: 'bx bx-message-rounded-add', class: '', badge: '', badgeClass: '', isExternalLink: false, submenu: [] },
+        ]
+    },
     {
         path: '', title: 'eCommerce', icon: 'bx bx-cart', class: 'sub', badge: '', badgeClass: '', isExternalLink: false,
         submenu: [
@@ -79,9 +90,6 @@ export const ROUTES: RouteInfo[] = [
            ]
     },
     {
-        path: '/table/table', title: 'Table', icon: 'bx bx-grid-alt', class: '', badge: '', badgeClass: '', isExternalLink: false, submenu: []
-    },
-    {
         path: '', title: 'Authentication', icon: 'bx bx-lock', class: 'sub', badge: '', badgeClass: '', isExternalLink: false,
         submenu: [
             
@@ -95,49 +103,4 @@ export const ROUTES: RouteInfo[] = [
             
         ]
     },
-    { path: '/user-profile', title: 'User Profile', icon: 'bx bx-user-circle', class: '', badge: '', badgeClass: '', isExternalLink: false, submenu: []},
-    { path: '/timeline', title: 'Timeline', icon: 'bx bx-video-recording', class: '', badge: '', badgeClass: '', isExternalLink: false, submenu: []},
-    {
-        path: '', title: 'Errors', icon: 'bx bx-error', class: 'sub', badge: '', badgeClass: '', isExternalLink: false,
-        submenu: [
-            { path: '/rocker-angular/demo/vertical/error/error-404', title: '404 Error', icon: 'bx bx-right-arrow-alt', class: '', badge: '', badgeClass: '', isExternalLink: true, submenu: [] },
-            { path: '/rocker-angular/demo/vertical/error/error-500', title: '500 Error', icon: 'bx bx-right-arrow-alt', class: '', badge: '', badgeClass: '', isExternalLink: true, submenu: [] },
-            { path: '/rocker-angular/demo/vertical/error/coming-soon', title: 'Coming Soon', icon: 'bx bx-right-arrow-alt', class: '', badge: '', badgeClass: '', isExternalLink: true, submenu: [] },
-           ]
-    },
-    { path: '/faq', title: 'FAQ', icon: 'bx bx-help-circle', class: '', badge: '', badgeClass: '', isExternalLink: false, submenu: [] },
-    { path: '/pricing', title: 'Pricing', icon: 'bx bx-diamond', class: '', badge: '', badgeClass: '', isExternalLink: false, submenu: [] },
-    { path: '/earnings', title: 'Earnings', icon: 'bx bx-dollar-circle', class: '', badge: '', badgeClass: '', isExternalLink: false, submenu: [] },
-    { path: '/downloads', title: 'Downloads', icon: 'bx bx-download', class: '', badge: '', badgeClass: '', isExternalLink: false, submenu: [] },
-    {
-        path: '', title: 'Charts', icon: 'bx bx-line-chart', class: 'sub', badge: '', badgeClass: '', isExternalLink: false,
-        submenu: [
-            { path: '/charts/apex-chart', title: 'Apex Charts', icon: 'bx bx-right-arrow-alt', class: '', badge: '', badgeClass: '', isExternalLink: false, submenu: [] },
-            { path: '/charts/chartjs', title: 'ChartJs', icon: 'bx bx-right-arrow-alt', class: '', badge: '', badgeClass: '', isExternalLink: false, submenu: [] },
-            { path: '/charts/highcharts', title: 'Highcharts', icon: 'bx bx-right-arrow-alt', class: '', badge: '', badgeClass: '', isExternalLink: false, submenu: [] },
-        ]
-    },
-    {
-        path: '', title: 'Maps', icon: 'bx bx-map-alt', class: 'sub', badge: '', badgeClass: '', isExternalLink: false,
-        submenu: [
-            { path: '/maps/google-maps', title: 'Google Maps', icon: 'bx bx-right-arrow-alt', class: '', badge: '', badgeClass: '', isExternalLink: false, submenu: [] },
-            { path: '/maps/fullscreen', title: 'Fullscreen Map', icon: 'bx bx-right-arrow-alt', class: '', badge: '', badgeClass: '', isExternalLink: false, submenu: [] },
-        ]
-    },
-    {
-        path: 'javascript:;', title: 'Menu Levels', icon: 'bx bx-menu', class: 'sub', badge: '', badgeClass: '', isExternalLink: false,
-            submenu: [
-                { path: 'javascript:;', title: 'Level 1', icon: 'bx bx-right-arrow-alt', class: '', badge: '', badgeClass: '', isExternalLink: false, submenu: [] },
-                    { path: 'javascript:;', title: 'Level 1', icon: 'bx bx-right-arrow-alt', class: 'sub', badge: '', badgeClass: '', isExternalLink: false, 
-                        submenu: [
-                            { path: 'javascript:;', title: 'level 2', icon: 'bx bx-right-arrow-alt', class: '', badge: '', badgeClass: '', isExternalLink: false, submenu: [] },
-                            { path: 'javascript:;', title: 'level 2', icon: 'bx bx-right-arrow-alt', class: '', badge: '', badgeClass: '', isExternalLink: false, submenu: [] },
-
-                        ] },
-            ]
-    },
-    { path: 'https://codervent.com/rocker-angular/demo/vertical/docs/', title: 'Documentation', icon: 'bx bx-folder', class: '', badge: '', badgeClass: '', isExternalLink: true, submenu: [] },
-    { path: 'https://themeforest.net/user/codewrrap/portfolio', title: 'Support', icon: 'bx bx-support', class: '', badge: '', badgeClass: '', isExternalLink: true, submenu: [] }
-
-    
 ];

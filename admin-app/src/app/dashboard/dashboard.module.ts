@@ -7,12 +7,10 @@ import { DashboardRoutingModule } from './dashboard-routing.module';
 import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
 
 import { DefaultComponent } from './default/default.component';
-import { AlternateComponent } from './alternate/alternate.component';
-
 
 @NgModule({
   declarations: [
-     DefaultComponent, AlternateComponent
+     DefaultComponent
   ],
   imports: [
     CommonModule,
