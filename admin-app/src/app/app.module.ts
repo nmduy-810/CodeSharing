@@ -32,7 +32,7 @@ import { AuthInterceptor } from './shared/interceptors/auth.interceptor';
   declarations: [
     AppComponent,
     FullLayoutComponent,
-    ContentLayoutComponent,
+    ContentLayoutComponent
   ],
   imports: [
     BrowserModule,

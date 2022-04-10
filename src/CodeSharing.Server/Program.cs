@@ -35,7 +35,7 @@ builder.Services.AddIdentityServer(options =>
         options.Events.RaiseSuccessEvents = true;
     })
     .AddInMemoryApiResources(Config.Apis)
-    .AddInMemoryClients(Config.Clients)
+    .AddInMemoryClients(builder.Configuration.GetSection("IdentityServer:Clients"))
     .AddInMemoryIdentityResources(Config.Ids)
     .AddInMemoryApiScopes(Config.ApiScopes)
     .AddAspNetIdentity<User>()

@@ -48,12 +48,8 @@ export const Full_ROUTES: Routes = [
         path: 'form',
         loadChildren: () => import('../../form/form.module').then(m => m.FormModule)
     },
-    {
-        path: 'login',
-        loadChildren: () => import('../../login/login.module').then(m => m.LoginModule)
+    { 
+        path: 'auth-callback', 
+        loadChildren: () => import('../../auth-callback/auth-callback.module').then(m => m.AuthCallbackModule) 
     },
-    {
-        path: 'auth-callback',
-        loadChildren: () => import('../../auth-callback/auth-callback.module').then(m => m.AuthCallbackModule)
-    }
 ];

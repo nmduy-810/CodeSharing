@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { AuthService } from '../shared/services';
+import { AuthService } from 'src/app/shared/services';
 import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
