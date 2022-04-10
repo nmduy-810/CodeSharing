@@ -27,5 +27,9 @@
     "strictInputAccessModifiers": true,
     "strictTemplates": false,
     "skipLibCheck": true
+  },
+  "paths": {
+    "@app/*": ["src/app/*"],
+    "@environments/*": ["src/environments/*"]
   }
 }
