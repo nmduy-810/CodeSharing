@@ -1,4 +1,7 @@
 import { Component , OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { Subscription } from 'rxjs';
+import { AuthService } from '../services';
 import { SidebarService } from '../sidebar/sidebar.service';
 
 
@@ -10,7 +13,13 @@ import { SidebarService } from '../sidebar/sidebar.service';
 
 export class NavbarComponent implements OnInit{
 
-    constructor(public sidebarservice: SidebarService) { }
+    userName: string;
+    isAuthenticated: boolean;
+    subscription: Subscription;
+
+    constructor(public sidebarservice: SidebarService, public router: Router, private authService: AuthService) 
+    {
+    }
         
     toggleSidebar() {
         this.sidebarservice.setSidebarState(!this.sidebarservice.getSidebarState());
@@ -36,5 +45,11 @@ export class NavbarComponent implements OnInit{
             })
         });
 
+        this.subscription = this.authService.authNavStatus$.subscribe(status => this.isAuthenticated = status);
+        this.userName = this.authService.name;
+    }
+
+    async signout() {
+        await this.authService.signout();
     }
 }

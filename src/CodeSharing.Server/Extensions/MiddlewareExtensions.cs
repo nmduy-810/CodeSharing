@@ -4,8 +4,9 @@ namespace CodeSharing.Server.Extensions;
 
 public static class MiddlewareExtensions
 {
-    public static void UseErrorWrapping(this IApplicationBuilder builder)
+    public static IApplicationBuilder UseErrorWrapping(
+        this IApplicationBuilder builder)
     {
-        builder.UseMiddleware<ErrorWrappingMiddleware>();
+        return builder.UseMiddleware<ErrorWrappingMiddleware>();
     }
 }

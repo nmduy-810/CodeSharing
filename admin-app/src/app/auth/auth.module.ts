@@ -9,7 +9,8 @@ import { ResetPasswordComponent } from './reset-password/reset-password.componen
 import { LockScreenComponent } from './lock-screen/lock-screen.component';
 import { SigninWithHeaderFooterComponent } from './signin-with-header-footer/signin-with-header-footer.component';
 import { SignupWithHeaderFooterComponent } from './signup-with-header-footer/signup-with-header-footer.component';
-
+import { LoginComponent } from './login/login.component';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 
 @NgModule({
@@ -20,10 +21,12 @@ import { SignupWithHeaderFooterComponent } from './signup-with-header-footer/sig
     ResetPasswordComponent, 
     LockScreenComponent, 
     SigninWithHeaderFooterComponent,
-    SignupWithHeaderFooterComponent],
+    SignupWithHeaderFooterComponent,
+    LoginComponent],
   imports: [
     CommonModule,
     AuthRoutingModule
-  ]
+  ],
+  providers:[NgxSpinnerService]
 })
 export class AuthModule { }

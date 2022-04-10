@@ -14,7 +14,7 @@ public class ErrorWrappingMiddleware
         _next = next;
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
-    
+
     public async Task Invoke(HttpContext context)
     {
         try
