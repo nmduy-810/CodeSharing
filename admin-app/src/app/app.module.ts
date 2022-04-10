@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { HttpClientModule, HttpClient } from "@angular/common/http";
+import { HttpClientModule, HttpClient, HTTP_INTERCEPTORS } from "@angular/common/http";
 
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { SharedModule } from "./shared/shared.module";
@@ -25,6 +25,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
 };
 
 import * as $ from 'jquery';
+import { AuthGuard } from './shared/guard';
+import { AuthInterceptor } from './shared/interceptors/auth.interceptor';
 
 @NgModule({
   declarations: [
@@ -44,7 +46,16 @@ import * as $ from 'jquery';
     PerfectScrollbarModule
   ],
   providers: [
-    { provide: PERFECT_SCROLLBAR_CONFIG, useValue: DEFAULT_PERFECT_SCROLLBAR_CONFIG }
+    { 
+      provide: PERFECT_SCROLLBAR_CONFIG, 
+      useValue: DEFAULT_PERFECT_SCROLLBAR_CONFIG 
+    },
+    AuthGuard,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptor,
+      multi: true
+    }
   ],
   bootstrap: [AppComponent]
 })
