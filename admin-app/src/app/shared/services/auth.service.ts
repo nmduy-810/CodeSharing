@@ -15,7 +15,7 @@ export class AuthService extends BaseService {
   authNavStatus$ = this._authNavStatusSource.asObservable();
 
   private manager = new UserManager(getClientSettings());
-  private user: User | null;
+  public user: User | null;
 
   constructor() {
     super();

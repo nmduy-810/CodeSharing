@@ -13,7 +13,12 @@ using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
+var configuration = builder.Configuration;
+
 // Add services to the container.
+
+// Define origin
+var CodeSharingSpecificOrigins = "CodeSharingSpecificOrigins";
 
 // Setup serilog to console
 builder.Host.UseSerilog((hostingContext, loggerConfiguration) =>
@@ -41,6 +46,18 @@ builder.Services.AddIdentityServer(options =>
     .AddAspNetIdentity<User>()
     .AddProfileService<IdentityProfileService>()
     .AddDeveloperSigningCredential();
+
+// Setup CORS (Cross Orgin Resouces)
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(CodeSharingSpecificOrigins,
+        builder =>
+        {
+            builder.WithOrigins(configuration["AllowOrigins"])
+                .AllowAnyHeader()
+                .AllowAnyMethod();
+        });
+});
 
 builder.Services.Configure<IdentityOptions>(options =>
 {
@@ -182,6 +199,8 @@ app.UseHttpsRedirection();
 app.UseRouting();
 
 app.UseAuthorization();
+
+app.UseCors(CodeSharingSpecificOrigins);
 
 app.UseEndpoints(endpoints =>
 {
