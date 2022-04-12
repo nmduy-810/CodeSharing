@@ -29,6 +29,11 @@ public class Post : IDateTracking
     
     public string Note { get; set; }
     
+    [Required]
+    [MaxLength(50)]
+    [Column(TypeName = "varchar(50)")]
+    public string OwnerUserId { get; set; }
+    
     public string Labels { get; set; }
     
     public int? NumberOfComments { get; set; }

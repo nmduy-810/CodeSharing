@@ -1,5 +1,7 @@
 using CodeSharing.Server.Authorization;
+using CodeSharing.Server.Datas.Entities;
 using CodeSharing.Server.Datas.Provider;
+using CodeSharing.Server.Extensions;
 using CodeSharing.Utilities.Commons;
 using CodeSharing.Utilities.Constants;
 using CodeSharing.Utilities.Helpers;
@@ -7,6 +9,8 @@ using CodeSharing.ViewModels.Contents.Post;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Net.Http.Headers;
+using CodeSharing.Server.Services.Interfaces;
 
 namespace CodeSharing.Server.Controllers;
 
@@ -14,11 +18,15 @@ public class PostsController : BaseController
 {
     private readonly ApplicationDbContext _context;
     private readonly ILogger<PostsController> _logger;
+    private readonly ISequenceService _sequenceService;
+    private readonly IStorageService _storageService;
     
-    public PostsController(ApplicationDbContext context, ILogger<PostsController> logger)
+    public PostsController(ApplicationDbContext context, ILogger<PostsController> logger, ISequenceService sequenceService, IStorageService storageService)
     {
         _context = context;
         _logger = logger ?? throw new ArgumentException(null, nameof(logger));
+        _sequenceService = sequenceService;
+        _storageService = storageService;
     }
     
     [AllowAnonymous]
@@ -109,23 +117,19 @@ public class PostsController : BaseController
             return NotFound(new ApiNotFoundResponse($"Can't found category item for id = {id} in database"));
         }
         
-        var items = new PostVm()
-        {
-            Id = post.Id,
-            CategoryId = post.CategoryId,
-            CategoryTitle = category.Title,
-            CategorySlug = category.Slug,
-            Title = post.Title,
-            Content = post.Content,
-            Slug = post.Slug,
-            Note = post.Note,
-            Labels = !string.IsNullOrEmpty(post.Labels) ? post.Labels.Split(',') : null,
-            CreateDate = post.CreateDate,
-            LastModifiedDate = post.LastModifiedDate,
-            NumberOfComments = post.NumberOfComments,
-            NumberOfVotes = post.NumberOfVotes,
-            NumberOfReports = post.NumberOfReports
-        };
+        var attachments = await _context.Attachments
+            .Where(x => x.PostId == id)
+            .Select(x => new AttachmentVm()
+            {
+                FileName = x.FileName,
+                FilePath = x.FilePath,
+                FileSize = x.FileSize,
+                Id = x.Id,
+                FileType = x.FileType
+            }).ToListAsync();
+
+        var items = InitPostVm(post);
+        items.Attachments = attachments;
 
         _logger.LogInformation("Successful execution of get post by id request");
         return Ok(items);
@@ -329,4 +333,87 @@ public class PostsController : BaseController
         _logger.LogInformation("Successful execution of get posts in paging no filter request");
         return Ok(pagination);
     }
+
+    #region Helpers
+    
+    private static PostVm InitPostVm(Post post)
+    {
+        return new PostVm()
+        {
+            Id = post.Id,
+            CategoryId = post.CategoryId,
+            Title = post.Title,
+            Content = post.Content,
+            Slug = post.Slug,
+            Note = post.Note,
+            OwnerUserId = post.OwnerUserId,
+            Labels = !string.IsNullOrEmpty(post.Labels) ? post.Labels.Split(',') : null,
+            CreateDate = post.CreateDate,
+            LastModifiedDate = post.LastModifiedDate,
+            NumberOfComments = post.NumberOfComments,
+            NumberOfVotes = post.NumberOfVotes,
+            NumberOfReports = post.NumberOfReports,
+        };
+    }
+
+    private static Post InitPostEntity(PostCreateRequest request)
+    {
+        var entity = new Post()
+        {
+            CategoryId = request.CategoryId,
+            Title = request.Title,
+            Content = request.Content,
+            Slug = request.Slug,
+        };
+        
+        if (request.Labels?.Length > 0)
+        {
+            entity.Labels = string.Join(',', request.Labels);
+        }
+        return entity;
+    }
+    
+    private async Task<Attachment> SaveFile(int postId, IFormFile file)
+    {
+        var originalFileName = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName?.Trim('"');
+        var fileName = $"{originalFileName?.Substring(0, originalFileName.LastIndexOf('.'))}{Path.GetExtension(originalFileName)}";
+        await _storageService.SaveFileAsync(file.OpenReadStream(), fileName);
+        var attachmentEntity = new Attachment()
+        {
+            FileName = fileName,
+            FilePath = _storageService.GetFileUrl(fileName),
+            FileSize = file.Length,
+            FileType = Path.GetExtension(fileName),
+            PostId = postId,
+        };
+        return attachmentEntity;
+    }
+    
+    private async Task ProcessLabel(PostCreateRequest request, Post post)
+    {
+        foreach (var labelText in request.Labels)
+        {
+            var labelId = TextHelper.ToUnsignString(labelText);
+            var existingLabel = await _context.Labels.FindAsync(labelId);
+            if (existingLabel == null)
+            {
+                var labelEntity = new Label()
+                {
+                    Id = labelId,
+                    Name = labelText
+                };
+                _context.Labels.Add(labelEntity);
+            }
+            if (await _context.LabelInPosts.FindAsync(labelId, post.Id) == null)
+            {
+                _context.LabelInPosts.Add(new LabelInPost()
+                {
+                    PostId = post.Id,
+                    LabelId = labelId
+                });
+            }
+        }
+    }
+
+    #endregion Helpers
 }

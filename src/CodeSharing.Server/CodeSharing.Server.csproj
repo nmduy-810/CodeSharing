@@ -36,8 +36,4 @@
       <ProjectReference Include="..\CodeSharing.ViewModels\CodeSharing.ViewModels.csproj" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="Services\Interfaces" />
-    </ItemGroup>
-
 </Project>

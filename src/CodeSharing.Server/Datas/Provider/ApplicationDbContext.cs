@@ -1,4 +1,5 @@
 using CodeSharing.Server.Datas.Entities;
+using CodeSharing.Server.Datas.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -40,8 +41,28 @@ public class ApplicationDbContext : IdentityDbContext<User>
         builder.HasSequence("PostSequence");
     }
 
+    public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default(CancellationToken))
+    {
+        var modified = ChangeTracker.Entries()
+            .Where(e => e.State is EntityState.Modified or EntityState.Added);
+        foreach (var item in modified)
+        {
+            if (item.Entity is not IDateTracking changedOrAddedItem) 
+                continue;
+                
+            if (item.State == EntityState.Added)
+            {
+                changedOrAddedItem.CreateDate = DateTime.Now;
+            }
+            else
+            {
+                changedOrAddedItem.LastModifiedDate = DateTime.Now;
+            }
+        }
+        return base.SaveChangesAsync(cancellationToken);
+    }
+
     public DbSet<ActivityLog> ActivityLogs { set; get; }
-    
     public DbSet<Attachment> Attachments { get; set; }
     public DbSet<Category> Categories { set; get; }
     public DbSet<Command> Commands { set; get; }

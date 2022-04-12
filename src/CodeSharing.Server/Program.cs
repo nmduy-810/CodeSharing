@@ -4,6 +4,7 @@ using CodeSharing.Server.Datas.Provider;
 using CodeSharing.Server.Extensions;
 using CodeSharing.Server.IdentityServer;
 using CodeSharing.Server.Services;
+using CodeSharing.Server.Services.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -117,6 +118,8 @@ builder.Services.AddTransient<DbInitializer>();
 
 // Register in Identity require have EmailSender
 builder.Services.AddTransient<IEmailSender, EmailSenderService>();
+builder.Services.AddTransient<ISequenceService, SequenceService>();
+builder.Services.AddTransient<IStorageService, FileStorageService>();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
