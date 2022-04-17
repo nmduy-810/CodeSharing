@@ -13,7 +13,7 @@
             <span class="input-group-text bg-transparent">
               <i class='bx bxs-message-square-edit'></i>
             </span>
-            <input type="text" class="form-control border-start-0" id="txtTitle" placeholder="Tiêu đề danh mục" name="title" (keyup)="generateSeoAlias()" formControlName="title" />
+            <input type="text" class="form-control border-start-0" id="txtTitle" placeholder="Tiêu đề danh mục" name="title" (keyup)="generateSlug()" formControlName="title" />
           </div>
           <span class="errorMessage" *ngIf="title && title.invalid">Please enter title</span>
         </div>

@@ -127,9 +127,8 @@ export class CategoriesDetailComponent implements OnInit {
     }
   }
 
-  public generateSeoAlias() {
+  public generateSlug() {
     const seoAlias = this.utilitiesService.MakeSeoTitle(this.categoryForm.controls['title'].value);
     this.categoryForm.controls['slug'].setValue(seoAlias);
   }
 }
-
