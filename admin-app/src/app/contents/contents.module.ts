@@ -6,7 +6,9 @@ import { CommentsComponent } from './comments/comments.component';
 import { ContactsComponent } from './contacts/contacts.component';
 import { AboutsComponent } from './abouts/abouts.component';
 import { ContentsRoutngModule } from './contents-routing.module';
-
+import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
+import { CategoriesDetailComponent } from './categories/categories-detail/categories-detail.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 
 @NgModule({
@@ -15,11 +17,15 @@ import { ContentsRoutngModule } from './contents-routing.module';
     CategoriesComponent,
     CommentsComponent,
     ContactsComponent,
-    AboutsComponent
+    AboutsComponent,
+    CategoriesDetailComponent
   ],
   imports: [
     CommonModule,
-    ContentsRoutngModule
+    ContentsRoutngModule,
+    NgbModule,
+    FormsModule, 
+    ReactiveFormsModule
   ]
 })
 export class ContentsModule { }

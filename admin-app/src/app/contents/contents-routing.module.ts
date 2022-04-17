@@ -1,6 +1,7 @@
 import { NgModule } from "@angular/core";
 import { RouterModule, Routes } from "@angular/router";
 import { AboutsComponent } from "./abouts/abouts.component";
+import { CategoriesDetailComponent } from "./categories/categories-detail/categories-detail.component";
 import { CategoriesComponent } from "./categories/categories.component";
 import { CommentsComponent } from "./comments/comments.component";
 import { ContactsComponent } from "./contacts/contacts.component";

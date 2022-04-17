@@ -85,4 +85,66 @@ public class CategoriesController : BaseController
 
         return BadRequest(new ApiBadRequestResponse("Create category failed"));
     }
+
+    [HttpPut("{id:int}")]
+    [ClaimRequirement(FunctionCodeConstants.CONTENT_CATEGORY, CommandCodeConstants.UPDATE)]
+    public async Task<IActionResult> PutCategory(int id, [FromBody] CategoryUpdateRequest request)
+    {
+        var category = await _context.Categories.FindAsync(id);
+        if (category == null)
+        {
+            return NotFound(new ApiNotFoundResponse($"Can't found category item for id = {id} in database"));
+        }
+
+        if (id == request.ParentCategoryId)
+        {
+            return BadRequest(new ApiBadRequestResponse("Category cannot be a child itself."));
+        }
+        
+        category.ParentCategoryId = request.ParentCategoryId;
+        category.Title = request.Title;
+        category.Slug = request.Slug;
+        category.SortOrder = request.SortOrder;
+        category.IsParent = request.IsParent;
+        
+        _context.Categories.Update(category);
+        
+        var result = await _context.SaveChangesAsync();
+        if (result > 0)
+        {
+            return NoContent();
+        }
+        return BadRequest(new ApiBadRequestResponse("Update category failed"));
+    }
+
+    [HttpDelete("{id:int}")]
+    [ClaimRequirement(FunctionCodeConstants.CONTENT_CATEGORY, CommandCodeConstants.DELETE)]
+    public async Task<IActionResult> DeleteCategory(int id)
+    {
+        var category = await _context.Categories.FindAsync(id);
+        if (category == null)
+        {
+            return NotFound(new ApiNotFoundResponse($"Can't found category item for id = {id} in database"));
+        }
+        
+        _context.Categories.Remove(category);
+        
+        var result = await _context.SaveChangesAsync();
+        if (result <= 0)
+        {
+            return BadRequest(new ApiBadRequestResponse("Can't delete category"));
+        }
+        
+        var items = new CategoryVm()
+        {
+            Id = category.Id,
+            IsParent = category.IsParent,
+            ParentCategoryId = category.ParentCategoryId,
+            Slug = category.Slug,
+            SortOrder = category.SortOrder,
+            Title = category.Title
+        };
+            
+        return Ok(items);
+    }
 }
