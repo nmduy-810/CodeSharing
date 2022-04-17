@@ -1,12 +1,19 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { BaseService } from './base.service';
-import { catchError, map } from 'rxjs/operators';
+import { catchError, map, tap } from 'rxjs/operators';
 import { Category } from '../models';
 import { environment } from 'src/environments/environment';
+import { Subject } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class CategoriesService extends BaseService {
+
+    private _refreshRequired = new Subject<void>();
+
+    get RefreshRequired() {
+        return this._refreshRequired;
+    }
 
     private _headers = new HttpHeaders();
 
@@ -32,7 +39,9 @@ export class CategoriesService extends BaseService {
 
     putCategory(id: number, request: Category) {
         return this.http.put(`${environment.apiUrl}/api/categories/${id}`, JSON.stringify(request), { headers: this._headers })
-            .pipe(catchError(this.handleError));
+            .pipe(tap(() => {
+                this._refreshRequired.next();
+            }), catchError(this.handleError));
     }
 
     deleteCategory(id: number) {

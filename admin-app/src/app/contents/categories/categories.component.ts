@@ -17,6 +17,10 @@ export class CategoriesComponent implements OnInit {
   @ViewChild(CategoriesDetailComponent) addView !:CategoriesDetailComponent;
   ngOnInit(): void {
     this.getCategories();
+
+    this.categoriesService.RefreshRequired.subscribe(result => {
+      this.getCategories();
+    });
   }
 
   getCategories() {

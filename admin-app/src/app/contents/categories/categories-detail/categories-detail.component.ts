@@ -24,8 +24,10 @@ export class CategoriesDetailComponent implements OnInit {
 
   public errorMessage = '';
   public errorClass = '';
-  
+
   public serverResponse: any;
+
+  public entityId: number;
 
   updateData: any;
 
@@ -35,14 +37,22 @@ export class CategoriesDetailComponent implements OnInit {
     slug: new FormControl('', Validators.compose([Validators.required])),
     sortOrder: new FormControl('', Validators.compose([Validators.required])),
     isParent: new FormControl(false),
-    
+
   });
 
   saveCategory() {
-    if(this.categoryForm.valid) {
-      this.categoriesService.postCategory(this.categoryForm.getRawValue()).subscribe(result => {
-        
-      });
+    if (this.categoryForm.valid) {
+      if (this.entityId == null) {
+        this.categoriesService.postCategory(this.categoryForm.getRawValue()).subscribe(result => {
+          this.closeResult = `Closed with: ${result}`;
+         });
+      }
+      else {
+        this.categoriesService.putCategory(this.entityId, this.categoryForm.getRawValue()).subscribe(result => { });
+      }
+
+      this.getCategories();
+
     } else {
       this.errorMessage = "Please enter valid data";
       this.errorClass = "errorMessage";
@@ -56,6 +66,7 @@ export class CategoriesDetailComponent implements OnInit {
   }
 
   getUpdateCategoryData(id: any) {
+    this.entityId = id;
     this.categoriesService.getById(id).subscribe(result => {
       this.updateData = result;
       this.categoryForm.setValue({
