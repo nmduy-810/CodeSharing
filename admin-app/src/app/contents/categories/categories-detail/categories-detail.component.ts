@@ -3,6 +3,7 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { ModalDismissReasons, NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Subscription } from 'rxjs';
 import { CategoriesService } from 'src/app/shared/services';
+import { UtilitiesService } from 'src/app/shared/services/utilities.service';
 
 @Component({
   selector: 'app-categories-detail',
@@ -11,7 +12,7 @@ import { CategoriesService } from 'src/app/shared/services';
 })
 export class CategoriesDetailComponent implements OnInit {
 
-  constructor(private modalService: NgbModal, private categoriesService: CategoriesService) { }
+  constructor(private modalService: NgbModal, private categoriesService: CategoriesService, private utilitiesService: UtilitiesService) { }
 
   @ViewChild('content') addView !: ElementRef
   ngOnInit(): void {
@@ -124,6 +125,11 @@ export class CategoriesDetailComponent implements OnInit {
     } else {
       return `with: ${reason}`;
     }
+  }
+
+  public generateSeoAlias() {
+    const seoAlias = this.utilitiesService.MakeSeoTitle(this.categoryForm.controls['title'].value);
+    this.categoryForm.controls['slug'].setValue(seoAlias);
   }
 }
 
