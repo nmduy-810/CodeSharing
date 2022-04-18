@@ -34,11 +34,13 @@ public class CategoriesController : BaseController
             SortOrder = x.SortOrder,
             IsParent = x.IsParent
         }).OrderBy(x => x.SortOrder).ToListAsync();
+        
+        
 
         _logger.LogInformation("Successful execution of get categories request");
         return Ok(items);
     }
-
+    
     [AllowAnonymous]
     [HttpGet("{id:int}")]
     public async Task<IActionResult> GetById(int id)
@@ -62,7 +64,7 @@ public class CategoriesController : BaseController
         _logger.LogInformation("Successful execution of get categories request");
         return Ok(items);
     }
-
+    
     [HttpPost]
     [ClaimRequirement(FunctionCodeConstants.CONTENT_CATEGORY, CommandCodeConstants.CREATE)]
     public async Task<IActionResult> PostCategory([FromBody] CategoryCreateRequest request)

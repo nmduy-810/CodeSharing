@@ -1,88 +1,69 @@
-<!--breadcrumb-->
-<div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
-    <div class="breadcrumb-title pe-3">Contents</div>
-    <div class="ps-3">
-      <nav aria-label="breadcrumb">
-        <ol class="breadcrumb mb-0 p-0">
-          <li class="breadcrumb-item">
-            <a href="#" (click)="$event.preventDefault()">
-              <i class="bx bx-home-alt"></i>
-            </a>
-          </li>
-          <li class="breadcrumb-item active" aria-current="page">Category</li>
-        </ol>
-      </nav>
-    </div>
-    <div class="ms-auto">
-      <div class="btn-group">
-        <button type="button" class="btn btn-primary">Settings</button>
-        <button type="button" class="btn btn-primary split-bg-primary dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown">
-          <span class="visually-hidden">Toggle Dropdown</span>
-        </button>
-        <div class="dropdown-menu dropdown-menu-right dropdown-menu-lg-end">
-          <a class="dropdown-item" href="#" (click)="$event.preventDefault()">Action</a>
-          <a class="dropdown-item" href="#" (click)="$event.preventDefault()">Another action</a>
-          <a class="dropdown-item" href="#" (click)="$event.preventDefault()">Something else here</a>
-          <div class="dropdown-divider"></div>
-          <a class="dropdown-item" href="#" (click)="$event.preventDefault()">Separated link</a>
-        </div>
-      </div>
-    </div>
-</div>
-  <!--end breadcrumb-->
-  <div class="card">
-    <div class="card-body">
-      <div class="d-lg-flex align-items-center mb-4 gap-3">
-        <div class="position-relative">
-          <input type="text" class="form-control ps-5 radius-30" placeholder="Search Category">
-          <span class="position-absolute top-50 product-show translate-middle-y">
-            <i class="bx bx-search"></i>
-          </span>
-        </div>
-        <div class="ms-auto">
-          <app-categories-detail></app-categories-detail>
-        </div>
-      </div>
-      <div class="table-responsive">
-        <table class="table mb-0">
-          <thead class="table-light">
-            <tr>
-              <th>Id</th>
-              <th>Title</th>
-              <th>Slug</th>
-              <th>Sort Order</th>
-              <th>Parent Category Id</th>
-              <th>Is Parent</th>
-              <th>View Details</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let category of categories$">
-              <td>{{category.id}}</td>
-              <td>{{category.title}}</td>
-              <td>
-                <div class="badge rounded-pill text-success bg-light-success p-2 text-uppercase px-3">{{category.slug}}</div>
-              </td>
-              <td>{{category.sortOrder}}</td>
-              <td>{{category.parentCategoryId}}</td>
-              <td>{{category.isParent}}</td>
-              <td>
-                <button type="button" class="btn btn-primary btn-sm radius-30 px-4">View Details</button>
-              </td>
-              <td>
-                <div class="d-flex order-actions">
-                  <a type="button" (click)="updateCategory(category.id)" class="ms-3">
-                    <i class='bx bxs-edit'></i>
-                  </a>
-                  <a type="button" (click)="deleteCategory(category.id)" class="ms-3">
-                    <i class='bx bxs-trash'></i>
-                  </a>
+<nz-card>
+    <div class="row m-b-30">
+        <div class="col-lg-8">
+            <div class="d-md-flex">
+                <div class="m-b-10 m-r-20">
+                    <nz-input-group [nzPrefix]="prefixTemplate">
+                        <input type="text" nz-input placeholder="Search Project" [(ngModel)]="searchInput" (ngModelChange)="search()">
+                    </nz-input-group>      
+                    <ng-template #prefixTemplate>
+                        <i nz-icon nzType="search" class="opacity-05"></i>
+                    </ng-template>   
                 </div>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+                <div class="m-b-10 m-r-20 d-flex align-items-center">
+                    <nz-select style="min-width: 220px;" class="w-100" nzPlaceHolder="Status">
+                        <nz-option nzLabel="All" nzValue="all"></nz-option>
+                        <nz-option nzLabel="Approved" nzValue="approved"></nz-option>
+                        <nz-option nzLabel="Pending" nzValue="pending"></nz-option>
+                        <nz-option nzLabel="Rejected" nzValue="rejected"></nz-option>
+                    </nz-select>
+                </div>
+            </div>          
+        </div>
+        <div class="col-lg-4 text-right">
+            <app-categories-detail></app-categories-detail>
+        </div>
     </div>
-  </div>
+    <nz-table #categoriesListTable [nzData]="displayData" >
+        <thead>
+            <tr>
+                <th *ngFor="let column of categoryColumn" [nzSortFn]="column.compare">{{ column.title }}</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let item of categoriesListTable.data;  let i=index">
+                <!--ID-->
+                <td>#{{item.id}}</td>
+
+                <!--Title-->
+                <td>
+                    <div class="d-flex align-items-center">
+                        <h6 class="m-l-10 m-b-0">{{item.title}}</h6>
+                    </div>
+                </td>
+
+                <!--Slug-->
+                <td>{{item.slug}}</td>
+
+                <!--Sort Order-->
+                <td>{{item.sortOrder}}</td>
+
+                <!--Parent Category-->
+                <td>{{item.parentCategoryId}}</td>
+
+                <!--Have Parent-->
+                <td>{{item.isParent}}</td>
+
+                <!--Action-->
+                <td class="text-md-right">
+                    <a class="m-r-5" nz-button (click)="update(item.id)" nzType="default" nzShape="circle" nz-tooltip nzTooltipTitle="Edit">
+                        <i nz-icon nzType="edit" theme="outline"></i>
+                    </a>
+                    <button (click)="delete(item.id)" nz-button nzType="default" nzShape="circle" nz-tooltip nzTooltipTitle="Delete">
+                        <i nz-icon nzType="delete" theme="outline"></i>
+                    </button>
+                </td>
+            </tr>
+        </tbody>
+    </nz-table>
+</nz-card>

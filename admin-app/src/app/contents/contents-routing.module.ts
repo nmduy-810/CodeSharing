@@ -1,10 +1,9 @@
 import { NgModule } from "@angular/core";
 import { RouterModule, Routes } from "@angular/router";
-import { AboutsComponent } from "./abouts/abouts.component";
-import { CategoriesDetailComponent } from "./categories/categories-detail/categories-detail.component";
+import { AboutComponent } from "./about/about.component";
 import { CategoriesComponent } from "./categories/categories.component";
 import { CommentsComponent } from "./comments/comments.component";
-import { ContactsComponent } from "./contacts/contacts.component";
+import { ContactComponent } from "./contact/contact.component";
 import { PostsComponent } from "./posts/posts.component";
 
 const routes: Routes = [
@@ -12,10 +11,10 @@ const routes: Routes = [
         path: '',
         children: [
             {
-                path: 'abouts',
-                component: AboutsComponent,
+                path: 'about',
+                component: AboutComponent,
                 data: {
-                    title: 'Abouts'
+                    title: 'About'
                 }
             },
             {
@@ -33,10 +32,10 @@ const routes: Routes = [
                 }
             },
             {
-                path: 'contacts',
-                component: ContactsComponent,
+                path: 'contact',
+                component: ContactComponent,
                 data: {
-                    title: 'Contacts'
+                    title: 'Contact'
                 }
             },
             {
@@ -54,4 +53,4 @@ const routes: Routes = [
     imports: [RouterModule.forChild(routes)],
     exports: [RouterModule]
 })
-export class ContentsRoutngModule { }
+export class ContentsRoutingModule { }

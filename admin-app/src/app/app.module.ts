@@ -1,62 +1,60 @@
-import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-
+import { NgModule } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { HttpClientModule, HttpClient, HTTP_INTERCEPTORS } from "@angular/common/http";
+import { NZ_I18N, en_US } from 'ng-zorro-antd/i18n';
+import { NzBreadCrumbModule } from 'ng-zorro-antd/breadcrumb';
 
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { SharedModule } from "./shared/shared.module";
-import { AgmCoreModule } from '@agm/core';
+import { registerLocaleData, PathLocationStrategy, LocationStrategy } from '@angular/common';
+import en from '@angular/common/locales/en';
 
 import { AppRoutingModule } from './app-routing.module';
+import { TemplateModule } from './shared/template/template.module';
+import { SharedModule } from './shared/shared.module';
+
 import { AppComponent } from './app.component';
+import { CommonLayoutComponent } from './layouts/common-layout/common-layout.component';
+import { FullLayoutComponent } from './layouts/full-layout/full-layout.component';
 
-
-import { ContentLayoutComponent } from "./layouts/content/content-layout.component";
-import { FullLayoutComponent } from "./layouts/full/full-layout.component";
-
-import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
-import { PERFECT_SCROLLBAR_CONFIG } from 'ngx-perfect-scrollbar';
-import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar';
-
-const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
-  suppressScrollX: true,
-  wheelPropagation: false
-};
-
-import * as $ from 'jquery';
+import { NgChartjsModule } from 'ng-chartjs';
+import { ThemeConstantService } from './shared/services/theme-constant.service';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AuthGuard } from './shared/guard';
-import { AuthInterceptor } from './shared/interceptors/auth.interceptor';
+import { AuthInterceptor } from './shared/interceptor/auth.interceptor';
+
+registerLocaleData(en);
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    FullLayoutComponent,
-    ContentLayoutComponent
-  ],
-  imports: [
-    BrowserModule,
-    BrowserAnimationsModule,
-    NgbModule,
-    HttpClientModule,
-    NgbModule,
-    AppRoutingModule,
-    SharedModule,
-    AgmCoreModule.forRoot({apiKey: 'AIzaSyDKXKdHQdtqgPVl2HI2RnUa_1bjCxRCQo4'}),
-    PerfectScrollbarModule
-  ],
-  providers: [
-    { 
-      provide: PERFECT_SCROLLBAR_CONFIG, 
-      useValue: DEFAULT_PERFECT_SCROLLBAR_CONFIG 
-    },
-    AuthGuard,
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: AuthInterceptor,
-      multi: true
-    }
-  ],
-  bootstrap: [AppComponent]
+    declarations: [
+        AppComponent,
+        CommonLayoutComponent,
+        FullLayoutComponent,
+    ],
+    imports: [
+        BrowserModule,
+        BrowserAnimationsModule,
+        AppRoutingModule,
+        NzBreadCrumbModule,
+        TemplateModule,
+        SharedModule,
+        NgChartjsModule
+    ],
+    providers: [
+        AuthGuard,
+        {
+            provide: HTTP_INTERCEPTORS,
+            useClass: AuthInterceptor,
+            multi: true
+        },
+        {
+            provide: NZ_I18N,
+            useValue: en_US,
+        },
+        {
+            provide: LocationStrategy,
+            useClass: PathLocationStrategy
+        },
+        ThemeConstantService
+    ],
+    bootstrap: [AppComponent]
 })
 export class AppModule { }
