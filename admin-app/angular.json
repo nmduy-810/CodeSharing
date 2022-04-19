@@ -3,16 +3,9 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "Rocker": {
+    "enlink": {
       "projectType": "application",
-      "schematics": {
-        "@schematics/angular:component": {
-          "style": "scss"
-        },
-        "@schematics/angular:application": {
-          "strict": true
-        }
-      },
+      "schematics": {},
       "root": "",
       "sourceRoot": "src",
       "prefix": "app",
@@ -20,93 +13,80 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "allowedCommonJsDependencies": [
-              "chart.js"
-           ],
-            "outputPath": "dist/Rocker",
+            "outputPath": "dist/enlink",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.app.json",
-            "inlineStyleLanguage": "scss",
             "assets": [
-              "src/favicon-32x32.png",
-              "src/assets"
+              "src/favicon.ico",
+              "src/assets",
+              {
+                "glob": "**/*",
+                "input": "./node_modules/@ant-design/icons-angular/src/inline-svg/",
+                "output": "/assets/"
+              }
             ],
             "styles": [
-              "src/assets/css/icons.css",
-              "node_modules/angular-calendar/css/angular-calendar.css",
-              "node_modules/flatpickr/dist/flatpickr.min.css",
-              "src/assets/plugins/datatable/css/dataTables.bootstrap5.min.css",
-              "src/assets/sass/app.scss",
-              "src/styles.scss"
+              "src/styles.scss" 
             ],
             "scripts": [
-              "node_modules/chart.js/dist/Chart.min.js",
-              "node_modules/apexcharts/dist/apexcharts.min.js",
-              "node_modules/jquery/dist/jquery.min.js",
-              "node_modules/@popperjs/core/dist/umd/popper.js",
-              "node_modules/bootstrap/dist/js/bootstrap.min.js",
-              "src/assets/plugins/jvector-map/jquery-jvectormap-2.0.2.min.js",
-              "src/assets/plugins/jvector-map/jquery-jvectormap-world-mill-en.js",
-              "src/assets/plugins/datatable/js/jquery.dataTables.min.js",
-              "src/assets/plugins/datatable/js/dataTables.bootstrap5.min.js",
-              "src/assets/plugins/sparkline-charts/jquery.sparkline.min.js",
-              "src/assets/plugins/morris/js/morris.js",
-              "src/assets/plugins/raphael/raphael-min.js",
-              "src/assets/plugins/chartjs/js/Chart.extension.js",
-              "src/assets/vendor/pace/pace.min.js"
-            ]
+              "node_modules/jquery/dist/jquery.js",
+              "src/assets/lib/hljs/highlight.pack.js"
+            ],
+            "vendorChunk": true,
+            "extractLicenses": false,
+            "buildOptimizer": false,
+            "sourceMap": true,
+            "optimization": false,
+            "namedChunks": true
           },
           "configurations": {
             "production": {
-              "budgets": [
-                {
-                  "type": "initial",
-                  "maximumWarning": "5mb",
-                  "maximumError": "6mb"
-                },
-                {
-                  "type": "anyComponentStyle",
-                  "maximumWarning": "2kb",
-                  "maximumError": "4kb"
-                }
-              ],
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",
                   "with": "src/environments/environment.prod.ts"
                 }
               ],
-              "outputHashing": "all"
-            },
-            "development": {
-              "buildOptimizer": false,
-              "optimization": false,
-              "vendorChunk": true,
-              "extractLicenses": false,
-              "sourceMap": true,
-              "namedChunks": true
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "namedChunks": false,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "2mb",
+                  "maximumError": "5mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "6kb",
+                  "maximumError": "10kb"
+                }
+              ]
             }
           },
-          "defaultConfiguration": "production"
+          "defaultConfiguration": ""
         },
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
+          "options": {
+            "browserTarget": "enlink:build"
+          },
           "configurations": {
             "production": {
-              "browserTarget": "Rocker:build:production"
-            },
-            "development": {
-              "browserTarget": "Rocker:build:development"
+              "browserTarget": "enlink:build:production"
             }
-          },
-          "defaultConfiguration": "development"
+          }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "Rocker:build"
+            "browserTarget": "enlink:build"
           }
         },
         "test": {
@@ -116,19 +96,30 @@
             "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.spec.json",
             "karmaConfig": "karma.conf.js",
-            "inlineStyleLanguage": "scss",
             "assets": [
               "src/favicon.ico",
               "src/assets"
             ],
             "styles": [
-              "src/styles.scss"
+              "src/styles.css"
             ],
             "scripts": []
+          }
+        },
+        "e2e": {
+          "builder": "@angular-devkit/build-angular:protractor",
+          "options": {
+            "protractorConfig": "e2e/protractor.conf.js",
+            "devServerTarget": "enlink:serve"
+          },
+          "configurations": {
+            "production": {
+              "devServerTarget": "enlink:serve:production"
+            }
           }
         }
       }
     }
   },
-  "defaultProject": "Rocker"
+  "defaultProject": "enlink"
 }

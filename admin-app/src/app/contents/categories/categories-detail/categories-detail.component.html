@@ -1,0 +1,71 @@
+<nz-modal [(nzVisible)]="isVisible" [nzTitle]="modalTitle" [nzContent]="modalContent" [nzFooter]="modalFooter"
+    (nzOnCancel)="cancel()">
+    <ng-template #modalTitle>Category</ng-template>
+
+    <ng-template #modalContent>
+        <form [formGroup]="categoryForm" (ngSubmit)="save()">
+            <div class="row">
+                <!--Title-->
+                <div class="col-md-12">
+                    <nz-form-item>
+                        <nz-form-label>Title</nz-form-label>
+                        <nz-form-control nzErrorTip="Please input your title!">
+                            <input nz-input placeholder="Tiêu đề danh mục" (keyup)="generateSlug()" name="title" formControlName="title">
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+
+                <!--Slug-->
+                <div class="col-md-12">
+                    <nz-form-item>
+                        <nz-form-label>Slug</nz-form-label>
+                        <nz-form-control nzErrorTip="Please input your slug!">
+                            <input nz-input placeholder="Đường dẫn SEO" name="slug" formControlName="slug">
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+
+                <!--Sort-->
+                <div class="col-md-12">
+                    <nz-form-item>
+                        <nz-form-label>Sort</nz-form-label>
+                        <nz-form-control nzErrorTip="Please input your sort order!">
+                            <input nz-input placeholder="Thứ tự hiển thị" name="sortOrder" formControlName="sortOrder">
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+
+                <!--Is Parent-->
+                <div class="col-md-12">
+                    <nz-form-item>
+                        <nz-form-control>
+                            <label nz-checkbox (click)="checkParent()" formControlName="isParent" >Have parent?</label>
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+
+                <!--Parent Category-->
+                <div class="col-md-12" *ngIf="isParentChecked">
+                    <nz-form-item>
+                        <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Choose a parent category" formControlName="parentCategoryId">
+                            <nz-option *ngFor="let item of categories$" nzLabel="{{item.title}}" nzValue="{{item.id}}"></nz-option>
+                        </nz-select>
+                    </nz-form-item>
+                </div>
+
+                <div class="col-md-12">
+                    <button nz-button nzType="primary" [nzLoading]="isConfirmLoading">Save</button>
+                </div>
+            </div>
+        </form>
+    </ng-template>
+
+    <ng-template #modalFooter>
+        <button nz-button nzType="primary">Close</button>
+    </ng-template>
+</nz-modal>
+
+<button (click)="open()" nz-button nzType="primary">
+    <i nz-icon nzType="form" nzTheme="outline"></i>
+    <span>Add</span>
+</button>
