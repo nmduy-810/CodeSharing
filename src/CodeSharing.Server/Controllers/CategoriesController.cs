@@ -35,8 +35,6 @@ public class CategoriesController : BaseController
             IsParent = x.IsParent
         }).OrderBy(x => x.SortOrder).ToListAsync();
         
-        
-
         _logger.LogInformation("Successful execution of get categories request");
         return Ok(items);
     }
