@@ -4,19 +4,11 @@
             <div class="d-md-flex">
                 <div class="m-b-10 m-r-20">
                     <nz-input-group [nzPrefix]="prefixTemplate">
-                        <input type="text" nz-input placeholder="Search Project" [(ngModel)]="searchInput" (ngModelChange)="search()">
+                        <input type="text" nz-input placeholder="Search category" [(ngModel)]="searchInput" (ngModelChange)="search()">
                     </nz-input-group>      
                     <ng-template #prefixTemplate>
                         <i nz-icon nzType="search" class="opacity-05"></i>
                     </ng-template>   
-                </div>
-                <div class="m-b-10 m-r-20 d-flex align-items-center">
-                    <nz-select style="min-width: 220px;" class="w-100" nzPlaceHolder="Status">
-                        <nz-option nzLabel="All" nzValue="all"></nz-option>
-                        <nz-option nzLabel="Approved" nzValue="approved"></nz-option>
-                        <nz-option nzLabel="Pending" nzValue="pending"></nz-option>
-                        <nz-option nzLabel="Rejected" nzValue="rejected"></nz-option>
-                    </nz-select>
                 </div>
             </div>          
         </div>

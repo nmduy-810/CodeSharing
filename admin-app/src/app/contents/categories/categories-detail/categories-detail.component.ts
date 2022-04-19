@@ -31,7 +31,7 @@ export class CategoriesDetailComponent implements OnInit, OnDestroy  {
   constructor(
     private categoriesService: CategoriesService, 
     private utilitiesService: UtilitiesService,
-    private fb: FormBuilder) { }
+    private fb: FormBuilder) {}
 
   @ViewChild('content') childView !: ElementRef
   ngOnInit(): void {

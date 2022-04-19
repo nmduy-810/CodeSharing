@@ -38,6 +38,8 @@ import { TableService } from '../shared/services/table.service';
 import { ThemeConstantService } from '../shared/services/theme-constant.service';
 import { SharedModule } from '../shared/shared.module';
 import { CategoriesDetailComponent } from './categories/categories-detail/categories-detail.component';
+import { PostsDetailComponent } from './posts/posts-detail/posts-detail.component';
+import { PostsAddComponent } from './posts/posts-add/posts-add.component';
 
 const antdModule = [
   NzButtonModule,
@@ -73,7 +75,10 @@ const antdModule = [
     PostsComponent,
     CategoriesComponent,
     CommentsComponent,
-    CategoriesDetailComponent
+    CategoriesDetailComponent,
+    PostsDetailComponent,
+    PostsAddComponent,
+    
   ],
   imports: [
     SharedModule,

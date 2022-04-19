@@ -1,5 +1,6 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { NzModalService } from 'ng-zorro-antd/modal';
+import { Subscription } from 'rxjs';
 import { Category } from 'src/app/shared/models';
 import { CategoriesService } from 'src/app/shared/services';
 import { TableService } from 'src/app/shared/services/table.service';
@@ -10,7 +11,7 @@ import { CategoriesDetailComponent } from './categories-detail/categories-detail
   templateUrl: './categories.component.html',
   styleUrls: ['./categories.component.css']
 })
-export class CategoriesComponent implements OnInit {
+export class CategoriesComponent implements OnInit, OnDestroy {
 
   // Initialize column table
   categoryColumn = [
@@ -46,12 +47,16 @@ export class CategoriesComponent implements OnInit {
   displayData = [];
   searchInput: string;
   categories$: any;
+  subscription = new Subscription();
 
   constructor(
     private tableSvc: TableService, 
     private categoriesService: CategoriesService,
     private modalService: NzModalService) {
       this.get();
+  }
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
   }
 
   @ViewChild(CategoriesDetailComponent) childView !:CategoriesDetailComponent;
@@ -60,9 +65,9 @@ export class CategoriesComponent implements OnInit {
   }
 
   get() {
-    this.categoriesService.get().subscribe((res: any) => {
+    this.subscription.add(this.categoriesService.get().subscribe((res: any) => {
       this.displayData = this.categories$ = res;
-    })
+    }));
   }
 
   search() {

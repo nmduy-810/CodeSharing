@@ -33,13 +33,19 @@ public class PostsController : BaseController
     [HttpGet]
     public async Task<IActionResult> GetPosts()
     {
-        var items = await _context.Posts.Select(u => new PostQuickVm()
+        var posts = from p in _context.Posts
+            join c in _context.Categories on p.CategoryId equals c.Id
+            orderby p.CreateDate descending
+            select new { p, c };
+        
+        var items = await posts.Select(u => new PostQuickVm()
         {
-            Id = u.Id,
-            CategoryId = u.CategoryId,
-            Slug = u.Slug,
-            Title = u.Title,
-            Content = u.Content,
+            Id = u.p.Id,
+            CategoryId = u.c.Id,
+            CategoryTitle = u.c.Title,
+            Slug = u.p.Slug,
+            Title = u.p.Title,
+            Content = u.p.Content,
         }).ToListAsync();
 
         _logger.LogInformation("Successful execution of get posts request");
