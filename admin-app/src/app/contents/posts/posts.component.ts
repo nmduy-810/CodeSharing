@@ -5,15 +5,6 @@ import { Post } from 'src/app/shared/models/post.model';
 import { PostsService } from 'src/app/shared/services';
 import { TableService } from 'src/app/shared/services/table.service';
 
-interface DataItem {
-  id: number;
-  name: string;
-  category: string;
-  price: number;
-  quantity: number;
-  status: string;
-}
-
 @Component({
   selector: 'app-posts',
   templateUrl: './posts.component.html',

@@ -27,13 +27,8 @@ import { NzMessageModule } from 'ng-zorro-antd/message';
 import { NzInputModule } from 'ng-zorro-antd/input';
 
 import { ProfileComponent } from './profile/profile.component';
-import { InvoiceComponent } from './invoice/invoice.component';
 import { MembersComponent } from './members/members.component';
-import { PricingComponent } from './pricing/pricing.component';
 import { SettingComponent } from './setting/setting.component';
-import { BlogGridComponent } from './blog/blog-grid/blog-grid.component';
-import { BlogListComponent } from './blog/blog-list/blog-list.component';
-import { BlogPostComponent } from './blog/blog-post/blog-post.component';
 
 const antdModule = [
     NzCardModule,
@@ -69,13 +64,8 @@ const antdModule = [
     ],
     declarations: [
         ProfileComponent,
-        InvoiceComponent,
         MembersComponent,
-        PricingComponent,
-        SettingComponent,
-        BlogGridComponent,
-        BlogListComponent,
-        BlogPostComponent
+        SettingComponent
     ],
     providers: [
     ]
