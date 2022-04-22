@@ -144,14 +144,6 @@ export const ROUTES: SideNavInterface[] = [
         icon: 'appstore',
         submenu: [
             {
-                path: '/apps/chat',
-                title: 'Chat',
-                iconType: '',
-                icon: '',
-                iconTheme: '',
-                submenu: []
-            },
-            {
                 path: '/apps/file-manager',
                 title: 'File Manager',
                 iconType: '',

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
@@ -14,7 +14,7 @@ import { NzMessageService } from 'ng-zorro-antd/message';
   templateUrl: './posts-add.component.html',
   styleUrls: ['./posts-add.component.css']
 })
-export class PostsAddComponent implements OnInit {
+export class PostsAddComponent implements OnInit, OnDestroy {
 
   subscription: Subscription[] = [];
   postForm: FormGroup;
@@ -29,12 +29,12 @@ export class PostsAddComponent implements OnInit {
       url: 'http://www.baidu.com/xxx.png'
     }
   ];
-  
+
   constructor(
-    private postsService: PostsService, 
-    private utilitiesService: UtilitiesService, 
+    private postsService: PostsService,
+    private utilitiesService: UtilitiesService,
     private categoriesService: CategoriesService,
-    private router: Router, 
+    private router: Router,
     private fb: FormBuilder,
     private msg: NzMessageService) { }
 
@@ -43,7 +43,7 @@ export class PostsAddComponent implements OnInit {
       'categoryId': new FormControl('', Validators.compose([Validators.required])),
       'title': new FormControl('', Validators.compose([Validators.required])),
       'slug': new FormControl('', Validators.compose([Validators.required])),
-      'content': new FormControl('', Validators.compose([Validators.required])),
+      'content': new FormControl(''),
       'labels': new FormControl(''),
     });
 
@@ -81,4 +81,11 @@ export class PostsAddComponent implements OnInit {
       this.msg.error(`${info.file.name} file upload failed.`);
     }
   }
+
+  ngOnDestroy(): void {
+    this.subscription.forEach(element => {
+      element.unsubscribe();
+    });
+  }
+
 }

@@ -1,5 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { NzModalService } from 'ng-zorro-antd/modal';
 import { Subscription } from 'rxjs';
 import { Post } from 'src/app/shared/models/post.model';
 import { PostsService } from 'src/app/shared/services';
@@ -36,11 +37,13 @@ export class PostsComponent implements OnInit, OnDestroy {
   searchInput: any;
   displayData = [];
   posts$: any;
+   selectedItems = [];
 
   constructor(
     private tableSvc: TableService, 
     private postsService: PostsService,
-    private router: Router) {
+    private router: Router,
+    private modalService: NzModalService) {
       this.get();
   }
   
@@ -77,7 +80,23 @@ export class PostsComponent implements OnInit, OnDestroy {
     this.router.navigateByUrl('/contents/posts-detail/');
   }
 
-  update() {
-    
+  update(id:any) {
+    this.router.navigateByUrl('/contents/posts/' + id);
+  }
+
+  delete(id:any) {
+    this.modalService.confirm({
+      nzTitle: 'Are you sure delete this post?',
+      nzContent: '<b style="color: red;">You wont be able to revert this!</b>',
+      nzOkText: 'Yes',
+      nzOkType: 'primary',
+      nzOkDanger: true,
+      nzCancelText: 'No',
+      nzOnOk: () => {
+        return this.postsService.delete(id).subscribe(result => {
+          this.get();
+        });
+      }
+    });
   }
 }
