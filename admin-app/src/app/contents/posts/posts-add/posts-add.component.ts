@@ -21,15 +21,6 @@ export class PostsAddComponent implements OnInit, OnDestroy {
   categories$: any;
   Editor = ClassicEditor;
 
-  fileList: NzUploadFile[] = [
-    {
-      uid: '-1',
-      name: 'xxx.png',
-      status: 'done',
-      url: 'http://www.baidu.com/xxx.png'
-    }
-  ];
-
   constructor(
     private postsService: PostsService,
     private utilitiesService: UtilitiesService,
@@ -44,6 +35,8 @@ export class PostsAddComponent implements OnInit, OnDestroy {
       'title': new FormControl('', Validators.compose([Validators.required])),
       'slug': new FormControl('', Validators.compose([Validators.required])),
       'content': new FormControl(''),
+      'coverImage': new FormControl(''),
+      'coverImageSource': new FormControl(''),
       'labels': new FormControl(''),
     });
 
@@ -59,7 +52,12 @@ export class PostsAddComponent implements OnInit, OnDestroy {
   }
 
   save() {
-
+    const formValues = this.postForm.getRawValue();
+    const formData = this.utilitiesService.ToFormData(formValues);
+    formData.append('coverImage', this.postForm.get('coverImageSource')?.value);
+    this.subscription.push(this.postsService.add(formData).subscribe((response: any) => {
+      console.log(response);
+    }));
   }
 
   reset(e: MouseEvent): void {
@@ -71,14 +69,12 @@ export class PostsAddComponent implements OnInit, OnDestroy {
     }
   }
 
-  handleChange(info: NzUploadChangeParam): void {
-    if (info.file.status !== 'uploading') {
-      console.log(info.file, info.fileList);
-    }
-    if (info.file.status === 'done') {
-      this.msg.success(`${info.file.name} file uploaded successfully`);
-    } else if (info.file.status === 'error') {
-      this.msg.error(`${info.file.name} file upload failed.`);
+  handleChange(event: any){
+    if (event.target.files.length > 0) {
+      const file = event.target.files[0];
+      this.postForm.patchValue({
+        coverImageSource: file
+      });
     }
   }
 

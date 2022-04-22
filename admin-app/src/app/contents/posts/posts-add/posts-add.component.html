@@ -45,12 +45,7 @@
             <div class="col-md-12">
                 <nz-form-item>
                     <nz-form-label [nzSm]="2">Cover image</nz-form-label>
-                    <nz-upload nzAction="https://www.mocky.io/v2/5cc8019d300000980a055e76" (nzChange)="handleChange($event)">
-                        <button nz-button>
-                            <i nz-icon nzType="upload"></i>
-                            Click to Upload
-                        </button>
-                    </nz-upload>
+                    <input type="file" id="file" (change)="handleChange($event)" formControlName="coverImage">
                 </nz-form-item>
             </div>
         </div>
@@ -62,6 +57,30 @@
                     <nz-form-label [nzSm]="2">Content</nz-form-label>
                     <nz-form-control>
                         <ckeditor [editor]="Editor" formControlName="content"></ckeditor>
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
+        </div>
+
+        <!--Label-->
+        <div class="row">
+            <div class="col-md-12">
+                <nz-form-item>
+                    <nz-form-label [nzSm]="2">Labels</nz-form-label>
+                    <nz-form-control>
+                        <input type="text" nz-input formControlName="labels" />
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
+        </div>
+
+        <!--Note-->
+        <div class="row">
+            <div class="col-md-12">
+                <nz-form-item>
+                    <nz-form-label [nzSm]="2">Note</nz-form-label>
+                    <nz-form-control>
+                        <textarea nz-input placeholder="Ghi chú" [nzAutosize]="{ minRows: 3, maxRows: 5 }"></textarea>
                     </nz-form-control>
                 </nz-form-item>
             </div>
