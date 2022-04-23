@@ -7,7 +7,6 @@ using CodeSharing.ViewModels.Contents.Post;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Net.Http.Headers;
 using CodeSharing.Server.Services.Interfaces;
 
 namespace CodeSharing.Server.Controllers;
@@ -153,7 +152,7 @@ public class PostsController : BaseController
             NumberOfComments = post.NumberOfComments,
             NumberOfVotes = post.NumberOfVotes,
             NumberOfReports = post.NumberOfReports,
-            CoverImage = AmazonS3Helper.GetPresignedUrl(post.CoverImage, 1440),
+            CoverImage = AmazonS3Helper.GetPresignedUrl(post.CoverImage),
             Attachments = attachments
         };
 
@@ -395,7 +394,7 @@ public class PostsController : BaseController
         post.Id = await _sequenceService.GetPostNewId();
     
         // Process label
-        if (request.Labels?.Length > 0)
+        if (request.Labels.Length > 0)
         {
             await ProcessLabel(request, post);
         }
@@ -416,7 +415,41 @@ public class PostsController : BaseController
 
         return BadRequest(new ApiBadRequestResponse("Insert post failed"));
     }
-   
+
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> Delete(int id)
+    {
+        var post = await _context.Posts.FindAsync(id);
+        if (post == null)
+        {
+            return NotFound(new ApiNotFoundResponse($"Can't found post item for id = {id} in database"));
+        }
+
+        _context.Posts.Remove(post);
+        var result = await _context.SaveChangesAsync();
+        if (result <= 0) 
+            return BadRequest(new ApiBadRequestResponse("Delete post failed"));
+        
+        var postVm = new PostVm()
+        {
+            Id = post.Id,
+            CategoryId = post.CategoryId,
+            Title = post.Title,
+            CoverImage = post.CoverImage,
+            Content = post.Content,
+            Slug = post.Slug,
+            Note = post.Note,
+            OwnerUserId = post.OwnerUserId,
+            Labels = !string.IsNullOrEmpty(post.Labels) ? post.Labels.Split(',') : null,
+            CreateDate = post.CreateDate,
+            LastModifiedDate = post.LastModifiedDate,
+            NumberOfComments = post.NumberOfComments,
+            NumberOfVotes = post.NumberOfVotes,
+            NumberOfReports = post.NumberOfReports
+        };
+        return Ok(postVm);
+    }
+
     #region Helpers
 
     private async Task ProcessLabel(PostCreateRequest request, Post post)

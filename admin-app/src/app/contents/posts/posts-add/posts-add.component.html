@@ -1,11 +1,11 @@
-<form class="form-horizontal form-label-left" novalidate [formGroup]="postForm" (ngSubmit)="save()">
+<form [formGroup]="postForm" (ngSubmit)="save()">
     <nz-card>
         <!--Category-->
         <div class="row">
             <div class="col-md-12">
                 <nz-form-item>
                     <nz-form-label [nzSm]="2">Category</nz-form-label>
-                    <nz-form-control>
+                    <nz-form-control nzErrorTip="Please choose your category!">
                         <nz-select class="w-100" nzPlaceHolder="Chọn danh mục" formControlName="categoryId">
                             <nz-option *ngFor="let item of categories$" nzLabel="{{item.title}}" nzValue="{{item.id}}">
                             </nz-option>
@@ -20,7 +20,7 @@
             <div class="col-md-12">
                 <nz-form-item>
                     <nz-form-label [nzSm]="2">Title</nz-form-label>
-                    <nz-form-control>
+                    <nz-form-control nzErrorTip="Please input your title!">
                         <input nz-input (keyup)="generateSeoAlias()" placeholder="Tiêu đề bài viết"
                             formControlName="title">
                     </nz-form-control>
@@ -33,7 +33,7 @@
             <div class="col-md-12">
                 <nz-form-item>
                     <nz-form-label [nzSm]="2">Slug</nz-form-label>
-                    <nz-form-control>
+                    <nz-form-control nzErrorTip="Please input your slug!">
                         <input nz-input placeholder="Tiêu đề SEO" formControlName="slug">
                     </nz-form-control>
                 </nz-form-item>
@@ -45,7 +45,9 @@
             <div class="col-md-12">
                 <nz-form-item>
                     <nz-form-label [nzSm]="2">Cover image</nz-form-label>
-                    <input type="file" id="file" (change)="handleChange($event)" formControlName="coverImage">
+                    <nz-form-control nzErrorTip="Please choose your cover image!">
+                        <input type="file" id="file" (change)="handleChange($event)" formControlName="coverImage">
+                    </nz-form-control>
                 </nz-form-item>
             </div>
         </div>
@@ -55,7 +57,7 @@
             <div class="col-md-12">
                 <nz-form-item>
                     <nz-form-label [nzSm]="2">Content</nz-form-label>
-                    <nz-form-control>
+                    <nz-form-control nzErrorTip="Please input your content!">
                         <ckeditor [editor]="Editor" formControlName="content"></ckeditor>
                     </nz-form-control>
                 </nz-form-item>
@@ -67,7 +69,7 @@
             <div class="col-md-12">
                 <nz-form-item>
                     <nz-form-label [nzSm]="2">Labels</nz-form-label>
-                    <nz-form-control>
+                    <nz-form-control nzErrorTip="Please input your label!">
                         <input type="text" nz-input formControlName="labels" />
                     </nz-form-control>
                 </nz-form-item>
@@ -79,7 +81,7 @@
             <div class="col-md-12">
                 <nz-form-item>
                     <nz-form-label [nzSm]="2">Note</nz-form-label>
-                    <nz-form-control>
+                    <nz-form-control nzErrorTip="Please input your note!">
                         <textarea nz-input placeholder="Ghi chú" [nzAutosize]="{ minRows: 3, maxRows: 5 }" formControlName="note"></textarea>
                     </nz-form-control>
                 </nz-form-item>

@@ -1,6 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { NzModalService } from 'ng-zorro-antd/modal';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { Subscription } from 'rxjs';
 import { Post } from 'src/app/shared/models/post.model';
 import { PostsService } from 'src/app/shared/services';
@@ -43,7 +44,8 @@ export class PostsComponent implements OnInit, OnDestroy {
     private tableSvc: TableService, 
     private postsService: PostsService,
     private router: Router,
-    private modalService: NzModalService) {
+    private modalService: NzModalService,
+    private notification: NzNotificationService) {
       this.get();
   }
   
@@ -57,7 +59,6 @@ export class PostsComponent implements OnInit, OnDestroy {
   get() {
     this.subscription.add(this.postsService.get().subscribe((res: any) => {
       this.displayData = this.posts$ = res;
-      console.log(res);
     }));
   }
 
@@ -95,6 +96,7 @@ export class PostsComponent implements OnInit, OnDestroy {
       nzOnOk: () => {
         return this.postsService.delete(id).subscribe(result => {
           this.get();
+          this.notification.create('success', 'Confirm', 'Delet post successfully!');
         });
       }
     });

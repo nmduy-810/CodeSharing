@@ -15,8 +15,18 @@ import { Router } from '@angular/router';
 })
 export class PostsAddComponent implements OnInit, OnDestroy {
 
+  postForm = this.fb.group({
+    'categoryId': new FormControl('', Validators.compose([Validators.required])),
+    'title': new FormControl('', Validators.compose([Validators.required])),
+    'slug': new FormControl('', Validators.compose([Validators.required])),
+    'content': new FormControl('', Validators.compose([Validators.required])),
+    'coverImage': new FormControl('', Validators.compose([Validators.required])),
+    'coverImageSource': new FormControl(''),
+    'labels': new FormControl('', Validators.compose([Validators.required])),
+    'note': new FormControl('', Validators.compose([Validators.required]))
+  });
+
   subscription: Subscription[] = [];
-  postForm: FormGroup;
   categories$: any;
   Editor = ClassicEditor;
 
@@ -29,17 +39,6 @@ export class PostsAddComponent implements OnInit, OnDestroy {
     private router: Router) { }
 
   ngOnInit(): void {
-    this.postForm = this.fb.group({
-      'categoryId': new FormControl('', Validators.compose([Validators.required])),
-      'title': new FormControl('', Validators.compose([Validators.required])),
-      'slug': new FormControl('', Validators.compose([Validators.required])),
-      'content': new FormControl(''),
-      'coverImage': new FormControl(''),
-      'coverImageSource': new FormControl(''),
-      'labels': new FormControl(''),
-      'note': new FormControl('')
-    });
-
     this.subscription.push(this.categoriesService.get()
       .subscribe((response: Category[]) => {
         this.categories$ = response;
@@ -52,16 +51,26 @@ export class PostsAddComponent implements OnInit, OnDestroy {
   }
 
   save() {
-    const formValues = this.postForm.getRawValue();
-    const formData = this.utilitiesService.ToFormData(formValues);
-    formData.append('coverImage', this.postForm.get('coverImageSource')?.value);
-    this.subscription.push(this.postsService.add(formData).subscribe((response: any) => {
-      console.log(response);
-      if (response.status === 201) {
-        this.notification.create('success', 'Confirm', 'Insert new post successfully!');
-        this.router.navigateByUrl('/contents/posts');
-      }
-    }));
+    if (this.postForm.valid) {
+      const formValues = this.postForm.getRawValue();
+      const formData = this.utilitiesService.ToFormData(formValues);
+      formData.append('coverImage', this.postForm.get('coverImageSource')?.value);
+      this.subscription.push(this.postsService.add(formData).subscribe((response: any) => {
+        console.log(response);
+        if (response.status === 201) {
+          this.notification.create('success', 'Confirm', 'Insert new post successfully!');
+          this.router.navigateByUrl('/contents/posts');
+        }
+      }));
+    }
+    else {
+      Object.values(this.postForm.controls).forEach(control => {
+        if (control.invalid) {
+          control.markAsDirty();
+          control.updateValueAndValidity({ onlySelf: true });
+        }
+      });
+    }
   }
 
   reset(e: MouseEvent): void {
@@ -87,5 +96,4 @@ export class PostsAddComponent implements OnInit, OnDestroy {
       element.unsubscribe();
     });
   }
-
 }
