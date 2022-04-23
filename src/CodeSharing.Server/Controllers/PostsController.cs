@@ -435,7 +435,7 @@ public class PostsController : BaseController
         post.Labels = string.Join(',', request.Labels);
         
         // Process Cover Image
-        if (!string.IsNullOrEmpty(request.CoverImage?.FileName))
+        if (!string.IsNullOrEmpty(request.CoverImage.FileName))
         {
             var fileName = request.CoverImage.FileName;
             var imageBase64 = FunctionBase.ConvertToBase64(request.CoverImage);
