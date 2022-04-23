@@ -29,6 +29,7 @@ export class PostsAddComponent implements OnInit, OnDestroy {
   subscription: Subscription[] = [];
   categories$: any;
   Editor = ClassicEditor;
+  coverImage: any;
 
   constructor(
     private postsService: PostsService,
@@ -54,7 +55,9 @@ export class PostsAddComponent implements OnInit, OnDestroy {
     if (this.postForm.valid) {
       const formValues = this.postForm.getRawValue();
       const formData = this.utilitiesService.ToFormData(formValues);
+
       formData.append('coverImage', this.postForm.get('coverImageSource')?.value);
+      
       this.subscription.push(this.postsService.add(formData).subscribe((response: any) => {
         console.log(response);
         if (response.status === 201) {

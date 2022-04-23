@@ -416,6 +416,51 @@ public class PostsController : BaseController
         return BadRequest(new ApiBadRequestResponse("Insert post failed"));
     }
 
+    [HttpPut("{id}")]
+    [Consumes("multipart/form-data")]
+    public async Task<IActionResult> Put(int id, [FromForm] PostCreateRequest request)
+    {
+        var post = await _context.Posts.FindAsync(id);
+        if (post == null)
+        {
+            return NotFound(new ApiNotFoundResponse($"Can't found post item for id = {id} in database"));
+        }
+        
+        // Set post with new data
+        post.CategoryId = request.CategoryId;
+        post.Title = request.Title;
+        post.Slug = string.IsNullOrEmpty(request.Slug) ? TextHelper.ToUnsignString(request.Title) : request.Slug;
+        post.Content = request.Content;
+        post.Note = request.Note;
+        post.Labels = string.Join(',', request.Labels);
+        
+        // Process Cover Image
+        if (!string.IsNullOrEmpty(request.CoverImage?.FileName))
+        {
+            var fileName = request.CoverImage.FileName;
+            var imageBase64 = FunctionBase.ConvertToBase64(request.CoverImage);
+            AmazonS3Helper.UploadImage(fileName, imageBase64, out var coverImageUrl);
+            post.CoverImage = coverImageUrl;
+        }
+        
+        // Process label
+        if (request.Labels.Length > 0)
+        {
+            await ProcessLabel(request, post);
+        }
+
+        // Update post
+        _context.Posts.Update(post);
+        
+        var result = await _context.SaveChangesAsync();
+
+        if (result > 0)
+        {
+            return NoContent();
+        }
+        return BadRequest(new ApiBadRequestResponse($"Update post failed"));
+    }
+
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(int id)
     {

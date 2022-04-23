@@ -1,13 +1,12 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { NzMessageService } from 'ng-zorro-antd/message';
-import { NzUploadChangeParam, NzUploadFile } from 'ng-zorro-antd/upload';
 import { Subscription } from 'rxjs';
 import { PostsService, CategoriesService } from 'src/app/shared/services';
 import { UtilitiesService } from 'src/app/shared/services/utilities.service';
 import * as ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import { Category } from 'src/app/shared/models';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
 
 @Component({
   selector: 'app-posts-detail',
@@ -17,57 +16,57 @@ import { Category } from 'src/app/shared/models';
 export class PostsDetailComponent implements OnInit, OnDestroy {
 
   subscription: Subscription[] = [];
-  postForm: FormGroup;
   categories$: any;
+  postForm: FormGroup;
   Editor = ClassicEditor;
+  postId: any;
 
-  fileList: NzUploadFile[] = [
-    {
-      uid: '-1',
-      name: 'xxx.png',
-      status: 'done',
-      url: 'http://www.baidu.com/xxx.png'
-    }
-  ];
-  
   constructor(
-    private postsService: PostsService, 
-    private utilitiesService: UtilitiesService, 
+    private postsService: PostsService,
+    private utilitiesService: UtilitiesService,
     private categoriesService: CategoriesService,
     private route: ActivatedRoute,
     private fb: FormBuilder,
-    private msg: NzMessageService) { }
+    private notification: NzNotificationService,
+    private router: Router) { }
 
   ngOnInit(): void {
     const id = Number(this.route.snapshot.paramMap.get('id'));
+
+    this.postForm = this.fb.group({
+      'categoryId': new FormControl('', Validators.compose([Validators.required])),
+      'title': new FormControl('', Validators.compose([Validators.required])),
+      'slug': new FormControl('', Validators.compose([Validators.required])),
+      'content': new FormControl('', Validators.compose([Validators.required])),
+      'coverImage': new FormControl('', Validators.compose([Validators.required])),
+      'coverImageSource': new FormControl(''),
+      'labels': new FormControl('', Validators.compose([Validators.required])),
+      'note': new FormControl('', Validators.compose([Validators.required]))
+    });
 
     this.subscription.push(this.categoriesService.get()
       .subscribe((response: Category[]) => {
         this.categories$ = response;
       }));
 
-    this.postForm = this.fb.group({
-      'categoryId': new FormControl('', Validators.compose([Validators.required])),
-      'title': new FormControl('', Validators.compose([Validators.required])),
-      'slug': new FormControl('', Validators.compose([Validators.required])),
-      'content': new FormControl(''),
-      'labels': new FormControl(''),
-    });
-
     if (id) {
       this.getById(id);
+      this.postId = id;
     }
   }
 
-  getById(id:any) {
-    this.subscription.push(this.postsService.getById(id).subscribe((response: any) => { 
+  getById(id: any) {
+    this.subscription.push(this.postsService.getById(id).subscribe((response: any) => {
       console.log(response);
       this.postForm.setValue({
         'categoryId': response.categoryId,
         'title': response.title,
         'slug': response.slug,
         'content': response.content,
+        'coverImage': '',
+        'coverImageSource': '',
         'labels': response.labels,
+        'note': response.note
       });
     }));
   }
@@ -78,7 +77,28 @@ export class PostsDetailComponent implements OnInit, OnDestroy {
   }
 
   save() {
+    if (this.postForm.valid) {
+      const formValues = this.postForm.getRawValue();
+      const formData = this.utilitiesService.ToFormData(formValues);
 
+      formData.append('coverImage', this.postForm.get('coverImageSource')?.value);
+
+      this.subscription.push(this.postsService.update(this.postId, formData).subscribe((response: any) => {
+        console.log(response);
+        if (response.status === 204) {
+          this.notification.create('success', 'Confirm', 'Update post successfully!');
+          this.router.navigateByUrl('/contents/posts');
+        }
+      }));
+    }
+    else {
+      Object.values(this.postForm.controls).forEach(control => {
+        if (control.invalid) {
+          control.markAsDirty();
+          control.updateValueAndValidity({ onlySelf: true });
+        }
+      });
+    }
   }
 
   reset(e: MouseEvent): void {
@@ -90,14 +110,12 @@ export class PostsDetailComponent implements OnInit, OnDestroy {
     }
   }
 
-  handleChange(info: NzUploadChangeParam): void {
-    if (info.file.status !== 'uploading') {
-      console.log(info.file, info.fileList);
-    }
-    if (info.file.status === 'done') {
-      this.msg.success(`${info.file.name} file uploaded successfully`);
-    } else if (info.file.status === 'error') {
-      this.msg.error(`${info.file.name} file upload failed.`);
+  handleChange(event: any) {
+    if (event.target.files.length > 0) {
+      const file = event.target.files[0];
+      this.postForm.patchValue({
+        coverImageSource: file
+      });
     }
   }
 

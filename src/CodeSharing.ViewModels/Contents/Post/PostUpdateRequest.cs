@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Http;
 
 namespace CodeSharing.ViewModels.Contents.Post;
 
-public class PostCreateRequest
+public class PostUpdateRequest
 {
     public int CategoryId { get; set; }
     public IFormFile CoverImage { get; set; }
