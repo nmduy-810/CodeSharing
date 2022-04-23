@@ -38,6 +38,7 @@ export class PostsAddComponent implements OnInit, OnDestroy {
       'coverImage': new FormControl(''),
       'coverImageSource': new FormControl(''),
       'labels': new FormControl(''),
+      'note': new FormControl('')
     });
 
     this.subscription.push(this.categoriesService.get()

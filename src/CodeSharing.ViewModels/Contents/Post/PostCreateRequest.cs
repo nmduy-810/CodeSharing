@@ -4,9 +4,8 @@ namespace CodeSharing.ViewModels.Contents.Post;
 
 public class PostCreateRequest
 {
-    public int Id { get; set; }
+    public int? Id { get; set; }
     public int CategoryId { get; set; }
-    
     public IFormFile CoverImage { get; set; }
     public string Title { get; set; }
     public string Content { get; set; }

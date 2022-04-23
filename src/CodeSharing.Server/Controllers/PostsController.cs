@@ -110,7 +110,7 @@ public class PostsController : BaseController
     }
 
     [AllowAnonymous]
-    [HttpGet("{id:int}")]
+    [HttpGet("{id}")]
     public async Task<IActionResult> GetById(int id)
     {
         var post = await _context.Posts.FindAsync(id);
@@ -136,8 +136,26 @@ public class PostsController : BaseController
                 FileType = x.FileType
             }).ToListAsync();
 
-        var items = InitPostVm(post);
-        items.Attachments = attachments;
+        var items = new PostVm
+        {
+            Id = post.Id,
+            CategoryId = post.CategoryId,
+            CategorySlug = category.Slug,
+            CategoryTitle = category.Title,
+            Title = post.Title,
+            Content = post.Content,
+            Slug = post.Slug,
+            Note = post.Note,
+            OwnerUserId = post.OwnerUserId,
+            Labels = !string.IsNullOrEmpty(post.Labels) ? post.Labels.Split(',') : null,
+            CreateDate = post.CreateDate,
+            LastModifiedDate = post.LastModifiedDate,
+            NumberOfComments = post.NumberOfComments,
+            NumberOfVotes = post.NumberOfVotes,
+            NumberOfReports = post.NumberOfReports,
+            CoverImage = AmazonS3Helper.GetPresignedUrl(post.CoverImage, 1440),
+            Attachments = attachments
+        };
 
         _logger.LogInformation("Successful execution of get post by id request");
         return Ok(items);
@@ -358,10 +376,16 @@ public class PostsController : BaseController
             Slug = request.Slug,
             Note = request.Note
         };
-
+        
         if (request.Labels.Length > 0)
         {
             post.Labels = string.Join(',', request.Labels);
+        }
+        
+        // Process Slug
+        if (string.IsNullOrEmpty(post.Slug))
+        {
+            post.Slug = TextHelper.ToUnsignString(post.Title);
         }
         
         // Process Owner User Id
