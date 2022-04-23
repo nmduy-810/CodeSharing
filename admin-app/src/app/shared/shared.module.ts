@@ -9,7 +9,6 @@ import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
 import { ThemeConstantService } from './services/theme-constant.service';
 import { SearchPipe } from './pipes/search.pipe';
 import { SplitPipe } from './pipes/split.pipe';
-
 @NgModule({
     exports: [
         CommonModule,

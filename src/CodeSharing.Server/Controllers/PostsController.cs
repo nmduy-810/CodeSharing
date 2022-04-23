@@ -418,27 +418,6 @@ public class PostsController : BaseController
     }
    
     #region Helpers
-    
-    private static PostVm InitPostVm(Post post)
-    {
-        return new PostVm()
-        {
-            Id = post.Id,
-            CategoryId = post.CategoryId,
-            Title = post.Title,
-            Content = post.Content,
-            Slug = post.Slug,
-            Note = post.Note,
-            OwnerUserId = post.OwnerUserId,
-            Labels = !string.IsNullOrEmpty(post.Labels) ? post.Labels.Split(',') : null,
-            CreateDate = post.CreateDate,
-            LastModifiedDate = post.LastModifiedDate,
-            NumberOfComments = post.NumberOfComments,
-            NumberOfVotes = post.NumberOfVotes,
-            NumberOfReports = post.NumberOfReports,
-            CoverImage = AmazonS3Helper.GetPresignedUrl(post.CoverImage, 1440)
-        };
-    }
 
     private async Task ProcessLabel(PostCreateRequest request, Post post)
     {
