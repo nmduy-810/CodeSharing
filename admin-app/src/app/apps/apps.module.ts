@@ -33,7 +33,6 @@ import { NzDatePickerModule } from 'ng-zorro-antd/date-picker';
 import { NzCheckboxModule } from 'ng-zorro-antd/checkbox';
 import { NzMessageModule } from 'ng-zorro-antd/message';
 
-import { ChatComponent } from './chat/chat.component';
 import { FileManagerComponent } from './file-manager/file-manager.component';
 import { MailComponent } from './mail/mail.component';
 import { ProjectListComponent } from './projects/project-list/project-list.component';
@@ -78,7 +77,6 @@ const antdModule = [
         ...antdModule
     ],
     declarations: [
-        ChatComponent,
         FileManagerComponent,
         MailComponent,
         ProjectListComponent,

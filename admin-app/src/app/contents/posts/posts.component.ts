@@ -1,18 +1,11 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { NzModalService } from 'ng-zorro-antd/modal';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { Subscription } from 'rxjs';
 import { Post } from 'src/app/shared/models/post.model';
 import { PostsService } from 'src/app/shared/services';
 import { TableService } from 'src/app/shared/services/table.service';
-
-interface DataItem {
-  id: number;
-  name: string;
-  category: string;
-  price: number;
-  quantity: number;
-  status: string;
-}
 
 @Component({
   selector: 'app-posts',
@@ -45,11 +38,14 @@ export class PostsComponent implements OnInit, OnDestroy {
   searchInput: any;
   displayData = [];
   posts$: any;
+   selectedItems = [];
 
   constructor(
     private tableSvc: TableService, 
     private postsService: PostsService,
-    private router: Router) {
+    private router: Router,
+    private modalService: NzModalService,
+    private notification: NzNotificationService) {
       this.get();
   }
   
@@ -63,7 +59,6 @@ export class PostsComponent implements OnInit, OnDestroy {
   get() {
     this.subscription.add(this.postsService.get().subscribe((res: any) => {
       this.displayData = this.posts$ = res;
-      console.log(res);
     }));
   }
 
@@ -86,7 +81,24 @@ export class PostsComponent implements OnInit, OnDestroy {
     this.router.navigateByUrl('/contents/posts-detail/');
   }
 
-  update() {
-    
+  update(id:any) {
+    this.router.navigateByUrl('/contents/posts/' + id);
+  }
+
+  delete(id:any) {
+    this.modalService.confirm({
+      nzTitle: 'Are you sure delete this post?',
+      nzContent: '<b style="color: red;">You wont be able to revert this!</b>',
+      nzOkText: 'Yes',
+      nzOkType: 'primary',
+      nzOkDanger: true,
+      nzCancelText: 'No',
+      nzOnOk: () => {
+        return this.postsService.delete(id).subscribe(result => {
+          this.get();
+          this.notification.create('success', 'Confirm', 'Delet post successfully!');
+        });
+      }
+    });
   }
 }

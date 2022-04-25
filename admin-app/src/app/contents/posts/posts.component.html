@@ -43,14 +43,14 @@
         <tbody>
             <tr *ngFor="let item of postsListTable.data; let i=index">
                 <td>#{{item.id}}</td>
-                <td>#{{item.title}}</td>
+                <td>{{item.title}}</td>
                 <td>{{item.categoryTitle}}</td>
                 <td class="text-md-right">
                     <a class="m-r-5" nz-button nzType="default" nzShape="circle" nz-tooltip nzTooltipTitle="Edit">
-                        <i nz-icon nzType="edit" theme="outline"></i>
+                        <i nz-icon nzType="edit" (click)="update(item.id)" theme="outline"></i>
                     </a>
                     <button nz-button nzType="default" nzShape="circle" nz-tooltip nzTooltipTitle="Delete">
-                        <i nz-icon nzType="delete" theme="outline"></i>
+                        <i nz-icon nzType="delete" (click)="delete(item.id)" theme="outline"></i>
                     </button>
                 </td>
             </tr>

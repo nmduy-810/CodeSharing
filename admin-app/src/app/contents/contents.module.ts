@@ -40,6 +40,7 @@ import { SharedModule } from '../shared/shared.module';
 import { CategoriesDetailComponent } from './categories/categories-detail/categories-detail.component';
 import { PostsDetailComponent } from './posts/posts-detail/posts-detail.component';
 import { PostsAddComponent } from './posts/posts-add/posts-add.component';
+import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
 
 const antdModule = [
   NzButtonModule,
@@ -85,6 +86,7 @@ const antdModule = [
     CommonModule,
     ContentsRoutingModule,
     ReactiveFormsModule,
+    CKEditorModule,
     QuillModule.forRoot(),
         ...antdModule
   ],

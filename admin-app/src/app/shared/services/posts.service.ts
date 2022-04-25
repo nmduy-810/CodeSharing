@@ -49,12 +49,4 @@ export class PostsService extends BaseService {
                 catchError(this.handleError)
             );
     }
-
-    deleteAttachment(postId, attachmentId) {
-        return this.http.delete(environment.apiUrl + '/api/posts/' + postId
-            + '/attachments/' + attachmentId, { headers: this._headers })
-            .pipe(
-                catchError(this.handleError)
-            );
-    }
 }

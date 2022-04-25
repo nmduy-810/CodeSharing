@@ -18,4 +18,5 @@ public class PostVm
     public int? NumberOfVotes { get; set; }
     public int? NumberOfReports { get; set; }
     public List<AttachmentVm> Attachments { set; get; }
+    public string CoverImage { get; set; }
 }

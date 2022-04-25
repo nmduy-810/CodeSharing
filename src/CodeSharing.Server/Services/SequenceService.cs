@@ -22,7 +22,7 @@ public class SequenceService : ISequenceService
             await conn.OpenAsync();
         }
 
-        var result = await conn.ExecuteScalarAsync<int>(@"SELECT (NEXT VALUE FOR KnowledgeBaseSequence)", null, null, 120, CommandType.Text);
+        var result = await conn.ExecuteScalarAsync<int>(@"SELECT (NEXT VALUE FOR PostSequence)", null, null, 120, CommandType.Text);
         return result;
     }
 }

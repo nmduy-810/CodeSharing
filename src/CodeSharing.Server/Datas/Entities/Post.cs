@@ -16,6 +16,9 @@ public class Post : IDateTracking
     public int CategoryId { get; set; }
     
     [Required]
+    public string CoverImage { get; set; }
+    
+    [Required]
     [MaxLength(500)]
     public string Title { get; set; }
     

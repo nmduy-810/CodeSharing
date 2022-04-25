@@ -1,5 +1,4 @@
 import { Routes } from '@angular/router';
-import { ComponentsComponent } from '../../components/components.component'
 import { AuthGuard } from '../guard';
 
 export const CommonLayout_ROUTES: Routes = [
@@ -8,7 +7,7 @@ export const CommonLayout_ROUTES: Routes = [
     {
         path: 'dashboard',
         loadChildren: () => import('../../dashboard/dashboard.module').then(m => m.DashboardModule),
-        //canActivate: [AuthGuard]
+        canActivate: [AuthGuard]
     },
 
     //Apps
@@ -26,45 +25,6 @@ export const CommonLayout_ROUTES: Routes = [
             {
                 path: '',
                 loadChildren: () => import('../../apps/apps.module').then(m => m.AppsModule)
-            },
-        ]    
-    },
-
-    //Component
-    {
-        path: 'demo',
-        component: ComponentsComponent,
-        children: [
-            {
-                path: '',
-                redirectTo: '/components/affix',
-                pathMatch: 'full'
-            }, 
-            {
-                path: '',
-                loadChildren: () => import('../../components/components.module').then(m => m.ComponentsModule)
-            }
-        ],
-        data: {
-            title: 'Components '
-        }
-    },
-
-    // Charts
-    {
-        path: 'charts',
-        data: {
-            title: 'Charts'
-        },
-        children: [
-            {
-                path: '',
-                redirectTo: '/dashboard',
-                pathMatch: 'full'
-            }, 
-            {
-                path: '',
-                loadChildren: () => import('../../charts/charts.module').then(m => m.ChartsModule)
             },
         ]    
     },

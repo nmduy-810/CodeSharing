@@ -9,7 +9,7 @@ import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
 import { ThemeConstantService } from './services/theme-constant.service';
 import { SearchPipe } from './pipes/search.pipe';
 import { SplitPipe } from './pipes/split.pipe';
-
+import { NzNotificationService } from 'ng-zorro-antd/notification';
 @NgModule({
     exports: [
         CommonModule,
@@ -33,7 +33,8 @@ import { SplitPipe } from './pipes/split.pipe';
         SplitPipe
     ],
     providers: [
-        ThemeConstantService
+        ThemeConstantService,
+        NzNotificationService
     ]
 })
 

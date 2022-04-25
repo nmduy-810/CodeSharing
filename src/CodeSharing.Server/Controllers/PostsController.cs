@@ -1,15 +1,12 @@
-using CodeSharing.Server.Authorization;
 using CodeSharing.Server.Datas.Entities;
 using CodeSharing.Server.Datas.Provider;
 using CodeSharing.Server.Extensions;
 using CodeSharing.Utilities.Commons;
-using CodeSharing.Utilities.Constants;
 using CodeSharing.Utilities.Helpers;
 using CodeSharing.ViewModels.Contents.Post;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Net.Http.Headers;
 using CodeSharing.Server.Services.Interfaces;
 
 namespace CodeSharing.Server.Controllers;
@@ -19,14 +16,15 @@ public class PostsController : BaseController
     private readonly ApplicationDbContext _context;
     private readonly ILogger<PostsController> _logger;
     private readonly ISequenceService _sequenceService;
-    private readonly IStorageService _storageService;
     
-    public PostsController(ApplicationDbContext context, ILogger<PostsController> logger, ISequenceService sequenceService, IStorageService storageService)
+    public PostsController(
+        ApplicationDbContext context, 
+        ILogger<PostsController> logger, 
+        ISequenceService sequenceService)
     {
         _context = context;
         _logger = logger ?? throw new ArgumentException(null, nameof(logger));
         _sequenceService = sequenceService;
-        _storageService = storageService;
     }
     
     [AllowAnonymous]
@@ -46,6 +44,7 @@ public class PostsController : BaseController
             Slug = u.p.Slug,
             Title = u.p.Title,
             Content = u.p.Content,
+            CoverImage = AmazonS3Helper.GetPresignedUrl(u.p.CoverImage, 1440)
         }).ToListAsync();
 
         _logger.LogInformation("Successful execution of get posts request");
@@ -73,7 +72,8 @@ public class PostsController : BaseController
             CategorySlug = x.c.Slug,
             CategoryTitle = x.c.Title,
             NumberOfVotes = x.p.NumberOfVotes,
-            CreateDate = x.p.CreateDate
+            CreateDate = x.p.CreateDate,
+            CoverImage = AmazonS3Helper.GetPresignedUrl(x.p.CoverImage, 1440)
         }).ToListAsync();
 
         _logger.LogInformation("Successful execution of get latest posts request");
@@ -100,7 +100,8 @@ public class PostsController : BaseController
                 CategorySlug = x.c.Slug,
                 CategoryTitle = x.c.Title,
                 NumberOfVotes = x.p.NumberOfVotes,
-                CreateDate = x.p.CreateDate
+                CreateDate = x.p.CreateDate,
+                CoverImage = AmazonS3Helper.GetPresignedUrl(x.p.CoverImage, 1440)
             }).ToListAsync();
 
         _logger.LogInformation("Successful execution of get popular posts request");
@@ -108,7 +109,7 @@ public class PostsController : BaseController
     }
 
     [AllowAnonymous]
-    [HttpGet("{id:int}")]
+    [HttpGet("{id}")]
     public async Task<IActionResult> GetById(int id)
     {
         var post = await _context.Posts.FindAsync(id);
@@ -134,8 +135,26 @@ public class PostsController : BaseController
                 FileType = x.FileType
             }).ToListAsync();
 
-        var items = InitPostVm(post);
-        items.Attachments = attachments;
+        var items = new PostVm
+        {
+            Id = post.Id,
+            CategoryId = post.CategoryId,
+            CategorySlug = category.Slug,
+            CategoryTitle = category.Title,
+            Title = post.Title,
+            Content = post.Content,
+            Slug = post.Slug,
+            Note = post.Note,
+            OwnerUserId = post.OwnerUserId,
+            Labels = !string.IsNullOrEmpty(post.Labels) ? post.Labels.Split(',') : null,
+            CreateDate = post.CreateDate,
+            LastModifiedDate = post.LastModifiedDate,
+            NumberOfComments = post.NumberOfComments,
+            NumberOfVotes = post.NumberOfVotes,
+            NumberOfReports = post.NumberOfReports,
+            CoverImage = AmazonS3Helper.GetPresignedUrl(post.CoverImage),
+            Attachments = attachments
+        };
 
         _logger.LogInformation("Successful execution of get post by id request");
         return Ok(items);
@@ -171,7 +190,8 @@ public class PostsController : BaseController
                 CategoryTitle = x.c.Title,
                 NumberOfVotes = x.p.NumberOfVotes,
                 CreateDate = x.p.CreateDate,
-                NumberOfComments = x.p.NumberOfComments
+                NumberOfComments = x.p.NumberOfComments,
+                CoverImage = AmazonS3Helper.GetPresignedUrl(x.p.CoverImage, 1440)
             }).ToListAsync();
 
         var pagination = new Pagination<PostQuickVm>
@@ -213,7 +233,8 @@ public class PostsController : BaseController
                 CategoryTitle = x.c.Title,
                 NumberOfVotes = x.p.NumberOfVotes,
                 CreateDate = x.p.CreateDate,
-                NumberOfComments = x.p.NumberOfComments
+                NumberOfComments = x.p.NumberOfComments,
+                CoverImage = AmazonS3Helper.GetPresignedUrl(x.p.CoverImage, 1440)
             }).ToListAsync();
 
         var pagination = new Pagination<PostQuickVm>()
@@ -285,7 +306,8 @@ public class PostsController : BaseController
                 CategoryTitle = x.c.Title,
                 NumberOfVotes = x.p.NumberOfVotes,
                 CreateDate = x.p.CreateDate,
-                NumberOfComments = x.p.NumberOfComments
+                NumberOfComments = x.p.NumberOfComments,
+                CoverImage = AmazonS3Helper.GetPresignedUrl(x.p.CoverImage, 1440)
             })
             .ToListAsync();
 
@@ -324,7 +346,8 @@ public class PostsController : BaseController
                 CategoryTitle = x.c.Title,
                 NumberOfVotes = x.p.NumberOfVotes,
                 CreateDate = x.p.CreateDate,
-                NumberOfComments = x.p.NumberOfComments
+                NumberOfComments = x.p.NumberOfComments,
+                CoverImage = AmazonS3Helper.GetPresignedUrl(x.p.CoverImage, 1440)
             })
             .ToListAsync();
 
@@ -340,15 +363,124 @@ public class PostsController : BaseController
         return Ok(pagination);
     }
 
-    #region Helpers
-    
-    private static PostVm InitPostVm(Post post)
+    [HttpPost]
+    [Consumes("multipart/form-data")]
+    public async Task<IActionResult> Post([FromForm] PostCreateRequest request)
     {
-        return new PostVm()
+        var post = new Post()
+        {
+            CategoryId = request.CategoryId,
+            Title = request.Title,
+            Content = request.Content,
+            Slug = request.Slug,
+            Note = request.Note
+        };
+        
+        if (request.Labels.Length > 0)
+        {
+            post.Labels = string.Join(',', request.Labels);
+        }
+        
+        // Process Slug
+        if (string.IsNullOrEmpty(post.Slug))
+        {
+            post.Slug = TextHelper.ToUnsignString(post.Title);
+        }
+        
+        // Process Owner User Id
+        post.OwnerUserId = User.GetUserId();
+        
+        // Id (using Sequence)
+        post.Id = await _sequenceService.GetPostNewId();
+    
+        // Process label
+        if (request.Labels.Length > 0)
+        {
+            await ProcessLabel(request, post);
+        }
+        // Process Cover Image
+        var fileName = request.CoverImage.FileName;
+        var imageBase64 = FunctionBase.ConvertToBase64(request.CoverImage);
+        AmazonS3Helper.UploadImage(fileName, imageBase64, out var coverImageUrl);
+        
+        post.CoverImage = coverImageUrl;
+        
+        _context.Posts.Add(post);
+        
+        var result = await _context.SaveChangesAsync();
+        if (result > 0)
+        {
+            return CreatedAtAction(nameof(GetById), new { id = post.Id });
+        }
+
+        return BadRequest(new ApiBadRequestResponse("Insert post failed"));
+    }
+
+    [HttpPut("{id}")]
+    [Consumes("multipart/form-data")]
+    public async Task<IActionResult> Put(int id, [FromForm] PostCreateRequest request)
+    {
+        var post = await _context.Posts.FindAsync(id);
+        if (post == null)
+        {
+            return NotFound(new ApiNotFoundResponse($"Can't found post item for id = {id} in database"));
+        }
+        
+        // Set post with new data
+        post.CategoryId = request.CategoryId;
+        post.Title = request.Title;
+        post.Slug = string.IsNullOrEmpty(request.Slug) ? TextHelper.ToUnsignString(request.Title) : request.Slug;
+        post.Content = request.Content;
+        post.Note = request.Note;
+        post.Labels = string.Join(',', request.Labels);
+        
+        // Process Cover Image
+        if (!string.IsNullOrEmpty(request.CoverImage.FileName))
+        {
+            var fileName = request.CoverImage.FileName;
+            var imageBase64 = FunctionBase.ConvertToBase64(request.CoverImage);
+            AmazonS3Helper.UploadImage(fileName, imageBase64, out var coverImageUrl);
+            post.CoverImage = coverImageUrl;
+        }
+        
+        // Process label
+        if (request.Labels.Length > 0)
+        {
+            await ProcessLabel(request, post);
+        }
+
+        // Update post
+        _context.Posts.Update(post);
+        
+        var result = await _context.SaveChangesAsync();
+
+        if (result > 0)
+        {
+            return NoContent();
+        }
+        return BadRequest(new ApiBadRequestResponse($"Update post failed"));
+    }
+
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> Delete(int id)
+    {
+        var post = await _context.Posts.FindAsync(id);
+        if (post == null)
+        {
+            return NotFound(new ApiNotFoundResponse($"Can't found post item for id = {id} in database"));
+        }
+
+        _context.Posts.Remove(post);
+        var result = await _context.SaveChangesAsync();
+        if (result <= 0) 
+            return BadRequest(new ApiBadRequestResponse("Delete post failed"));
+        
+        var postVm = new PostVm()
         {
             Id = post.Id,
             CategoryId = post.CategoryId,
             Title = post.Title,
+            CoverImage = post.CoverImage,
             Content = post.Content,
             Slug = post.Slug,
             Note = post.Note,
@@ -358,43 +490,13 @@ public class PostsController : BaseController
             LastModifiedDate = post.LastModifiedDate,
             NumberOfComments = post.NumberOfComments,
             NumberOfVotes = post.NumberOfVotes,
-            NumberOfReports = post.NumberOfReports,
+            NumberOfReports = post.NumberOfReports
         };
+        return Ok(postVm);
     }
 
-    private static Post InitPostEntity(PostCreateRequest request)
-    {
-        var entity = new Post()
-        {
-            CategoryId = request.CategoryId,
-            Title = request.Title,
-            Content = request.Content,
-            Slug = request.Slug,
-        };
-        
-        if (request.Labels?.Length > 0)
-        {
-            entity.Labels = string.Join(',', request.Labels);
-        }
-        return entity;
-    }
-    
-    private async Task<Attachment> SaveFile(int postId, IFormFile file)
-    {
-        var originalFileName = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName?.Trim('"');
-        var fileName = $"{originalFileName?.Substring(0, originalFileName.LastIndexOf('.'))}{Path.GetExtension(originalFileName)}";
-        await _storageService.SaveFileAsync(file.OpenReadStream(), fileName);
-        var attachmentEntity = new Attachment()
-        {
-            FileName = fileName,
-            FilePath = _storageService.GetFileUrl(fileName),
-            FileSize = file.Length,
-            FileType = Path.GetExtension(fileName),
-            PostId = postId,
-        };
-        return attachmentEntity;
-    }
-    
+    #region Helpers
+
     private async Task ProcessLabel(PostCreateRequest request, Post post)
     {
         foreach (var labelText in request.Labels)

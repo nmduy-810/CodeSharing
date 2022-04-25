@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
-import { ChatComponent } from './chat/chat.component';
 import { FileManagerComponent } from './file-manager/file-manager.component';
 import { MailComponent } from './mail/mail.component';
 import { ProjectListComponent } from './projects/project-list/project-list.component';
@@ -11,14 +10,6 @@ import { ProductsListComponent } from './e-commerce/products-list/products-list.
 import { ProductComponent } from './e-commerce/product/product.component';
 
 const routes: Routes = [
-    {
-        path: 'chat',
-        component: ChatComponent,
-        data: {
-            title: 'Chat',
-            headerDisplay: "none"
-        }
-    },
     {
         path: 'file-manager',
         component: FileManagerComponent,

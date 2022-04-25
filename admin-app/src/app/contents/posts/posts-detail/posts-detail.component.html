@@ -1,0 +1,97 @@
+<form class="form-horizontal form-label-left" novalidate [formGroup]="postForm" (ngSubmit)="save()">
+    <nz-card>
+        <!--Category-->
+        <div class="row">
+            <div class="col-md-12">
+                <nz-form-item>
+                    <nz-form-label [nzSm]="2">Category</nz-form-label>
+                    <nz-form-control>
+                        <nz-select class="w-100" nzPlaceHolder="Chọn danh mục" formControlName="categoryId">
+                            <nz-option *ngFor="let item of categories$" nzLabel="{{item.title}}" nzValue="{{item.id}}">
+                            </nz-option>
+                        </nz-select>
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
+        </div>
+
+        <!--Title-->    
+        <div class="row">
+            <div class="col-md-12">
+                <nz-form-item>
+                    <nz-form-label [nzSm]="2">Title</nz-form-label>
+                    <nz-form-control>
+                        <input nz-input (keyup)="generateSeoAlias()" placeholder="Tiêu đề bài viết"
+                            formControlName="title">
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
+        </div>
+
+        <!--Slug-->
+        <div class="row">
+            <div class="col-md-12">
+                <nz-form-item>
+                    <nz-form-label [nzSm]="2">Slug</nz-form-label>
+                    <nz-form-control>
+                        <input nz-input placeholder="Tiêu đề SEO" formControlName="slug">
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
+        </div>
+
+        <!--Cover image-->
+        <div class="row">
+            <div class="col-md-12">
+                <nz-form-item>
+                    <nz-form-label [nzSm]="2">Cover image</nz-form-label>
+                    <nz-form-control nzErrorTip="Please choose your cover image!">
+                        <input type="file" id="file" (change)="handleChange($event)" formControlName="coverImage">
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
+        </div>
+
+        <!--Label-->
+        <div class="row">
+            <div class="col-md-12">
+                <nz-form-item>
+                    <nz-form-label [nzSm]="2">Labels</nz-form-label>
+                    <nz-form-control nzErrorTip="Please input your label!">
+                        <input type="text" nz-input formControlName="labels" />
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
+        </div>
+
+        <!--Note-->
+        <div class="row">
+            <div class="col-md-12">
+                <nz-form-item>
+                    <nz-form-label [nzSm]="2">Note</nz-form-label>
+                    <nz-form-control nzErrorTip="Please input your note!">
+                        <textarea nz-input placeholder="Ghi chú" [nzAutosize]="{ minRows: 3, maxRows: 5 }" formControlName="note"></textarea>
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
+        </div>
+
+         <!--Content-->
+         <div class="row">
+            <div class="col-md-12">
+                <nz-form-item>
+                    <nz-form-control>
+                        <ckeditor [editor]="Editor" formControlName="content" spellcheck="false" name="editor5" (ready)="onReady($event)"></ckeditor>
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
+        </div>
+
+        <nz-form-item>
+            <nz-form-control [nzOffset]="10" [nzSpan]="12">
+                <button nz-button nzType="primary">Save</button>
+                <button style="margin-left: 8px;" (click)="reset($event)" nz-button>Reset</button>
+            </nz-form-control>
+        </nz-form-item>
+    </nz-card>
+</form>
