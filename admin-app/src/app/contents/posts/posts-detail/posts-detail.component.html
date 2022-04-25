@@ -52,18 +52,6 @@
             </div>
         </div>
 
-        <!--Content-->
-        <div class="row">
-            <div class="col-md-12">
-                <nz-form-item>
-                    <nz-form-label [nzSm]="2">Content</nz-form-label>
-                    <nz-form-control>
-                        <ckeditor [editor]="Editor" formControlName="content"></ckeditor>
-                    </nz-form-control>
-                </nz-form-item>
-            </div>
-        </div>
-
         <!--Label-->
         <div class="row">
             <div class="col-md-12">
@@ -83,6 +71,17 @@
                     <nz-form-label [nzSm]="2">Note</nz-form-label>
                     <nz-form-control nzErrorTip="Please input your note!">
                         <textarea nz-input placeholder="Ghi chú" [nzAutosize]="{ minRows: 3, maxRows: 5 }" formControlName="note"></textarea>
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
+        </div>
+
+         <!--Content-->
+         <div class="row">
+            <div class="col-md-12">
+                <nz-form-item>
+                    <nz-form-control>
+                        <ckeditor [editor]="Editor" formControlName="content" spellcheck="false" name="editor5" (ready)="onReady($event)"></ckeditor>
                     </nz-form-control>
                 </nz-form-item>
             </div>
