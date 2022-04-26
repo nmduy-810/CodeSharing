@@ -6,6 +6,7 @@ public class PostVm
     public int CategoryId { get; set; }
     public string CategoryTitle { get; set; }
     public string CategorySlug { get; set; }
+    public string FullName { get; set; }
     public string Title { get; set; }
     public string Content { get; set; }
     public string Slug { get; set; }

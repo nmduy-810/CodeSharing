@@ -6,6 +6,7 @@ public class PostQuickVm
     public int CategoryId { get; set; }
     public string CategoryTitle { get; set; }
     public string CategorySlug { get; set; }
+    public string FullName { get; set; }
     public string CoverImage { get; set; }
     public string Title { get; set; }
     public string Content { get; set; }

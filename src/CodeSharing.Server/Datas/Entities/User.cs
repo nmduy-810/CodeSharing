@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using CodeSharing.Server.Datas.Interfaces;
 using Microsoft.AspNetCore.Identity;
 
@@ -8,10 +9,12 @@ public class User : IdentityUser, IDateTracking
 {
     [Required]
     [MaxLength(50)]
+    [Column(TypeName = "nvarchar(50)")]
     public string FirstName { get; set; }
 
     [Required]
     [MaxLength(50)]
+    [Column(TypeName = "nvarchar(50)")]
     public string LastName { get; set; }
 
     [Required]

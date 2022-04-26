@@ -33,18 +33,20 @@ public class PostsController : BaseController
     {
         var posts = from p in _context.Posts
             join c in _context.Categories on p.CategoryId equals c.Id
+            join u in _context.Users on p.OwnerUserId equals u.Id
             orderby p.CreateDate descending
-            select new { p, c };
+            select new { p, c, u };
         
-        var items = await posts.Select(u => new PostQuickVm()
+        var items = await posts.Select(x => new PostQuickVm()
         {
-            Id = u.p.Id,
-            CategoryId = u.c.Id,
-            CategoryTitle = u.c.Title,
-            Slug = u.p.Slug,
-            Title = u.p.Title,
-            Content = u.p.Content,
-            CoverImage = AmazonS3Helper.GetPresignedUrl(u.p.CoverImage, 1440)
+            Id = x.p.Id,
+            CategoryId = x.c.Id,
+            CategoryTitle = x.c.Title,
+            FullName = string.Concat(x.u.FirstName, " ", x.u.LastName),
+            Slug = x.p.Slug,
+            Title = x.p.Title,
+            Content = x.p.Content,
+            CoverImage = AmazonS3Helper.GetPresignedUrl(x.p.CoverImage, 1440)
         }).ToListAsync();
 
         _logger.LogInformation("Successful execution of get posts request");
@@ -57,8 +59,9 @@ public class PostsController : BaseController
     {
         var posts = from p in _context.Posts
             join c in _context.Categories on p.CategoryId equals c.Id
+            join u in _context.Users on p.OwnerUserId equals u.Id
             orderby p.CreateDate descending
-            select new { p, c };
+            select new { p, c, u };
 
         var items = await posts
             .Take(take)
@@ -71,6 +74,7 @@ public class PostsController : BaseController
             Content = x.p.Content,
             CategorySlug = x.c.Slug,
             CategoryTitle = x.c.Title,
+            FullName = string.Concat(x.u.FirstName, " ", x.u.LastName),
             NumberOfVotes = x.p.NumberOfVotes,
             CreateDate = x.p.CreateDate,
             CoverImage = AmazonS3Helper.GetPresignedUrl(x.p.CoverImage, 1440)
@@ -123,6 +127,12 @@ public class PostsController : BaseController
         {
             return NotFound(new ApiNotFoundResponse($"Can't found category item for id = {id} in database"));
         }
+
+        var fullName = _context.Users.FirstOrDefault(x => x.Id == post.OwnerUserId);
+        if (fullName == null)
+        {
+            return NotFound(new ApiNotFoundResponse($"Can't found full name for id = {id} in database"));
+        }
         
         var attachments = await _context.Attachments
             .Where(x => x.PostId == id)
@@ -141,6 +151,7 @@ public class PostsController : BaseController
             CategoryId = post.CategoryId,
             CategorySlug = category.Slug,
             CategoryTitle = category.Title,
+            FullName = string.Concat(fullName.FirstName, " ", fullName.LastName),
             Title = post.Title,
             Content = post.Content,
             Slug = post.Slug,
@@ -165,9 +176,9 @@ public class PostsController : BaseController
     public async Task<IActionResult> GetPostsByCategoryId(int? categoryId, int pageIndex, int pageSize)
     {
         var query = from p in _context.Posts
-            join c in _context.Categories
-                on p.CategoryId equals c.Id
-            select new { p, c };
+            join c in _context.Categories on p.CategoryId equals c.Id
+            join u in _context.Users on p.OwnerUserId equals u.Id
+            select new { p, c, u };
         
         // Get all post by category Id
         if (categoryId.HasValue)
@@ -188,6 +199,7 @@ public class PostsController : BaseController
                 Content = x.p.Content,
                 CategorySlug = x.c.Slug,
                 CategoryTitle = x.c.Title,
+                FullName = string.Concat(x.u.FirstName, " ", x.u.LastName),
                 NumberOfVotes = x.p.NumberOfVotes,
                 CreateDate = x.p.CreateDate,
                 NumberOfComments = x.p.NumberOfComments,
@@ -214,8 +226,9 @@ public class PostsController : BaseController
             join lip in _context.LabelInPosts on p.Id equals lip.PostId
             join l in _context.Labels on lip.LabelId equals l.Id
             join c in _context.Categories on p.CategoryId equals c.Id
+            join u in _context.Users on p.OwnerUserId equals u.Id
             where lip.LabelId == tagId
-            select new { p, l, c };
+            select new { p, l, c, u };
 
         var totalRecords = await query.CountAsync();
 
@@ -231,6 +244,7 @@ public class PostsController : BaseController
                 Content = x.p.Content,
                 CategorySlug = x.c.Slug,
                 CategoryTitle = x.c.Title,
+                FullName = string.Concat(x.u.FirstName, " ", x.u.LastName),
                 NumberOfVotes = x.p.NumberOfVotes,
                 CreateDate = x.p.CreateDate,
                 NumberOfComments = x.p.NumberOfComments,
@@ -283,7 +297,8 @@ public class PostsController : BaseController
     {
         var query = from p in _context.Posts
             join c in _context.Categories on p.CategoryId equals c.Id
-            select new { p, c };
+            join u in _context.Users on p.OwnerUserId equals u.Id
+            select new { p, c, u };
         if (!string.IsNullOrEmpty(filter))
         {
             query = query.Where(x => x.p.Title.Contains(filter));
@@ -304,6 +319,7 @@ public class PostsController : BaseController
                 Content = x.p.Content,
                 CategorySlug = x.c.Slug,
                 CategoryTitle = x.c.Title,
+                FullName = string.Concat(x.u.FirstName, " ", x.u.LastName),
                 NumberOfVotes = x.p.NumberOfVotes,
                 CreateDate = x.p.CreateDate,
                 NumberOfComments = x.p.NumberOfComments,
@@ -329,8 +345,9 @@ public class PostsController : BaseController
     {
         var query = from p in _context.Posts
             join c in _context.Categories on p.CategoryId equals c.Id
+            join u in _context.Users on p.OwnerUserId equals u.Id
             orderby p.CreateDate descending
-            select new { p, c };
+            select new { p, c, u };
         
         var totalRecords = await query.CountAsync();
         var items = await query.Skip((pageIndex - 1) * pageSize)
@@ -344,6 +361,7 @@ public class PostsController : BaseController
                 Content = x.p.Content,
                 CategorySlug = x.c.Slug,
                 CategoryTitle = x.c.Title,
+                FullName = string.Concat(x.u.FirstName, " ", x.u.LastName),
                 NumberOfVotes = x.p.NumberOfVotes,
                 CreateDate = x.p.CreateDate,
                 NumberOfComments = x.p.NumberOfComments,
