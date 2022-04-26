@@ -57,8 +57,14 @@
             <div class="col-md-12">
                 <nz-form-item>
                     <nz-form-label [nzSm]="2">Labels</nz-form-label>
-                    <nz-form-control nzErrorTip="Please input your label!">
-                        <input type="text" nz-input formControlName="labels" />
+                    <nz-form-control nzErrorTip="Please input your tags!">
+                        <nz-mention [nzSuggestions]="suggestions" (nzOnSearchChange)="onSearchChange($event)" [nzPrefix]="['#']">
+                            <input
+                              placeholder="Nhãn bài viết (Nhập # để chọn nhãn)"
+                              nzMentionTrigger
+                              nz-input
+                              formControlName="labels"/>
+                          </nz-mention>
                     </nz-form-control>
                 </nz-form-item>
             </div>

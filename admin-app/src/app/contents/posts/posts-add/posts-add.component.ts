@@ -7,6 +7,8 @@ import { UtilitiesService } from 'src/app/shared/services/utilities.service';
 import * as CustomEdtior from '../../../ckCustomBuild/build/ckeditor';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { Router } from '@angular/router';
+import { MentionOnSearchTypes } from 'ng-zorro-antd/mention';
+import { LabelsService } from 'src/app/shared/services/labels.service';
 
 @Component({
   selector: 'app-posts-add',
@@ -31,10 +33,14 @@ export class PostsAddComponent implements OnInit, OnDestroy {
   Editor = CustomEdtior;
   coverImage: any;
 
+  suggestions: string[] = [];
+  tags = ['1.0', '2.0'];
+
   constructor(
     private postsService: PostsService,
     private utilitiesService: UtilitiesService,
     private categoriesService: CategoriesService,
+    private labelsService: LabelsService,
     private fb: FormBuilder,
     private notification: NzNotificationService,
     private router: Router) { }
@@ -43,7 +49,17 @@ export class PostsAddComponent implements OnInit, OnDestroy {
     this.subscription.push(this.categoriesService.get()
       .subscribe((response: Category[]) => {
         this.categories$ = response;
+        this.getTags();
       }));
+  }
+
+  getTags() {
+    this.subscription.push(this.labelsService.get().subscribe((response: any) => {
+      response.forEach((element: { id: string; }) => {
+        this.tags.push(element.id);
+      });
+      console.log(this.tags);
+    }))
   }
 
   generateSeoAlias() {
@@ -104,6 +120,11 @@ export class PostsAddComponent implements OnInit, OnDestroy {
     this.subscription.forEach(element => {
       element.unsubscribe();
     });
+  }
+
+  onSearchChange({ value, prefix }: MentionOnSearchTypes): void {
+    console.log('nzOnSearchChange', value, prefix);
+    this.suggestions =  this.tags;
   }
 }
 

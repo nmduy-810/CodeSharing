@@ -41,6 +41,7 @@ import { CategoriesDetailComponent } from './categories/categories-detail/catego
 import { PostsDetailComponent } from './posts/posts-detail/posts-detail.component';
 import { PostsAddComponent } from './posts/posts-add/posts-add.component';
 import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
+import { NzMentionModule } from 'ng-zorro-antd/mention';
 
 const antdModule = [
   NzButtonModule,
@@ -66,7 +67,8 @@ const antdModule = [
   NzPaginationModule,
   NzDatePickerModule,
   NzCheckboxModule,
-  NzMessageModule
+  NzMessageModule,
+  NzMentionModule
 ]
 
 @NgModule({

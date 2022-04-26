@@ -1,3 +1,4 @@
+using System.Text.RegularExpressions;
 using CodeSharing.Server.Datas.Entities;
 using CodeSharing.Server.Datas.Provider;
 using CodeSharing.Server.Extensions;
@@ -396,7 +397,12 @@ public class PostsController : BaseController
         
         if (request.Labels.Length > 0)
         {
+            request.Labels = request.Labels[0].Split("#").Select(x => x.Trim())
+                .Where(x => !string.IsNullOrWhiteSpace(x))
+                .ToArray();
+
             post.Labels = string.Join(',', request.Labels);
+            post.Labels = post.Labels.Trim().TrimStart(',');
         }
         
         // Process Slug

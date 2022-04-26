@@ -19,6 +19,20 @@ public class LabelsController : BaseController
         _context = context;
         _logger = logger ?? throw new ArgumentException(null, nameof(logger));
     }
+    
+    [HttpGet]
+    public async Task<List<LabelVm>> GetLabels()
+    {
+
+        var items = await _context.Labels.Select(x => new LabelVm()
+        {
+            Id = x.Id,
+            Name = x.Name
+        }).ToListAsync();
+
+        _logger.LogInformation("Successful execution of get popular labels request");
+        return items;
+    }
 
     [AllowAnonymous]
     [HttpGet("popular/{take:int}")]
