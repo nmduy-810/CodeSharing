@@ -3,21 +3,22 @@
 }
 
 <div class="row gy-4">
-  <div class="col-lg-8">
-    <div class="page-content bordered rounded padding-30">
-      <img src="~/images/other/about.jpg" alt="Katen Doe" class="rounded mb-4" />
-      <p>Hello, I’m a content writer who is fascinated by content fashion, celebrity and lifestyle. She helps clients bring the right content to the right people.</p>
-      <p>A small river named Duden flows by their place and supplies it with the necessary regelialia. It is a paradisematic country, in which roasted parts of sentences fly into your mouth.</p>
-      <p>Even the all-powerful Pointing has no control about the blind texts it is an almost unorthographic life One day however a small line of blind text by the name of Lorem Ipsum decided to leave for the far World of Grammar.</p>
-      <p>The Big Oxmox advised her not to do so, because there were thousands of bad Commas, wild Question Marks and devious Semikoli, but the Little Blind Text didn’t listen. She packed her seven versalia, put her initial into the belt and made herself on the way.</p>
-      <hr class="my-4" />
-      <ul class="social-icons list-unstyled list-inline mb-0">
-        <partial name="_SocialIcons"/>
-      </ul>
+    <div class="col-lg-8">
+        <div class="page-content bordered rounded padding-30">
+            <img src="~/images/about/background-about.jpg" alt="Duy Nguyễn" class="rounded mb-4"/>
+            <p>Xin chào mọi người, mình là Nguyễn Minh Duy. Một lập trình viên .NET đã có 3 năm kinh nghiệm trong quá trình làm việc và đây cũng là dự án cá nhân đầu tiên của mình.</p>
+            <p>Giới thiệu sơ qua về mình, mình năm nay 25 tuổi, tốt nghiệp đại học Khoa Học Tự Nhiên TPHCM, đây là ngôi trường mình rất yêu quý và cũng nhờ nó mà mình mới có được ngày hôm nay</p>
+            <p>Ngoài những giờ làm việc, mình rất thích đọc sách, một cuốn sách hay sẽ mang đến rất nhiều điều thú vị, hoặc có thể một buổi tối vui vẻ với bạn bè và người thân. :))</p>
+            <p>Nói qua về mục đích trang blog này, đúng như tên trang web, mình mong muốn blog này được ra đời vì bản thân muốn được chia sẻ, giải đáp những thắc mắc, những khó khăn trong quá trình học lập trình cũng như đi làm cho mọi người</p>
+            <p>Mình rất vui nếu mọi người tìm được những kiến thức tại đây. Mong rằng bạn sẽ ghé thăm lần sau. Cảm ơn bạn rất nhiều khi đọc đến dòng này.</p>
+            <hr class="my-4"/>
+            <ul class="social-icons list-unstyled list-inline mb-0">
+                <partial name="_SocialIcons"/>
+            </ul>
+        </div>
     </div>
-  </div>
-  <div class="col-lg-4">
-    <!-- sidebar -->
-    @await Component.InvokeAsync("SideBar", "Default")
-  </div>
+    <div class="col-lg-4">
+        <!-- sidebar -->
+        @await Component.InvokeAsync("SideBar", "Default")
+    </div>
 </div>
