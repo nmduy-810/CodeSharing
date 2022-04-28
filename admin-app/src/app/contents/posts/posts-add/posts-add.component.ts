@@ -34,7 +34,7 @@ export class PostsAddComponent implements OnInit, OnDestroy {
   coverImage: any;
 
   suggestions: string[] = [];
-  tags = ['1.0', '2.0'];
+  tags = [];
 
   constructor(
     private postsService: PostsService,

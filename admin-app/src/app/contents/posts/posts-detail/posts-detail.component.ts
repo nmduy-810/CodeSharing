@@ -7,6 +7,8 @@ import { UtilitiesService } from 'src/app/shared/services/utilities.service';
 import * as CustomEdtior from '../../../ckCustomBuild/build/ckeditor';
 import { Category } from 'src/app/shared/models';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { MentionOnSearchTypes } from 'ng-zorro-antd/mention';
+import { LabelsService } from 'src/app/shared/services/labels.service';
 
 @Component({
   selector: 'app-posts-detail',
@@ -21,16 +23,23 @@ export class PostsDetailComponent implements OnInit, OnDestroy {
   Editor = CustomEdtior;
   postId: any;
 
+  suggestions: string[] = [];
+  tagList: string[] = [];
+  tags = [];
+  labels: any;
+
   constructor(
     private postsService: PostsService,
     private utilitiesService: UtilitiesService,
     private categoriesService: CategoriesService,
+    private labelsService: LabelsService,
     private route: ActivatedRoute,
     private fb: FormBuilder,
     private notification: NzNotificationService,
     private router: Router) { }
 
   ngOnInit(): void {
+    this.getTags();
     const id = Number(this.route.snapshot.paramMap.get('id'));
 
     this.postForm = this.fb.group({
@@ -58,6 +67,12 @@ export class PostsDetailComponent implements OnInit, OnDestroy {
   getById(id: any) {
     this.subscription.push(this.postsService.getById(id).subscribe((response: any) => {
       console.log(response);
+      response.labels.forEach(element => {
+        this.tagList.push("#" + element);
+      });
+
+      this.labels = this.tagList.join(' ');
+
       this.postForm.setValue({
         'categoryId': response.categoryId,
         'title': response.title,
@@ -65,7 +80,7 @@ export class PostsDetailComponent implements OnInit, OnDestroy {
         'content': response.content,
         'coverImage': '',
         'coverImageSource': '',
-        'labels': response.labels,
+        'labels': this.labels,
         'note': response.note
       });
     }));
@@ -74,6 +89,14 @@ export class PostsDetailComponent implements OnInit, OnDestroy {
   generateSeoAlias() {
     const seoAlias = this.utilitiesService.MakeSeoTitle(this.postForm.controls['title'].value);
     this.postForm.controls['slug'].setValue(seoAlias);
+  }
+
+  getTags() {
+    this.subscription.push(this.labelsService.get().subscribe((response: any) => {
+      response.forEach((element: { id: string; }) => {
+        this.tags.push(element.id);
+      });
+    }))
   }
 
   save() {
@@ -129,6 +152,11 @@ export class PostsDetailComponent implements OnInit, OnDestroy {
     this.subscription.forEach(element => {
       element.unsubscribe();
     });
+  }
+
+  onSearchChange({ value, prefix }: MentionOnSearchTypes): void {
+    console.log('nzOnSearchChange', value, prefix);
+    this.suggestions =  this.tags;
   }
 }
 

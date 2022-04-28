@@ -456,7 +456,17 @@ public class PostsController : BaseController
         post.Slug = string.IsNullOrEmpty(request.Slug) ? TextHelper.ToUnsignString(request.Title) : request.Slug;
         post.Content = request.Content;
         post.Note = request.Note;
-        post.Labels = string.Join(',', request.Labels);
+        
+        // Process labels
+        if (request.Labels.Length > 0)
+        {
+            request.Labels = request.Labels[0].Split("#").Select(x => x.Trim())
+                .Where(x => !string.IsNullOrWhiteSpace(x))
+                .ToArray();
+
+            post.Labels = string.Join(',', request.Labels);
+            post.Labels = post.Labels.Trim().TrimStart(',');
+        }
         
         // Process Cover Image
         if (!string.IsNullOrEmpty(request.CoverImage.FileName))
