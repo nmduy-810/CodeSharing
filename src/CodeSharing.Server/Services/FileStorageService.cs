@@ -17,7 +17,7 @@ public class FileStorageService : IStorageService
         return $"/{UserContentFolderName}/{fileName}";
     }
 
-    public async Task SaveFileAsync(Stream? mediaBinaryStream, string fileName)
+    public async Task SaveFileAsync(Stream mediaBinaryStream, string fileName)
     {
         if (!Directory.Exists(_userContentFolder))
             Directory.CreateDirectory(_userContentFolder);

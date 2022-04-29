@@ -84,7 +84,7 @@ export class PostsDetailComponent implements OnInit, OnDestroy {
       });
 
       this.imagePath = response.coverImage;
-      
+      this.postForm.get('categoryId').setValue(response.categoryId.toString());
     }));
   }
 

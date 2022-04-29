@@ -44,7 +44,7 @@
         <div class="row">
             <div class="col-md-12">
                 <nz-form-item>
-                    <nz-form-label [nzSm]="2">Cover image</nz-form-label>
+                    <nz-form-label [nzSm]="2">Image</nz-form-label>
                     <nz-form-control nzErrorTip="Please choose your cover image!">
                         <input type="file" (change)="handleChange($event)">
                     </nz-form-control>
@@ -58,13 +58,11 @@
                 <nz-form-item>
                     <nz-form-label [nzSm]="2">Labels</nz-form-label>
                     <nz-form-control nzErrorTip="Please input your tags!">
-                        <nz-mention [nzSuggestions]="suggestions" (nzOnSearchChange)="onSearchChange($event)" [nzPrefix]="['#']">
-                            <input
-                              placeholder="Nhãn bài viết (Nhập # để chọn nhãn)"
-                              nzMentionTrigger
-                              nz-input
-                              formControlName="labels"/>
-                          </nz-mention>
+                        <nz-mention [nzSuggestions]="suggestions" (nzOnSearchChange)="onSearchChange($event)"
+                            [nzPrefix]="['#']">
+                            <input placeholder="Nhãn bài viết (Nhập # để chọn nhãn)" nzMentionTrigger nz-input
+                                formControlName="labels" />
+                        </nz-mention>
                     </nz-form-control>
                 </nz-form-item>
             </div>
@@ -76,7 +74,8 @@
                 <nz-form-item>
                     <nz-form-label [nzSm]="2">Note</nz-form-label>
                     <nz-form-control nzErrorTip="Please input your note!">
-                        <textarea nz-input placeholder="Ghi chú" [nzAutosize]="{ minRows: 3, maxRows: 5 }" formControlName="note"></textarea>
+                        <textarea nz-input placeholder="Ghi chú" [nzAutosize]="{ minRows: 3, maxRows: 5 }"
+                            formControlName="note"></textarea>
                     </nz-form-control>
                 </nz-form-item>
             </div>
@@ -87,7 +86,8 @@
             <div class="col-md-12">
                 <nz-form-item>
                     <nz-form-control nzErrorTip="Please input your content!">
-                        <ckeditor [editor]="Editor" formControlName="content" spellcheck="false" name="editor5" (ready)="onReady($event)"></ckeditor>                        
+                        <ckeditor [editor]="Editor" formControlName="content" spellcheck="false" name="editor5"
+                            (ready)="onReady($event)"></ckeditor>
                     </nz-form-control>
                 </nz-form-item>
             </div>

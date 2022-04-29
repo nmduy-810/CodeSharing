@@ -1,3 +1,4 @@
+using System.Drawing;
 using Microsoft.AspNetCore.Http;
 
 namespace CodeSharing.Utilities.Helpers;
@@ -29,5 +30,10 @@ public static class FunctionBase
         var request = context.HttpContext?.Request;
         var baseUrl = $"{request?.Scheme}://{request?.Host}/";
         return baseUrl;
+    }
+    
+    public static string GenerateFileName(string context)
+    {
+        return context + "_" + DateTime.Now.ToString("yyyyMMddHHmmssfff") + "_" + Guid.NewGuid().ToString("N");
     }
 }

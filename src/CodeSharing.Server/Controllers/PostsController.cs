@@ -417,8 +417,11 @@ public class PostsController : BaseController
             await ProcessLabel(request, post);
         }
         // Process Cover Image
-        var coverImagePath = await SaveFile(request.CoverImage);
-        post.CoverImage = coverImagePath;
+        if (request.CoverImage != null)
+        {
+            var coverImagePath = await SaveFile(request.CoverImage);
+            post.CoverImage = coverImagePath;
+        }
         
         _context.Posts.Add(post);
         
@@ -546,11 +549,11 @@ public class PostsController : BaseController
         }
     }
     
-    private async Task<string> SaveFile(IFormFile? file)
+    private async Task<string> SaveFile(IFormFile file)
     {
-        var originalFileName = ContentDispositionHeaderValue.Parse(file?.ContentDisposition).FileName?.Trim('"');
-        var fileName = $"{originalFileName?.Substring(0, originalFileName.LastIndexOf('.'))}{Path.GetExtension(originalFileName)}";
-        await _storageService.SaveFileAsync(file?.OpenReadStream(), fileName);
+        var originalFileName = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName?.Trim('"');
+        var fileName = FunctionBase.GenerateFileName("Image") + Path.GetExtension(originalFileName);
+        await _storageService.SaveFileAsync(file.OpenReadStream(), fileName);
         var filePath = _storageService.GetFileUrl(fileName);
         return filePath;
     }
