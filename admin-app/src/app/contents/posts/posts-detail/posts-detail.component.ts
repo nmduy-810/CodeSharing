@@ -28,6 +28,9 @@ export class PostsDetailComponent implements OnInit, OnDestroy {
   tags = [];
   labels: any;
 
+  selectedFile: File;
+  imagePath: string;
+
   constructor(
     private postsService: PostsService,
     private utilitiesService: UtilitiesService,
@@ -47,8 +50,6 @@ export class PostsDetailComponent implements OnInit, OnDestroy {
       'title': new FormControl('', Validators.compose([Validators.required])),
       'slug': new FormControl('', Validators.compose([Validators.required])),
       'content': new FormControl('', Validators.compose([Validators.required])),
-      'coverImage': new FormControl('', Validators.compose([Validators.required])),
-      'coverImageSource': new FormControl(''),
       'labels': new FormControl('', Validators.compose([Validators.required])),
       'note': new FormControl('', Validators.compose([Validators.required]))
     });
@@ -78,11 +79,12 @@ export class PostsDetailComponent implements OnInit, OnDestroy {
         'title': response.title,
         'slug': response.slug,
         'content': response.content,
-        'coverImage': '',
-        'coverImageSource': '',
         'labels': this.labels,
         'note': response.note
       });
+
+      this.imagePath = response.coverImage;
+      
     }));
   }
 
@@ -104,7 +106,7 @@ export class PostsDetailComponent implements OnInit, OnDestroy {
       const formValues = this.postForm.getRawValue();
       const formData = this.utilitiesService.ToFormData(formValues);
 
-      formData.append('coverImage', this.postForm.get('coverImageSource')?.value);
+      formData.append('coverImage', this.selectedFile);
 
       this.subscription.push(this.postsService.update(this.postId, formData).subscribe((response: any) => {
         console.log(response);
@@ -136,9 +138,7 @@ export class PostsDetailComponent implements OnInit, OnDestroy {
   handleChange(event: any) {
     if (event.target.files.length > 0) {
       const file = event.target.files[0];
-      this.postForm.patchValue({
-        coverImageSource: file
-      });
+      this.selectedFile = file;
     }
   }
 

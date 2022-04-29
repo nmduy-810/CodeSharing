@@ -8,9 +8,9 @@ namespace CodeSharing.Utilities.Helpers;
 
 public static class AmazonS3Helper
 {
-    private static string _accessId = "AKIAUTAZO7FRJI6KEKGS";
-    private static string _secret = "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";
-    private static string _bucketName = "codesharing";
+    private static string _accessId = "AKIAQ5CNMO3BV5PJXN4X";
+    private static string _secret = "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";
+    private static string _bucketName = "codesharingserver";
     private static string _folderName = "CoverImage/";
     private static string _serverUrl = "https://s3-ap-southeast-1.amazonaws.com";
     private static readonly RegionEndpoint BucketRegion = RegionEndpoint.APSoutheast1;

@@ -38,4 +38,8 @@
       <ProjectReference Include="..\CodeSharing.ViewModels\CodeSharing.ViewModels.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="wwwroot\user-attachments" />
+    </ItemGroup>
+
 </Project>

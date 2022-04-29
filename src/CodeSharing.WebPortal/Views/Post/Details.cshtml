@@ -50,9 +50,12 @@
         <div class="row d-flex align-items-center">
           <div class="col-md-6 col-12 text-center text-md-start">
             <!-- tags -->
-            <a href="#" class="tag">#Trending</a>
-            <a href="#" class="tag">#Video</a>
-            <a href="#" class="tag">#Featured</a>
+            @foreach (var item in Model.Label)
+            {
+              var postByLabelUrl = "/tag/" + item.LabelId;
+              var value = "#" + item.LabelId;
+              <a href="@postByLabelUrl" class="tag">@value</a>
+            }
           </div>
         </div>
       </div>

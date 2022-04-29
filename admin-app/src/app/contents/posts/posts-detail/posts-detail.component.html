@@ -46,7 +46,11 @@
                 <nz-form-item>
                     <nz-form-label [nzSm]="2">Cover image</nz-form-label>
                     <nz-form-control nzErrorTip="Please choose your cover image!">
-                        <input type="file" id="file" (change)="handleChange($event)" formControlName="coverImage">
+                        <input type="file" (change)="handleChange($event)">
+                        <div *ngIf="imagePath">
+                            <br />
+                            <img [src]="imagePath" width="100px">
+                          </div>
                     </nz-form-control>
                 </nz-form-item>
             </div>

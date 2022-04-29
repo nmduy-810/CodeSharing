@@ -23,4 +23,11 @@ public static class FunctionBase
         result = Convert.ToBase64String(fileBytes);
         return result;
     }
+
+    public static string GetBaseUrl(IHttpContextAccessor context)
+    {
+        var request = context.HttpContext?.Request;
+        var baseUrl = $"{request?.Scheme}://{request?.Host}/";
+        return baseUrl;
+    }
 }

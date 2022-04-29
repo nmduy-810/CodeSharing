@@ -1,4 +1,4 @@
-using System.Text.RegularExpressions;
+using System.Net.Http.Headers;
 using CodeSharing.Server.Datas.Entities;
 using CodeSharing.Server.Datas.Provider;
 using CodeSharing.Server.Extensions;
@@ -17,15 +17,21 @@ public class PostsController : BaseController
     private readonly ApplicationDbContext _context;
     private readonly ILogger<PostsController> _logger;
     private readonly ISequenceService _sequenceService;
+    private readonly IStorageService _storageService;
+    private readonly IHttpContextAccessor _httpContextAccessor;
     
     public PostsController(
         ApplicationDbContext context, 
         ILogger<PostsController> logger, 
-        ISequenceService sequenceService)
+        ISequenceService sequenceService,
+        IStorageService storageService,
+        IHttpContextAccessor httpContextAccessor)
     {
         _context = context;
         _logger = logger ?? throw new ArgumentException(null, nameof(logger));
         _sequenceService = sequenceService;
+        _storageService = storageService;
+        _httpContextAccessor = httpContextAccessor;
     }
     
     [AllowAnonymous]
@@ -47,7 +53,7 @@ public class PostsController : BaseController
             Slug = x.p.Slug,
             Title = x.p.Title,
             Content = x.p.Content,
-            CoverImage = AmazonS3Helper.GetPresignedUrl(x.p.CoverImage, 1440)
+            CoverImage = FunctionBase.GetBaseUrl(_httpContextAccessor) + x.p.CoverImage
         }).ToListAsync();
 
         _logger.LogInformation("Successful execution of get posts request");
@@ -78,7 +84,7 @@ public class PostsController : BaseController
             FullName = string.Concat(x.u.FirstName, " ", x.u.LastName),
             NumberOfVotes = x.p.NumberOfVotes,
             CreateDate = x.p.CreateDate,
-            CoverImage = AmazonS3Helper.GetPresignedUrl(x.p.CoverImage, 1440)
+            CoverImage = FunctionBase.GetBaseUrl(_httpContextAccessor) + x.p.CoverImage
         }).ToListAsync();
 
         _logger.LogInformation("Successful execution of get latest posts request");
@@ -106,7 +112,7 @@ public class PostsController : BaseController
                 CategoryTitle = x.c.Title,
                 NumberOfVotes = x.p.NumberOfVotes,
                 CreateDate = x.p.CreateDate,
-                CoverImage = AmazonS3Helper.GetPresignedUrl(x.p.CoverImage, 1440)
+                CoverImage = FunctionBase.GetBaseUrl(_httpContextAccessor) + x.p.CoverImage
             }).ToListAsync();
 
         _logger.LogInformation("Successful execution of get popular posts request");
@@ -134,17 +140,6 @@ public class PostsController : BaseController
         {
             return NotFound(new ApiNotFoundResponse($"Can't found full name for id = {id} in database"));
         }
-        
-        var attachments = await _context.Attachments
-            .Where(x => x.PostId == id)
-            .Select(x => new AttachmentVm()
-            {
-                FileName = x.FileName,
-                FilePath = x.FilePath,
-                FileSize = x.FileSize,
-                Id = x.Id,
-                FileType = x.FileType
-            }).ToListAsync();
 
         var items = new PostVm
         {
@@ -164,8 +159,7 @@ public class PostsController : BaseController
             NumberOfComments = post.NumberOfComments,
             NumberOfVotes = post.NumberOfVotes,
             NumberOfReports = post.NumberOfReports,
-            CoverImage = AmazonS3Helper.GetPresignedUrl(post.CoverImage),
-            Attachments = attachments
+            CoverImage = FunctionBase.GetBaseUrl(_httpContextAccessor) + post.CoverImage
         };
 
         _logger.LogInformation("Successful execution of get post by id request");
@@ -204,7 +198,7 @@ public class PostsController : BaseController
                 NumberOfVotes = x.p.NumberOfVotes,
                 CreateDate = x.p.CreateDate,
                 NumberOfComments = x.p.NumberOfComments,
-                CoverImage = AmazonS3Helper.GetPresignedUrl(x.p.CoverImage, 1440)
+                CoverImage = FunctionBase.GetBaseUrl(_httpContextAccessor) + x.p.CoverImage
             }).ToListAsync();
 
         var pagination = new Pagination<PostQuickVm>
@@ -249,7 +243,7 @@ public class PostsController : BaseController
                 NumberOfVotes = x.p.NumberOfVotes,
                 CreateDate = x.p.CreateDate,
                 NumberOfComments = x.p.NumberOfComments,
-                CoverImage = AmazonS3Helper.GetPresignedUrl(x.p.CoverImage, 1440)
+                CoverImage = FunctionBase.GetBaseUrl(_httpContextAccessor) + x.p.CoverImage
             }).ToListAsync();
 
         var pagination = new Pagination<PostQuickVm>()
@@ -324,7 +318,7 @@ public class PostsController : BaseController
                 NumberOfVotes = x.p.NumberOfVotes,
                 CreateDate = x.p.CreateDate,
                 NumberOfComments = x.p.NumberOfComments,
-                CoverImage = AmazonS3Helper.GetPresignedUrl(x.p.CoverImage, 1440)
+                CoverImage = FunctionBase.GetBaseUrl(_httpContextAccessor) + x.p.CoverImage
             })
             .ToListAsync();
 
@@ -349,7 +343,7 @@ public class PostsController : BaseController
             join u in _context.Users on p.OwnerUserId equals u.Id
             orderby p.CreateDate descending
             select new { p, c, u };
-        
+
         var totalRecords = await query.CountAsync();
         var items = await query.Skip((pageIndex - 1) * pageSize)
             .Take(pageSize)
@@ -366,7 +360,7 @@ public class PostsController : BaseController
                 NumberOfVotes = x.p.NumberOfVotes,
                 CreateDate = x.p.CreateDate,
                 NumberOfComments = x.p.NumberOfComments,
-                CoverImage = AmazonS3Helper.GetPresignedUrl(x.p.CoverImage, 1440)
+                CoverImage = FunctionBase.GetBaseUrl(_httpContextAccessor) + x.p.CoverImage
             })
             .ToListAsync();
 
@@ -423,11 +417,8 @@ public class PostsController : BaseController
             await ProcessLabel(request, post);
         }
         // Process Cover Image
-        var fileName = request.CoverImage.FileName;
-        var imageBase64 = FunctionBase.ConvertToBase64(request.CoverImage);
-        AmazonS3Helper.UploadImage(fileName, imageBase64, out var coverImageUrl);
-        
-        post.CoverImage = coverImageUrl;
+        var coverImagePath = await SaveFile(request.CoverImage);
+        post.CoverImage = coverImagePath;
         
         _context.Posts.Add(post);
         
@@ -469,12 +460,10 @@ public class PostsController : BaseController
         }
         
         // Process Cover Image
-        if (!string.IsNullOrEmpty(request.CoverImage.FileName))
+        if (request.CoverImage != null)
         {
-            var fileName = request.CoverImage.FileName;
-            var imageBase64 = FunctionBase.ConvertToBase64(request.CoverImage);
-            AmazonS3Helper.UploadImage(fileName, imageBase64, out var coverImageUrl);
-            post.CoverImage = coverImageUrl;
+            var coverImagePath = await SaveFile(request.CoverImage);
+            post.CoverImage = coverImagePath;
         }
         
         // Process label
@@ -555,6 +544,15 @@ public class PostsController : BaseController
                 });
             }
         }
+    }
+    
+    private async Task<string> SaveFile(IFormFile? file)
+    {
+        var originalFileName = ContentDispositionHeaderValue.Parse(file?.ContentDisposition).FileName?.Trim('"');
+        var fileName = $"{originalFileName?.Substring(0, originalFileName.LastIndexOf('.'))}{Path.GetExtension(originalFileName)}";
+        await _storageService.SaveFileAsync(file?.OpenReadStream(), fileName);
+        var filePath = _storageService.GetFileUrl(fileName);
+        return filePath;
     }
 
     #endregion Helpers

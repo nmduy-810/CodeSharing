@@ -22,8 +22,6 @@ export class PostsAddComponent implements OnInit, OnDestroy {
     'title': new FormControl('', Validators.compose([Validators.required])),
     'slug': new FormControl('', Validators.compose([Validators.required])),
     'content': new FormControl('', Validators.compose([Validators.required])),
-    'coverImage': new FormControl('', Validators.compose([Validators.required])),
-    'coverImageSource': new FormControl(''),
     'labels': new FormControl('', Validators.compose([Validators.required])),
     'note': new FormControl('', Validators.compose([Validators.required]))
   });
@@ -31,7 +29,7 @@ export class PostsAddComponent implements OnInit, OnDestroy {
   subscription: Subscription[] = [];
   categories$: any;
   Editor = CustomEdtior;
-  coverImage: any;
+  selectedFile: File;
 
   suggestions: string[] = [];
   tags = [];
@@ -72,7 +70,7 @@ export class PostsAddComponent implements OnInit, OnDestroy {
       const formValues = this.postForm.getRawValue();
       const formData = this.utilitiesService.ToFormData(formValues);
 
-      formData.append('coverImage', this.postForm.get('coverImageSource')?.value);
+      formData.append('coverImage', this.selectedFile);
 
       this.subscription.push(this.postsService.add(formData).subscribe((response: any) => {
         console.log(response);
@@ -104,9 +102,7 @@ export class PostsAddComponent implements OnInit, OnDestroy {
   handleChange(event: any) {
     if (event.target.files.length > 0) {
       const file = event.target.files[0];
-      this.postForm.patchValue({
-        coverImageSource: file
-      });
+      this.selectedFile = file;
     }
   }
 

@@ -1,3 +1,4 @@
+using CodeSharing.Server.Services.Interfaces;
 using CodeSharing.Utilities.Helpers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -7,6 +8,15 @@ namespace CodeSharing.Server.Controllers;
 [AllowAnonymous]
 public class UploadsController : BaseController
 {
+    private readonly IStorageService _storageService;
+    private readonly IHttpContextAccessor _httpContextAccessor;
+
+    public UploadsController(IStorageService storageService, IHttpContextAccessor httpContextAccessor)
+    {
+        _storageService = storageService;
+        _httpContextAccessor = httpContextAccessor;
+    }
+    
     [HttpPost("UploadImage")]
     public Task<IActionResult> UploadImage(IFormFile upload)
     {
@@ -19,15 +29,15 @@ public class UploadsController : BaseController
         if (upload.Length == 0) 
             return Task.FromResult<IActionResult>(BadRequest("Empty file"));
         
-        var fileName = Guid.NewGuid() + Path.GetExtension(upload.FileName);
-        
-        var imageBase64 = FunctionBase.ConvertToBase64(upload);
-        AmazonS3Helper.UploadImage(fileName, imageBase64, out var imageUrl);
+        var uniqueFileName = Guid.NewGuid() + Path.GetExtension(upload.FileName);
+        _storageService.SaveFileAsync(upload.OpenReadStream(), uniqueFileName);
+
+        var imageUrl = FunctionBase.GetBaseUrl(_httpContextAccessor) + _storageService.GetFileUrl(uniqueFileName);
         
         return Task.FromResult<IActionResult>(Ok(new
         {
             uploaded = true,
-            url = AmazonS3Helper.GetPresignedUrl(imageUrl)
+            url = imageUrl
         }));
     }
 }
