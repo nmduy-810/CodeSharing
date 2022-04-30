@@ -19,4 +19,9 @@ public class LabelApiClient : BaseApiClient, ILabelApiClient
     {
         return await GetAsync<LabelVm>($"/api/labels/{labelId}");
     }
+
+    public async Task<List<LabelInPostVm>> GetLabelsByPostId(int id)
+    {
+        return await GetListAsync<LabelInPostVm>($"/api/labels/post/{id}");
+    }
 }

@@ -351,6 +351,10 @@ namespace CodeSharing.Server.Datas.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("CoverImage")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime>("CreateDate")
                         .HasColumnType("datetime2");
 
@@ -373,6 +377,11 @@ namespace CodeSharing.Server.Datas.Migrations
 
                     b.Property<int?>("NumberOfVotes")
                         .HasColumnType("int");
+
+                    b.Property<string>("OwnerUserId")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)");
 
                     b.Property<string>("Slug")
                         .IsRequired()

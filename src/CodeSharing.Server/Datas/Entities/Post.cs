@@ -16,6 +16,9 @@ public class Post : IDateTracking
     public int CategoryId { get; set; }
     
     [Required]
+    public string CoverImage { get; set; }
+    
+    [Required]
     [MaxLength(500)]
     public string Title { get; set; }
     
@@ -28,6 +31,11 @@ public class Post : IDateTracking
     public string Slug { get; set; }
     
     public string Note { get; set; }
+    
+    [Required]
+    [MaxLength(50)]
+    [Column(TypeName = "varchar(50)")]
+    public string OwnerUserId { get; set; }
     
     public string Labels { get; set; }
     

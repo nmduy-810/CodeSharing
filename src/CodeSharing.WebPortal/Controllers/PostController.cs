@@ -22,10 +22,12 @@ public class PostController : Controller
     public async Task<IActionResult> Details(int id)
     {
         var post = await _postApiClient.GetDetailsPost(id);
+        var label = await _labelApiClient.GetLabelsByPostId(id);
         
         var items = new PostDetailViewModel
         {
-            Post = post
+            Post = post,
+            Label = label
         };
         
         return View(items);

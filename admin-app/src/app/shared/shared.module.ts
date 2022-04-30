@@ -1,38 +1,41 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from "@angular/common";
+import { FormsModule } from '@angular/forms';
+import { HttpClientJsonpModule, HttpClientModule } from '@angular/common/http';
 import { RouterModule } from "@angular/router";
-
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NzIconModule } from 'ng-zorro-antd/icon';
+import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
 import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
-
-import { FooterComponent } from "./footer/footer.component";
-import { NavbarComponent } from "./navbar/navbar.component";
-import { SidebarComponent } from "./sidebar/sidebar.component";
-import { ColorSwitcherComponent } from './color-switcher/color-switcher.component';
-
-
-
+import { ThemeConstantService } from './services/theme-constant.service';
+import { SearchPipe } from './pipes/search.pipe';
+import { SplitPipe } from './pipes/split.pipe';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
 @NgModule({
     exports: [
         CommonModule,
-        FooterComponent,
-        NavbarComponent,
-        SidebarComponent,
-        ColorSwitcherComponent,
-        NgbModule
+        FormsModule,
+        HttpClientModule,
+        HttpClientJsonpModule,
+        NzIconModule,
+        PerfectScrollbarModule,
+        SearchPipe,
+        SplitPipe
     ],
     imports: [
         RouterModule,
         CommonModule,
-        NgbModule,
+        NzIconModule,
+        NzToolTipModule,
         PerfectScrollbarModule
     ],
     declarations: [
-        FooterComponent,
-        NavbarComponent,
-        SidebarComponent,
-        ColorSwitcherComponent
+        SearchPipe,
+        SplitPipe
     ],
-    providers: [ ],
+    providers: [
+        ThemeConstantService,
+        NzNotificationService
+    ]
 })
+
 export class SharedModule { }

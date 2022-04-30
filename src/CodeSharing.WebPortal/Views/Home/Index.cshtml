@@ -18,15 +18,15 @@
               </span>
               <a href="@detailPostUrl">
                 <div class="inner">
-                  <img src="~/images/posts/post-md-1.jpg" alt="post-title" />
+                  <img src="@item.CoverImage" alt="post-title" />
                 </div>
               </a>
             </div>
             <div class="details">
               <ul class="meta list-inline mb-0">
                 <li class="list-inline-item">
-                  <a href="#">
-                    <img src="~/images/other/author-sm.png" class="author" alt="author" />Katen Doe </a>
+                  <a href="/about">
+                    <img src="~/images/other/author-sm.png" class="author" alt="author" />@Html.Raw(@item.FullName)</a>
                 </li>
                 <li class="list-inline-item">@item.CreateDate.ToString("dd MMMM, yyyy")</li>
               </ul>

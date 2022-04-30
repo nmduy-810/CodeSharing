@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CodeSharing.Server.Controllers;
 
+[AllowAnonymous]
 public class LabelsController : BaseController
 {
     private readonly ApplicationDbContext _context;
@@ -19,8 +20,21 @@ public class LabelsController : BaseController
         _context = context;
         _logger = logger ?? throw new ArgumentException(null, nameof(logger));
     }
+    
+    [HttpGet]
+    public async Task<List<LabelVm>> GetLabels()
+    {
 
-    [AllowAnonymous]
+        var items = await _context.Labels.Select(x => new LabelVm()
+        {
+            Id = x.Id,
+            Name = x.Name
+        }).ToListAsync();
+
+        _logger.LogInformation("Successful execution of get popular labels request");
+        return items;
+    }
+
     [HttpGet("popular/{take:int}")]
     public async Task<List<LabelVm>> GetPopularLabels(int take)
     {
@@ -45,7 +59,6 @@ public class LabelsController : BaseController
         return items;
     }
     
-    [AllowAnonymous]
     [HttpGet("{id}")]
     public async Task<IActionResult> GetById(string id)
     {
@@ -63,5 +76,28 @@ public class LabelsController : BaseController
 
         _logger.LogInformation("Successful execution of get label by id request");
         return Ok(labelVm);
+    }
+
+    [HttpGet("post/{postId}")]
+    public async Task<IActionResult> GetLabelsByPostId(int postId)
+    {
+        var post = from p in _context.Posts
+            join lip in _context.LabelInPosts on p.Id equals lip.PostId
+            where p.Id == postId
+            select new { lip, p };
+
+        if (!post.Any())
+        {
+            return NotFound(new ApiNotFoundResponse($"Can't found label item for id = {postId} in database"));
+        }
+
+        var items = await post.Select(x => new LabelInPostVm()
+        {
+            PostId = x.p.Id,
+            LabelId = x.lip.LabelId
+        }).ToListAsync();
+
+        _logger.LogInformation("Successful execution of get label by post id request");
+        return Ok(items);
     }
 }

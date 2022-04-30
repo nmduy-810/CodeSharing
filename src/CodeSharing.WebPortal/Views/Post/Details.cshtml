@@ -28,8 +28,8 @@
         <h1 class="title mt-0 mb-3">@Html.Raw(Model.Post.Title)</h1>
         <ul class="meta list-inline mb-0">
           <li class="list-inline-item">
-            <a href="#">
-              <img src="~/images/other/author-sm.png" class="author" alt="author" />Katen Doe </a>
+            <a href="/about">
+              <img src="~/images/other/author-sm.png" class="author" alt="author" />@Html.Raw(Model.Post.FullName)</a>
           </li>
           <li class="list-inline-item">
             <a href="#">Trending</a>
@@ -39,7 +39,7 @@
       </div>
       <!-- featured image -->
       <div class="featured-image">
-        <img src="~/images/posts/featured-lg.jpg" alt="post-title" />
+        <img src="@Model.Post.CoverImage" alt="post-title" />
       </div>
       <!-- post content -->
       <div class="post-content clearfix">
@@ -50,15 +50,12 @@
         <div class="row d-flex align-items-center">
           <div class="col-md-6 col-12 text-center text-md-start">
             <!-- tags -->
-            <a href="#" class="tag">#Trending</a>
-            <a href="#" class="tag">#Video</a>
-            <a href="#" class="tag">#Featured</a>
-          </div>
-          <div class="col-md-6 col-12">
-            <!-- social icons -->
-            <ul class="social-icons list-unstyled list-inline mb-0 float-md-end">
-              <partial name="_SocialIcons"/>
-            </ul>
+            @foreach (var item in Model.Label)
+            {
+              var postByLabelUrl = "/tag/" + item.LabelId;
+              var value = "#" + item.LabelId;
+              <a href="@postByLabelUrl" class="tag">@value</a>
+            }
           </div>
         </div>
       </div>
@@ -66,13 +63,13 @@
     <div class="spacer" data-height="50"></div>
     <div class="about-author padding-30 rounded">
       <div class="thumb">
-        <img src="~/images/other/avatar-about.png" alt="Katen Doe" />
+        <img src="~/images/other/avatar-about.png" alt="@Html.Raw(Model.Post.FullName)" />
       </div>
       <div class="details">
         <h4 class="name">
-          <a href="#">Katen Doe</a>
+          <a href="/about">@Html.Raw(Model.Post.FullName)</a>
         </h4>
-        <p>Hello, I’m a content writer who is fascinated by content fashion, celebrity and lifestyle. She helps clients bring the right content to the right people.</p>
+        <p>Những devloper nổi tiếng đều gặp phải những vấn đề nan giải cho đến khi họ giải quyết được nó</p>
         <!-- social icons -->
         <ul class="social-icons list-unstyled list-inline mb-0">
           <partial name="_SocialIcons"/>
@@ -82,7 +79,7 @@
     <div class="spacer" data-height="50"></div>
     <!-- section header -->
     <div class="section-header">
-      <h3 class="section-title">Comments (3)</h3>
+      <h3 class="section-title">Các bình luận (3)</h3>
       <img src="~/images/wave.svg" class="wave" alt="wave" />
     </div>
     <!-- post comments -->
@@ -135,7 +132,7 @@
     <div class="spacer" data-height="50"></div>
     <!-- section header -->
     <div class="section-header">
-      <h3 class="section-title">Leave Comment</h3>
+      <h3 class="section-title">Hãy để lại bình luận</h3>
       <img src="~/images/wave.svg" class="wave" alt="wave" />
     </div>
     <!-- comment form -->
@@ -146,29 +143,23 @@
           <div class="column col-md-12">
             <!-- Comment textarea -->
             <div class="form-group">
-              <textarea name="InputComment" id="InputComment" class="form-control" rows="4" placeholder="Your comment here..." required="required"></textarea>
+              <textarea name="InputComment" id="InputComment" class="form-control" rows="4" placeholder="Bạn muốn bình luận gì á..." required="required"></textarea>
             </div>
           </div>
           <div class="column col-md-6">
             <!-- Email input -->
             <div class="form-group">
-              <input type="email" class="form-control" id="InputEmail" name="InputEmail" placeholder="Email address" required="required">
+              <input type="email" class="form-control" id="InputEmail" name="InputEmail" placeholder="Địa chỉ email" required="required">
             </div>
           </div>
           <div class="column col-md-6">
             <!-- Name input -->
             <div class="form-group">
-              <input type="text" class="form-control" name="InputWeb" id="InputWeb" placeholder="Website" required="required">
-            </div>
-          </div>
-          <div class="column col-md-12">
-            <!-- Email input -->
-            <div class="form-group">
-              <input type="text" class="form-control" id="InputName" name="InputName" placeholder="Your name" required="required">
+               <input type="text" class="form-control" id="InputName" name="InputName" placeholder="Your name" required="required">
             </div>
           </div>
         </div>
-        <button type="submit" name="submit" id="submit" value="Submit" class="btn btn-default">Submit</button>
+        <button type="submit" name="submit" id="submit" value="Submit" class="btn btn-default">Gửi</button>
         <!-- Submit Button -->
       </form>
     </div>
