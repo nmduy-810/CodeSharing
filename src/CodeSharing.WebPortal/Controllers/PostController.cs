@@ -1,3 +1,5 @@
+using CodeSharing.ViewModels.Contents.Comment;
+using CodeSharing.WebPortal.Extensions;
 using CodeSharing.WebPortal.Interfaces;
 using CodeSharing.WebPortal.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -9,13 +11,15 @@ public class PostController : Controller
     private readonly IPostApiClient _postApiClient;
     private readonly ICategoryApiClient _categoryApiClient;
     private readonly ILabelApiClient _labelApiClient;
+    private readonly IUserApiClient _userApiClient;
     private readonly IConfiguration _configuration;
     
-    public PostController(IPostApiClient postApiClient, ICategoryApiClient categoryApiClient, ILabelApiClient labelApiClient, IConfiguration configuration)
+    public PostController(IPostApiClient postApiClient, ICategoryApiClient categoryApiClient, ILabelApiClient labelApiClient, IUserApiClient userApiClient, IConfiguration configuration)
     {
         _postApiClient = postApiClient;
         _categoryApiClient = categoryApiClient;
         _labelApiClient = labelApiClient;
+        _userApiClient = userApiClient;
         _configuration = configuration;
     }
     
@@ -29,6 +33,11 @@ public class PostController : Controller
             Post = post,
             Label = label
         };
+        
+        if (User.Identity != null && User.Identity.IsAuthenticated)
+        {
+            items.CurrentUser = await _userApiClient.GetById(User.GetUserId());
+        }
         
         return View(items);
     }
@@ -72,4 +81,20 @@ public class PostController : Controller
         };
         return View(items);
     }
+    
+    #region AJAX Methods (wwwroot/js/controller)
+    
+    public async Task<IActionResult> GetCommentByPostId(int postId)
+    {
+        var result = await _postApiClient.GetCommentsTree(postId);
+        return Ok(result);
+    }
+    
+    public async Task<IActionResult> AddNewComment([FromForm] CommentCreateRequest request)
+    {
+        var result = await _postApiClient.PostComment(request);
+        return Ok(result);
+    }
+    
+    #endregion AJAX Methods
 }

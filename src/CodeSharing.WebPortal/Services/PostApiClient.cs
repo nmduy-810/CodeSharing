@@ -1,5 +1,6 @@
 using System.Text;
 using CodeSharing.Utilities.Commons;
+using CodeSharing.ViewModels.Contents.Comment;
 using CodeSharing.ViewModels.Contents.Post;
 using CodeSharing.WebPortal.Interfaces;
 
@@ -52,5 +53,20 @@ public class PostApiClient : BaseApiClient, IPostApiClient
     public async Task<Pagination<PostQuickVm>> GetLatestPostsPaging(int pageIndex, int pageSize)
     {
         return await GetAsync<Pagination<PostQuickVm>>($"/api/posts/paging?pageIndex={pageIndex}&pageSize={pageSize}");
+    }
+
+    public async Task<List<CommentVm>> GetRecentComments(int take)
+    {
+        return await GetListAsync<CommentVm>($"/api/posts/comments/recent/{take}");
+    }
+
+    public async Task<List<CommentVm>> GetCommentsTree(int postId)
+    {
+        return await GetListAsync<CommentVm>($"/api/posts/{postId}/comments/tree");
+    }
+
+    public async Task<CommentVm> PostComment(CommentCreateRequest request)
+    {
+        return await PostAsync<CommentCreateRequest, CommentVm>($"/api/posts/{request.PostId}/comments", request);
     }
 }

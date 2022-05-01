@@ -12,7 +12,7 @@ using CodeSharing.Server.Services.Interfaces;
 
 namespace CodeSharing.Server.Controllers;
 
-public class PostsController : BaseController
+public partial class PostsController : BaseController
 {
     private readonly ApplicationDbContext _context;
     private readonly ILogger<PostsController> _logger;

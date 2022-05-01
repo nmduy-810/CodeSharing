@@ -1,4 +1,5 @@
 using CodeSharing.Utilities.Commons;
+using CodeSharing.ViewModels.Contents.Comment;
 using CodeSharing.ViewModels.Contents.Post;
 
 namespace CodeSharing.WebPortal.Interfaces;
@@ -12,4 +13,7 @@ public interface IPostApiClient
     Task<List<PostQuickVm>> GetTotalPostInCategory();
     Task<Pagination<PostQuickVm>> SearchPosts(string keyword, int pageIndex, int pageSize);
     Task<Pagination<PostQuickVm>> GetLatestPostsPaging(int pageIndex, int pageSize);
+    Task<List<CommentVm>> GetRecentComments(int take);
+    Task<List<CommentVm>> GetCommentsTree(int postId);
+    Task<CommentVm> PostComment(CommentCreateRequest request);
 }
