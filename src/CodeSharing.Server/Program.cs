@@ -26,7 +26,7 @@ builder.Host.UseSerilog((hostingContext, loggerConfiguration) =>
     loggerConfiguration.ReadFrom.Configuration(hostingContext.Configuration));
 
 // Setup Entity Framework
-builder.Services.AddDbContext<ApplicationDbContext>(
+builder.Services.AddDbContextPool<ApplicationDbContext>(
     options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 // Setup Identity
@@ -52,9 +52,9 @@ builder.Services.AddIdentityServer(options =>
 builder.Services.AddCors(options =>
 {
     options.AddPolicy(CodeSharingSpecificOrigins,
-        builder =>
+        corsPolicyBuilder =>
         {
-            builder.WithOrigins(configuration["AllowOrigins"])
+            corsPolicyBuilder.WithOrigins(configuration["AllowOrigins"])
                 .AllowAnyHeader()
                 .AllowAnyMethod()
                 .AllowCredentials();
@@ -121,6 +121,7 @@ builder.Services.AddTransient<DbInitializer>();
 builder.Services.AddTransient<IEmailSender, EmailSenderService>();
 builder.Services.AddTransient<ISequenceService, SequenceService>();
 builder.Services.AddTransient<IStorageService, FileStorageService>();
+builder.Services.AddTransient<ICacheService, DistributedCacheService>();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -150,6 +151,14 @@ builder.Services.AddSwaggerGen(c =>
             new List<string>{ "api.codesharing" }
         }
     });
+});
+
+// Config Distributed Cache
+builder.Services.AddDistributedSqlServerCache(o =>
+{
+    o.ConnectionString = configuration.GetConnectionString("DefaultConnection");
+    o.SchemaName = "dbo";
+    o.TableName = "CacheTable";
 });
 
 var app = builder.Build();

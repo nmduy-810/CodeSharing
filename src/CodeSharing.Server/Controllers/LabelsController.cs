@@ -1,6 +1,4 @@
-using CodeSharing.Server.Authorization;
 using CodeSharing.Server.Datas.Provider;
-using CodeSharing.Utilities.Constants;
 using CodeSharing.Utilities.Helpers;
 using CodeSharing.ViewModels.Contents.Label;
 using Microsoft.AspNetCore.Authorization;

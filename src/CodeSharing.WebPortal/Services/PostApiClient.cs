@@ -2,6 +2,7 @@ using System.Text;
 using CodeSharing.Utilities.Commons;
 using CodeSharing.ViewModels.Contents.Comment;
 using CodeSharing.ViewModels.Contents.Post;
+using CodeSharing.ViewModels.Contents.Report;
 using CodeSharing.ViewModels.Contents.Vote;
 using CodeSharing.WebPortal.Interfaces;
 
@@ -89,5 +90,10 @@ public class PostApiClient : BaseApiClient, IPostApiClient
     public async Task<bool> UpdateViewCount(int id)
     {
         return await PutAsync<object, bool>($"/api/posts/{id}/view-count", id, false);
+    }
+
+    public async Task<ReportVm> PostReport(ReportCreateRequest request)
+    {
+        return await PostAsync<ReportCreateRequest, ReportVm>($"/api/posts/{request.PostId}/reports", request);
     }
 }

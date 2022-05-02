@@ -88,6 +88,16 @@ var postsController = function () {
         $('#frm_vote .like-it').click(function () {
             $('#frm_vote').submit();
         });
+
+        $('#btn_send_report').off('click').on('click', function (e) {
+            e.preventDefault();
+            var form = $('#frm_report');
+            $.post('/post/postReport', form.serialize())
+                .done(function () {
+                    $('#reportModal').modal('hide');
+                    $('#txt_report_content').val('');
+                });
+        });
     }
 
     function loadComments(id) {

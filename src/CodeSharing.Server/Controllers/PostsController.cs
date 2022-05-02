@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using CodeSharing.Server.Services.Interfaces;
+using CodeSharing.Utilities.Constants;
 
 namespace CodeSharing.Server.Controllers;
 
@@ -18,6 +19,7 @@ public partial class PostsController : BaseController
     private readonly ILogger<PostsController> _logger;
     private readonly ISequenceService _sequenceService;
     private readonly IStorageService _storageService;
+    private readonly ICacheService _distributedCacheService;
     private readonly IHttpContextAccessor _httpContextAccessor;
     
     public PostsController(
@@ -25,12 +27,14 @@ public partial class PostsController : BaseController
         ILogger<PostsController> logger, 
         ISequenceService sequenceService,
         IStorageService storageService,
+        ICacheService distributedCacheService,
         IHttpContextAccessor httpContextAccessor)
     {
         _context = context;
         _logger = logger ?? throw new ArgumentException(null, nameof(logger));
         _sequenceService = sequenceService;
         _storageService = storageService;
+        _distributedCacheService = distributedCacheService;
         _httpContextAccessor = httpContextAccessor;
     }
     
@@ -65,94 +69,115 @@ public partial class PostsController : BaseController
     [HttpGet("latest/{take:int}")]
     public async Task<IActionResult> GetLatestPosts(int take)
     {
-        var posts = from p in _context.Posts
-            join c in _context.Categories on p.CategoryId equals c.Id
-            join u in _context.Users on p.OwnerUserId equals u.Id
-            orderby p.CreateDate descending
-            select new { p, c, u };
-
-        var items = await posts
-            .Take(take)
-            .Select(x => new PostQuickVm()
+        var cacheData = await _distributedCacheService.GetAsync<List<PostQuickVm>>(CacheConstants.LatestPosts);
+        if (cacheData == null)
         {
-            Id = x.p.Id,
-            CategoryId = x.p.CategoryId,
-            Slug = x.p.Slug,
-            Title = x.p.Title,
-            Summary = x.p.Summary,
-            Content = x.p.Content,
-            CategorySlug = x.c.Slug,
-            CategoryTitle = x.c.Title,
-            FullName = string.Concat(x.u.FirstName, " ", x.u.LastName),
-            NumberOfVotes = x.p.NumberOfVotes,
-            CreateDate = x.p.CreateDate,
-            CoverImage = FunctionBase.GetBaseUrl(_httpContextAccessor) + x.p.CoverImage
-        }).ToListAsync();
+            var posts = from p in _context.Posts
+                join c in _context.Categories on p.CategoryId equals c.Id
+                join u in _context.Users on p.OwnerUserId equals u.Id
+                orderby p.CreateDate descending
+                select new { p, c, u };
 
+            var items = await posts
+                .Take(take)
+                .Select(x => new PostQuickVm()
+                {
+                    Id = x.p.Id,
+                    CategoryId = x.p.CategoryId,
+                    Slug = x.p.Slug,
+                    Title = x.p.Title,
+                    Summary = x.p.Summary,
+                    Content = x.p.Content,
+                    CategorySlug = x.c.Slug,
+                    CategoryTitle = x.c.Title,
+                    FullName = string.Concat(x.u.FirstName, " ", x.u.LastName),
+                    NumberOfVotes = x.p.NumberOfVotes,
+                    CreateDate = x.p.CreateDate,
+                    CoverImage = FunctionBase.GetBaseUrl(_httpContextAccessor) + x.p.CoverImage
+                }).ToListAsync();
+
+            await _distributedCacheService.SetAsync(CacheConstants.LatestPosts, items, 2);
+            cacheData = items;
+        }
+        
         _logger.LogInformation("Successful execution of get latest posts request");
-        return Ok(items);
+        return Ok(cacheData);
     }
     
     [AllowAnonymous]
     [HttpGet("popular/{take:int}")]
     public async Task<IActionResult> GetPopularPosts(int take)
     {
-        var posts = from p in _context.Posts
-            join c in _context.Categories on p.CategoryId equals c.Id
-            join u in _context.Users on p.OwnerUserId equals u.Id
-            orderby p.ViewCount descending
-            select new { p, c, u };
+        var cacheData = await _distributedCacheService.GetAsync<List<PostQuickVm>>(CacheConstants.PopularPosts);
+        if (cacheData == null)
+        {
+            var posts = from p in _context.Posts
+                join c in _context.Categories on p.CategoryId equals c.Id
+                join u in _context.Users on p.OwnerUserId equals u.Id
+                orderby p.ViewCount descending
+                select new { p, c, u };
 
-        var items = await posts.Take(take)
-            .Select(x => new PostQuickVm()
-            {
-                Id = x.p.Id,
-                CategoryId = x.p.CategoryId,
-                Slug = x.p.Slug,
-                Title = x.p.Title,
-                Summary = x.p.Summary,
-                Content = x.p.Content,
-                CategorySlug = x.c.Slug,
-                CategoryTitle = x.c.Title,
-                FullName = string.Concat(x.u.FirstName, " ", x.u.LastName),
-                NumberOfVotes = x.p.NumberOfVotes,
-                CreateDate = x.p.CreateDate,
-                CoverImage = FunctionBase.GetBaseUrl(_httpContextAccessor) + x.p.CoverImage
-            }).ToListAsync();
+            var items = await posts.Take(take)
+                .Select(x => new PostQuickVm()
+                {
+                    Id = x.p.Id,
+                    CategoryId = x.p.CategoryId,
+                    Slug = x.p.Slug,
+                    Title = x.p.Title,
+                    Summary = x.p.Summary,
+                    Content = x.p.Content,
+                    CategorySlug = x.c.Slug,
+                    CategoryTitle = x.c.Title,
+                    FullName = string.Concat(x.u.FirstName, " ", x.u.LastName),
+                    NumberOfVotes = x.p.NumberOfVotes,
+                    CreateDate = x.p.CreateDate,
+                    CoverImage = FunctionBase.GetBaseUrl(_httpContextAccessor) + x.p.CoverImage
+                }).ToListAsync();
 
+            await _distributedCacheService.SetAsync(CacheConstants.PopularPosts, items, 2);
+            cacheData = items;
+        }
+        
         _logger.LogInformation("Successful execution of get popular posts request");
-        return Ok(items);
+        return Ok(cacheData);
     }
 
     [AllowAnonymous]
     [HttpGet("trending/{take:int}")]
     public async Task<IActionResult> GetTrendingPosts(int take)
     {
-        var posts = from p in _context.Posts
-            join c in _context.Categories on p.CategoryId equals c.Id
-            join u in _context.Users on p.OwnerUserId equals u.Id
-            orderby p.NumberOfVotes descending
-            select new { p, c, u };
+        var cacheData = await _distributedCacheService.GetAsync<List<PostQuickVm>>(CacheConstants.TrendingPosts);
+        if (cacheData == null)
+        {
+            var posts = from p in _context.Posts
+                join c in _context.Categories on p.CategoryId equals c.Id
+                join u in _context.Users on p.OwnerUserId equals u.Id
+                orderby p.NumberOfVotes descending
+                select new { p, c, u };
         
-        var items = await posts.Take(take)
-            .Select(x => new PostQuickVm()
-            {
-                Id = x.p.Id,
-                CategoryId = x.p.CategoryId,
-                Slug = x.p.Slug,
-                Title = x.p.Title,
-                Summary = x.p.Summary,
-                Content = x.p.Content,
-                CategorySlug = x.c.Slug,
-                CategoryTitle = x.c.Title,
-                FullName = string.Concat(x.u.FirstName, " ", x.u.LastName),
-                NumberOfVotes = x.p.NumberOfVotes,
-                CreateDate = x.p.CreateDate,
-                CoverImage = FunctionBase.GetBaseUrl(_httpContextAccessor) + x.p.CoverImage
-            }).ToListAsync();
+            var items = await posts.Take(take)
+                .Select(x => new PostQuickVm()
+                {
+                    Id = x.p.Id,
+                    CategoryId = x.p.CategoryId,
+                    Slug = x.p.Slug,
+                    Title = x.p.Title,
+                    Summary = x.p.Summary,
+                    Content = x.p.Content,
+                    CategorySlug = x.c.Slug,
+                    CategoryTitle = x.c.Title,
+                    FullName = string.Concat(x.u.FirstName, " ", x.u.LastName),
+                    NumberOfVotes = x.p.NumberOfVotes,
+                    CreateDate = x.p.CreateDate,
+                    CoverImage = FunctionBase.GetBaseUrl(_httpContextAccessor) + x.p.CoverImage
+                }).ToListAsync();
+
+            await _distributedCacheService.SetAsync(CacheConstants.TrendingPosts, items, 2);
+            cacheData = items;
+        }
         
         _logger.LogInformation("Successful execution of get popular posts request");
-        return Ok(items);
+        return Ok(cacheData);
     }
 
     [AllowAnonymous]
@@ -379,43 +404,50 @@ public partial class PostsController : BaseController
     [HttpGet("paging")]
     public async Task<IActionResult> GetPostsPaging(int pageIndex, int pageSize)
     {
-        var query = from p in _context.Posts
-            join c in _context.Categories on p.CategoryId equals c.Id
-            join u in _context.Users on p.OwnerUserId equals u.Id
-            orderby p.CreateDate descending
-            select new { p, c, u };
-
-        var totalRecords = await query.CountAsync();
-        var items = await query.Skip((pageIndex - 1) * pageSize)
-            .Take(pageSize)
-            .Select(x => new PostQuickVm()
-            {
-                Id = x.p.Id,
-                CategoryId = x.p.CategoryId,
-                Slug = x.p.Slug,
-                Title = x.p.Title,
-                Summary = x.p.Summary,
-                Content = x.p.Content,
-                CategorySlug = x.c.Slug,
-                CategoryTitle = x.c.Title,
-                FullName = string.Concat(x.u.FirstName, " ", x.u.LastName),
-                NumberOfVotes = x.p.NumberOfVotes,
-                CreateDate = x.p.CreateDate,
-                NumberOfComments = x.p.NumberOfComments,
-                CoverImage = FunctionBase.GetBaseUrl(_httpContextAccessor) + x.p.CoverImage
-            })
-            .ToListAsync();
-
-        var pagination = new Pagination<PostQuickVm>
+        var cacheData = await _distributedCacheService.GetAsync<Pagination<PostQuickVm>>(CacheConstants.PostsPaging);
+        if (cacheData == null)
         {
-            PageSize = pageSize,
-            PageIndex = pageIndex,
-            Items = items,
-            TotalRecords = totalRecords,
-        };
+            var query = from p in _context.Posts
+                join c in _context.Categories on p.CategoryId equals c.Id
+                join u in _context.Users on p.OwnerUserId equals u.Id
+                orderby p.CreateDate descending
+                select new { p, c, u };
+
+            var totalRecords = await query.CountAsync();
+            var items = await query.Skip((pageIndex - 1) * pageSize)
+                .Take(pageSize)
+                .Select(x => new PostQuickVm()
+                {
+                    Id = x.p.Id,
+                    CategoryId = x.p.CategoryId,
+                    Slug = x.p.Slug,
+                    Title = x.p.Title,
+                    Summary = x.p.Summary,
+                    Content = x.p.Content,
+                    CategorySlug = x.c.Slug,
+                    CategoryTitle = x.c.Title,
+                    FullName = string.Concat(x.u.FirstName, " ", x.u.LastName),
+                    NumberOfVotes = x.p.NumberOfVotes,
+                    CreateDate = x.p.CreateDate,
+                    NumberOfComments = x.p.NumberOfComments,
+                    CoverImage = FunctionBase.GetBaseUrl(_httpContextAccessor) + x.p.CoverImage
+                })
+                .ToListAsync();
+
+            var pagination = new Pagination<PostQuickVm>
+            {
+                PageSize = pageSize,
+                PageIndex = pageIndex,
+                Items = items,
+                TotalRecords = totalRecords,
+            };
+
+            await _distributedCacheService.SetAsync(CacheConstants.PostsPaging, pagination, 2);
+            cacheData = pagination;
+        }
         
         _logger.LogInformation("Successful execution of get posts in paging no filter request");
-        return Ok(pagination);
+        return Ok(cacheData);
     }
 
     [HttpPost]
@@ -434,6 +466,12 @@ public partial class PostsController : BaseController
         
         if (request.Labels.Length > 0)
         {
+            // Remove cached previous save for post
+            await _distributedCacheService.RemoveAsync(CacheConstants.LatestPosts);
+            await _distributedCacheService.RemoveAsync(CacheConstants.PopularPosts);
+            await _distributedCacheService.RemoveAsync(CacheConstants.TrendingPosts);
+            await _distributedCacheService.RemoveAsync(CacheConstants.PostsPaging);
+            
             request.Labels = request.Labels[0].Split("#").Select(x => x.Trim())
                 .Where(x => !string.IsNullOrWhiteSpace(x))
                 .ToArray();
@@ -526,6 +564,12 @@ public partial class PostsController : BaseController
 
         if (result > 0)
         {
+            // Remove cached previous save for post
+            await _distributedCacheService.RemoveAsync(CacheConstants.LatestPosts);
+            await _distributedCacheService.RemoveAsync(CacheConstants.PopularPosts);
+            await _distributedCacheService.RemoveAsync(CacheConstants.TrendingPosts);
+            await _distributedCacheService.RemoveAsync(CacheConstants.PostsPaging);
+            
             return NoContent();
         }
         return BadRequest(new ApiBadRequestResponse($"Update post failed"));
@@ -542,8 +586,16 @@ public partial class PostsController : BaseController
 
         _context.Posts.Remove(post);
         var result = await _context.SaveChangesAsync();
-        if (result <= 0) 
+        if (result <= 0)
+        {
             return BadRequest(new ApiBadRequestResponse("Delete post failed"));
+        }
+        
+        // Remove cached previous save for post
+        await _distributedCacheService.RemoveAsync(CacheConstants.LatestPosts);
+        await _distributedCacheService.RemoveAsync(CacheConstants.PopularPosts);
+        await _distributedCacheService.RemoveAsync(CacheConstants.TrendingPosts);
+        await _distributedCacheService.RemoveAsync(CacheConstants.PostsPaging);
         
         var postVm = new PostVm()
         {
@@ -563,6 +615,7 @@ public partial class PostsController : BaseController
             NumberOfVotes = post.NumberOfVotes,
             NumberOfReports = post.NumberOfReports
         };
+        
         return Ok(postVm);
     }
     

@@ -1,4 +1,5 @@
 using CodeSharing.ViewModels.Contents.Comment;
+using CodeSharing.ViewModels.Contents.Report;
 using CodeSharing.ViewModels.Contents.Vote;
 using CodeSharing.WebPortal.Extensions;
 using CodeSharing.WebPortal.Interfaces;
@@ -103,6 +104,13 @@ public class PostController : Controller
     public async Task<IActionResult> PostVote([FromForm] VoteCreateRequest request)
     {
         var result = await _postApiClient.PostVote(request);
+        return Ok(result);
+    }
+    
+    [HttpPost]
+    public async Task<IActionResult> PostReport([FromForm] ReportCreateRequest request)
+    {
+        var result = await _postApiClient.PostReport(request);
         return Ok(result);
     }
     

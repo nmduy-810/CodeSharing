@@ -1,6 +1,7 @@
 using CodeSharing.Utilities.Commons;
 using CodeSharing.ViewModels.Contents.Comment;
 using CodeSharing.ViewModels.Contents.Post;
+using CodeSharing.ViewModels.Contents.Report;
 using CodeSharing.ViewModels.Contents.Vote;
 
 namespace CodeSharing.WebPortal.Interfaces;
@@ -21,4 +22,5 @@ public interface IPostApiClient
     Task<CommentVm> PostComment(CommentCreateRequest request);
     Task<int> PostVote(VoteCreateRequest request);
     Task<bool> UpdateViewCount(int id);
+    Task<ReportVm> PostReport(ReportCreateRequest request);
 }
