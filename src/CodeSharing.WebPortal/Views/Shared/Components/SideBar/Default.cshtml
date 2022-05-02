@@ -14,16 +14,16 @@
     <!-- widget popular posts -->
     <div class="post-tabs widget rounded bordered">
         <ul class="nav nav-tabs nav-pills nav-fill" id="postsTab" role="tablist">
-            <li class="nav-item" role="presentation"><button aria-controls="popular" aria-selected="true" class="nav-link active" data-bs-target="#popular" data-bs-toggle="tab" id="popular-tab" role="tab" type="button">Popular</button></li>
-            <li class="nav-item" role="presentation"><button aria-controls="recent" aria-selected="false" class="nav-link" data-bs-target="#recent" data-bs-toggle="tab" id="recent-tab" role="tab" type="button">Recent</button></li>
+            <li class="nav-item" role="presentation"><button aria-controls="popular" aria-selected="true" class="nav-link active" data-bs-target="#popular" data-bs-toggle="tab" id="popular-tab" role="tab" type="button">Xu hướng</button></li>
+            <li class="nav-item" role="presentation"><button aria-controls="recent" aria-selected="false" class="nav-link" data-bs-target="#recent" data-bs-toggle="tab" id="recent-tab" role="tab" type="button">Gần đây</button></li>
         </ul>
         <!-- tab contents -->
         <div class="tab-content" id="postsTabContent">
         	<!-- loader -->
         	<div class="lds-dual-ring"></div>
-        	<!-- popular posts -->
+        	<!-- trending posts -->
 	        <div aria-labelledby="popular-tab" class="tab-pane fade show active" id="popular" role="tabpanel">
-		        @foreach (var item in Model.PopularPosts)
+		        @foreach (var item in Model.TrendingPosts)
 		        {
 		            var detailPostUrl = "/post/" + item.Slug + "-" + item.Id + "/";
 		            <!-- post -->
@@ -77,66 +77,31 @@
         </div>
         <div class="widget-content">
             <div class="post-carousel-widget">
-                <!-- post -->
-                <div class="post post-carousel">
-                    <div class="thumb rounded">
-                        <a href="category.html" class="category-badge position-absolute">How to</a>
-                        <a href="blog-single.html">
-                            <div class="inner">
-                                <img src="~/images/widgets/widget-carousel-1.jpg" alt="post-title"/>
-                            </div>
-                        </a>
+                @foreach (var item in Model.PopularPosts)
+                {
+                    var detailPostUrl = "/post/" + item.Slug + "-" + item.Id + "/";
+                    var postsByCategoryUrl = "/category/" + item.CategorySlug + "-" + item.CategoryId;
+                    <!-- post -->
+                    <div class="post post-carousel">
+                        <div class="thumb rounded">
+                            <a href="@postsByCategoryUrl" class="category-badge position-absolute">@item.CategoryTitle</a>
+                            <a href="@detailPostUrl">
+                                <div class="inner">
+                                    <img src="@item.CoverImage" alt="@item.Title"/>
+                                </div>
+                            </a>
+                        </div>
+                        <h5 class="post-title mb-0 mt-4">
+                            <a href="@detailPostUrl">@item.Title</a>
+                        </h5>
+                        <ul class="meta list-inline mt-2 mb-0">
+                            <li class="list-inline-item">
+                                <a href="#">@item.FullName</a>
+                            </li>
+                            <li class="list-inline-item">@item.CreateDate.ToString("dd MMMM, yyyy")</li>
+                        </ul>
                     </div>
-                    <h5 class="post-title mb-0 mt-4">
-                        <a href="blog-single.html">5 Easy Ways You Can Turn Future Into Success</a>
-                    </h5>
-                    <ul class="meta list-inline mt-2 mb-0">
-                        <li class="list-inline-item">
-                            <a href="#">Katen Doe</a>
-                        </li>
-                        <li class="list-inline-item">29 March 2021</li>
-                    </ul>
-                </div>
-                <!-- post -->
-                <div class="post post-carousel">
-                    <div class="thumb rounded">
-                        <a href="category.html" class="category-badge position-absolute">Trending</a>
-                        <a href="blog-single.html">
-                            <div class="inner">
-                                <img src="~/images/widgets/widget-carousel-2.jpg" alt="post-title"/>
-                            </div>
-                        </a>
-                    </div>
-                    <h5 class="post-title mb-0 mt-4">
-                        <a href="blog-single.html">Master The Art Of Nature With These 7 Tips</a>
-                    </h5>
-                    <ul class="meta list-inline mt-2 mb-0">
-                        <li class="list-inline-item">
-                            <a href="#">Katen Doe</a>
-                        </li>
-                        <li class="list-inline-item">29 March 2021</li>
-                    </ul>
-                </div>
-                <!-- post -->
-                <div class="post post-carousel">
-                    <div class="thumb rounded">
-                        <a href="category.html" class="category-badge position-absolute">How to</a>
-                        <a href="blog-single.html">
-                            <div class="inner">
-                                <img src="~/images/widgets/widget-carousel-1.jpg" alt="post-title"/>
-                            </div>
-                        </a>
-                    </div>
-                    <h5 class="post-title mb-0 mt-4">
-                        <a href="blog-single.html">5 Easy Ways You Can Turn Future Into Success</a>
-                    </h5>
-                    <ul class="meta list-inline mt-2 mb-0">
-                        <li class="list-inline-item">
-                            <a href="#">Katen Doe</a>
-                        </li>
-                        <li class="list-inline-item">29 March 2021</li>
-                    </ul>
-                </div>
+                }
             </div>
             <!-- carousel arrows -->
             <div class="slick-arrows-bot">

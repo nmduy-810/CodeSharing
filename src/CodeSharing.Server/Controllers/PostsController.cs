@@ -52,6 +52,7 @@ public partial class PostsController : BaseController
             FullName = string.Concat(x.u.FirstName, " ", x.u.LastName),
             Slug = x.p.Slug,
             Title = x.p.Title,
+            Summary = x.p.Summary,
             Content = x.p.Content,
             CoverImage = FunctionBase.GetBaseUrl(_httpContextAccessor) + x.p.CoverImage
         }).ToListAsync();
@@ -78,6 +79,7 @@ public partial class PostsController : BaseController
             CategoryId = x.p.CategoryId,
             Slug = x.p.Slug,
             Title = x.p.Title,
+            Summary = x.p.Summary,
             Content = x.p.Content,
             CategorySlug = x.c.Slug,
             CategoryTitle = x.c.Title,
@@ -97,8 +99,9 @@ public partial class PostsController : BaseController
     {
         var posts = from p in _context.Posts
             join c in _context.Categories on p.CategoryId equals c.Id
+            join u in _context.Users on p.OwnerUserId equals u.Id
             orderby p.ViewCount descending
-            select new { p, c };
+            select new { p, c, u };
 
         var items = await posts.Take(take)
             .Select(x => new PostQuickVm()
@@ -107,14 +110,47 @@ public partial class PostsController : BaseController
                 CategoryId = x.p.CategoryId,
                 Slug = x.p.Slug,
                 Title = x.p.Title,
+                Summary = x.p.Summary,
                 Content = x.p.Content,
                 CategorySlug = x.c.Slug,
                 CategoryTitle = x.c.Title,
+                FullName = string.Concat(x.u.FirstName, " ", x.u.LastName),
                 NumberOfVotes = x.p.NumberOfVotes,
                 CreateDate = x.p.CreateDate,
                 CoverImage = FunctionBase.GetBaseUrl(_httpContextAccessor) + x.p.CoverImage
             }).ToListAsync();
 
+        _logger.LogInformation("Successful execution of get popular posts request");
+        return Ok(items);
+    }
+
+    [AllowAnonymous]
+    [HttpGet("trending/{take:int}")]
+    public async Task<IActionResult> GetTrendingPosts(int take)
+    {
+        var posts = from p in _context.Posts
+            join c in _context.Categories on p.CategoryId equals c.Id
+            join u in _context.Users on p.OwnerUserId equals u.Id
+            orderby p.NumberOfVotes descending
+            select new { p, c, u };
+        
+        var items = await posts.Take(take)
+            .Select(x => new PostQuickVm()
+            {
+                Id = x.p.Id,
+                CategoryId = x.p.CategoryId,
+                Slug = x.p.Slug,
+                Title = x.p.Title,
+                Summary = x.p.Summary,
+                Content = x.p.Content,
+                CategorySlug = x.c.Slug,
+                CategoryTitle = x.c.Title,
+                FullName = string.Concat(x.u.FirstName, " ", x.u.LastName),
+                NumberOfVotes = x.p.NumberOfVotes,
+                CreateDate = x.p.CreateDate,
+                CoverImage = FunctionBase.GetBaseUrl(_httpContextAccessor) + x.p.CoverImage
+            }).ToListAsync();
+        
         _logger.LogInformation("Successful execution of get popular posts request");
         return Ok(items);
     }
@@ -149,6 +185,7 @@ public partial class PostsController : BaseController
             CategoryTitle = category.Title,
             FullName = string.Concat(fullName.FirstName, " ", fullName.LastName),
             Title = post.Title,
+            Summary = post.Summary,
             Content = post.Content,
             Slug = post.Slug,
             Note = post.Note,
@@ -191,6 +228,7 @@ public partial class PostsController : BaseController
                 CategoryId = x.p.CategoryId,
                 Slug = x.p.Slug,
                 Title = x.p.Title,
+                Summary = x.p.Summary,
                 Content = x.p.Content,
                 CategorySlug = x.c.Slug,
                 CategoryTitle = x.c.Title,
@@ -236,6 +274,7 @@ public partial class PostsController : BaseController
                 CategoryId = x.p.CategoryId,
                 Slug = x.p.Slug,
                 Title = x.p.Title,
+                Summary = x.p.Summary,
                 Content = x.p.Content,
                 CategorySlug = x.c.Slug,
                 CategoryTitle = x.c.Title,
@@ -311,6 +350,7 @@ public partial class PostsController : BaseController
                 CategoryId = x.p.CategoryId,
                 Slug = x.p.Slug,
                 Title = x.p.Title,
+                Summary = x.p.Summary,
                 Content = x.p.Content,
                 CategorySlug = x.c.Slug,
                 CategoryTitle = x.c.Title,
@@ -353,6 +393,7 @@ public partial class PostsController : BaseController
                 CategoryId = x.p.CategoryId,
                 Slug = x.p.Slug,
                 Title = x.p.Title,
+                Summary = x.p.Summary,
                 Content = x.p.Content,
                 CategorySlug = x.c.Slug,
                 CategoryTitle = x.c.Title,
@@ -384,6 +425,7 @@ public partial class PostsController : BaseController
         {
             CategoryId = request.CategoryId,
             Title = request.Title,
+            Summary = request.Summary,
             Content = request.Content,
             Slug = request.Slug,
             Note = request.Note
@@ -447,6 +489,7 @@ public partial class PostsController : BaseController
         // Set post with new data
         post.CategoryId = request.CategoryId;
         post.Title = request.Title;
+        post.Summary = request.Summary;
         post.Slug = string.IsNullOrEmpty(request.Slug) ? TextHelper.ToUnsignString(request.Title) : request.Slug;
         post.Content = request.Content;
         post.Note = request.Note;
@@ -506,6 +549,7 @@ public partial class PostsController : BaseController
             Id = post.Id,
             CategoryId = post.CategoryId,
             Title = post.Title,
+            Summary = post.Summary,
             CoverImage = post.CoverImage,
             Content = post.Content,
             Slug = post.Slug,

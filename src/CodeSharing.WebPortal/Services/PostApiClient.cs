@@ -25,6 +25,11 @@ public class PostApiClient : BaseApiClient, IPostApiClient
         return await GetListAsync<PostQuickVm>($"api/posts/latest/{take}");
     }
 
+    public async Task<List<PostQuickVm>> GetTrendingPosts(int take)
+    {
+        return await GetListAsync<PostQuickVm>($"api/posts/trending/{take}");
+    }
+
     public async Task<PostVm> GetDetailsPost(int id)
     {
         return await GetAsync<PostVm>($"/api/posts/{id}");

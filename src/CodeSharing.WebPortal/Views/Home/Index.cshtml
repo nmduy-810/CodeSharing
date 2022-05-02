@@ -33,11 +33,7 @@
               <h5 class="post-title mb-3 mt-3">
                 <a href="@detailPostUrl">@Html.Raw(item.Title)</a>
               </h5>
-              @{
-                var beforeFirstDotCommaString = item.Content.Substring(0, item.Content.IndexOf(".", StringComparison.Ordinal));
-                var summary = beforeFirstDotCommaString + "...";
-              }
-              <p class="excerpt mb-0">@Html.Raw(summary)</p>
+              <p class="excerpt mb-0">@Html.Raw(item.Summary)</p>
             </div>
             <div class="post-bottom clearfix d-flex align-items-center">
               <div class="social-share me-auto">

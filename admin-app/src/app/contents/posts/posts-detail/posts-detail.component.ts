@@ -48,6 +48,7 @@ export class PostsDetailComponent implements OnInit, OnDestroy {
     this.postForm = this.fb.group({
       'categoryId': new FormControl('', Validators.compose([Validators.required])),
       'title': new FormControl('', Validators.compose([Validators.required])),
+      'summary': new FormControl('', Validators.compose([Validators.required])),
       'slug': new FormControl('', Validators.compose([Validators.required])),
       'content': new FormControl('', Validators.compose([Validators.required])),
       'labels': new FormControl('', Validators.compose([Validators.required])),
@@ -77,6 +78,7 @@ export class PostsDetailComponent implements OnInit, OnDestroy {
       this.postForm.setValue({
         'categoryId': response.categoryId,
         'title': response.title,
+        'summary': response.summary,
         'slug': response.slug,
         'content': response.content,
         'labels': this.labels,
