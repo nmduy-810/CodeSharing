@@ -21,99 +21,93 @@
 </section>
 
 <section class="main-content">
-<div class="container-xl">
-  <div class="row gy-4">
-    <div class="col-lg-8">
+  <div class="container-xl">
+    <div class="row gy-4">
+      <div class="col-lg-8">
       <div class="row gy-4">
-      @foreach (var item in Model.Data.Items)
-      {
-        var detailPostUrl = "/post/" + item.Slug + "-" + item.Id + "/";
-        var postsByCategoryUrl = "/category/" + item.CategorySlug + "-" + item.CategoryId;
-        <div class="col-sm-6">
-          <!-- post -->
-          <div class="post post-grid rounded bordered">
-            <div class="thumb top-rounded">
-              <a href="@postsByCategoryUrl" class="category-badge position-absolute">@Html.Raw(item.CategoryTitle)</a>
-              <span class="post-format">
-                <i class="icon-picture"></i>
-              </span>
-              <a href="@detailPostUrl">
-                <div class="inner">
-                  <img src="@item.CoverImage" alt="post-title" />
-                </div>
-              </a>
-            </div>
-            <div class="details">
-              <ul class="meta list-inline mb-0">
-                <li class="list-inline-item">
-                  <a href="/about">
-                    <img src="~/images/other/author-sm.png" class="author" alt="author" />@Html.Raw(@item.FullName)</a>
-                </li>
-                <li class="list-inline-item">29 March 2021</li>
-              </ul>
-              <h5 class="post-title mb-3 mt-3">
-                <a href="@detailPostUrl">@Html.Raw(item.Title)</a>
-              </h5>
-              @{
-                var beforeFirstDotCommaString = item.Content.Substring(0, item.Content.IndexOf(".", StringComparison.Ordinal));
-                var summary = beforeFirstDotCommaString + "...";
-              }
-              <p class="excerpt mb-0">@Html.Raw(summary)</p>
-            </div>
-            <div class="post-bottom clearfix d-flex align-items-center">
-              <div class="social-share me-auto">
-                <button class="toggle-button icon-share"></button>
-                <ul class="icons list-unstyled list-inline mb-0">
-                  <li class="list-inline-item">
-                    <a href="#">
-                      <i class="fab fa-facebook-f"></i>
-                    </a>
-                  </li>
-                  <li class="list-inline-item">
-                    <a href="#">
-                      <i class="fab fa-twitter"></i>
-                    </a>
-                  </li>
-                  <li class="list-inline-item">
-                    <a href="#">
-                      <i class="fab fa-linkedin-in"></i>
-                    </a>
-                  </li>
-                  <li class="list-inline-item">
-                    <a href="#">
-                      <i class="fab fa-pinterest"></i>
-                    </a>
-                  </li>
-                  <li class="list-inline-item">
-                    <a href="#">
-                      <i class="fab fa-telegram-plane"></i>
-                    </a>
-                  </li>
-                  <li class="list-inline-item">
-                    <a href="#">
-                      <i class="far fa-envelope"></i>
-                    </a>
-                  </li>
-                </ul>
-              </div>
-              <div class="more-button float-end">
+        @foreach (var item in Model.Data.Items)
+        {
+          var detailPostUrl = "/post/" + item.Slug + "-" + item.Id + "/";
+          var postsByCategoryUrl = "/category/" + item.CategorySlug + "-" + item.CategoryId;
+          <div class="col-sm-6">
+            <!-- post -->
+            <div class="post post-grid rounded bordered">
+              <div class="thumb top-rounded">
+                <a href="@postsByCategoryUrl" class="category-badge position-absolute">@Html.Raw(item.CategoryTitle)</a>
+                <span class="post-format">
+                  <i class="icon-picture"></i>
+                </span>
                 <a href="@detailPostUrl">
-                  <span class="icon-options"></span>
+                  <div class="inner">
+                    <img src="@item.CoverImage" alt="post-title" />
+                  </div>
                 </a>
+              </div>
+              <div class="details">
+                <ul class="meta list-inline mb-0">
+                  <li class="list-inline-item">
+                    <a href="/about">
+                      <img src="~/images/other/author-sm.png" class="author" alt="author" />@Html.Raw(@item.FullName)</a>
+                  </li>
+                  <li class="list-inline-item">@item.CreateDate.ToString("dd MMMM, yyyy")</li>
+                </ul>
+                <h5 class="post-title mb-3 mt-3">
+                  <a href="@detailPostUrl">@Html.Raw(item.Title)</a>
+                </h5>
+                <p class="excerpt mb-0">@Html.Raw(item.Summary)</p>
+              </div>
+              <div class="post-bottom clearfix d-flex align-items-center">
+                <div class="social-share me-auto">
+                  <button class="toggle-button icon-share"></button>
+                  <ul class="icons list-unstyled list-inline mb-0">
+                    <li class="list-inline-item">
+                      <a href="#">
+                        <i class="fab fa-facebook-f"></i>
+                      </a>
+                    </li>
+                    <li class="list-inline-item">
+                      <a href="#">
+                        <i class="fab fa-twitter"></i>
+                      </a>
+                    </li>
+                    <li class="list-inline-item">
+                      <a href="#">
+                        <i class="fab fa-linkedin-in"></i>
+                      </a>
+                    </li>
+                    <li class="list-inline-item">
+                      <a href="#">
+                        <i class="fab fa-pinterest"></i>
+                      </a>
+                    </li>
+                    <li class="list-inline-item">
+                      <a href="#">
+                        <i class="fab fa-telegram-plane"></i>
+                      </a>
+                    </li>
+                    <li class="list-inline-item">
+                      <a href="#">
+                        <i class="far fa-envelope"></i>
+                      </a>
+                    </li>
+                  </ul>
+                </div>
+                <div class="more-button float-end">
+                  <a href="@detailPostUrl">
+                    <span class="icon-options"></span>
+                  </a>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      }
+        }
       </div>
-      @await Component.InvokeAsync("Pager", Model.Data)
+        @await Component.InvokeAsync("Pager", Model.Data)
+      </div>
+      <div class="col-lg-4">
+        <!-- sidebar -->
+        @await Component.InvokeAsync("SideBar", "Default")
+      </div>
     </div>
-
-    <div class="col-lg-4">
-      <!-- sidebar -->
-      @await Component.InvokeAsync("SideBar", "Default")
-    </div>
-
   </div>
-</div>
 </section>
