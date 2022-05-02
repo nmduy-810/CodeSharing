@@ -1,4 +1,5 @@
 using CodeSharing.ViewModels.Contents.Comment;
+using CodeSharing.ViewModels.Contents.Vote;
 using CodeSharing.WebPortal.Extensions;
 using CodeSharing.WebPortal.Interfaces;
 using CodeSharing.WebPortal.Models;
@@ -38,6 +39,9 @@ public class PostController : Controller
         {
             items.CurrentUser = await _userApiClient.GetById(User.GetUserId());
         }
+
+        // Update view count when user clicked post
+        await _postApiClient.UpdateViewCount(id);
         
         return View(items);
     }
@@ -93,6 +97,12 @@ public class PostController : Controller
     public async Task<IActionResult> AddNewComment([FromForm] CommentCreateRequest request)
     {
         var result = await _postApiClient.PostComment(request);
+        return Ok(result);
+    }
+    
+    public async Task<IActionResult> PostVote([FromForm] VoteCreateRequest request)
+    {
+        var result = await _postApiClient.PostVote(request);
         return Ok(result);
     }
     

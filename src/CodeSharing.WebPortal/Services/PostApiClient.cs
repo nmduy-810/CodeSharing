@@ -2,6 +2,7 @@ using System.Text;
 using CodeSharing.Utilities.Commons;
 using CodeSharing.ViewModels.Contents.Comment;
 using CodeSharing.ViewModels.Contents.Post;
+using CodeSharing.ViewModels.Contents.Vote;
 using CodeSharing.WebPortal.Interfaces;
 
 namespace CodeSharing.WebPortal.Services;
@@ -17,6 +18,11 @@ public class PostApiClient : BaseApiClient, IPostApiClient
     public async Task<List<PostQuickVm>> GetPopularPosts(int take)
     {
         return await GetListAsync<PostQuickVm>($"/api/posts/popular/{take}");
+    }
+
+    public async Task<List<PostQuickVm>> GetLatestPosts(int take)
+    {
+        return await GetListAsync<PostQuickVm>($"api/posts/latest/{take}");
     }
 
     public async Task<PostVm> GetDetailsPost(int id)
@@ -68,5 +74,15 @@ public class PostApiClient : BaseApiClient, IPostApiClient
     public async Task<CommentVm> PostComment(CommentCreateRequest request)
     {
         return await PostAsync<CommentCreateRequest, CommentVm>($"/api/posts/{request.PostId}/comments", request);
+    }
+
+    public async Task<int> PostVote(VoteCreateRequest request)
+    {
+        return await PostAsync<VoteCreateRequest, int>($"/api/posts/{request.PostId}/votes", request, true);
+    }
+
+    public async Task<bool> UpdateViewCount(int id)
+    {
+        return await PutAsync<object, bool>($"/api/posts/{id}/view-count", id, false);
     }
 }

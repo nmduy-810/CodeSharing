@@ -520,6 +520,34 @@ public partial class PostsController : BaseController
         };
         return Ok(postVm);
     }
+    
+    [AllowAnonymous]
+    [HttpPut("{id}/view-count")]
+    public async Task<IActionResult> UpdateViewCount(int id)
+    {
+        var post = await _context.Posts.FindAsync(id);
+        if (post == null)
+        {
+            return NotFound(new ApiNotFoundResponse($"Can't found post for id = {id} in database"));
+        }
+
+        if (post.ViewCount == null)
+        {
+            post.ViewCount = 0;
+        }
+        
+        post.ViewCount += 1;
+        
+        _context.Posts.Update(post);
+        
+        var result = await _context.SaveChangesAsync();
+        if (result > 0)
+        {
+            return Ok();
+        }
+        
+        return BadRequest(new ApiBadRequestResponse("Update view post failed"));
+    }
 
     #region Helpers
 

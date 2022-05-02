@@ -16,12 +16,14 @@ public class SideBarViewComponent : ViewComponent
     
     public async Task<IViewComponentResult> InvokeAsync()
     {
-        var popularPosts = await _postApiClient.GetPopularPosts(3);
+        var popularPosts = await _postApiClient.GetPopularPosts(4);
+        var latestPosts = await _postApiClient.GetLatestPosts(4);
         var popularLabels = await _labelApiClient.GetPopularLabels(5);
         var explorerTopics = await _postApiClient.GetTotalPostInCategory();
         var items = new SideBarViewModel()
         {
             PopularPosts = popularPosts,
+            LatestPosts = latestPosts,
             PopularLabels = popularLabels,
             ExplorerTopics = explorerTopics
         };

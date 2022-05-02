@@ -52,6 +52,10 @@
                         <a href="#">Trending</a>
                     </li>
                     <li class="list-inline-item">@Model.Post.CreateDate.ToString("dd MMMM, yyyy")</li>
+                    <li class="list-inline-item">
+                        <i class="icon-like" style="vertical-align: inherit !important;"></i>
+                        <span class="like-count">@Model.Post.NumberOfVotes.GetValueOrDefault(0).ToString("N0")</span>
+                    </li>
                 </ul>
             </div>
             <!-- featured image -->
@@ -62,6 +66,18 @@
             <div class="post-content clearfix">
                 <p>@Html.Raw(@Model.Post.Content)</p>
             </div>
+
+            @if (User.Identity.IsAuthenticated)
+            {
+                <form class="text-right" id="frm_vote" action="#" method="post">
+                    <input type="hidden" name="postId" value="@Model.Post.Id">
+                    <button class="btn" style="background-color: rgb(7, 55, 99); color: white; border: none; cursor: pointer; padding:  2px 12px 3px 12px; text-decoration: none;">
+                        <i class="icon-like" style="vertical-align: middle !important;"></i>
+                        <span style="vertical-align: text-top;" class="like-it">@Model.Post.NumberOfVotes.GetValueOrDefault(0).ToString("N0")</span>
+                    </button>
+                </form>
+            }
+
             <!-- post bottom section -->
             <div class="post-bottom">
                 <div class="row d-flex align-items-center">
