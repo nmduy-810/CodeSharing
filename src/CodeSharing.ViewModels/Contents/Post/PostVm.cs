@@ -18,6 +18,7 @@ public class PostVm
     public DateTime? LastModifiedDate { get; set; }
     public int? NumberOfComments { get; set; }
     public int? NumberOfVotes { get; set; }
+    public int? ViewCount { get; set; }
     public int? NumberOfReports { get; set; }
     public List<AttachmentVm> Attachments { set; get; }
     public string CoverImage { get; set; }

@@ -196,6 +196,7 @@ public partial class PostsController : BaseController
             NumberOfComments = post.NumberOfComments,
             NumberOfVotes = post.NumberOfVotes,
             NumberOfReports = post.NumberOfReports,
+            ViewCount = post.ViewCount,
             CoverImage = FunctionBase.GetBaseUrl(_httpContextAccessor) + post.CoverImage
         };
 

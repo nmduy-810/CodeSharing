@@ -53,8 +53,12 @@
                     </li>
                     <li class="list-inline-item">@Model.Post.CreateDate.ToString("dd MMMM, yyyy")</li>
                     <li class="list-inline-item">
-                        <i class="icon-like" style="vertical-align: inherit !important;"></i>
                         <span class="like-count">@Model.Post.NumberOfVotes.GetValueOrDefault(0).ToString("N0")</span>
+                         <i class="icon-like" style="vertical-align: inherit !important;"></i>
+                    </li>
+                    <li class="list-inline-item">
+                        <span>@Model.Post.ViewCount.GetValueOrDefault(0).ToString("N0")</span>
+                        <i class="icon-eye" style="vertical-align: inherit !important;"></i>
                     </li>
                 </ul>
             </div>
