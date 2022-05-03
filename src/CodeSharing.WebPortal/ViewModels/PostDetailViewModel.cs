@@ -2,7 +2,7 @@ using CodeSharing.ViewModels.Contents.Label;
 using CodeSharing.ViewModels.Contents.Post;
 using CodeSharing.ViewModels.Systems.User;
 
-namespace CodeSharing.WebPortal.Models;
+namespace CodeSharing.WebPortal.ViewModels;
 
 public class PostDetailViewModel
 {

@@ -1,7 +1,7 @@
 using CodeSharing.ViewModels.Contents.Label;
 using CodeSharing.ViewModels.Contents.Post;
 
-namespace CodeSharing.WebPortal.Models;
+namespace CodeSharing.WebPortal.ViewModels;
 
 public class SideBarViewModel
 {

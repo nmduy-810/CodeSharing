@@ -3,7 +3,7 @@ using CodeSharing.ViewModels.Contents.Report;
 using CodeSharing.ViewModels.Contents.Vote;
 using CodeSharing.WebPortal.Extensions;
 using CodeSharing.WebPortal.Interfaces;
-using CodeSharing.WebPortal.Models;
+using CodeSharing.WebPortal.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CodeSharing.WebPortal.Controllers;

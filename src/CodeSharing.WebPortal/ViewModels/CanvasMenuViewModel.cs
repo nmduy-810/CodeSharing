@@ -1,7 +1,7 @@
 using CodeSharing.ViewModels.Contents.Category;
 using CodeSharing.ViewModels.Systems.User;
 
-namespace CodeSharing.WebPortal.Models;
+namespace CodeSharing.WebPortal.ViewModels;
 
 public class CanvasMenuViewModel
 {
