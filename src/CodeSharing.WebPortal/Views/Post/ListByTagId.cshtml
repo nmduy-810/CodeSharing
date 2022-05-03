@@ -2,6 +2,9 @@
 
 @{
     Layout = "_Layout";
+    var suffixPage = Model.Data.PageIndex > 1 ? Model.Label.Name + " - Trang " + Model.Data.PageIndex : "";
+    ViewData["Title"] = Model.Label.Name + suffixPage + " · Code Sharing";
+    ViewData["Description"] = "Các bài viết liên quan đến thẻ " + Model.Label.Name + suffixPage;
 }
 
 <section class="page-header">
@@ -33,11 +36,11 @@
             <!-- post -->
             <div class="post post-grid rounded bordered">
               <div class="thumb top-rounded">
-                <a href="@postsByCategoryUrl" class="category-badge position-absolute">@Html.Raw(item.CategoryTitle)</a>
+                <a href="@postsByCategoryUrl" title="Xem tất cả bài viết trong @item.CategoryTitle" class="category-badge position-absolute">@Html.Raw(item.CategoryTitle)</a>
                 <span class="post-format">
                   <i class="icon-picture"></i>
                 </span>
-                <a href="@detailPostUrl">
+                <a href="@detailPostUrl" title="@item.Title">
                   <div class="inner">
                     <img src="@item.CoverImage" alt="post-title" />
                   </div>
@@ -52,7 +55,7 @@
                   <li class="list-inline-item">@item.CreateDate.ToString("dd MMMM, yyyy")</li>
                 </ul>
                 <h5 class="post-title mb-3 mt-3">
-                  <a href="@detailPostUrl">@Html.Raw(item.Title)</a>
+                  <a href="@detailPostUrl" title="@item.Title">@Html.Raw(item.Title)</a>
                 </h5>
                 <p class="excerpt mb-0">@Html.Raw(item.Summary)</p>
               </div>
@@ -93,7 +96,7 @@
                   </ul>
                 </div>
                 <div class="more-button float-end">
-                  <a href="@detailPostUrl">
+                  <a href="@detailPostUrl" title="@item.Title">
                     <span class="icon-options"></span>
                   </a>
                 </div>

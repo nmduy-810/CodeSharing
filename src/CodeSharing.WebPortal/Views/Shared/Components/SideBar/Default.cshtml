@@ -29,14 +29,14 @@
 		            <!-- post -->
 		            <div class="post post-list-sm circle">
                         <div class="thumb">
-                            <a href="@detailPostUrl">
+                            <a href="@detailPostUrl" title="@item.Title">
                                 <div class="inner">
                                     <img style="height: 60px; border-radius: 50%" src="@item.CoverImage" alt="@item.Title"/>
                                 </div>
                             </a>
                         </div>
                         <div class="details clearfix">
-                            <h6 class="post-title my-0"><a href="@detailPostUrl">@Html.Raw(item.Title)</a></h6>
+                            <h6 class="post-title my-0"><a href="@detailPostUrl" title="@item.Title">@Html.Raw(item.Title)</a></h6>
                             <ul class="meta list-inline mt-1 mb-0">
                                 <li class="list-inline-item">@item.CreateDate.ToString("dd MMMM, yyyy")</li>
                             </ul>
@@ -52,14 +52,14 @@
                     <!-- post -->
                     <div class="post post-list-sm circle">
                         <div class="thumb circle">
-                            <a href="@detailPostUrl">
+                            <a href="@detailPostUrl" title="@item.Title">
                                 <div class="inner">
                                     <img style="height: 60px; border-radius: 50%" src="@item.CoverImage" alt="@item.Title"/>
                                 </div>
                             </a>
                         </div>
                         <div class="details clearfix">
-                            <h6 class="post-title my-0"><a href="@detailPostUrl">@Html.Raw(item.Title)</a></h6>
+                            <h6 class="post-title my-0"><a href="@detailPostUrl" title="@item.Title">@Html.Raw(item.Title)</a></h6>
                             <ul class="meta list-inline mt-1 mb-0">
                                 <li class="list-inline-item">@item.CreateDate.ToString("dd MMMM, yyyy")</li>
                             </ul>
@@ -84,15 +84,15 @@
                     <!-- post -->
                     <div class="post post-carousel">
                         <div class="thumb rounded">
-                            <a href="@postsByCategoryUrl" class="category-badge position-absolute">@item.CategoryTitle</a>
-                            <a href="@detailPostUrl">
+                            <a href="@postsByCategoryUrl" title="Xem tất cả bài viết trong @item.CategoryTitle" class="category-badge position-absolute">@item.CategoryTitle</a>
+                            <a href="@detailPostUrl" title="@item.Title">
                                 <div class="inner">
                                     <img src="@item.CoverImage" alt="@item.Title"/>
                                 </div>
                             </a>
                         </div>
                         <h5 class="post-title mb-0 mt-4">
-                            <a href="@detailPostUrl">@item.Title</a>
+                            <a href="@detailPostUrl" title="@item.Title">@item.Title</a>
                         </h5>
                         <ul class="meta list-inline mt-2 mb-0">
                             <li class="list-inline-item">
