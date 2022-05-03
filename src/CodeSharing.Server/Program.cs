@@ -165,6 +165,13 @@ builder.Services.AddDistributedSqlServerCache(o =>
     o.TableName = "CacheTable";
 });
 
+// Security Headers
+builder.WebHost.UseKestrel(serverOptions =>
+{
+    // Hidden infomation server in Network tab of browsers
+    serverOptions.AddServerHeader = false;
+});
+
 var app = builder.Build();
 
 #region Serilog
@@ -202,6 +209,13 @@ if (app.Environment.IsDevelopment())
         c.SwaggerEndpoint("/swagger/v1/swagger.json", "CodeSharing API V1");
     });
 }
+
+// Security Headers ( before UseStaticFiles() )
+app.UseHsts(hsts => hsts.MaxAge(365).IncludeSubdomains().Preload());
+app.UseXContentTypeOptions();
+app.UseReferrerPolicy(opts => opts.NoReferrer());
+app.UseXXssProtection(options => options.EnabledWithBlockMode());
+app.UseXfo(options => options.Deny());
 
 app.UseErrorWrapping();
 

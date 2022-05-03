@@ -12,6 +12,7 @@
       <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="6.0.3" />
       <PackageReference Include="Microsoft.Extensions.Caching.SqlServer" Version="6.0.4" />
       <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+      <PackageReference Include="NWebsec.AspNetCore.Middleware" Version="3.0.0" />
     </ItemGroup>
 
     <ItemGroup>
@@ -82,6 +83,14 @@
 
     <ItemGroup>
       <Folder Include="wwwroot\lib" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Include="Web.config">
+        <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      </None>
     </ItemGroup>
 
 </Project>

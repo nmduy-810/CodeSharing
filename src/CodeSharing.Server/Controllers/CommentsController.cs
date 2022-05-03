@@ -39,7 +39,7 @@ public partial class PostsController
     
     [HttpGet("{postId}/comments/tree")]
     [AllowAnonymous]
-    public async Task<IActionResult> GetCommentTreeByPostId(int postId)
+    public async Task<IActionResult> GetCommentTreeByPostId(int postId, int pageIndex, int pageSize)
     {
         var query = from c in _context.Comments
             join u in _context.Users on c.OwnerUserId equals u.Id
