@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using CodeSharing.Server.Services.Interfaces;
 using CodeSharing.Utilities.Constants;
+using Microsoft.AspNetCore.Identity.UI.Services;
 
 namespace CodeSharing.Server.Controllers;
 
@@ -21,6 +22,8 @@ public partial class PostsController : BaseController
     private readonly IStorageService _storageService;
     private readonly ICacheService _distributedCacheService;
     private readonly IHttpContextAccessor _httpContextAccessor;
+    private readonly IEmailSender _emailSender;
+    private readonly IViewRenderService _viewRenderService;
     
     public PostsController(
         ApplicationDbContext context, 
@@ -28,7 +31,9 @@ public partial class PostsController : BaseController
         ISequenceService sequenceService,
         IStorageService storageService,
         ICacheService distributedCacheService,
-        IHttpContextAccessor httpContextAccessor)
+        IHttpContextAccessor httpContextAccessor,
+        IEmailSender emailSender,
+        IViewRenderService viewRenderService)
     {
         _context = context;
         _logger = logger ?? throw new ArgumentException(null, nameof(logger));
@@ -36,6 +41,8 @@ public partial class PostsController : BaseController
         _storageService = storageService;
         _distributedCacheService = distributedCacheService;
         _httpContextAccessor = httpContextAccessor;
+        _emailSender = emailSender;
+        _viewRenderService = viewRenderService;
     }
     
     [AllowAnonymous]

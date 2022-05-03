@@ -1,4 +1,3 @@
-using System.Linq;
 using CodeSharing.Server.Datas.Entities;
 using CodeSharing.Server.Extensions;
 using CodeSharing.Utilities.Commons;
@@ -169,13 +168,32 @@ public partial class PostsController
             PostId = postId,
             ReplyId = request.ReplyId
         };
-        
-        if (result > 0)
-        {
-            return CreatedAtAction(nameof(GetCommentDetail), new { id = postId, commentId = comment.Id }, respose);
-        }
 
-        return BadRequest(new ApiBadRequestResponse("Create comment failed"));
+        if (result <= 0)
+        {
+            return BadRequest(new ApiBadRequestResponse("Create comment failed"));
+        }
+        
+        // Send mail
+        if (comment.ReplyId.HasValue)
+        {
+            var repliedComment = await _context.Comments.FindAsync(comment.ReplyId.Value);
+            var repledUser = await _context.Users.FindAsync(repliedComment?.OwnerUserId);
+            var emailModel = new RepliedCommentVm()
+            {
+                CommentContent = request.Content,
+                PostId = postId,
+                PostSlug = post.Slug,
+                PostTitle = post.Title,
+                RepliedName = repledUser?.FirstName + " " + repledUser?.LastName
+            };
+            
+            //https://github.com/leemunroe/responsive-html-email-template
+            var htmlContent = await _viewRenderService.RenderToStringAsync("_RepliedCommentEmail", emailModel);
+            await _emailSender.SendEmailAsync(repledUser?.Email, "Có người đang trả lời bạn", htmlContent);
+        }
+            
+        return CreatedAtAction(nameof(GetCommentDetail), new { id = postId, commentId = comment.Id }, respose);
     }
 
     [HttpPut("{postId}/comments/{commentId}")]
