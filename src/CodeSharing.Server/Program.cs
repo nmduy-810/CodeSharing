@@ -66,8 +66,8 @@ builder.Services.AddCors(options =>
 builder.Services.Configure<IdentityOptions>(options =>
 {
     // Default Lockout settings.
-    options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(2);
-    options.Lockout.MaxFailedAccessAttempts = 5;
+    options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(2); // Khóa tài khoản 2 phút nếu đăng nhập sai
+    options.Lockout.MaxFailedAccessAttempts = 5; // Thất bại 3 lần thì khóa
     options.Lockout.AllowedForNewUsers = true;
     options.SignIn.RequireConfirmedPhoneNumber = false;
     options.SignIn.RequireConfirmedAccount = false;

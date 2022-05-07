@@ -22,11 +22,13 @@ namespace CodeSharing.Server.Areas.Identity.Pages.Account
     public class LoginModel : PageModel
     {
         private readonly SignInManager<User> _signInManager;
+        private readonly UserManager<User> _userManager;
         private readonly ILogger<LoginModel> _logger;
 
-        public LoginModel(SignInManager<User> signInManager, ILogger<LoginModel> logger)
+        public LoginModel(SignInManager<User> signInManager, UserManager<User> userManager, ILogger<LoginModel> logger)
         {
             _signInManager = signInManager;
+            _userManager = userManager;
             _logger = logger;
         }
 
@@ -66,9 +68,9 @@ namespace CodeSharing.Server.Areas.Identity.Pages.Account
             ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
             ///     directly from your code. This API may change or be removed in future releases.
             /// </summary>
-            [Required(ErrorMessage = "Tên đăng nhập không được để trống")]
-            [Display(Name="Tên đăng nhập")]
-            public string UserName { get; set; }
+            [Required(ErrorMessage = "Tên đăng nhập hoặc email không được để trống")]
+            [Display(Name="Tên đăng nhập hoặc email")]
+            public string UserNameOrEmail { get; set; }
 
             /// <summary>
             ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
@@ -112,12 +114,24 @@ namespace CodeSharing.Server.Areas.Identity.Pages.Account
 
             if (ModelState.IsValid)
             {
+                IdentityUser user = await _userManager.FindByEmailAsync (Input.UserNameOrEmail);
+                if (user == null)
+                {
+                    user = await _userManager.FindByNameAsync(Input.UserNameOrEmail);
+                }
+                
+                if (user == null)
+                {
+                    ModelState.AddModelError (string.Empty, "Tài khoản không tồn tại.");
+                    return Page ();
+                }
+                
                 // This doesn't count login failures towards account lockout
                 // To enable password failures to trigger account lockout, set lockoutOnFailure: true
-                var result = await _signInManager.PasswordSignInAsync(Input.UserName, Input.Password, Input.RememberMe, lockoutOnFailure: true);
+                var result = await _signInManager.PasswordSignInAsync(user.UserName, Input.Password, Input.RememberMe, lockoutOnFailure: true);
                 if (result.Succeeded)
                 {
-                    _logger.LogInformation("User logged in.");
+                    _logger.LogInformation("User đã đăng nhập");
                     return LocalRedirect(returnUrl);
                 }
                 if (result.RequiresTwoFactor)
@@ -126,11 +140,11 @@ namespace CodeSharing.Server.Areas.Identity.Pages.Account
                 }
                 if (result.IsLockedOut)
                 {
-                    _logger.LogWarning("User account locked out.");
+                    _logger.LogWarning("Tài khoản bí tạm khóa.");
                     return RedirectToPage("./Lockout");
                 }
 
-                ModelState.AddModelError(string.Empty, "Không đăng nhập được.ddd");
+                ModelState.AddModelError(string.Empty, "Không đăng nhập được.");
                 return Page();
             }
 
