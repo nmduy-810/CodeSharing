@@ -4,6 +4,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
@@ -65,22 +66,24 @@ namespace CodeSharing.Server.Areas.Identity.Pages.Account
             ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
             ///     directly from your code. This API may change or be removed in future releases.
             /// </summary>
-            [Required]
+            [Required(ErrorMessage = "Tên đăng nhập không được để trống")]
+            [Display(Name="Tên đăng nhập")]
             public string UserName { get; set; }
 
             /// <summary>
             ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
             ///     directly from your code. This API may change or be removed in future releases.
             /// </summary>
-            [Required]
+            [Required(ErrorMessage = "Mật khẩu không được để trống")]
             [DataType(DataType.Password)]
+            [Display(Name = "Mật khẩu")]
             public string Password { get; set; }
 
             /// <summary>
             ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
             ///     directly from your code. This API may change or be removed in future releases.
             /// </summary>
-            [Display(Name = "Remember me?")]
+            [Display(Name = "Nhớ tài khoản?")]
             public bool RememberMe { get; set; }
         }
 
@@ -126,11 +129,9 @@ namespace CodeSharing.Server.Areas.Identity.Pages.Account
                     _logger.LogWarning("User account locked out.");
                     return RedirectToPage("./Lockout");
                 }
-                else
-                {
-                    ModelState.AddModelError(string.Empty, "Invalid login attempt.");
-                    return Page();
-                }
+
+                ModelState.AddModelError(string.Empty, "Tên đăng nhập hoặc mật khẩu không đúng.");
+                return Page();
             }
 
             // If we got this far, something failed, redisplay form

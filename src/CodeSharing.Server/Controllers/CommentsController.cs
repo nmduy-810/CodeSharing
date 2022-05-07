@@ -175,23 +175,23 @@ public partial class PostsController
         }
         
         // Send mail
-        if (comment.ReplyId.HasValue)
-        {
-            var repliedComment = await _context.Comments.FindAsync(comment.ReplyId.Value);
-            var repledUser = await _context.Users.FindAsync(repliedComment?.OwnerUserId);
-            var emailModel = new RepliedCommentVm()
-            {
-                CommentContent = request.Content,
-                PostId = postId,
-                PostSlug = post.Slug,
-                PostTitle = post.Title,
-                RepliedName = repledUser?.FirstName + " " + repledUser?.LastName
-            };
-            
-            //https://github.com/leemunroe/responsive-html-email-template
-            var htmlContent = await _viewRenderService.RenderToStringAsync("_RepliedCommentEmail", emailModel);
-            await _emailSender.SendEmailAsync(repledUser?.Email, "Có người đang trả lời bạn", htmlContent);
-        }
+        // if (comment.ReplyId.HasValue)
+        // {
+        //     var repliedComment = await _context.Comments.FindAsync(comment.ReplyId.Value);
+        //     var repledUser = await _context.Users.FindAsync(repliedComment?.OwnerUserId);
+        //     var emailModel = new RepliedCommentVm()
+        //     {
+        //         CommentContent = request.Content,
+        //         PostId = postId,
+        //         PostSlug = post.Slug,
+        //         PostTitle = post.Title,
+        //         RepliedName = repledUser?.FirstName + " " + repledUser?.LastName
+        //     };
+        //     
+        //     //https://github.com/leemunroe/responsive-html-email-template
+        //     var htmlContent = await _viewRenderService.RenderToStringAsync("_RepliedCommentEmail", emailModel);
+        //     await _emailSender.SendEmailAsync(repledUser?.Email, "Có người đang trả lời bạn", htmlContent);
+        // }
             
         return CreatedAtAction(nameof(GetCommentDetail), new { id = postId, commentId = comment.Id }, respose);
     }

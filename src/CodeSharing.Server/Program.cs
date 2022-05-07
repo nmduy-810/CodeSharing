@@ -172,6 +172,12 @@ builder.WebHost.UseKestrel(serverOptions =>
     serverOptions.AddServerHeader = false;
 });
 
+var enviroment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+if (enviroment == Environments.Development)
+{
+    builder.Services.AddRazorPages().AddRazorRuntimeCompilation();
+}
+
 var app = builder.Build();
 
 #region Serilog
