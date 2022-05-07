@@ -9,6 +9,8 @@ using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using CodeSharing.Server.Datas.Entities;
+using CodeSharing.Server.Services.Interfaces;
+using CodeSharing.ViewModels.Commons;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -17,15 +19,18 @@ using Microsoft.AspNetCore.WebUtilities;
 
 namespace CodeSharing.Server.Areas.Identity.Pages.Account
 {
+    [AllowAnonymous]
     public class ForgotPasswordModel : PageModel
     {
         private readonly UserManager<User> _userManager;
         private readonly IEmailSender _emailSender;
-
-        public ForgotPasswordModel(UserManager<User> userManager, IEmailSender emailSender)
+        private readonly IViewRenderService _viewRenderService;
+        
+        public ForgotPasswordModel(UserManager<User> userManager, IEmailSender emailSender, IViewRenderService viewRenderService)
         {
             _userManager = userManager;
             _emailSender = emailSender;
+            _viewRenderService = viewRenderService;
         }
 
         /// <summary>
@@ -70,11 +75,23 @@ namespace CodeSharing.Server.Areas.Identity.Pages.Account
                     pageHandler: null,
                     values: new { area = "Identity", code },
                     protocol: Request.Scheme);
+                
+                // Get information user
+                var emailModel = new MailContent()
+                {
+                    To = Input.Email,
+                    Subject = "Đặt lại mật khẩu",
+                    Body = $"Bạn nhận được email này vì đã gửi yêu cầu đặt lại mật khẩu tài khoản CodeSharing. Vui lòng nhấp chuột vào đường dẫn dưới đây để đặt lại mật khẩu:",
+                    UserName = user.LastName + " " + user.FirstName,
+                    Url = callbackUrl
+                };
+
+                var htmlContent = await _viewRenderService.RenderToStringAsync("_ResetPasswordEmail", emailModel);
 
                 await _emailSender.SendEmailAsync(
                     Input.Email,
-                    "Reset Password",
-                    $"Please reset your password by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+                    "[CodeSharing] Yêu Cầu Lấy Lại Mật Khẩu",
+                    htmlContent);
 
                 return RedirectToPage("./ForgotPasswordConfirmation");
             }

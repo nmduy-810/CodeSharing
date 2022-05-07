@@ -66,7 +66,7 @@ builder.Services.AddCors(options =>
 builder.Services.Configure<IdentityOptions>(options =>
 {
     // Default Lockout settings.
-    options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
+    options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(2);
     options.Lockout.MaxFailedAccessAttempts = 5;
     options.Lockout.AllowedForNewUsers = true;
     options.SignIn.RequireConfirmedPhoneNumber = false;
@@ -82,6 +82,11 @@ builder.Services.Configure<ApiBehaviorOptions>(options =>
 {
     options.SuppressModelStateInvalidFilter = true;
 });
+
+// Config token when reset password using identity
+builder.Services.AddIdentityCore<User>(options => options.SignIn.RequireConfirmedAccount = true)
+    .AddEntityFrameworkStores<ApplicationDbContext>()
+    .AddTokenProvider<DataProtectorTokenProvider<User>>(TokenOptions.DefaultProvider);
 
 builder.Services.AddControllersWithViews();
 
@@ -119,12 +124,15 @@ builder.Services.AddRazorPages(options =>
 // Add DbInitializer using Seeding data
 builder.Services.AddTransient<DbInitializer>();
 
+// Config use options
+builder.Services.AddOptions();
+
 // Register in Identity require have EmailSender
 builder.Services.AddTransient<IEmailSender, EmailSenderService>();
 builder.Services.AddTransient<ISequenceService, SequenceService>();
 builder.Services.AddTransient<IStorageService, FileStorageService>();
 builder.Services.AddTransient<ICacheService, DistributedCacheService>();
-builder.Services.Configure<EmailSettings>(configuration.GetSection("EmailSettings"));
+builder.Services.Configure<MailSettings>(configuration.GetSection("MailSettings"));
 builder.Services.AddTransient<IViewRenderService, ViewRenderService>();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

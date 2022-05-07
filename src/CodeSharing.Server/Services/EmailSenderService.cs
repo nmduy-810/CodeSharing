@@ -1,41 +1,55 @@
 using CodeSharing.ViewModels.Commons;
+using MailKit.Net.Smtp;
+using MailKit.Security;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.Extensions.Options;
-using RestSharp;
-using RestSharp.Authenticators;
+using MimeKit;
 
 namespace CodeSharing.Server.Services;
 
 public class EmailSenderService : IEmailSender
 {
-    private readonly EmailSettings _emailSettings;
-
-    public EmailSenderService(IOptions<EmailSettings> emailOptions)
+    private readonly MailSettings _mailSettings;
+    private readonly ILogger<EmailSenderService> _logger;
+    public EmailSenderService(IOptions<MailSettings> mailSettings, ILogger<EmailSenderService> logger)
     {
-        _emailSettings = emailOptions.Value;
+        _mailSettings = mailSettings.Value;
+        _logger = logger;
     }
-
+    
     public async Task SendEmailAsync(string email, string subject, string htmlMessage)
     {
-        RestClient client = new RestClient
+        var mimeMessage = new MimeMessage();
+        mimeMessage.Sender = new MailboxAddress(_mailSettings.DisplayName, _mailSettings.Mail);
+        mimeMessage.From.Add(new MailboxAddress(_mailSettings.DisplayName, _mailSettings.Mail));
+        mimeMessage.To.Add (MailboxAddress.Parse(email));
+        mimeMessage.Subject = subject;
+        
+        var builder = new BodyBuilder();
+        builder.HtmlBody = htmlMessage;
+        mimeMessage.Body = builder.ToMessageBody();
+        
+        // dùng SmtpClient của MailKit
+        using var smtp = new SmtpClient();
+
+        try
         {
-            BaseUrl = new Uri(_emailSettings.ApiBaseUri),
-            Authenticator = new HttpBasicAuthenticator("api", _emailSettings.ApiKey)
-        };
-        RestRequest request = new RestRequest();
-        request.AddParameter("domain", _emailSettings.Domain, ParameterType.UrlSegment);
-        request.Resource = "{domain}/messages";
-        request.AddParameter("from", _emailSettings.From);
-        request.AddParameter("to", email);
-        request.AddParameter("subject", subject);
-        request.AddParameter("html", htmlMessage);
-        request.Method = Method.POST;
-
-        TaskCompletionSource<IRestResponse> taskCompletion = new TaskCompletionSource<IRestResponse>();
-
-        client.ExecuteAsync(
-            request, r => taskCompletion.SetResult(r));
-
-        RestResponse response = (RestResponse)(await taskCompletion.Task);
+            smtp.Connect(_mailSettings.Host, _mailSettings.Port, SecureSocketOptions.StartTls);
+            smtp.Authenticate(_mailSettings.Mail, _mailSettings.Password);
+            await smtp.SendAsync(mimeMessage);
+        }
+        catch (Exception ex)
+        {
+            // Gửi mail thất bại, nội dung email sẽ lưu vào thư mục mailssave
+            Directory.CreateDirectory("mailssave");
+            var emailsavefile = $@"mailssave/{Guid.NewGuid()}.eml";
+            await mimeMessage.WriteToAsync(emailsavefile);
+            
+            _logger.LogInformation("Send mail failed, save from - " + emailsavefile);
+            _logger.LogError(ex.Message);
+        }
+        
+        smtp.Disconnect(true);
+        _logger.LogInformation("Send mail to " + email);
     }
 }

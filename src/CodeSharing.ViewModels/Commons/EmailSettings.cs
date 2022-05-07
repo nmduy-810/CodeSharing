@@ -1,11 +1,10 @@
 namespace CodeSharing.ViewModels.Commons;
 
-public class EmailSettings
+public class MailSettings
 {
-    public string ApiKey { get; set; }
-    public string Domain { get; set; }
-    public string ApiBaseUri { get; set; }
-    public string FromName { get; set; }
-    public string From { get; set; }
-    public string AdminMail { set; get; }
+    public string Mail { get; set; }
+    public string DisplayName { get; set; }
+    public string Password { get; set; }
+    public string Host { get; set; }
+    public int Port { get; set; }
 }
