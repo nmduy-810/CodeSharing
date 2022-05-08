@@ -161,7 +161,7 @@ namespace CodeSharing.Server.Areas.Identity.Pages.Account
                 
                 if (result.Succeeded)
                 {
-                     _logger.LogInformation("Người dùng đã tạo tài khoản mới thành công!");
+                     _logger.LogInformation("User created a new account with password.");
 
                      // Set default roles is Member for user
                      await _userManager.AddToRoleAsync(user, "Member");

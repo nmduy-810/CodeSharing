@@ -131,7 +131,7 @@ namespace CodeSharing.Server.Areas.Identity.Pages.Account
                 var result = await _signInManager.PasswordSignInAsync(user.UserName, Input.Password, Input.RememberMe, lockoutOnFailure: true);
                 if (result.Succeeded)
                 {
-                    _logger.LogInformation("User đã đăng nhập");
+                    _logger.LogInformation("User logged in.");
                     return LocalRedirect(returnUrl);
                 }
                 if (result.RequiresTwoFactor)
@@ -140,11 +140,11 @@ namespace CodeSharing.Server.Areas.Identity.Pages.Account
                 }
                 if (result.IsLockedOut)
                 {
-                    _logger.LogWarning("Tài khoản bí tạm khóa.");
+                    _logger.LogWarning("User account locked out.");
                     return RedirectToPage("./Lockout");
                 }
 
-                ModelState.AddModelError(string.Empty, "Không đăng nhập được.");
+                ModelState.AddModelError(string.Empty, "Tên tài khoản hoặc mật khẩu không đúng.");
                 return Page();
             }
 
