@@ -173,13 +173,6 @@ builder.Services.AddDistributedSqlServerCache(o =>
     o.TableName = "CacheTable";
 });
 
-// Security Headers
-builder.WebHost.UseKestrel(serverOptions =>
-{
-    // Hidden infomation server in Network tab of browsers
-    serverOptions.AddServerHeader = false;
-});
-
 var enviroment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
 if (enviroment == Environments.Development)
 {
@@ -222,14 +215,17 @@ if (app.Environment.IsDevelopment())
         c.OAuthClientId("swagger");
         c.SwaggerEndpoint("/swagger/v1/swagger.json", "CodeSharing API V1");
     });
+    app.UseDeveloperExceptionPage();
 }
-
-// Security Headers ( before UseStaticFiles() )
-app.UseHsts(hsts => hsts.MaxAge(365).IncludeSubdomains().Preload());
-app.UseXContentTypeOptions();
-app.UseReferrerPolicy(opts => opts.NoReferrer());
-app.UseXXssProtection(options => options.EnabledWithBlockMode());
-app.UseXfo(options => options.Deny());
+else
+{
+    // Security Headers ( before UseStaticFiles() )
+    app.UseHsts(hsts => hsts.MaxAge(365).IncludeSubdomains().Preload());
+    app.UseXContentTypeOptions();
+    app.UseReferrerPolicy(opts => opts.NoReferrer());
+    app.UseXXssProtection(options => options.EnabledWithBlockMode());
+    app.UseXfo(options => options.Deny());
+}
 
 app.UseErrorWrapping();
 
@@ -252,7 +248,5 @@ app.UseEndpoints(endpoints =>
     endpoints.MapDefaultControllerRoute();
     endpoints.MapRazorPages();
 });
-
-app.MapControllers();
 
 app.Run();

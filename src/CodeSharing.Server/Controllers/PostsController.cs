@@ -454,7 +454,6 @@ public partial class PostsController : BaseController
     [HttpPost]
     [Consumes("multipart/form-data")]
     [ClaimRequirement(FunctionCodeConstants.CONTENT_POST, CommandCodeConstants.CREATE)]
-    [ApiValidationFilter]
     public async Task<IActionResult> Post([FromForm] PostCreateRequest request)
     {
         var post = new Post()

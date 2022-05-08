@@ -107,11 +107,11 @@ public class DbInitializer
                 },
                 new Function
                 {
-                    Id = "CONTENT_KNOWLEDGEBASE", 
+                    Id = "CONTENT_POST", 
                     Name = "Bài viết", 
                     ParentId = "CONTENT", 
                     SortOrder = 2,
-                    Url = "/content/knowledge-bases", 
+                    Url = "/content/posts", 
                     Icon = "fa-edit"
                 },
                 new Function
