@@ -3,102 +3,50 @@
 
 @{
     ViewData["Title"] = "Đăng nhập · Code Sharing";
-    Layout = null;
+    ViewData["Header"] = "Đăng nhập";
+    Layout = "_Layout";
 }
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@ViewData["Title"]</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" 
-          integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" />
-    <style>
-        body {
-            background-image: url("../images/4853433.jpg");
-        }
-
-        .btn-login {
-            font-size: 0.9rem;
-            letter-spacing: 0.05rem;
-            padding: 0.75rem 1rem;
-        }
-
-        .btn-google {
-            color: white !important;
-            background-color: #ea4335;
-        }
-
-        .btn-facebook {
-            color: white !important;
-            background-color: #3b5998;
-        }
-        
-        .validation-summary-errors ul { 
-                list-style: none;
-                margin-left:-40px
-            }
-            
-        .validation-summary-errors li { 
-                 padding-left: 5px;
-            }   
-    </style>
-</head>
-<body>
-    <div class="container">
-        <div class="row">
-            <div class="col-sm-9 col-md-7 col-lg-5 mx-auto">
-                <div class="card border-0 shadow rounded-3 my-5">
-                    <div class="card-body p-4 p-sm-5">
-                        <h2 class="card-title text-center mb-5 fw-light font-weight-bold">Đăng nhập</h2>
-                        <form id="account" method="post">
-                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                            <div class="form-floating mb-3">
-                                <input asp-for="Input.UserNameOrEmail" class="form-control" placeholder="Tên đăng nhập" autocomplete="username" aria-required="true"/>
-                                <label asp-for="Input.UserNameOrEmail" class="form-label"></label>
-                                <span asp-validation-for="Input.UserNameOrEmail" class="text-danger"></span>
-                            </div>
-                            <div class="form-floating mb-3">
-                                <input asp-for="Input.Password" type="password" class="form-control" placeholder="Mật khẩu" autocomplete="current-password" aria-required="true">
-                                <label asp-for="Input.Password" class="form-label"></label>
-                                <span asp-validation-for="Input.Password" class="text-danger"></span>
-                            </div>
+<form id="account" method="post">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div class="form-floating mb-3">
+        <input asp-for="Input.UserNameOrEmail" class="form-control" placeholder="Tên đăng nhập" autocomplete="username" aria-required="true"/>
+        <label asp-for="Input.UserNameOrEmail" class="form-label"></label>
+        <span asp-validation-for="Input.UserNameOrEmail" class="text-danger"></span>
+    </div>
+    <div class="form-floating mb-3">
+        <input asp-for="Input.Password" type="password" class="form-control" placeholder="Mật khẩu" autocomplete="current-password" aria-required="true">
+        <label asp-for="Input.Password" class="form-label"></label>
+        <span asp-validation-for="Input.Password" class="text-danger"></span>
+    </div>
                             
-                            <div class="row">
-                                <div class="col">
-                                    <div class="form-check mb-3">
-                                        <label asp-for="Input.RememberMe" class="form-label">
-                                            <input class="form-check-input" asp-for="Input.RememberMe" />
-                                            @Html.DisplayNameFor(m => m.Input.RememberMe)
-                                        </label>
-                                    </div>
-                                </div>
-                                <div class="col">
-                                    <a id="forgot-password" asp-page="./ForgotPassword">Quên mật khẩu?</a>
-                                </div>
-                            </div>
-                            
-                            <div class="d-grid">
-                                <button id="login-submit" class="btn btn-primary btn-login text-uppercase fw-bold" type="submit">Đăng nhập</button>
-                            </div>
-                            <hr class="my-4">
-                            <div class="d-grid mb-2">
-                                <button class="btn btn-google btn-login text-uppercase fw-bold" type="submit">
-                                    <i class="fab fa-google me-2"></i> Đăng nhập với Google </button>
-                            </div>
-                            <div class="d-grid">
-                                <button class="btn btn-facebook btn-login text-uppercase fw-bold" type="submit">
-                                    <i class="fab fa-facebook-f me-2"></i> Đăng nhập với Facebook </button>
-                            </div>
-                            <div class="mt-3 text-center">
-                                Bạn chưa có tài khoản? <a asp-page="./Register">Đăng ký</a>
-                            </div>
-                        </form>
-                    </div>
-                </div>
+    <div class="row">
+        <div class="col">
+            <div class="form-check mb-3">
+                <label asp-for="Input.RememberMe" class="form-label">
+                    <input class="form-check-input" asp-for="Input.RememberMe" />
+                    @Html.DisplayNameFor(m => m.Input.RememberMe)
+                </label>
             </div>
         </div>
+        <div class="col">
+            <a id="forgot-password" asp-page="./ForgotPassword">Quên mật khẩu?</a>
+        </div>
     </div>
-</body>
+                            
+    <div class="d-grid">
+        <button id="login-submit" class="btn btn-primary btn-login text-uppercase fw-bold" type="submit">Đăng nhập</button>
+    </div>
+    <hr class="my-4">
+    <div class="d-grid mb-2">
+        <button class="btn btn-google btn-login text-uppercase fw-bold" type="submit">
+            <i class="fab fa-google me-2"></i> Đăng nhập với Google </button>
+    </div>
+    <div class="d-grid">
+        <button class="btn btn-facebook btn-login text-uppercase fw-bold" type="submit">
+            <i class="fab fa-facebook-f me-2"></i> Đăng nhập với Facebook </button>
+    </div>
+    <div class="mt-3 text-center">
+        Bạn chưa có tài khoản? <a asp-page="./Register">Đăng ký</a>
+    </div>
+</form>

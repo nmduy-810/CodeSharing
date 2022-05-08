@@ -2,126 +2,61 @@
 @model RegisterModel
 @{
     ViewData["Title"] = "Đăng ký · Code Sharing";
-    Layout = null;
+    ViewData["Header"] = "Đăng ký";
+    Layout = "_Layout";
 }
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@ViewData["Title"]</title>
-    
-    <!-- Include jQuery -->
-    <script type="text/javascript" src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
-    
-    <!-- Include Date Range Picker -->
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css"/>
-    
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" 
-          integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" />
-    
-    <script>
-        $(document).ready(function(){
-            var date_input=$('input[name="date"]'); //our date input has the name "date"
-            var container=$('.bootstrap-iso form').length>0 ? $('.bootstrap-iso form').parent() : "body";
-            date_input.datepicker({
-                format: 'mm/dd/yyyy',
-                container: container,
-                todayHighlight: true,
-                autoclose: true,
-            })
-        })
-    </script>
-    
-    <style>
-        body {
-            background-image: url("../images/4853433.jpg");
-        }
-
-        .btn-register {
-            font-size: 0.9rem;
-            letter-spacing: 0.05rem;
-            padding: 0.75rem 1rem;
-        }
-        
-        .validation-summary-errors ul { 
-                list-style: none;
-                margin-left:-40px
-            }
-            
-        .validation-summary-errors li { 
-                 padding-left: 5px;
-            }   
-    </style>
-</head>
-<body>
-    <div class="container">
-        <div class="row">
-            <div class="col-sm-9 col-md-7 col-lg-5 mx-auto">
-                <div class="card border-0 shadow rounded-3 my-5">
-                    <div class="card-body p-4 p-sm-5">
-                        <h2 class="card-title text-center mb-5 fw-light font-weight-bold">Đăng ký</h2>
-                        <form id="account" method="post">
-                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                            <div class="row">
-                                <div class="col">
-                                    <div class="form-floating mb-3">
-                                        <input asp-for="Input.FirstName" class="form-control" placeholder="Họ của bạn" autocomplete="firstname" aria-required="true" />
-                                        <label asp-for="Input.FirstName" class="form-label"></label>
-                                        <span asp-validation-for="Input.FirstName" class="text-danger"></span>
-                                    </div>
-                                </div>
-                                <div class="col">
-                                    <div class="form-floating mb-3">
-                                        <input asp-for="Input.LastName" class="form-control" placeholder="Tên của bạn" autocomplete="lastname" aria-required="true" />
-                                        <label asp-for="Input.LastName" class="form-label"></label>
-                                        <span asp-validation-for="Input.LastName" class="text-danger"></span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col">
-                                    <div class="form-floating mb-3">
-                                        <input asp-for="Input.Birthday" class="form-control" id="date" name="date" placeholder="MM/DD/YYY" type="text" />
-                                        <label asp-for="Input.Birthday" class="form-label"></label>
-                                        <span asp-validation-for="Input.Birthday" class="text-danger"></span>
-                                    </div>
-                                    <div class="form-floating mb-3">
-                                        <input asp-for="Input.Email" class="form-control" placeholder="Email" autocomplete="email" aria-required="true" />
-                                        <label asp-for="Input.Email"></label>
-                                        <span asp-validation-for="Input.Email" class="text-danger"></span>
-                                    </div>
-                                    <div class="form-floating mb-3">
-                                        <input asp-for="Input.UserName" class="form-control" placeholder="Tên đăng nhập" autocomplete="username" aria-required="true" />
-                                        <label asp-for="Input.UserName" class="form-label"></label>
-                                        <span asp-validation-for="Input.UserName" class="text-danger"></span>
-                                    </div>
-                                    <div class="form-floating mb-3">
-                                        <input asp-for="Input.Password" type="password" class="form-control" placeholder="Mật khẩu" autocomplete="current-password" aria-required="true">
-                                        <label asp-for="Input.Password" class="form-label"></label>
-                                        <span asp-validation-for="Input.Password" class="text-danger"></span>
-                                    </div>
-                                    <div class="form-floating mb-3">
-                                        <input asp-for="Input.ConfirmPassword" class="form-control" placeholder="Xác nhận mật khẩu" autocomplete="new-password" aria-required="true" />
-                                        <label asp-for="Input.ConfirmPassword"></label>
-                                        <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="d-grid">
-                                <button id="registerSubmit" class="btn btn-primary btn-register text-uppercase fw-bold" type="submit">Đăng ký</button>
-                            </div>
-                            <div class="mt-3 text-center">
-                                Quay về trang đăng nhập? <a asp-page="./Login">Đăng nhập</a>
-                            </div>
-                            
-                        </form>
-                    </div>
-                </div>
+<form id="account" method="post">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div class="row">
+        <div class="col">
+            <div class="form-floating mb-3">
+                <input asp-for="Input.FirstName" class="form-control" placeholder="Họ của bạn" autocomplete="firstname" aria-required="true" />
+                <label asp-for="Input.FirstName" class="form-label"></label>
+                <span asp-validation-for="Input.FirstName" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col">
+            <div class="form-floating mb-3">
+                <input asp-for="Input.LastName" class="form-control" placeholder="Tên của bạn" autocomplete="lastname" aria-required="true" />
+                <label asp-for="Input.LastName" class="form-label"></label>
+                <span asp-validation-for="Input.LastName" class="text-danger"></span>
             </div>
         </div>
     </div>
-</body>
+    <div class="row">
+        <div class="col">
+            <div class="form-floating mb-3">
+                <input asp-for="Input.Birthday" class="form-control" id="date" name="date" placeholder="MM/DD/YYY" type="text" />
+                <label asp-for="Input.Birthday" class="form-label"></label>
+                <span asp-validation-for="Input.Birthday" class="text-danger"></span>
+            </div>
+            <div class="form-floating mb-3">
+                <input asp-for="Input.Email" class="form-control" placeholder="Email" autocomplete="email" aria-required="true" />
+                <label asp-for="Input.Email"></label>
+                <span asp-validation-for="Input.Email" class="text-danger"></span>
+            </div>
+            <div class="form-floating mb-3">
+                <input asp-for="Input.UserName" class="form-control" placeholder="Tên đăng nhập" autocomplete="username" aria-required="true" />
+                <label asp-for="Input.UserName" class="form-label"></label>
+                <span asp-validation-for="Input.UserName" class="text-danger"></span>
+            </div>
+            <div class="form-floating mb-3">
+                <input asp-for="Input.Password" type="password" class="form-control" placeholder="Mật khẩu" autocomplete="current-password" aria-required="true">
+                <label asp-for="Input.Password" class="form-label"></label>
+                <span asp-validation-for="Input.Password" class="text-danger"></span>
+            </div>
+            <div class="form-floating mb-3">
+                <input asp-for="Input.ConfirmPassword" class="form-control" placeholder="Xác nhận mật khẩu" autocomplete="new-password" aria-required="true" />
+                <label asp-for="Input.ConfirmPassword"></label>
+                <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
+    <div class="d-grid">
+        <button id="registerSubmit" class="btn btn-primary btn-register text-uppercase fw-bold" type="submit">Đăng ký</button>
+    </div>
+    <div class="mt-3 text-center">
+        Quay về trang đăng nhập? <a asp-page="./Login">Đăng nhập</a>
+    </div>
+</form>

@@ -1,0 +1,28 @@
+body {
+    background-image: url("../images/4853433.jpg");
+}
+
+.btn-login {
+    font-size: 0.9rem;
+    letter-spacing: 0.05rem;
+    padding: 0.75rem 1rem;
+}
+
+.btn-google {
+    color: white !important;
+    background-color: #ea4335;
+}
+
+.btn-facebook {
+    color: white !important;
+    background-color: #3b5998;
+}
+
+.validation-summary-errors ul {
+    list-style: none;
+    margin-left:-40px
+}
+
+.validation-summary-errors li {
+    padding-left: 5px;
+}
