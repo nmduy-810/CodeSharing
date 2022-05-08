@@ -21,6 +21,10 @@ public class Post : IDateTracking
     [Required]
     [MaxLength(500)]
     public string Title { get; set; }
+
+    [Required]
+    [MaxLength(500)]
+    public string Summary { get; set; }
     
     [Required]
     public string Content { get; set; }

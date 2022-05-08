@@ -4,6 +4,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
@@ -21,11 +22,13 @@ namespace CodeSharing.Server.Areas.Identity.Pages.Account
     public class LoginModel : PageModel
     {
         private readonly SignInManager<User> _signInManager;
+        private readonly UserManager<User> _userManager;
         private readonly ILogger<LoginModel> _logger;
 
-        public LoginModel(SignInManager<User> signInManager, ILogger<LoginModel> logger)
+        public LoginModel(SignInManager<User> signInManager, UserManager<User> userManager, ILogger<LoginModel> logger)
         {
             _signInManager = signInManager;
+            _userManager = userManager;
             _logger = logger;
         }
 
@@ -65,22 +68,24 @@ namespace CodeSharing.Server.Areas.Identity.Pages.Account
             ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
             ///     directly from your code. This API may change or be removed in future releases.
             /// </summary>
-            [Required]
-            public string UserName { get; set; }
+            [Required(ErrorMessage = "Tên đăng nhập hoặc email không được để trống")]
+            [Display(Name="Tên đăng nhập hoặc email")]
+            public string UserNameOrEmail { get; set; }
 
             /// <summary>
             ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
             ///     directly from your code. This API may change or be removed in future releases.
             /// </summary>
-            [Required]
+            [Required(ErrorMessage = "Mật khẩu không được để trống")]
             [DataType(DataType.Password)]
+            [Display(Name = "Mật khẩu")]
             public string Password { get; set; }
 
             /// <summary>
             ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
             ///     directly from your code. This API may change or be removed in future releases.
             /// </summary>
-            [Display(Name = "Remember me?")]
+            [Display(Name = "Nhớ tài khoản?")]
             public bool RememberMe { get; set; }
         }
 
@@ -109,9 +114,21 @@ namespace CodeSharing.Server.Areas.Identity.Pages.Account
 
             if (ModelState.IsValid)
             {
+                IdentityUser user = await _userManager.FindByEmailAsync (Input.UserNameOrEmail);
+                if (user == null)
+                {
+                    user = await _userManager.FindByNameAsync(Input.UserNameOrEmail);
+                }
+                
+                if (user == null)
+                {
+                    ModelState.AddModelError (string.Empty, "Tài khoản không tồn tại.");
+                    return Page ();
+                }
+                
                 // This doesn't count login failures towards account lockout
                 // To enable password failures to trigger account lockout, set lockoutOnFailure: true
-                var result = await _signInManager.PasswordSignInAsync(Input.UserName, Input.Password, Input.RememberMe, lockoutOnFailure: false);
+                var result = await _signInManager.PasswordSignInAsync(user.UserName, Input.Password, Input.RememberMe, lockoutOnFailure: true);
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User logged in.");
@@ -126,11 +143,9 @@ namespace CodeSharing.Server.Areas.Identity.Pages.Account
                     _logger.LogWarning("User account locked out.");
                     return RedirectToPage("./Lockout");
                 }
-                else
-                {
-                    ModelState.AddModelError(string.Empty, "Invalid login attempt.");
-                    return Page();
-                }
+
+                ModelState.AddModelError(string.Empty, "Tên tài khoản hoặc mật khẩu không đúng.");
+                return Page();
             }
 
             // If we got this far, something failed, redisplay form

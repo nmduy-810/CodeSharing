@@ -1,4 +1,3 @@
-using System.Linq;
 using CodeSharing.Server.Authorization;
 using CodeSharing.Server.Datas.Entities;
 using CodeSharing.Utilities.Constants;
@@ -48,7 +47,7 @@ public class UsersController : BaseController
         var user = await _userManager.FindByIdAsync(id);
         if (user == null)
         {
-            return NotFound(new ApiNotFoundResponse($"Can't found user item for id = {id} in database"));
+            return NotFound(new ApiNotFoundResponse($"Cannotfound user item for id = {id} in database"));
         }
 
         var item = new UserVm()

@@ -16,9 +16,9 @@ public class ContactsController : BaseController
         _context = context;
         _logger = logger ?? throw new ArgumentException(null, nameof(logger));
     }
-
-    [AllowAnonymous]
+    
     [HttpGet]
+    [AllowAnonymous]
     public async Task<IActionResult> GetContacts()
     {
         var items = await _context.Contacts.Select(x => new ContactVm()

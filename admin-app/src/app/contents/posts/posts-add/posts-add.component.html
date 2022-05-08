@@ -28,6 +28,19 @@
             </div>
         </div>
 
+        <!--Summary-->
+        <div class="row">
+            <div class="col-md-12">
+                <nz-form-item>
+                    <nz-form-label [nzSm]="2">Summary</nz-form-label>
+                    <nz-form-control nzErrorTip="Please input your summary!">
+                        <input nz-input (keyup)="generateSeoAlias()" placeholder="Tổng quan bài viết"
+                            formControlName="summary">
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
+        </div>
+
         <!--Slug-->
         <div class="row">
             <div class="col-md-12">

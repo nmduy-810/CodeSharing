@@ -1,6 +1,7 @@
 using CodeSharing.Server.Authorization;
 using CodeSharing.Server.Datas.Entities;
 using CodeSharing.Server.Datas.Provider;
+using CodeSharing.Server.Services.Interfaces;
 using CodeSharing.Utilities.Constants;
 using CodeSharing.Utilities.Helpers;
 using CodeSharing.ViewModels.Contents.Category;
@@ -14,39 +15,52 @@ public class CategoriesController : BaseController
 {
     private readonly ApplicationDbContext _context;
     private readonly ILogger<CategoriesController> _logger;
+    private readonly ICacheService _distributedCacheService;
 
-    public CategoriesController(ApplicationDbContext context, ILogger<CategoriesController> logger)
+    public CategoriesController(ApplicationDbContext context, ILogger<CategoriesController> logger, ICacheService distributedCacheService)
     {
         _context = context;
         _logger = logger ?? throw new ArgumentException(null, nameof(logger));
-    }
-
-    [AllowAnonymous]
-    [HttpGet]
-    public async Task<IActionResult> GetCategories()
-    {
-        var items = await _context.Categories.Select(x => new CategoryVm()
-        {
-            Id = x.Id,
-            ParentCategoryId = x.ParentCategoryId,
-            Title = x.Title,
-            Slug = x.Slug,
-            SortOrder = x.SortOrder,
-            IsParent = x.IsParent
-        }).OrderBy(x => x.SortOrder).ToListAsync();
-        
-        _logger.LogInformation("Successful execution of get categories request");
-        return Ok(items);
+        _distributedCacheService = distributedCacheService;
     }
     
+    [HttpGet]
     [AllowAnonymous]
+    public async Task<IActionResult> GetCategories()
+    {
+        // Check cached data have value in database
+        var cacheData = await _distributedCacheService.GetAsync<List<CategoryVm>>(CacheConstants.Categories);
+        
+        // If in database not data
+        if (cacheData == null)
+        {
+            var items = await _context.Categories.Select(x => new CategoryVm()
+            {
+                Id = x.Id,
+                ParentCategoryId = x.ParentCategoryId,
+                Title = x.Title,
+                Slug = x.Slug,
+                SortOrder = x.SortOrder,
+                IsParent = x.IsParent
+            }).OrderBy(x => x.SortOrder).ToListAsync();
+            
+            // Set categories data into cached with key
+            await _distributedCacheService.SetAsync("Categories", items);
+            cacheData = items;
+        }
+        
+        _logger.LogInformation("Successful execution of get categories request");
+        return Ok(cacheData);
+    }
+    
     [HttpGet("{id:int}")]
+    [AllowAnonymous]
     public async Task<IActionResult> GetById(int id)
     {
         var category = await _context.Categories.FindAsync(id);
         if (category == null)
         {
-            return NotFound(new ApiNotFoundResponse($"Can't found category item for id = {id} in database"));
+            return NotFound(new ApiNotFoundResponse($"Cannot found category item for id = {id} in database"));
         }
 
         var items = new CategoryVm()
@@ -65,6 +79,7 @@ public class CategoriesController : BaseController
     
     [HttpPost]
     [ClaimRequirement(FunctionCodeConstants.CONTENT_CATEGORY, CommandCodeConstants.CREATE)]
+    [ApiValidationFilter]
     public async Task<IActionResult> PostCategory([FromBody] CategoryCreateRequest request)
     {
         var item = new Category()
@@ -80,6 +95,7 @@ public class CategoriesController : BaseController
         var result = await _context.SaveChangesAsync();
         if (result > 0)
         {
+            await _distributedCacheService.RemoveAsync(CacheConstants.Categories);
             return CreatedAtAction(nameof(GetById), new { id = item.Id }, request);
         }
 
@@ -88,12 +104,13 @@ public class CategoriesController : BaseController
 
     [HttpPut("{id:int}")]
     [ClaimRequirement(FunctionCodeConstants.CONTENT_CATEGORY, CommandCodeConstants.UPDATE)]
+    [ApiValidationFilter]
     public async Task<IActionResult> PutCategory(int id, [FromBody] CategoryUpdateRequest request)
     {
         var category = await _context.Categories.FindAsync(id);
         if (category == null)
         {
-            return NotFound(new ApiNotFoundResponse($"Can't found category item for id = {id} in database"));
+            return NotFound(new ApiNotFoundResponse($"Cannot found category item for id = {id} in database"));
         }
 
         if (id == request.ParentCategoryId)
@@ -112,6 +129,8 @@ public class CategoriesController : BaseController
         var result = await _context.SaveChangesAsync();
         if (result > 0)
         {
+            // When update category, delete cached previous saved
+            await _distributedCacheService.RemoveAsync(CacheConstants.Categories);
             return NoContent();
         }
         return BadRequest(new ApiBadRequestResponse("Update category failed"));
@@ -124,7 +143,7 @@ public class CategoriesController : BaseController
         var category = await _context.Categories.FindAsync(id);
         if (category == null)
         {
-            return NotFound(new ApiNotFoundResponse($"Can't found category item for id = {id} in database"));
+            return NotFound(new ApiNotFoundResponse($"Cannot found category item for id = {id} in database"));
         }
         
         _context.Categories.Remove(category);
@@ -132,7 +151,9 @@ public class CategoriesController : BaseController
         var result = await _context.SaveChangesAsync();
         if (result <= 0)
         {
-            return BadRequest(new ApiBadRequestResponse("Can't delete category"));
+            // When delete category, delete cached previous saved
+            await _distributedCacheService.RemoveAsync(CacheConstants.Categories);
+            return BadRequest(new ApiBadRequestResponse("Cannot delete category"));
         }
         
         var items = new CategoryVm()

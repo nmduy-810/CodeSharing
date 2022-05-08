@@ -1,6 +1,6 @@
 using CodeSharing.ViewModels.Contents.Category;
 
-namespace CodeSharing.WebPortal.Models;
+namespace CodeSharing.WebPortal.ViewModels;
 
 public class HeaderViewModel
 {

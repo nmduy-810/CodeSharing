@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics;
 using CodeSharing.WebPortal.Interfaces;
 using Microsoft.AspNetCore.Mvc;
-using CodeSharing.WebPortal.Models;
+using CodeSharing.WebPortal.ViewModels;
 
 namespace CodeSharing.WebPortal.Controllers;
 

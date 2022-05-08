@@ -1,0 +1,12 @@
+@if (User.Identity!.IsAuthenticated)
+{
+    <button class="burger-menu icon-button ms-2 float-end float-md-none">
+        <span class="icon-user"></span>
+    </button>
+}
+else
+{
+    <button class="icon-button ms-2 float-end float-md-none" title="Đăng nhập" onclick="location.href='@Url.Action("SignIn", "Account")'">
+        <span class="icon-login"></span>
+    </button>
+}

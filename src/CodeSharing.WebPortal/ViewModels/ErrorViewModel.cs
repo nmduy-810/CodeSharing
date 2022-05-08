@@ -1,4 +1,4 @@
-namespace CodeSharing.WebPortal.Models;
+namespace CodeSharing.WebPortal.ViewModels;
 
 public class ErrorViewModel
 {

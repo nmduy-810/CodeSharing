@@ -4,6 +4,7 @@ export class Post {
     categoryTitle: string;
     categorySlug: string;
     title: string;
+    summary: string;
     content: string;
     slug: string;
     viewCount: number | null;

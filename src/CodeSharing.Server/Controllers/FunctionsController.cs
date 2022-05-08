@@ -44,7 +44,7 @@ public class FunctionsController : BaseController
         var function = await _context.Functions.FindAsync(id);
         if (function == null)
         {
-            return NotFound(new ApiNotFoundResponse($"Can't found function item for id = {id} in database"));
+            return NotFound(new ApiNotFoundResponse($"Cannot found function item for id = {id} in database"));
         }
         
         var items = new FunctionVm()

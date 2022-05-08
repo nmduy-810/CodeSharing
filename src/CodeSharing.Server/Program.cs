@@ -1,3 +1,4 @@
+using System.Configuration;
 using CodeSharing.Server.Datas.Entities;
 using CodeSharing.Server.Datas.Initialize;
 using CodeSharing.Server.Datas.Provider;
@@ -5,6 +6,7 @@ using CodeSharing.Server.Extensions;
 using CodeSharing.Server.IdentityServer;
 using CodeSharing.Server.Services;
 using CodeSharing.Server.Services.Interfaces;
+using CodeSharing.ViewModels.Commons;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -26,7 +28,7 @@ builder.Host.UseSerilog((hostingContext, loggerConfiguration) =>
     loggerConfiguration.ReadFrom.Configuration(hostingContext.Configuration));
 
 // Setup Entity Framework
-builder.Services.AddDbContext<ApplicationDbContext>(
+builder.Services.AddDbContextPool<ApplicationDbContext>(
     options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 // Setup Identity
@@ -52,9 +54,9 @@ builder.Services.AddIdentityServer(options =>
 builder.Services.AddCors(options =>
 {
     options.AddPolicy(CodeSharingSpecificOrigins,
-        builder =>
+        corsPolicyBuilder =>
         {
-            builder.WithOrigins(configuration["AllowOrigins"])
+            corsPolicyBuilder.WithOrigins(configuration["AllowOrigins"])
                 .AllowAnyHeader()
                 .AllowAnyMethod()
                 .AllowCredentials();
@@ -64,8 +66,8 @@ builder.Services.AddCors(options =>
 builder.Services.Configure<IdentityOptions>(options =>
 {
     // Default Lockout settings.
-    options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
-    options.Lockout.MaxFailedAccessAttempts = 5;
+    options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(2); // Khóa tài khoản 2 phút nếu đăng nhập sai
+    options.Lockout.MaxFailedAccessAttempts = 5; // Thất bại 3 lần thì khóa
     options.Lockout.AllowedForNewUsers = true;
     options.SignIn.RequireConfirmedPhoneNumber = false;
     options.SignIn.RequireConfirmedAccount = false;
@@ -80,6 +82,11 @@ builder.Services.Configure<ApiBehaviorOptions>(options =>
 {
     options.SuppressModelStateInvalidFilter = true;
 });
+
+// Setup token when reset password using identity
+builder.Services.AddIdentityCore<User>(options => options.SignIn.RequireConfirmedAccount = true)
+    .AddEntityFrameworkStores<ApplicationDbContext>()
+    .AddTokenProvider<DataProtectorTokenProvider<User>>(TokenOptions.DefaultProvider);
 
 builder.Services.AddControllersWithViews();
 
@@ -117,10 +124,16 @@ builder.Services.AddRazorPages(options =>
 // Add DbInitializer using Seeding data
 builder.Services.AddTransient<DbInitializer>();
 
+// Config use options
+builder.Services.AddOptions();
+
 // Register in Identity require have EmailSender
 builder.Services.AddTransient<IEmailSender, EmailSenderService>();
 builder.Services.AddTransient<ISequenceService, SequenceService>();
 builder.Services.AddTransient<IStorageService, FileStorageService>();
+builder.Services.AddTransient<ICacheService, DistributedCacheService>();
+builder.Services.Configure<MailSettings>(configuration.GetSection("MailSettings"));
+builder.Services.AddTransient<IViewRenderService, ViewRenderService>();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -151,6 +164,20 @@ builder.Services.AddSwaggerGen(c =>
         }
     });
 });
+
+// Config Distributed Cache
+builder.Services.AddDistributedSqlServerCache(o =>
+{
+    o.ConnectionString = configuration.GetConnectionString("DefaultConnection");
+    o.SchemaName = "dbo";
+    o.TableName = "CacheTable";
+});
+
+var enviroment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+if (enviroment == Environments.Development)
+{
+    builder.Services.AddRazorPages().AddRazorRuntimeCompilation();
+}
 
 var app = builder.Build();
 
@@ -188,6 +215,16 @@ if (app.Environment.IsDevelopment())
         c.OAuthClientId("swagger");
         c.SwaggerEndpoint("/swagger/v1/swagger.json", "CodeSharing API V1");
     });
+    app.UseDeveloperExceptionPage();
+}
+else
+{
+    // Security Headers ( before UseStaticFiles() )
+    app.UseHsts(hsts => hsts.MaxAge(365).IncludeSubdomains().Preload());
+    app.UseXContentTypeOptions();
+    app.UseReferrerPolicy(opts => opts.NoReferrer());
+    app.UseXXssProtection(options => options.EnabledWithBlockMode());
+    app.UseXfo(options => options.Deny());
 }
 
 app.UseErrorWrapping();
@@ -211,7 +248,5 @@ app.UseEndpoints(endpoints =>
     endpoints.MapDefaultControllerRoute();
     endpoints.MapRazorPages();
 });
-
-app.MapControllers();
 
 app.Run();

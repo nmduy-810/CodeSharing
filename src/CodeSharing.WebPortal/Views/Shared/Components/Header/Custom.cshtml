@@ -1,4 +1,4 @@
-@model HeaderViewModel
+@model CodeSharing.WebPortal.ViewModels.HeaderViewModel
 
 <!-- header -->
 <header class="header-default">
@@ -12,7 +12,7 @@
         <!-- menus -->
         <ul class="navbar-nav mr-auto">
           <li class="nav-item active">
-            <a class="nav-link" href="/">Home</a>
+            <a class="nav-link" href="/">Trang chủ</a>
           </li>
           @foreach (var item in Model.Categories)
           {
@@ -41,29 +41,24 @@
           }
           
           <li class="nav-item">
-            <a class="nav-link" href="/about">About</a>
+            <a class="nav-link" href="/about">Thông tin</a>
           </li>
           
           <li class="nav-item">
-            <a class="nav-link" href="/contact">Contact</a>
+            <a class="nav-link" href="/contact">Liên hệ</a>
           </li>
           
         </ul>
       </div>
       <!-- header right section -->
       <div class="header-right">
-        <!-- social icons -->
-        <ul class="social-icons list-unstyled list-inline mb-0">
-          <partial name="_SocialIcons"/>
-        </ul>
+        
         <!-- header buttons -->
         <div class="header-buttons">
           <button class="search icon-button">
             <i class="icon-magnifier"></i>
           </button>
-          <button class="burger-menu icon-button">
-            <span class="burger-icon"></span>
-          </button>
+          <partial name="_LoginPartial"/>
         </div>
       </div>
     </div>

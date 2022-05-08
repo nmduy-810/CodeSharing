@@ -41,7 +41,7 @@ public class RolesController : BaseController
         var role = await _roleManager.FindByIdAsync(id);
         if (role == null)
         {
-            return NotFound(new ApiNotFoundResponse($"Can't found role item for id = {id} in database"));
+            return NotFound(new ApiNotFoundResponse($"Cannot found role item for id = {id} in database"));
         }
 
         var items = new RoleVm()

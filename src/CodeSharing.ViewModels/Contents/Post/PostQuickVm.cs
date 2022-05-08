@@ -9,6 +9,7 @@ public class PostQuickVm
     public string FullName { get; set; }
     public string CoverImage { get; set; }
     public string Title { get; set; }
+    public string Summary { get; set; }
     public string Content { get; set; }
     public string Slug { get; set; }
     
