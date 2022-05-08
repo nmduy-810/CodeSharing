@@ -4,20 +4,22 @@ namespace CodeSharing.Utilities.Helpers;
 
 public class ApiBadRequestResponse : ApiResponse
 {
-    public IEnumerable<string>? Errors { get; set; }
-    
-    public ApiBadRequestResponse(ModelStateDictionary modelStateDictionary) : base(400)
+    public IEnumerable<string>? Errors { get; }
+
+    public ApiBadRequestResponse(ModelStateDictionary modelState)
+        : base(400)
     {
-        if (modelStateDictionary.IsValid)
+        if (modelState.IsValid)
         {
-            throw new ArgumentException("Model must be invalid", nameof(modelStateDictionary));
+            throw new ArgumentException("ModelState must be invalid", nameof(modelState));
         }
-        
-        Errors = modelStateDictionary
-            .SelectMany(x => x.Value!.Errors)
+
+        Errors = modelState.SelectMany(x => x.Value.Errors)
             .Select(x => x.ErrorMessage).ToArray();
     }
-    public ApiBadRequestResponse(string? message) : base(400, message)
+
+    public ApiBadRequestResponse(string message)
+        : base(400, message)
     {
     }
 }

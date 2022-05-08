@@ -23,9 +23,9 @@ public class CategoriesController : BaseController
         _logger = logger ?? throw new ArgumentException(null, nameof(logger));
         _distributedCacheService = distributedCacheService;
     }
-
-    [AllowAnonymous]
+    
     [HttpGet]
+    [AllowAnonymous]
     public async Task<IActionResult> GetCategories()
     {
         // Check cached data have value in database
@@ -53,14 +53,14 @@ public class CategoriesController : BaseController
         return Ok(cacheData);
     }
     
-    [AllowAnonymous]
     [HttpGet("{id:int}")]
+    [AllowAnonymous]
     public async Task<IActionResult> GetById(int id)
     {
         var category = await _context.Categories.FindAsync(id);
         if (category == null)
         {
-            return NotFound(new ApiNotFoundResponse($"Can't found category item for id = {id} in database"));
+            return NotFound(new ApiNotFoundResponse($"Cannot found category item for id = {id} in database"));
         }
 
         var items = new CategoryVm()
@@ -79,6 +79,7 @@ public class CategoriesController : BaseController
     
     [HttpPost]
     [ClaimRequirement(FunctionCodeConstants.CONTENT_CATEGORY, CommandCodeConstants.CREATE)]
+    [ApiValidationFilter]
     public async Task<IActionResult> PostCategory([FromBody] CategoryCreateRequest request)
     {
         var item = new Category()
@@ -103,12 +104,13 @@ public class CategoriesController : BaseController
 
     [HttpPut("{id:int}")]
     [ClaimRequirement(FunctionCodeConstants.CONTENT_CATEGORY, CommandCodeConstants.UPDATE)]
+    [ApiValidationFilter]
     public async Task<IActionResult> PutCategory(int id, [FromBody] CategoryUpdateRequest request)
     {
         var category = await _context.Categories.FindAsync(id);
         if (category == null)
         {
-            return NotFound(new ApiNotFoundResponse($"Can't found category item for id = {id} in database"));
+            return NotFound(new ApiNotFoundResponse($"Cannot found category item for id = {id} in database"));
         }
 
         if (id == request.ParentCategoryId)
@@ -141,7 +143,7 @@ public class CategoriesController : BaseController
         var category = await _context.Categories.FindAsync(id);
         if (category == null)
         {
-            return NotFound(new ApiNotFoundResponse($"Can't found category item for id = {id} in database"));
+            return NotFound(new ApiNotFoundResponse($"Cannot found category item for id = {id} in database"));
         }
         
         _context.Categories.Remove(category);
@@ -151,7 +153,7 @@ public class CategoriesController : BaseController
         {
             // When delete category, delete cached previous saved
             await _distributedCacheService.RemoveAsync(CacheConstants.Categories);
-            return BadRequest(new ApiBadRequestResponse("Can't delete category"));
+            return BadRequest(new ApiBadRequestResponse("Cannot delete category"));
         }
         
         var items = new CategoryVm()

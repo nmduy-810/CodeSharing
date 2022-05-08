@@ -25,7 +25,7 @@ public partial class PostsController
 
         var post = await _context.Posts.FindAsync(postId);
         if (post == null)
-            return BadRequest(new ApiBadRequestResponse($"Can't found post with id {postId}"));
+            return BadRequest(new ApiBadRequestResponse($"Cannot found post with id {postId}"));
 
         post.NumberOfReports = post.NumberOfReports.GetValueOrDefault(0) + 1;
         _context.Posts.Update(post);

@@ -1,6 +1,8 @@
+using CodeSharing.Server.Authorization;
 using CodeSharing.Server.Datas.Entities;
 using CodeSharing.Server.Extensions;
 using CodeSharing.Utilities.Commons;
+using CodeSharing.Utilities.Constants;
 using CodeSharing.Utilities.Helpers;
 using CodeSharing.ViewModels.Contents.Comment;
 using Microsoft.AspNetCore.Authorization;
@@ -75,6 +77,7 @@ public partial class PostsController
     }
     
     [HttpGet("{postId}/comments/filter")]
+    [ClaimRequirement(FunctionCodeConstants.CONTENT_COMMENT, CommandCodeConstants.VIEW)]
     public async Task<IActionResult> GetCommentsPaging(int? postId, string filter, int pageIndex, int pageSize)
     {
         var query = from c in _context.Comments
@@ -115,12 +118,13 @@ public partial class PostsController
     }
 
     [HttpGet("{postId}/comments/{commentId}")]
+    [ClaimRequirement(FunctionCodeConstants.CONTENT_COMMENT, CommandCodeConstants.VIEW)]
     public async Task<IActionResult> GetCommentDetail(int commentId)
     {
         var comment = await _context.Comments.FindAsync(commentId);
         if (comment == null)
         {
-            return NotFound(new ApiNotFoundResponse($"Can't found comment for id = {commentId} in database"));
+            return NotFound(new ApiNotFoundResponse($"Cannot found comment for id = {commentId} in database"));
         }
 
         var user = await _context.Users.FindAsync(comment.OwnerUserId);
@@ -153,7 +157,7 @@ public partial class PostsController
         var post = await _context.Posts.FindAsync(postId);
         if (post == null)
         {
-            return BadRequest(new ApiBadRequestResponse($"Can't found post with id: {postId}"));
+            return BadRequest(new ApiBadRequestResponse($"Cannot found post with id: {postId}"));
         }
 
         post.NumberOfComments = post.NumberOfComments.GetValueOrDefault(0) + 1;
@@ -178,12 +182,13 @@ public partial class PostsController
     }
 
     [HttpPut("{postId}/comments/{commentId}")]
+    [ClaimRequirement(FunctionCodeConstants.CONTENT_COMMENT, CommandCodeConstants.UPDATE)]
     public async Task<IActionResult> PutComment(int commentId, [FromBody] CommentCreateRequest request)
     {
         var comment = await _context.Comments.FindAsync(commentId);
         if (comment == null)
         {
-            return BadRequest(new ApiBadRequestResponse($"Can't found comment with id: {commentId}"));
+            return BadRequest(new ApiBadRequestResponse($"Cannot found comment with id: {commentId}"));
         }
 
         if (comment.OwnerUserId != User.GetUserId())
@@ -204,12 +209,13 @@ public partial class PostsController
     }
     
     [HttpDelete("{postId}/comments/{commentId}")]
+    [ClaimRequirement(FunctionCodeConstants.CONTENT_COMMENT, CommandCodeConstants.DELETE)]
     public async Task<IActionResult> DeleteComment(int postId, int commentId)
     {
         var comment = await _context.Comments.FindAsync(commentId);
         if (comment == null)
         {
-            return NotFound(new ApiNotFoundResponse($"Can't found the comment with id: {commentId}"));
+            return NotFound(new ApiNotFoundResponse($"Cannot found the comment with id: {commentId}"));
         }
         
         _context.Comments.Remove(comment);
@@ -217,7 +223,7 @@ public partial class PostsController
         var post = await _context.Posts.FindAsync(postId);
         if (post == null)
         {
-            return BadRequest(new ApiBadRequestResponse($"Can't found post with id: {postId}"));
+            return BadRequest(new ApiBadRequestResponse($"Cannot found post with id: {postId}"));
         }
         
         post.NumberOfComments = post.NumberOfVotes.GetValueOrDefault(0) - 1;

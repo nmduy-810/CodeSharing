@@ -1,4 +1,5 @@
 using System.Net.Http.Headers;
+using CodeSharing.Server.Authorization;
 using CodeSharing.Server.Datas.Entities;
 using CodeSharing.Server.Datas.Provider;
 using CodeSharing.Server.Extensions;
@@ -10,7 +11,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using CodeSharing.Server.Services.Interfaces;
 using CodeSharing.Utilities.Constants;
-using Microsoft.AspNetCore.Identity.UI.Services;
 
 namespace CodeSharing.Server.Controllers;
 
@@ -22,8 +22,6 @@ public partial class PostsController : BaseController
     private readonly IStorageService _storageService;
     private readonly ICacheService _distributedCacheService;
     private readonly IHttpContextAccessor _httpContextAccessor;
-    private readonly IEmailSender _emailSender;
-    private readonly IViewRenderService _viewRenderService;
     
     public PostsController(
         ApplicationDbContext context, 
@@ -31,9 +29,7 @@ public partial class PostsController : BaseController
         ISequenceService sequenceService,
         IStorageService storageService,
         ICacheService distributedCacheService,
-        IHttpContextAccessor httpContextAccessor,
-        IEmailSender emailSender,
-        IViewRenderService viewRenderService)
+        IHttpContextAccessor httpContextAccessor)
     {
         _context = context;
         _logger = logger ?? throw new ArgumentException(null, nameof(logger));
@@ -41,12 +37,10 @@ public partial class PostsController : BaseController
         _storageService = storageService;
         _distributedCacheService = distributedCacheService;
         _httpContextAccessor = httpContextAccessor;
-        _emailSender = emailSender;
-        _viewRenderService = viewRenderService;
     }
     
-    [AllowAnonymous]
     [HttpGet]
+    [AllowAnonymous]
     public async Task<IActionResult> GetPosts()
     {
         var posts = from p in _context.Posts
@@ -71,9 +65,9 @@ public partial class PostsController : BaseController
         _logger.LogInformation("Successful execution of get posts request");
         return Ok(items);
     }
-
-    [AllowAnonymous]
+    
     [HttpGet("latest/{take:int}")]
+    [AllowAnonymous]
     public async Task<IActionResult> GetLatestPosts(int take)
     {
         var cacheData = await _distributedCacheService.GetAsync<List<PostQuickVm>>(CacheConstants.LatestPosts);
@@ -111,8 +105,8 @@ public partial class PostsController : BaseController
         return Ok(cacheData);
     }
     
-    [AllowAnonymous]
     [HttpGet("popular/{take:int}")]
+    [AllowAnonymous]
     public async Task<IActionResult> GetPopularPosts(int take)
     {
         var cacheData = await _distributedCacheService.GetAsync<List<PostQuickVm>>(CacheConstants.PopularPosts);
@@ -148,9 +142,9 @@ public partial class PostsController : BaseController
         _logger.LogInformation("Successful execution of get popular posts request");
         return Ok(cacheData);
     }
-
-    [AllowAnonymous]
+    
     [HttpGet("trending/{take:int}")]
+    [AllowAnonymous]
     public async Task<IActionResult> GetTrendingPosts(int take)
     {
         var cacheData = await _distributedCacheService.GetAsync<List<PostQuickVm>>(CacheConstants.TrendingPosts);
@@ -186,27 +180,27 @@ public partial class PostsController : BaseController
         _logger.LogInformation("Successful execution of get popular posts request");
         return Ok(cacheData);
     }
-
-    [AllowAnonymous]
+    
     [HttpGet("{id}")]
+    [AllowAnonymous]
     public async Task<IActionResult> GetById(int id)
     {
         var post = await _context.Posts.FindAsync(id);
         if (post == null)
         {
-            return NotFound(new ApiNotFoundResponse($"Can't found post item for id = {id} in database"));
+            return NotFound(new ApiNotFoundResponse($"Cannot found post item for id = {id} in database"));
         }
 
         var category = _context.Categories.FirstOrDefault(x => x.Id == post.CategoryId);
         if (category == null)
         {
-            return NotFound(new ApiNotFoundResponse($"Can't found category item for id = {id} in database"));
+            return NotFound(new ApiNotFoundResponse($"Cannot found category item for id = {id} in database"));
         }
 
         var fullName = _context.Users.FirstOrDefault(x => x.Id == post.OwnerUserId);
         if (fullName == null)
         {
-            return NotFound(new ApiNotFoundResponse($"Can't found full name for id = {id} in database"));
+            return NotFound(new ApiNotFoundResponse($"Cannot found full name for id = {id} in database"));
         }
 
         var items = new PostVm
@@ -235,9 +229,9 @@ public partial class PostsController : BaseController
         _logger.LogInformation("Successful execution of get post by id request");
         return Ok(items);
     }
-
-    [AllowAnonymous]
+    
     [HttpGet("category/{categoryId:int}")]
+    [AllowAnonymous]
     public async Task<IActionResult> GetPostsByCategoryId(int? categoryId, int pageIndex, int pageSize)
     {
         var query = from p in _context.Posts
@@ -283,9 +277,9 @@ public partial class PostsController : BaseController
         _logger.LogInformation("Successful execution of get posts by category id request");
         return Ok(pagination);
     }
-
-    [AllowAnonymous]
+    
     [HttpGet("tags/{tagId}")]
+    [AllowAnonymous]
     public async Task<IActionResult> GetPostsByTagId(string tagId, int pageIndex, int pageSize)
     {
         var query = from p in _context.Posts
@@ -329,9 +323,9 @@ public partial class PostsController : BaseController
         _logger.LogInformation("Successful execution of get posts by tag id request");
         return Ok(pagination);
     }
-
-    [AllowAnonymous]
+    
     [HttpGet("total-post")]
+    [AllowAnonymous]
     public async Task<IActionResult> GetTotalPostInCategory()
     {
         var query = from c in _context.Categories
@@ -358,8 +352,8 @@ public partial class PostsController : BaseController
         return Ok(items);
     }
     
-    [AllowAnonymous]
     [HttpGet("filter")]
+    [AllowAnonymous]
     public async Task<IActionResult> GetPostsPaging(string filter, int? categoryId, int pageIndex, int pageSize)
     {
         var query = from p in _context.Posts
@@ -407,8 +401,8 @@ public partial class PostsController : BaseController
         return Ok(pagination);
     }
     
-    [AllowAnonymous]
     [HttpGet("paging")]
+    [AllowAnonymous]
     public async Task<IActionResult> GetPostsPaging(int pageIndex, int pageSize)
     {
         var cacheData = await _distributedCacheService.GetAsync<Pagination<PostQuickVm>>(CacheConstants.PostsPaging);
@@ -459,6 +453,8 @@ public partial class PostsController : BaseController
 
     [HttpPost]
     [Consumes("multipart/form-data")]
+    [ClaimRequirement(FunctionCodeConstants.CONTENT_POST, CommandCodeConstants.CREATE)]
+    [ApiValidationFilter]
     public async Task<IActionResult> Post([FromForm] PostCreateRequest request)
     {
         var post = new Post()
@@ -524,12 +520,13 @@ public partial class PostsController : BaseController
 
     [HttpPut("{id}")]
     [Consumes("multipart/form-data")]
+    [ClaimRequirement(FunctionCodeConstants.CONTENT_POST, CommandCodeConstants.UPDATE)]
     public async Task<IActionResult> Put(int id, [FromForm] PostCreateRequest request)
     {
         var post = await _context.Posts.FindAsync(id);
         if (post == null)
         {
-            return NotFound(new ApiNotFoundResponse($"Can't found post item for id = {id} in database"));
+            return NotFound(new ApiNotFoundResponse($"Cannot found post item for id = {id} in database"));
         }
         
         // Set post with new data
@@ -583,12 +580,13 @@ public partial class PostsController : BaseController
     }
 
     [HttpDelete("{id}")]
+    [ClaimRequirement(FunctionCodeConstants.CONTENT_POST, CommandCodeConstants.DELETE)]
     public async Task<IActionResult> Delete(int id)
     {
         var post = await _context.Posts.FindAsync(id);
         if (post == null)
         {
-            return NotFound(new ApiNotFoundResponse($"Can't found post item for id = {id} in database"));
+            return NotFound(new ApiNotFoundResponse($"Cannotfound post item for id = {id} in database"));
         }
 
         _context.Posts.Remove(post);
@@ -626,14 +624,14 @@ public partial class PostsController : BaseController
         return Ok(postVm);
     }
     
-    [AllowAnonymous]
     [HttpPut("{id}/view-count")]
+    [AllowAnonymous]
     public async Task<IActionResult> UpdateViewCount(int id)
     {
         var post = await _context.Posts.FindAsync(id);
         if (post == null)
         {
-            return NotFound(new ApiNotFoundResponse($"Can't found post for id = {id} in database"));
+            return NotFound(new ApiNotFoundResponse($"Cannot found post for id = {id} in database"));
         }
 
         if (post.ViewCount == null)

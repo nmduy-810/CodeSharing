@@ -1,4 +1,6 @@
+using CodeSharing.Server.Authorization;
 using CodeSharing.Server.Services.Interfaces;
+using CodeSharing.Utilities.Constants;
 using CodeSharing.Utilities.Helpers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -18,6 +20,7 @@ public class UploadsController : BaseController
     }
     
     [HttpPost("UploadImage")]
+    [ClaimRequirement(FunctionCodeConstants.CONTENT_POST, CommandCodeConstants.CREATE)]
     public Task<IActionResult> UploadImage(IFormFile upload)
     {
         if (string.IsNullOrEmpty(upload.FileName)) 

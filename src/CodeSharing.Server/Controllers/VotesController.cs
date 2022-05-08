@@ -2,6 +2,7 @@ using CodeSharing.Server.Datas.Entities;
 using CodeSharing.Server.Extensions;
 using CodeSharing.Utilities.Helpers;
 using CodeSharing.ViewModels.Contents.Vote;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -12,6 +13,7 @@ public partial class PostsController
     #region Votes
 
     [HttpGet("{postId}/votes")]
+    [AllowAnonymous]
     public async Task<IActionResult> GetVotes(int postId)
     {
         var votes = await _context.Votes
@@ -28,6 +30,7 @@ public partial class PostsController
     }
     
     [HttpPost("{postId}/votes")]
+    [AllowAnonymous]
     public async Task<IActionResult> PostVote(int postId, [FromBody]VoteCreateRequest request)
     {
         // Get current user id vote
@@ -37,7 +40,7 @@ public partial class PostsController
         var post = await _context.Posts.FindAsync(postId);
         if (post == null)
         {
-            return NotFound(new ApiNotFoundResponse($"Can't found post with id {postId}"));
+            return NotFound(new ApiNotFoundResponse($"Cannot found post with id {postId}"));
         }
         
         // Get number of votes in current post
@@ -79,18 +82,19 @@ public partial class PostsController
     }
     
     [HttpDelete("{postId}/votes/{userId}")]
+    [AllowAnonymous]
     public async Task<IActionResult> DeleteVote(int postId, string userId)
     {
         var vote = await _context.Votes.FindAsync(postId, userId);
         if (vote == null)
         {
-            return NotFound(new ApiNotFoundResponse($"Can't found vote"));
+            return NotFound(new ApiNotFoundResponse($"Cannot found vote"));
         }
         
         var post = await _context.Posts.FindAsync(postId);
         if (post == null)
         {
-            return NotFound(new ApiNotFoundResponse($"Can't found post with id {postId}"));
+            return NotFound(new ApiNotFoundResponse($"Cannot found post with id {postId}"));
         }
         
         post.NumberOfVotes = post.NumberOfVotes.GetValueOrDefault(0) - 1;
