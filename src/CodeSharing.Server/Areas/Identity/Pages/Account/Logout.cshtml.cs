@@ -6,6 +6,7 @@ using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using CodeSharing.Server.Datas.Entities;
+using IdentityServer4.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -18,26 +19,46 @@ namespace CodeSharing.Server.Areas.Identity.Pages.Account
         private readonly SignInManager<User> _signInManager;
         private readonly ILogger<LogoutModel> _logger;
 
-        public LogoutModel(SignInManager<User> signInManager, ILogger<LogoutModel> logger)
+        private IIdentityServerInteractionService _interaction;
+            
+        public LogoutModel(SignInManager<User> signInManager, ILogger<LogoutModel> logger, IIdentityServerInteractionService interaction)
         {
             _signInManager = signInManager;
             _logger = logger;
+            _interaction = interaction;
+        }
+        
+        public async Task<IActionResult> OnGet(string returnUrl = null)
+        {
+            return await OnPost(returnUrl);
         }
         
         public async Task<IActionResult> OnPost(string returnUrl = null)
         {
             await _signInManager.SignOutAsync();
             _logger.LogInformation("User logged out.");
+
+            var logoutId = this.Request.Query["logoutId"].ToString();
+
             if (returnUrl != null)
             {
                 return LocalRedirect(returnUrl);
             }
-            else
+            
+            if (!string.IsNullOrEmpty(logoutId))
             {
-                // This needs to be a redirect so that the browser performs a new
-                // request and the identity for the user gets updated.
-                return RedirectToPage();
+                var logoutContext = await this._interaction.GetLogoutContextAsync(logoutId);
+                returnUrl = logoutContext.PostLogoutRedirectUri;
+
+                if (!string.IsNullOrEmpty(returnUrl))
+                {
+                    return this.Redirect(returnUrl);
+                }
+
+                return Page();
             }
+                
+            return Page();
         }
     }
 }
