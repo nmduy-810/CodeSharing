@@ -20,7 +20,6 @@ public class UploadsController : BaseController
     }
     
     [HttpPost("UploadImage")]
-    [ClaimRequirement(FunctionCodeConstants.CONTENT_POST, CommandCodeConstants.CREATE)]
     public Task<IActionResult> UploadImage(IFormFile upload)
     {
         if (string.IsNullOrEmpty(upload.FileName)) 
