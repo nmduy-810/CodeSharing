@@ -10,8 +10,8 @@ public class ContactApiClient : BaseApiClient, IContactApiClient
     {
     }
     
-    public async Task<List<ContactVm>> GetContacts()
+    public async Task<ContactVm> GetById(int id)
     {
-        return await GetListAsync<ContactVm>($"/api/contacts");
+        return await GetAsync<ContactVm>($"/api/contacts/{id}");
     }
 }

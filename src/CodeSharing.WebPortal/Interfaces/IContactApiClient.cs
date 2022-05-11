@@ -4,5 +4,5 @@ namespace CodeSharing.WebPortal.Interfaces;
 
 public interface IContactApiClient
 {
-    Task<List<ContactVm>> GetContacts();
+    Task<ContactVm> GetById(int id);
 }

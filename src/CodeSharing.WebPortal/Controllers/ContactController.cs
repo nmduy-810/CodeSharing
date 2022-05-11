@@ -15,10 +15,10 @@ public class ContactController : Controller
     
     public async Task<IActionResult> Index()
     {
-        var contact = await _contactApiClient.GetContacts();
+        var contact = await _contactApiClient.GetById(1);
         var items = new ContactViewModel()
         {
-            Contacts = contact
+            Contact = contact
         };
         
         return View(items);

@@ -1,0 +1,45 @@
+<nz-modal [(nzVisible)]="isVisible" [nzTitle]="modalTitle" [nzContent]="modalContent" [nzFooter]="modalFooter" [nzWidth]="900"
+    (nzOnCancel)="cancel()">
+    <ng-template #modalTitle>About</ng-template>
+    <ng-template #modalContent>
+        <form [formGroup]="aboutForm" (ngSubmit)="save()">
+            <div class="row">
+
+                <!--Description-->
+                <div class="col-md-12">
+                    <nz-form-item>
+                        <nz-form-control nzErrorTip="Please input your description!">
+                            <ckeditor [editor]="Editor" formControlName="description" spellcheck="false" name="description"></ckeditor>
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+
+               <!--Cover image-->
+                <div class="col-md-12">
+                    <nz-form-item>
+                        <nz-form-control nzErrorTip="Please choose your image!">
+                            <input type="file" (change)="handleChange($event)">
+                            <div *ngIf="imagePath">
+                                <br />
+                                <img [src]="imagePath" width="200px">
+                            </div>
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+
+                <div class="col-md-12">
+                    <button nz-button nzType="primary" [nzLoading]="isConfirmLoading">Save</button>
+                </div>
+            </div>
+        </form>
+    </ng-template>
+
+    <ng-template #modalFooter>
+        <button (click)="cancel()" nz-button nzType="primary">Close</button>
+    </ng-template>
+
+</nz-modal>
+<button (click)="open()" nz-button nzType="primary">
+    <i nz-icon nzType="plus-circle" theme="outline"></i>
+    <span>Add About</span>
+</button>

@@ -1,9 +1,9 @@
 import { NgModule } from "@angular/core";
 import { RouterModule, Routes } from "@angular/router";
+import { ContactsComponent } from "./contacts/contacts.component";
 import { AboutComponent } from "./about/about.component";
 import { CategoriesComponent } from "./categories/categories.component";
 import { CommentsComponent } from "./comments/comments.component";
-import { ContactComponent } from "./contact/contact.component";
 import { PostsAddComponent } from "./posts/posts-add/posts-add.component";
 import { PostsDetailComponent } from "./posts/posts-detail/posts-detail.component";
 import { PostsComponent } from "./posts/posts.component";
@@ -35,7 +35,7 @@ const routes: Routes = [
             },
             {
                 path: 'contact',
-                component: ContactComponent,
+                component: ContactsComponent,
                 data: {
                     title: 'Contact'
                 }

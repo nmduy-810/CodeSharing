@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AboutComponent } from './about/about.component';
-import { ContactComponent } from './contact/contact.component';
 import { PostsComponent } from './posts/posts.component';
 import { CategoriesComponent } from './categories/categories.component';
 import { CommentsComponent } from './comments/comments.component';
@@ -42,6 +41,9 @@ import { PostsDetailComponent } from './posts/posts-detail/posts-detail.componen
 import { PostsAddComponent } from './posts/posts-add/posts-add.component';
 import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
 import { NzMentionModule } from 'ng-zorro-antd/mention';
+import { ContactsDetailComponent } from './contacts/contacts-detail/contacts-detail.component';
+import { ContactsComponent } from './contacts/contacts.component';
+import { AboutsDetailComponent } from './about/abouts-detail/abouts-detail.component';
 
 const antdModule = [
   NzButtonModule,
@@ -74,13 +76,15 @@ const antdModule = [
 @NgModule({
   declarations: [
     AboutComponent,
-    ContactComponent,
     PostsComponent,
     CategoriesComponent,
     CommentsComponent,
     CategoriesDetailComponent,
     PostsDetailComponent,
     PostsAddComponent,
+    ContactsComponent,
+    ContactsDetailComponent,
+    AboutsDetailComponent,
     
   ],
   imports: [
