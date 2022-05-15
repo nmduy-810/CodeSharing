@@ -1,0 +1,94 @@
+<nz-modal [(nzVisible)]="isVisible" [nzTitle]="modalTitle" [nzContent]="modalContent" [nzFooter]="modalFooter"
+    (nzOnCancel)="cancel()" [nzWidth]="800">
+    <ng-template #modalTitle>User</ng-template>
+
+    <ng-template #modalContent>
+        <form [formGroup]="userForm" (ngSubmit)="save()">
+            <div class="row">
+                <!--User name-->
+                <div class="col-md-12">
+                    <nz-form-item>
+                        <nz-form-label [nzSm]="4">User Name</nz-form-label>
+                        <nz-form-control nzErrorTip="Please input your user name!">
+                            <input nz-input placeholder="Tên tài khoản" (keyup)="generateSlug()" name="userName"
+                                formControlName="userName">
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+
+                <!--Password-->
+                <div class="col-md-12">
+                    <nz-form-item>
+                        <nz-form-label [nzSm]="4">Password</nz-form-label>
+                        <nz-form-control nzErrorTip="Please input your password!">
+                            <input nz-input placeholder="Mật khẩu" name="password" formControlName="password">
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+
+                <!--First Name-->
+                <div class="col-md-12">
+                    <nz-form-item>
+                        <nz-form-label [nzSm]="4">First Name</nz-form-label>
+                        <nz-form-control nzErrorTip="Please input your first name!">
+                            <input nz-input placeholder="Họ của bạn" name="firstName" formControlName="firstName">
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+
+                <!--Last Name-->
+                <div class="col-md-12">
+                    <nz-form-item>
+                        <nz-form-label [nzSm]="4">Last Name</nz-form-label>
+                        <nz-form-control nzErrorTip="Please input your last name!">
+                            <input nz-input placeholder="Tên của bạn" name="lastName" formControlName="lastName">
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+
+                <!--Email-->
+                <div class="col-md-12">
+                    <nz-form-item>
+                        <nz-form-label [nzSm]="4">Email</nz-form-label>
+                        <nz-form-control nzErrorTip="Please input your email!">
+                            <input nz-input placeholder="Email của bạn" name="email" formControlName="email">
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+
+                <!--Phone Number-->
+                <div class="col-md-12">
+                    <nz-form-item>
+                        <nz-form-label [nzSm]="4">Phone Number</nz-form-label>
+                        <nz-form-control>
+                            <input nz-input placeholder="Số điện thoại của bạn" name="phoneNumber" formControlName="phoneNumber">
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+
+                <!--Birthday-->
+                <div class="col-md-12">
+                    <nz-form-item>
+                        <nz-form-label [nzSm]="4">Birthday</nz-form-label>
+                        <nz-form-control nzErrorTip="Please input your birthday!">
+                            <nz-date-picker formControlName="birthday"></nz-date-picker>
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+
+                <div class="col-md-12">
+                    <button nz-button nzType="primary" [nzLoading]="isConfirmLoading">Save</button>
+                </div>
+            </div>
+        </form>
+    </ng-template>
+
+    <ng-template #modalFooter>
+        <button (click)="cancel()" nz-button nzType="primary">Close</button>
+    </ng-template>
+</nz-modal>
+
+<button (click)="open()" nz-button nzType="primary">
+    <i nz-icon nzType="plus-circle" theme="outline"></i>
+    <span>Add User</span>
+</button>

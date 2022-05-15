@@ -37,13 +37,11 @@ export class ContactsComponent implements OnInit, OnDestroy {
   searchInput: string;
   contacts$: any;
   subscription = new Subscription();
-  
-  constructor(
-    private tableSvc: TableService, 
-    private contactsService: ContactsService,
-    private modalService: NzModalService) { }
 
-  @ViewChild(ContactsDetailComponent) childView !:ContactsDetailComponent;
+  constructor(
+    private contactsService: ContactsService) { }
+
+  @ViewChild(ContactsDetailComponent) childView !: ContactsDetailComponent;
   ngOnInit(): void {
     this.get();
   }

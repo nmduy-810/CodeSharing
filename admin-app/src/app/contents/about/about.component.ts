@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { Subscription } from 'rxjs';
 import { About } from 'src/app/shared/models';
-import { AboutsService } from 'src/app/shared/services/about.service';
+import { AboutsService } from 'src/app/shared/services';
 import { TableService } from 'src/app/shared/services/table.service';
 import { AboutsDetailComponent } from './abouts-detail/abouts-detail.component';
 
@@ -58,5 +58,4 @@ export class AboutComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.subscription.unsubscribe();
   }
-
 }

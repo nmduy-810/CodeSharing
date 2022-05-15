@@ -1,1 +1,51 @@
-<p>users works!</p>
+<nz-card>
+    <div class="row m-b-30">
+        <div class="col-lg-8">
+            <div class="d-md-flex">
+                <div class="m-b-10 m-r-20">
+                    <nz-input-group [nzPrefix]="prefixTemplate">
+                        <input type="text" nz-input placeholder="Search user" [(ngModel)]="searchInput" (ngModelChange)="search()" />
+                    </nz-input-group>
+                    <ng-template #prefixTemplate>
+                        <i nz-icon nzType="search" class="opacity-05"></i>
+                    </ng-template>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4 text-right">
+            <app-users-detail></app-users-detail>
+        </div>
+    </div>
+    <nz-table #rowSelectionTable nzShowSizeChanger [nzData]="listOfData" (nzCurrentPageDataChange)="onCurrentPageDataChange($event)">
+        <thead>
+            <tr>
+                <th [nzSelections]="listOfSelection" [(nzChecked)]="checked" [nzIndeterminate]="indeterminate" (nzCheckedChange)="onAllChecked($event)"></th>
+                <th *ngFor="let column of userColumn" [nzSortFn]="column.compare">{{ column.title }}</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let data of rowSelectionTable.data">
+                <td [nzChecked]="setOfCheckedId.has(data.id)" (nzCheckedChange)="onItemChecked(data.id, $event)"></td>
+                <td>{{data.id }}</td>
+                <td>
+                    <div class="d-flex align-items-center">
+                        <h6 class="m-l-10 m-b-0">{{data.userName}}</h6>
+                    </div>
+                </td>
+                <td>{{data.firstName}} {{data.lastName}}</td>
+                <td>{{data.email }}</td>
+                <td>{{data.birthday | date: 'dd-MM-yyyy' }}</td>
+                <td>{{data.phoneNumber}}</td>
+                <td class="text-md-right">
+                    <a class="m-r-5" nz-button (click)="update(data.id)" nzType="default" nzShape="circle" nz-tooltip nzTooltipTitle="Edit">
+                        <i nz-icon nzType="edit" theme="outline"></i>
+                    </a>
+                    <button (click)="delete(data.id)" nz-button nzType="default" nzShape="circle" nz-tooltip nzTooltipTitle="Delete">
+                        <i nz-icon nzType="delete" theme="outline"></i>
+                    </button>
+                </td>
+            </tr>
+        </tbody>
+    </nz-table>
+</nz-card>
+
