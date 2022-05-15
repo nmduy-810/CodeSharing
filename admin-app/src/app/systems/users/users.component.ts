@@ -35,25 +35,24 @@ export class UsersComponent implements OnInit {
   // Initialize column table
   userColumn = [
     {
-      title: 'ID',
-      compare: (a: User, b: User) => a.id - b.id,
-    },
-    {
-      title: 'User name',
+      title: 'Tên tài khoản',
       compare: (a: User, b: User) => a.userName.localeCompare(b.userName)
     },
     {
-      title: 'Full name',
+      title: 'Họ và tên',
       compare: (a: User, b: User) => a.firstName.localeCompare(b.firstName)
     },
     {
       title: 'Email',
     },
     {
-      title: 'Birthday',
+      title: 'Ngày sinh',
     },
     {
-      title: 'Phone number',
+      title: 'Số điện thoại',
+    },
+    {
+      title: 'Ngày tạo',
     },
     {
       title: ''

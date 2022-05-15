@@ -16,14 +16,10 @@ export class AboutComponent implements OnInit, OnDestroy {
   // Initialize column table
   aboutColumn = [
     {
-      title: 'ID',
-      compare: (a: About, b: About) => a.id - b.id,
+      title: 'Mô tả',
     },
     {
-      title: 'Description',
-    },
-    {
-      title: 'Image',
+      title: 'Hình ảnh',
     },
     {
       title: ''

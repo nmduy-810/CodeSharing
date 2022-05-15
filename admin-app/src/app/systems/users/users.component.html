@@ -16,7 +16,7 @@
             <app-users-detail></app-users-detail>
         </div>
     </div>
-    <nz-table #rowSelectionTable nzShowSizeChanger [nzData]="listOfData" (nzCurrentPageDataChange)="onCurrentPageDataChange($event)">
+    <nz-table #rowSelectionTable [nzData]="listOfData" (nzCurrentPageDataChange)="onCurrentPageDataChange($event)">
         <thead>
             <tr>
                 <th [nzSelections]="listOfSelection" [(nzChecked)]="checked" [nzIndeterminate]="indeterminate" (nzCheckedChange)="onAllChecked($event)"></th>
@@ -26,21 +26,17 @@
         <tbody>
             <tr *ngFor="let data of rowSelectionTable.data">
                 <td [nzChecked]="setOfCheckedId.has(data.id)" (nzCheckedChange)="onItemChecked(data.id, $event)"></td>
-                <td>{{data.id }}</td>
-                <td>
-                    <div class="d-flex align-items-center">
-                        <h6 class="m-l-10 m-b-0">{{data.userName}}</h6>
-                    </div>
-                </td>
+                <td>{{data.userName}}</td>
                 <td>{{data.firstName}} {{data.lastName}}</td>
                 <td>{{data.email }}</td>
                 <td>{{data.birthday | date: 'dd-MM-yyyy' }}</td>
                 <td>{{data.phoneNumber}}</td>
+                <td>{{data.createDate | date: 'dd-MM-yyyy'}}</td>
                 <td class="text-md-right">
-                    <a class="m-r-5" nz-button (click)="update(data.id)" nzType="default" nzShape="circle" nz-tooltip nzTooltipTitle="Edit">
+                    <a class="m-r-5" nz-button (click)="update(data.id)" nzType="default" nzShape="circle" nz-tooltip nzTooltipTitle="Chỉnh sửa">
                         <i nz-icon nzType="edit" theme="outline"></i>
                     </a>
-                    <button (click)="delete(data.id)" nz-button nzType="default" nzShape="circle" nz-tooltip nzTooltipTitle="Delete">
+                    <button (click)="delete(data.id)" nz-button nzType="default" nzShape="circle" nz-tooltip nzTooltipTitle="Xoá">
                         <i nz-icon nzType="delete" theme="outline"></i>
                     </button>
                 </td>
@@ -48,4 +44,3 @@
         </tbody>
     </nz-table>
 </nz-card>
-

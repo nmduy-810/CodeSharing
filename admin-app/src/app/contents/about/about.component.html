@@ -12,10 +12,7 @@
             </tr>
         </thead>
         <tbody>
-            <tr *ngFor="let item of aboutsListTable.data;  let i=index">
-
-                <!--ID-->
-                <td>#{{item.id}}</td>
+            <tr *ngFor="let item of aboutsListTable.data; let i=index">
 
                 <!--Description-->
                 <td innerHTML="{{item.description}}">/td>
@@ -24,7 +21,7 @@
 
                 <!--Action-->
                 <td class="text-md-right">
-                    <a class="m-r-5" nz-button (click)="update(item.id)" nzType="default" nzShape="circle" nz-tooltip nzTooltipTitle="Edit">
+                    <a class="m-r-5" nz-button (click)="update(item.id)" nzType="default" nzShape="circle" nz-tooltip nzTooltipTitle="Chỉnh sửa">
                         <i nz-icon nzType="edit" theme="outline"></i>
                     </a>
                 </td>

@@ -1,6 +1,6 @@
 <nz-modal [(nzVisible)]="isVisible" [nzTitle]="modalTitle" [nzContent]="modalContent" [nzFooter]="modalFooter"
     (nzOnCancel)="cancel()">
-    <ng-template #modalTitle>Contact</ng-template>
+    <ng-template #modalTitle>Liên hệ</ng-template>
 
     <ng-template #modalContent>
         <form [formGroup]="contactForm" (ngSubmit)="save()">
@@ -8,7 +8,7 @@
                 <!--Phone-->
                 <div class="col-md-12">
                     <nz-form-item>
-                        <nz-form-label>Phone</nz-form-label>
+                        <nz-form-label>Số điện thoại</nz-form-label>
                         <nz-form-control nzErrorTip="Please input your phone!">
                             <input nz-input placeholder="Số điện thoại" name="phone" formControlName="phone">
                         </nz-form-control>
@@ -28,21 +28,21 @@
                 <!--Location-->
                 <div class="col-md-12">
                     <nz-form-item>
-                        <nz-form-label>Location</nz-form-label>
+                        <nz-form-label>Nơi ở</nz-form-label>
                         <nz-form-control nzErrorTip="Please input your location!">
                             <input nz-input placeholder="Nơi sống" name="location" formControlName="location">
                         </nz-form-control>
                     </nz-form-item>
                 </div>
 
-                <div class="col-md-12">
-                    <button nz-button nzType="primary" [nzLoading]="isConfirmLoading">Save</button>
+                <div class="col-md-12 text-center">
+                    <button nz-button nzType="primary" [nzLoading]="isConfirmLoading">Lưu lại</button>
                 </div>
             </div>
         </form>
     </ng-template>
 
     <ng-template #modalFooter>
-        <button (click)="cancel()" nz-button nzType="primary">Close</button>
+        <button (click)="cancel()" nz-button nzType="primary">Đóng</button>
     </ng-template>
 </nz-modal>

@@ -4,7 +4,7 @@
             <div class="d-md-flex">
                 <div class="m-b-10 m-r-20">
                     <nz-input-group [nzPrefix]="prefixTemplate">
-                        <input type="text" nz-input placeholder="Search category" [(ngModel)]="searchInput" (ngModelChange)="search()">
+                        <input type="text" nz-input placeholder="Tìm kiếm danh mục" [(ngModel)]="searchInput" (ngModelChange)="search()">
                     </nz-input-group>      
                     <ng-template #prefixTemplate>
                         <i nz-icon nzType="search" class="opacity-05"></i>
@@ -23,16 +23,10 @@
             </tr>
         </thead>
         <tbody>
-            <tr *ngFor="let item of categoriesListTable.data;  let i=index">
-                <!--ID-->
-                <td>#{{item.id}}</td>
+            <tr *ngFor="let item of categoriesListTable.data; let i=index">
 
                 <!--Title-->
-                <td>
-                    <div class="d-flex align-items-center">
-                        <h6 class="m-l-10 m-b-0">{{item.title}}</h6>
-                    </div>
-                </td>
+                <td>{{item.title}}</td>
 
                 <!--Slug-->
                 <td>{{item.slug}}</td>
@@ -43,15 +37,12 @@
                 <!--Parent Category-->
                 <td>{{item.parentCategoryId}}</td>
 
-                <!--Have Parent-->
-                <td>{{item.isParent}}</td>
-
                 <!--Action-->
                 <td class="text-md-right">
-                    <a class="m-r-5" nz-button (click)="update(item.id)" nzType="default" nzShape="circle" nz-tooltip nzTooltipTitle="Edit">
+                    <a class="m-r-5" nz-button (click)="update(item.id)" nzType="default" nzShape="circle" nz-tooltip nzTooltipTitle="Chỉnh sửa">
                         <i nz-icon nzType="edit" theme="outline"></i>
                     </a>
-                    <button (click)="delete(item.id)" nz-button nzType="default" nzShape="circle" nz-tooltip nzTooltipTitle="Delete">
+                    <button (click)="delete(item.id)" nz-button nzType="default" nzShape="circle" nz-tooltip nzTooltipTitle="Xoá">
                         <i nz-icon nzType="delete" theme="outline"></i>
                     </button>
                 </td>

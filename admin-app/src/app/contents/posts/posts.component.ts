@@ -16,16 +16,28 @@ export class PostsComponent implements OnInit, OnDestroy {
 
   postsColumn = [
     {
-      title: 'ID',
-      compare: (a: Post, b: Post) => a.id - b.id,
+      title: 'Danh mục',
+      compare: (a: Post, b: Post) => a.categoryTitle.localeCompare(b.categoryTitle)
     },
     {
-      title: 'Title',
+      title: 'Tiêu đề',
       compare: (a: Post, b: Post) => a.title.localeCompare(b.title)
     },
     {
-      title: 'Category',
-      compare: (a: Post, b: Post) => a.categoryTitle.localeCompare(b.categoryTitle)
+      title: 'Ngày tạo',
+      compare: (a: Post, b: Post) => a.title.localeCompare(b.title)
+    },
+    {
+      title: 'Bình luận',
+      compare: (a: Post, b: Post) => a.categoryTitle.localeCompare(b.title)
+    },
+    {
+      title: 'Lượt thích',
+      compare: (a: Post, b: Post) => a.title.localeCompare(b.title)
+    },
+    {
+      title: 'Số người xem',
+      compare: (a: Post, b: Post) => a.title.localeCompare(b.title)
     },
     {
       title: ''
@@ -87,8 +99,8 @@ export class PostsComponent implements OnInit, OnDestroy {
 
   delete(id:any) {
     this.modalService.confirm({
-      nzTitle: 'Are you sure delete this post?',
-      nzContent: '<b style="color: red;">You wont be able to revert this!</b>',
+      nzTitle: 'Bạn có muốn xoá bài viết này?',
+      nzContent: '<b style="color: red;">Bạn không thể hoàn tác hành động này!</b>',
       nzOkText: 'Yes',
       nzOkType: 'primary',
       nzOkDanger: true,
@@ -96,7 +108,7 @@ export class PostsComponent implements OnInit, OnDestroy {
       nzOnOk: () => {
         return this.postsService.delete(id).subscribe(result => {
           this.get();
-          this.notification.create('success', 'Confirm', 'Delet post successfully!');
+          this.notification.create('success', 'Xác nhận', 'Bài viết đã được xoá thành công!');
         });
       }
     });

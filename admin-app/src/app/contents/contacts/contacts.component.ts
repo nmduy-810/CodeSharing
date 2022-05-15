@@ -16,17 +16,13 @@ export class ContactsComponent implements OnInit, OnDestroy {
   // Initialize column table
   contactColumn = [
     {
-      title: 'ID',
-      compare: (a: Contact, b: Contact) => a.id - b.id,
-    },
-    {
-      title: 'Phone',
+      title: 'Số điện thoại',
     },
     {
       title: 'Email',
     },
     {
-      title: 'Location',
+      title: 'Nơi ở',
     },
     {
       title: ''

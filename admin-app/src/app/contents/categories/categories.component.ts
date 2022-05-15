@@ -1,5 +1,6 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { NzModalService } from 'ng-zorro-antd/modal';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { Subscription } from 'rxjs';
 import { Category } from 'src/app/shared/models';
 import { CategoriesService } from 'src/app/shared/services';
@@ -15,28 +16,21 @@ export class CategoriesComponent implements OnInit, OnDestroy {
 
   // Initialize column table
   categoryColumn = [
+    
     {
-      title: 'ID',
-      compare: (a: Category, b: Category) => a.id - b.id,
-    },
-    {
-      title: 'Title',
+      title: 'Tên danh mục',
       compare: (a: Category, b: Category) => a.title.localeCompare(b.title)
     },
     {
-      title: 'Slug',
+      title: 'Đường dẫn SEO',
       compare: (a: Category, b: Category) => a.title.localeCompare(b.title)
     },
     {
-      title: 'Sort Order',
+      title: 'Thứ tự sắp xếp',
       compare: (a: Category, b: Category) => a.title.localeCompare(b.title)
     },
     {
-      title: 'Parent Category',
-      compare: (a: Category, b: Category) => a.title.localeCompare(b.title)
-    },
-    {
-      title: 'Have Parent',
+      title: 'Danh mục cha',
       compare: (a: Category, b: Category) => a.title.localeCompare(b.title)
     },
     {
@@ -52,7 +46,8 @@ export class CategoriesComponent implements OnInit, OnDestroy {
   constructor(
     private tableSvc: TableService, 
     private categoriesService: CategoriesService,
-    private modalService: NzModalService) {
+    private modalService: NzModalService,
+    private notification: NzNotificationService) {
       this.get();
   }
   ngOnDestroy(): void {
@@ -81,8 +76,8 @@ export class CategoriesComponent implements OnInit, OnDestroy {
 
   delete(id: any) {
     this.modalService.confirm({
-      nzTitle: 'Are you sure delete this category?',
-      nzContent: '<b style="color: red;">You wont be able to revert this!</b>',
+      nzTitle: 'Bạn có muốn xoá danh mục này?',
+      nzContent: '<b style="color: red;">Bạn không thể hoàn tác hành động này!</b>',
       nzOkText: 'Yes',
       nzOkType: 'primary',
       nzOkDanger: true,
@@ -90,6 +85,7 @@ export class CategoriesComponent implements OnInit, OnDestroy {
       nzOnOk: () => {
         return this.categoriesService.delete(id).subscribe(result => {
           this.get();
+          this.notification.create('success', 'Xác nhận', 'Danh mục đã được xoá thành công!');
         });
       }
     });

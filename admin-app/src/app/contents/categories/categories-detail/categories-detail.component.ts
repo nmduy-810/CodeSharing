@@ -1,6 +1,7 @@
 import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormControl, Validators, FormBuilder } from '@angular/forms';
 import { NzModalService } from 'ng-zorro-antd/modal';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { Subscription } from 'rxjs';
 import { CategoriesService } from 'src/app/shared/services';
 import { UtilitiesService } from 'src/app/shared/services/utilities.service';
@@ -31,7 +32,8 @@ export class CategoriesDetailComponent implements OnInit, OnDestroy  {
   constructor(
     private categoriesService: CategoriesService, 
     private utilitiesService: UtilitiesService,
-    private fb: FormBuilder) {}
+    private fb: FormBuilder,
+    private notification: NzNotificationService) {}
 
   @ViewChild('content') childView !: ElementRef
   ngOnInit(): void {
@@ -80,15 +82,19 @@ export class CategoriesDetailComponent implements OnInit, OnDestroy  {
         this.subscription.add(this.categoriesService.add(this.categoryForm.getRawValue())
         .subscribe(() => {
           setTimeout(() => { this.isVisible = false; this.isConfirmLoading = false; }, 1000);
+          this.notification.create('success', 'Xác nhận', 'Danh mục được thêm thành công!');
         }, error => {
           setTimeout(() => { this.isVisible = false; this.isConfirmLoading = false; }, 1000);
+          this.notification.create('success', 'Xác nhận', 'Danh mục được thêm thất bại!');
         }))
       } else {
         this.subscription.add(this.categoriesService.update(this.categoryId, this.categoryForm.getRawValue())
         .subscribe(() => {
           setTimeout(() => { this.isVisible = false; this.isConfirmLoading = false; }, 1000);
+          this.notification.create('success', 'Xác nhận', 'Danh mục được cập nhật thành công!');
         }, error => {
           setTimeout(() => { this.isVisible = false; this.isConfirmLoading = false; }, 1000);
+          this.notification.create('success', 'Xác nhận', 'Danh mục được cập nhật thất bại!');
         }))
       }
     }
