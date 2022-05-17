@@ -10,6 +10,9 @@
                         <i nz-icon nzType="search" class="opacity-05"></i>
                     </ng-template>
                 </div>
+                <div class="m-t-10">
+                    <label nz-checkbox [(ngModel)]="showRoleAssign" (click)="showHideRoleTable()" binary="true">Gán quyền người dùng</label> 
+                </div>
             </div>
         </div>
         <div class="col-lg-4 text-right">
@@ -43,4 +46,41 @@
             </tr>
         </tbody>
     </nz-table>
+</nz-card>
+
+<!--Role Assign-->
+<nz-card #pnlRole *ngIf="showRoleAssign">
+    <div class="row m-b-30">
+        <div class="col-lg-8">
+            <div class="d-md-flex">
+                <div class="m-b-10 m-r-20">
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4 text-right">
+            <button (click)="addUserRoles()" nz-button nzType="primary">
+                <i nz-icon nzType="plus-circle" theme="outline"></i>
+                <span>Thêm mới</span>
+            </button>
+        </div>
+    </div>
+    <nz-table #rolesListTable [nzData]="displayData">
+        <thead>
+            <tr>
+                <th *ngFor="let column of rolesColumn" [nzSortFn]="column.compare">{{ column.title }}</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let item of rolesListTable.data; let i=index">
+                <td>{{item}}</td>
+                <td>{{item}}</td>
+                <td class="text-md-right">
+                    <a class="m-r-5" nz-button (click)="deleteRole(item)" nzType="default" nzShape="circle" nz-tooltip nzTooltipTitle="Xoá">
+                        <i nz-icon nzType="delete" theme="outline"></i>
+                    </a>
+                </td>
+            </tr>
+        </tbody>
+    </nz-table> 
+
 </nz-card>

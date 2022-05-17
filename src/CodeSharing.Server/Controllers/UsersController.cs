@@ -207,6 +207,7 @@ public class UsersController : BaseController
         }
         
         var roles = await _userManager.GetRolesAsync(user);
+        
         return Ok(roles);
     }
     
@@ -238,22 +239,23 @@ public class UsersController : BaseController
     [ClaimRequirement(FunctionCodeConstants.SYSTEM_USER, CommandCodeConstants.VIEW)]
     public async Task<IActionResult> RemoveRolesFromUser(string userId, [FromQuery] RoleAssignRequest request)
     {
+        var user = await _userManager.FindByIdAsync(userId);
+        
+        if (user == null)
+        {
+            return NotFound(new ApiNotFoundResponse($"Cannot found user with id: {userId}"));
+        }
+
         if (request.RoleNames.Length == 0)
         {
             return BadRequest(new ApiBadRequestResponse("Role names cannot empty"));
         }
         
-        if (request.RoleNames.Length == 1 && request.RoleNames[0] == SystemConstants.Roles.Admin)
+        if (request.RoleNames.Length == 1 && request.RoleNames[0] == SystemConstants.Roles.Admin && user.UserName == "admin")
         {
             return BadRequest(new ApiBadRequestResponse($"Cannot remove {SystemConstants.Roles.Admin} role"));
         }
-        
-        var user = await _userManager.FindByIdAsync(userId);
-        if (user == null)
-        {
-            return NotFound(new ApiNotFoundResponse($"Cannot found user with id: {userId}"));
-        }
-        
+
         var result = await _userManager.RemoveFromRolesAsync(user, request.RoleNames);
         if (result.Succeeded)
         {
@@ -262,5 +264,4 @@ public class UsersController : BaseController
 
         return BadRequest(new ApiBadRequestResponse(result));
     }
-
 }

@@ -10,14 +10,14 @@ import { UtilitiesService } from './utilities.service';
 export class UserService extends BaseService {
 
     private _sharedHeaders = new HttpHeaders();
-    
+
     constructor(private http: HttpClient, private utilitiesService: UtilitiesService) {
         super();
         this._sharedHeaders = this._sharedHeaders.set('Content-Type', 'application/json');
     }
 
     get() {
-         return this.http.get<User[]>(`${environment.apiUrl}/api/users`, { headers: this._sharedHeaders })
+        return this.http.get<User[]>(`${environment.apiUrl}/api/users`, { headers: this._sharedHeaders })
             .pipe(catchError(this.handleError));
     }
 
@@ -38,7 +38,7 @@ export class UserService extends BaseService {
 
     delete(id: string) {
         return this.http.delete(environment.apiUrl + '/api/users/' + id, { headers: this._sharedHeaders })
-        .pipe(catchError(this.handleError));
+            .pipe(catchError(this.handleError));
     }
 
     getMenuByUser(userId: string) {
@@ -59,6 +59,7 @@ export class UserService extends BaseService {
         for (const roleName of roleNames) {
             rolesQuery += 'roleNames' + '=' + roleName + '&';
         }
+
         return this.http.delete(environment.apiUrl + '/api/users/' + id + '/roles?' + rolesQuery, { headers: this._sharedHeaders })
             .pipe(catchError(this.handleError));
     }

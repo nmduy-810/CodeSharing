@@ -39,6 +39,7 @@ import { ThemeConstantService } from '../shared/services/theme-constant.service'
 import { SharedModule } from '../shared/shared.module';
 import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
 import { NzMentionModule } from 'ng-zorro-antd/mention';
+import { RoleAssignComponent } from './users/role-assign/role-assign.component';
 
 const antdModule = [
   NzButtonModule,
@@ -75,6 +76,7 @@ const antdModule = [
     PermissionsComponent,
     RolesComponent,
     UsersDetailComponent,
+    RoleAssignComponent,
   ],
   imports: [
     SharedModule,

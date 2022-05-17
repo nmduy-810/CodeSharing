@@ -1,0 +1,21 @@
+<form method="post" (ngSubmit)="save()">
+    <nz-table #rowSelectionTable [nzData]="listOfData" (nzCurrentPageDataChange)="onCurrentPageDataChange($event)">
+        <thead>
+            <tr>
+                <th [nzSelections]="listOfSelection" [(nzChecked)]="checked" [nzIndeterminate]="indeterminate" (nzCheckedChange)="onAllChecked($event)"></th>
+                <th>ID</th>
+                <th>Name</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let data of rowSelectionTable.data">
+                <td [nzChecked]="setOfCheckedId.has(data.id)" (nzCheckedChange)="onItemChecked(data.id, $event)"></td>
+                <td>{{ data.id }}</td>
+                <td>{{ data.name }}</td>
+            </tr>
+        </tbody>
+    </nz-table>
+    <div class="col-md-12 text-center">
+        <button nz-button nzType="primary" [nzLoading]="isConfirmLoading">Lưu lại</button>
+    </div>
+</form>
