@@ -44,6 +44,7 @@ import { PostsDetailComponent } from './posts/posts-detail/posts-detail.componen
 import { PostsAddComponent } from './posts/posts-add/posts-add.component';
 import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
 import { NzMentionModule } from 'ng-zorro-antd/mention';
+import { CommentsDetailComponent } from './comments/comments-detail/comments-detail.component';
 
 
 const antdModule = [
@@ -86,6 +87,7 @@ const antdModule = [
     ContactsComponent,
     ContactsDetailComponent,
     AboutsDetailComponent,
+    CommentsDetailComponent,
     
   ],
   imports: [

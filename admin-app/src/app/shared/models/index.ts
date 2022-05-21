@@ -4,3 +4,4 @@ export * from './label.model';
 export * from './contact.model';
 export * from './about.model';
 export * from './role.model';
+export * from './comment.model';

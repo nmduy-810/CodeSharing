@@ -106,10 +106,10 @@ export class UsersComponent implements OnInit {
     this.modalService.confirm({
       nzTitle: 'Bạn có muốn xoá tài khoản này?',
       nzContent: '<b style="color: red;">Bạn không thể hoàn tác hành động này!</b>',
-      nzOkText: 'Yes',
+      nzOkText: 'Xác nhận',
       nzOkType: 'primary',
       nzOkDanger: true,
-      nzCancelText: 'No',
+      nzCancelText: 'Không',
       nzOnOk: () => {
         return this.usersService.delete(id).subscribe(result => {
           this.get();
@@ -177,10 +177,10 @@ export class UsersComponent implements OnInit {
     this.modalService.confirm({
       nzTitle: 'Bạn có muốn xoá quyền cho tài khoản này?',
       nzContent: '<b style="color: red;">Bạn không thể hoàn tác hành động này!</b>',
-      nzOkText: 'Yes',
+      nzOkText: 'Xác nhận',
       nzOkType: 'primary',
       nzOkDanger: true,
-      nzCancelText: 'No',
+      nzCancelText: 'Không',
       nzOnOk: () => {
         const userId = this.setOfCheckedId.values().next().value;
         this.roleNames.push(item);

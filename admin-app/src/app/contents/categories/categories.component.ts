@@ -78,10 +78,10 @@ export class CategoriesComponent implements OnInit, OnDestroy {
     this.modalService.confirm({
       nzTitle: 'Bạn có muốn xoá danh mục này?',
       nzContent: '<b style="color: red;">Bạn không thể hoàn tác hành động này!</b>',
-      nzOkText: 'Yes',
+      nzOkText: 'Xác nhận',
       nzOkType: 'primary',
       nzOkDanger: true,
-      nzCancelText: 'No',
+      nzCancelText: 'Không',
       nzOnOk: () => {
         return this.categoriesService.delete(id).subscribe(result => {
           this.get();

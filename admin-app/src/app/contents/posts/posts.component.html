@@ -49,6 +49,9 @@
                 <td nzAlign="center">{{item.numberOfVotes}}</td>
                 <td nzAlign="center">{{item.viewCount}}</td>
                 <td class="text-md-right">
+                    <a class="m-r-5" nz-button nzType="default" nzShape="circle" nz-tooltip nzTooltipTitle="Xem chi tiết bình luận">
+                        <i nz-icon nzType="comment" [routerLink]="['/contents/comment', item.id, 'details']"  nzTheme="outline"></i>
+                    </a>
                     <a class="m-r-5" nz-button nzType="default" nzShape="circle" nz-tooltip nzTooltipTitle="Chỉnh sửa">
                         <i nz-icon nzType="edit" (click)="update(item.id)" theme="outline"></i>
                     </a>

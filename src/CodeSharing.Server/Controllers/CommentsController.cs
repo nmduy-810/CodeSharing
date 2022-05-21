@@ -76,45 +76,53 @@ public partial class PostsController
         return Ok(rootCategories);
     }
     
-    [HttpGet("{postId}/comments/filter")]
-    [ClaimRequirement(FunctionCodeConstants.CONTENT_COMMENT, CommandCodeConstants.VIEW)]
-    public async Task<IActionResult> GetCommentsPaging(int? postId, string filter, int pageIndex, int pageSize)
+    [HttpGet("comments/all")]
+    [AllowAnonymous]
+    public async Task<IActionResult> GetComments()
     {
-        var query = from c in _context.Comments
+        var query = from p in _context.Posts
+            join c in _context.Comments on p.Id equals c.PostId
             join u in _context.Users on c.OwnerUserId equals u.Id
-            select new { u, c };
-
-        if (postId.HasValue)
+            select new { p, c, u };
+        
+        var items = await query.Select(x => new CommentVm()
         {
-            query = query.Where(x => x.c.PostId == postId.Value);
-        }
+            Id = x.c.Id,
+            Content = x.c.Content,
+            CreateDate = x.c.CreateDate,
+            PostId = x.c.PostId,
+            PostTitle = x.p.Title,
+            OwnerUserId = x.c.OwnerUserId,
+            OwnerName = x.u.FirstName + " " + x.u.LastName,
+            ReplyId = x.c.ReplyId
+        }).ToListAsync();
+        
+        _logger.LogInformation("Successful execution of get comments request");
+        return Ok(items);
+    }
 
-        if (!string.IsNullOrEmpty(filter))
+    [HttpGet("{postId}/comments")]
+    [AllowAnonymous]
+    public async Task<IActionResult> GetCommentsByPostId(int postId)
+    {
+        var query = from p in _context.Posts
+            join c in _context.Comments on p.Id equals c.PostId
+            join u in _context.Users on c.OwnerUserId equals u.Id
+            where c.PostId == postId
+            select new { p, c, u };
+        
+        var comments = await query.Select(x => new CommentVm()
         {
-            query = query.Where(x => x.c.Content.Contains(filter));
-        }
-
-        var totalRecords = await query.CountAsync();
-        var items = await query.Skip((pageIndex - 1) * pageSize)
-            .Take(pageSize)
-            .Select(c => new CommentVm()
-            {
-                Id = c.c.Id,
-                Content = c.c.Content,
-                CreateDate = c.c.CreateDate,
-                PostId = c.c.PostId,
-                LastModifiedDate = c.c.LastModifiedDate,
-                OwnerUserId = c.c.OwnerUserId,
-                OwnerName = c.u.FirstName + " " + c.u.LastName
-            })
-            .ToListAsync();
-
-        var pagination = new Pagination<CommentVm>
-        {
-            Items = items,
-            TotalRecords = totalRecords,
-        };
-        return Ok(pagination);
+            Id = x.c.Id,
+            Content = x.c.Content,
+            CreateDate = x.c.CreateDate,
+            PostId = x.c.PostId,
+            OwnerUserId = x.c.OwnerUserId,
+            OwnerName = x.u.FirstName + " " + x.u.LastName,
+            ReplyId = x.c.ReplyId
+        }).ToListAsync();
+        
+        return Ok(comments);
     }
 
     [HttpGet("{postId}/comments/{commentId}")]
