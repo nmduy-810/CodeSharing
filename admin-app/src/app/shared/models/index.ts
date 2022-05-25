@@ -5,3 +5,6 @@ export * from './contact.model';
 export * from './about.model';
 export * from './role.model';
 export * from './comment.model';
+export * from './monthly-new-comment.model';
+export * from './monthly-new-post.model';
+export * from './monthly-new-register-user.model';

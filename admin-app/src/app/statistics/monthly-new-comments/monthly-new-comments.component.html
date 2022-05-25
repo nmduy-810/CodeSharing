@@ -1,1 +1,30 @@
-<p>monthly-new-comments works!</p>
+<nz-card>
+    <div class="row m-b-30">
+        <div class="col-lg-4 text-right">
+        </div>
+    </div>
+    <nz-table #monthlyNewCommentsListTable [nzData]="displayData">
+        <thead>
+            <tr>
+                <th *ngFor="let column of monthlyNewCommentsColumn" [nzSortFn]="column.compare">{{ column.title }}</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let item of monthlyNewCommentsListTable.data; let i=index">
+
+                <!--Month-->
+                <td>{{item.month}}</td>
+
+                <!--Number Of Comments-->
+                <td>{{item.numberOfComments  | number}}</td>
+
+                <!--Action-->
+                <td class="text-md-right">
+                    <a class="m-r-5" nz-button nzType="default" nzShape="circle" nz-tooltip nzTooltipTitle="Xem tất cả" routerLink="/contents/comments">
+                        <i nz-icon nzType="eye" theme="outline"></i>
+                    </a>
+                </td>
+            </tr>
+        </tbody>
+    </nz-table>
+</nz-card>

@@ -1,4 +1,5 @@
 import { Component } from '@angular/core'
+import { StatisticsService } from 'src/app/shared/services';
 import { ThemeConstantService } from '../../shared/services/theme-constant.service';
 
 @Component({
@@ -17,7 +18,13 @@ export class DefaultDashboardComponent {
     purpleLight = this.themeColors.purpleLight;
     red = this.themeColors.red;
 
-    constructor( private colorConfig:ThemeConstantService ) {}
+    // Statistics
+    public year: number = new Date().getFullYear();
+    public totalOfComments = 0;
+    public totalOfPosts = 0;
+    public totalOfRegisterUsers = 0;
+
+    constructor(private colorConfig: ThemeConstantService, private statisticsService: StatisticsService) { }
 
     salesChartOptions: any = {
         scaleShowVerticalLines: false,
@@ -53,7 +60,7 @@ export class DefaultDashboardComponent {
                     zeroLineBorderDash: [3, 4]
                 },
                 ticks: {
-                    max: 80,                            
+                    max: 80,
                     stepSize: 20,
                     display: true,
                     beginAtZero: true,
@@ -66,23 +73,23 @@ export class DefaultDashboardComponent {
     salesChartLabels: string[] = ['Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug'];
     salesChartType = 'bar';
     salesChartColors: Array<any> = [
-        { 
+        {
             backgroundColor: this.themeColors.blue,
             borderWidth: 0
         },
-        { 
+        {
             backgroundColor: this.themeColors.blueLight,
             borderWidth: 0
         }
     ];
     salesChartData: any[] = [
-        { 
+        {
             data: [20, 30, 35, 45, 55, 45],
             label: 'Online',
             categoryPercentage: 0.35,
             barPercentage: 0.70
         },
-        { 
+        {
             data: [25, 35, 40, 50, 60, 50],
             label: 'Offline',
             categoryPercentage: 0.35,
@@ -92,12 +99,12 @@ export class DefaultDashboardComponent {
 
     revenueChartFormat: string = 'revenueMonth';
 
-    revenueChartData: Array<any> = [{ 
+    revenueChartData: Array<any> = [{
         data: [30, 60, 40, 50, 40, 55, 85, 65, 75, 50, 70],
-        label: 'Series A' 
+        label: 'Series A'
     }];
     currentrevenueChartLabelsIdx = 1;
-    revenueChartLabels:Array<any> = ["16th", "17th", "18th", "19th", "20th", "21th", "22th", "23th", "24th", "25th", "26th"];
+    revenueChartLabels: Array<any> = ["16th", "17th", "18th", "19th", "20th", "21th", "22th", "23th", "24th", "25th", "26th"];
     revenueChartOptions: any = {
         maintainAspectRatio: false,
         responsive: true,
@@ -109,7 +116,7 @@ export class DefaultDashboardComponent {
             mode: 'index'
         },
         scales: {
-            xAxes: [{ 
+            xAxes: [{
                 gridLines: [{
                     display: false,
                 }],
@@ -126,21 +133,21 @@ export class DefaultDashboardComponent {
                     drawTicks: false,
                     borderDash: [3, 4],
                     zeroLineWidth: 1,
-                    zeroLineBorderDash: [3, 4]  
+                    zeroLineBorderDash: [3, 4]
                 },
                 ticks: {
                     display: true,
-                    max: 100,                            
+                    max: 100,
                     stepSize: 20,
                     fontColor: this.themeColors.grayLight,
                     fontSize: 13,
                     padding: 10
-                }  
+                }
             }],
         }
     };
     revenueChartColors: Array<any> = [
-        { 
+        {
             backgroundColor: this.themeColors.transparent,
             borderColor: this.cyan,
             pointBackgroundColor: this.cyan,
@@ -153,9 +160,9 @@ export class DefaultDashboardComponent {
 
     customersChartLabels: string[] = ['Direct', 'Referral', 'Social Network'];
     customersChartData: number[] = [350, 450, 100];
-    customersChartColors: Array<any> =  [{ 
+    customersChartColors: Array<any> = [{
         backgroundColor: [this.gold, this.blue, this.red],
-        pointBackgroundColor : [this.gold, this.blue, this.red]
+        pointBackgroundColor: [this.gold, this.blue, this.red]
     }];
     customersChartOptions: any = {
         cutoutPercentage: 80,
@@ -171,7 +178,7 @@ export class DefaultDashboardComponent {
             date: '8 May 2019',
             amount: 137,
             status: 'approved',
-            checked : false
+            checked: false
         },
         {
             id: 5375,
@@ -180,7 +187,7 @@ export class DefaultDashboardComponent {
             date: '6 May 2019',
             amount: 322,
             status: 'approved',
-            checked : false
+            checked: false
         },
         {
             id: 5762,
@@ -189,7 +196,7 @@ export class DefaultDashboardComponent {
             date: '1 May 2019',
             amount: 543,
             status: 'approved',
-            checked : false
+            checked: false
         },
         {
             id: 5865,
@@ -198,7 +205,7 @@ export class DefaultDashboardComponent {
             date: '28 April 2019',
             amount: 876,
             status: 'pending',
-            checked : false
+            checked: false
         },
         {
             id: 5213,
@@ -207,7 +214,7 @@ export class DefaultDashboardComponent {
             date: '28 April 2019',
             amount: 241,
             status: 'approved',
-            checked : false
+            checked: false
         },
         {
             id: 5311,
@@ -216,9 +223,9 @@ export class DefaultDashboardComponent {
             date: '19 April 2019',
             amount: 872,
             status: 'rejected',
-            checked : false
+            checked: false
         }
-    ]    
+    ]
 
     productsList = [
         {
@@ -251,5 +258,50 @@ export class DefaultDashboardComponent {
             category: 'Eletronic',
             growth: 5.8
         }
-    ]    
+    ]
+
+    ngOnInit() {
+        // Statistics
+        this.loadNumberOfComments();
+        this.loadNumberOfPosts();
+        this.loadNumberOfRegisterUsers();
+    }
+
+    loadNumberOfComments() {
+        this.statisticsService.getMonthlyNewComments(this.year).subscribe((response: any) => {
+            this.totalOfComments = 0;
+            response.forEach(element => {
+                this.totalOfComments += element.numberOfComments;
+            });
+            setTimeout(() => { }, 1000);
+        }, error => {
+            setTimeout(() => { }, 1000);
+        });
+    }
+
+    loadNumberOfPosts() {
+        this.statisticsService.getMonthlyNewPosts(this.year).subscribe((response: any) => {
+            this.totalOfPosts = 0;
+            console.log(response);
+            response.forEach(element => {
+                this.totalOfPosts += element.numberOfNewPosts;
+            });
+            setTimeout(() => { }, 1000);
+        }, error => {
+            setTimeout(() => { }, 1000);
+        });
+    }
+
+    loadNumberOfRegisterUsers() {
+        this.statisticsService.getMonthlyNewRegisterUsers(this.year).subscribe((response: any) => {
+            this.totalOfRegisterUsers = 0;
+            console.log(response);
+            response.forEach(element => {
+                this.totalOfRegisterUsers += element.numberOfRegisterUsers;
+            });
+            setTimeout(() => { }, 1000);
+        }, error => {
+            setTimeout(() => { }, 1000);
+        });
+    }
 }    

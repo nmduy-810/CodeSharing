@@ -8,3 +8,4 @@ export * from './role.service';
 export * from './utilities.service';
 export * from './about.service';
 export * from './comment.service';
+export * from './statistics.service';

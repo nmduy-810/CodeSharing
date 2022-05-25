@@ -63,7 +63,9 @@ public partial class PostsController : BaseController
             NumberOfComments = x.p.NumberOfComments,
             NumberOfVotes = x.p.NumberOfVotes,
             ViewCount = x.p.ViewCount,
-            CreateDate = x.p.CreateDate
+            CreateDate = x.p.CreateDate,
+            LastModifiedDate = x.p.LastModifiedDate
+            
         }).ToListAsync();
 
         _logger.LogInformation("Successful execution of get posts request");

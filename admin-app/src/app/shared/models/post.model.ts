@@ -10,6 +10,7 @@ export class Post {
     viewCount: number | null;
     totalPost: number | null;
     createDate: Date;
+    lastModifiedDate: Date;
     numberOfVotes: number | null;
     numberOfComments: number | null;
 }

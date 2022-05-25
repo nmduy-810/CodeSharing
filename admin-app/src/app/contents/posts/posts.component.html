@@ -44,19 +44,19 @@
             <tr *ngFor="let item of postsListTable.data; let i=index">
                 <td>{{item.categoryTitle}}</td>
                 <td>{{item.title}}</td>
-                <td>{{item.createDate | date: 'dd-MM-yyyy'}}</td>
+                <td>{{item.createDate | date: 'dd-MM-yy'}}</td>
                 <td nzAlign="center">{{item.numberOfComments}}</td>
                 <td nzAlign="center">{{item.numberOfVotes}}</td>
                 <td nzAlign="center">{{item.viewCount}}</td>
                 <td class="text-md-right">
-                    <a class="m-r-5" nz-button nzType="default" nzShape="circle" nz-tooltip nzTooltipTitle="Xem chi tiết bình luận">
-                        <i nz-icon nzType="comment" [routerLink]="['/contents/comment', item.id, 'details']"  nzTheme="outline"></i>
+                    <a class="m-r-5" nz-button nzType="default" nzShape="circle" nz-tooltip nzTooltipTitle="Xem chi tiết bình luận" [routerLink]="['/contents/comment', item.id, 'details']">
+                        <i nz-icon nzType="comment" nzTheme="outline"></i>
                     </a>
-                    <a class="m-r-5" nz-button nzType="default" nzShape="circle" nz-tooltip nzTooltipTitle="Chỉnh sửa">
-                        <i nz-icon nzType="edit" (click)="update(item.id)" theme="outline"></i>
+                    <a class="m-r-5" nz-button nzType="default" nzShape="circle" nz-tooltip nzTooltipTitle="Chỉnh sửa" (click)="update(item.id)" >
+                        <i nz-icon nzType="edit" theme="outline"></i>
                     </a>
-                    <button nz-button nzType="default" nzShape="circle" nz-tooltip nzTooltipTitle="Xoá">
-                        <i nz-icon nzType="delete" (click)="delete(item.id)" theme="outline"></i>
+                    <button nz-button nzType="default" nzShape="circle" nz-tooltip nzTooltipTitle="Xoá" (click)="delete(item.id)">
+                        <i nz-icon nzType="delete" theme="outline"></i>
                     </button>
                 </td>
             </tr>

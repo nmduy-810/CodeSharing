@@ -22,11 +22,11 @@
                 <td>{{item.ownerName}}</td>
                 <td>{{item.createDate | date: 'dd-MM-yyyy'}}</td>
                 <td class="text-md-right">
-                    <a class="m-r-5" nz-button nzType="default" nzShape="circle" nz-tooltip nzTooltipTitle="Chỉnh sửa">
-                        <i nz-icon nzType="edit" (click)="update(item.id)" theme="outline"></i>
+                    <a class="m-r-5" nz-button nzType="default" nzShape="circle" nz-tooltip nzTooltipTitle="Chỉnh sửa" (click)="update(item.id)">
+                        <i nz-icon nzType="edit" theme="outline"></i>
                     </a>
-                    <button nz-button nzType="default" nzShape="circle" nz-tooltip nzTooltipTitle="Xoá">
-                        <i nz-icon nzType="delete" (click)="delete(item.id)" theme="outline"></i>
+                    <button nz-button nzType="default" nzShape="circle" nz-tooltip nzTooltipTitle="Xoá" (click)="delete(item.id)">
+                        <i nz-icon nzType="delete" theme="outline"></i>
                     </button>
                 </td>
             </tr>

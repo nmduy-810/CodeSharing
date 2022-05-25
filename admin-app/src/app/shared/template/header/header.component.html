@@ -104,10 +104,10 @@
                             </a>
                         </li>
                         <li nz-menu-item>
-                            <a class="p-v-5 d-flex align-items-center justify-content-between">
+                            <a class="p-v-5 d-flex align-items-center justify-content-between" (click)="signout()">
                                 <div>
                                     <i class="opacity-04 font-size-16" nz-icon nzType="logout" theme="outline"></i>
-                                    <span (click)="signout()" routerLink="/authentication/login" class="m-l-10">Đăng xuất</span>
+                                    <span routerLink="/authentication/login" class="m-l-10">Đăng xuất</span>
                                 </div>
                                 <i class="font-size-10" nz-icon nzType="right" theme="outline"></i>
                             </a>

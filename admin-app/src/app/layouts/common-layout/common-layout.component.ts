@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router } from "@angular/router";
 import { Observable } from "rxjs";
 import { distinctUntilChanged, filter, map, startWith } from "rxjs/operators";
+import { StatisticsService } from 'src/app/shared/services';
 import { IBreadcrumb } from "../../shared/interfaces/breadcrumb.type";
 import { ThemeConstantService } from '../../shared/services/theme-constant.service';
 
@@ -49,7 +50,7 @@ export class CommonLayoutComponent  {
         this.themeService.isMenuFoldedChanges.subscribe(isFolded => this.isFolded = isFolded);
         this.themeService.isSideNavDarkChanges.subscribe(isDark => this.isSideNavDark = isDark);
         this.themeService.selectedHeaderColor.subscribe(color => this.selectedHeaderColor = color);   
-        this.themeService.isExpandChanges.subscribe(isExpand => this.isExpand = isExpand);     
+        this.themeService.isExpandChanges.subscribe(isExpand => this.isExpand = isExpand);
     }
 
     private buildBreadCrumb(route: ActivatedRoute, url: string = '', breadcrumbs: IBreadcrumb[] = []): IBreadcrumb[] {

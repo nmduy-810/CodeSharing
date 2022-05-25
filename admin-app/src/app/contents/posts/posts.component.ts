@@ -36,7 +36,7 @@ export class PostsComponent implements OnInit, OnDestroy {
       compare: (a: Post, b: Post) => a.title.localeCompare(b.title)
     },
     {
-      title: 'Số người xem',
+      title: 'Luợt xem',
       compare: (a: Post, b: Post) => a.title.localeCompare(b.title)
     },
     {
