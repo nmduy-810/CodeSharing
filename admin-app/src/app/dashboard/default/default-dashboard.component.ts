@@ -1,5 +1,7 @@
 import { Component } from '@angular/core'
-import { StatisticsService } from 'src/app/shared/services';
+import { User } from 'src/app/shared/models';
+import { Post } from 'src/app/shared/models/post.model';
+import { PostsService, StatisticsService, UserService } from 'src/app/shared/services';
 import { ThemeConstantService } from '../../shared/services/theme-constant.service';
 
 @Component({
@@ -24,7 +26,41 @@ export class DefaultDashboardComponent {
     public totalOfPosts = 0;
     public totalOfRegisterUsers = 0;
 
-    constructor(private colorConfig: ThemeConstantService, private statisticsService: StatisticsService) { }
+    // User
+    listOfData: readonly User[] = [];
+    userColumn = [
+        {
+            title: 'Tên tài khoản',
+            compare: (a: User, b: User) => a.userName.localeCompare(b.userName)
+        },
+        {
+            title: 'Họ và tên',
+            compare: (a: User, b: User) => a.firstName.localeCompare(b.firstName)
+        },
+        {
+            title: 'Email',
+        },
+        {
+            title: 'Ngày tạo',
+        }
+    ]
+
+    // Post
+    postsColumn = [
+        {
+            title: 'Danh mục',
+        },
+        {
+            title: 'Tiêu đề',
+        }
+    ]
+    postData: readonly Post[] = [];
+
+    constructor(
+        private colorConfig: ThemeConstantService, 
+        private statisticsService: StatisticsService, 
+        private usersService: UserService,
+        private postsService: PostsService) { }
 
     salesChartOptions: any = {
         scaleShowVerticalLines: false,
@@ -170,101 +206,13 @@ export class DefaultDashboardComponent {
     }
     customersChartType = 'doughnut';
 
-    ordersList = [
-        {
-            id: 5331,
-            name: 'Erin Gonzales',
-            avatar: 'assets/images/avatars/thumb-1.jpg',
-            date: '8 May 2019',
-            amount: 137,
-            status: 'approved',
-            checked: false
-        },
-        {
-            id: 5375,
-            name: 'Darryl Day',
-            avatar: 'assets/images/avatars/thumb-2.jpg',
-            date: '6 May 2019',
-            amount: 322,
-            status: 'approved',
-            checked: false
-        },
-        {
-            id: 5762,
-            name: 'Marshall Nichols',
-            avatar: 'assets/images/avatars/thumb-3.jpg',
-            date: '1 May 2019',
-            amount: 543,
-            status: 'approved',
-            checked: false
-        },
-        {
-            id: 5865,
-            name: 'Virgil Gonzales',
-            avatar: 'assets/images/avatars/thumb-4.jpg',
-            date: '28 April 2019',
-            amount: 876,
-            status: 'pending',
-            checked: false
-        },
-        {
-            id: 5213,
-            name: 'Nicole Wyne',
-            avatar: 'assets/images/avatars/thumb-5.jpg',
-            date: '28 April 2019',
-            amount: 241,
-            status: 'approved',
-            checked: false
-        },
-        {
-            id: 5311,
-            name: 'Riley Newman',
-            avatar: 'assets/images/avatars/thumb-6.jpg',
-            date: '19 April 2019',
-            amount: 872,
-            status: 'rejected',
-            checked: false
-        }
-    ]
-
-    productsList = [
-        {
-            name: 'Gray Sofa',
-            avatar: 'assets/images/others/thumb-9.jpg',
-            category: 'Home Decoration',
-            growth: 18.3
-        },
-        {
-            name: 'Beat Headphone',
-            avatar: 'assets/images/others/thumb-10.jpg',
-            category: 'Eletronic',
-            growth: 12.7
-        },
-        {
-            name: 'Wooden Rhino',
-            avatar: 'assets/images/others/thumb-11.jpg',
-            category: 'Home Decoration',
-            growth: 9.2
-        },
-        {
-            name: 'Red Chair',
-            avatar: 'assets/images/others/thumb-12.jpg',
-            category: 'Home Decoration',
-            growth: 7.7
-        },
-        {
-            name: 'Wristband',
-            avatar: 'assets/images/others/thumb-13.jpg',
-            category: 'Eletronic',
-            growth: 5.8
-        }
-    ]
-
     ngOnInit() {
         // Statistics
         this.loadNumberOfComments();
         this.loadNumberOfPosts();
         this.loadNumberOfRegisterUsers();
+        this.getUsers();
+        this.getLatestPost();
     }
 
     loadNumberOfComments() {
@@ -304,4 +252,16 @@ export class DefaultDashboardComponent {
             setTimeout(() => { }, 1000);
         });
     }
+
+    getUsers() {
+        this.usersService.get().subscribe((res: any) => {
+            this.listOfData = res;
+        });
+    }
+
+    getLatestPost() {
+        this.postsService.getLatest().subscribe((res: any) => {
+          this.postData = res;
+        });
+      }
 }    

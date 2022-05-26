@@ -27,6 +27,13 @@ export class PostsService extends BaseService {
             .pipe(catchError(this.handleError));
     }
 
+    getLatest() {
+        return this.http.get<Post[]>(`${environment.apiUrl}/api/posts/latest/5`, { headers: this._headers })
+            .pipe(map((response: Post[]) => {
+                return response;
+            }), catchError(this.handleError));
+    }
+
     add(formData: FormData) {
         return this.http.post(`${environment.apiUrl}/api/posts`, formData,
             {

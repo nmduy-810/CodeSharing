@@ -8,6 +8,5 @@ public class UserCreateRequest
     public string PhoneNumber { get; set; }
     public string FirstName { get; set; }
     public string LastName { get; set; }
-
-    public string Birthday { get; set; }
+    public DateTime Birthday { get; set; }
 }

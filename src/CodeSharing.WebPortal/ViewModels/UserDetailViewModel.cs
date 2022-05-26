@@ -1,8 +1,9 @@
-namespace CodeSharing.ViewModels.Systems.User;
+using CodeSharing.ViewModels.Systems.User;
 
-public class UserVm
+namespace CodeSharing.WebPortal.ViewModels;
+
+public class UserDetailViewModel
 {
-    public string Id { get; set; }
     public string UserName { get; set; }
     public string Email { get; set; }
     public string PhoneNumber { get; set; }
@@ -10,6 +11,4 @@ public class UserVm
     public string LastName { get; set; }
     public string FullName { get; set; }
     public DateTime Birthday { get; set; }
-    public DateTime CreateDate { get; set; }
-    public DateTime? LastModifiedDate { get; set; }
 }

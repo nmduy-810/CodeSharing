@@ -81,7 +81,7 @@ public class UsersController : BaseController
         {
             Id = Guid.NewGuid().ToString(),
             Email = request.Email,
-            Birthday = DateTime.Parse(request.Birthday),
+            Birthday = request.Birthday,
             UserName = request.UserName,
             LastName = request.LastName,
             FirstName = request.FirstName,
@@ -108,7 +108,7 @@ public class UsersController : BaseController
 
         user.FirstName = request.FirstName;
         user.LastName = request.LastName;
-        user.Birthday = DateTime.Parse(request.Birthday);
+        user.Birthday = request.Birthday;
 
         var result = await _userManager.UpdateAsync(user);
 

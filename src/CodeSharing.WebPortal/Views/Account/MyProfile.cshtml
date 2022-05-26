@@ -1,24 +1,70 @@
-@using Microsoft.AspNetCore.Authentication
-<h2><a href="https://localhost:44349/Identity/Account/Manage">My Account</a></h2>
-<br />
-<br />
+@model CodeSharing.WebPortal.ViewModels.UserDetailViewModel
 
-<h2>Claims</h2>
+@{
+    Layout = "_SubLayout";
+    ViewData["Title"] = "Thông tin cá nhân · Code Sharing";
+    ViewData["Description"] = "Thông tin cá nhân· Code Sharing";
+}
 
-<dl>
-    @foreach (var claim in User.Claims)
-    {
-        <dt>@claim.Type</dt>
-        <dd>@claim.Value</dd>
-    }
-</dl>
+<div class="spacer" data-height="50"></div>
+<!-- section header -->
+<div class="section-header">
+    <h3 class="section-title">Thông tin cá nhân</h3>
+    <img src="~/images/wave.svg" class="wave" alt="wave" />
+</div>
 
-<h2>Properties</h2>
+<!-- Contact Form -->
+@using (Html.BeginForm("MyProfile", "Account", FormMethod.Post))
+{
+    <div class="messages"></div>
+    <div class="row">
+        
+        <!-- User name -->
+        <div class="column col-md-6">
+            <div class="form-group">
+                @Html.TextBoxFor(model => model.UserName, new { @class = "form-control", type = "text", disabled="disabled" })
+            </div>
+        </div>
 
-<dl>
-    @foreach (var prop in (await Context.AuthenticateAsync()).Properties.Items)
-    {
-        <dt>@prop.Key</dt>
-        <dd>@prop.Value</dd>
-    }
-</dl>
+        <!-- Email -->
+        <div class="column col-md-6">
+            <div class="form-group">
+                @Html.TextBoxFor(model => model.Email, new { @class = "form-control", type = "text", disabled="disabled" })
+            </div>
+        </div>
+
+        <!-- Birthday -->
+        <div class="column col-md-6">
+            <div class="form-group">
+                @Html.TextBoxFor(model => model.Birthday, "{0:yyyy-MM-dd}", 
+                    new
+                    {
+                        @class = "form-control input-sm datepicker", 
+                        type = "date",  
+                        name="birthday", 
+                        max = DateTime.Today.ToString("yyyy-MM-dd")
+                    })
+            </div>
+        </div>
+
+        <!-- Phone Number -->
+        <div class="column col-md-6">
+            <div class="form-group">
+                @Html.TextBoxFor(model => model.PhoneNumber, new { @class = "form-control", type = "text", disabled="disabled" })
+            </div>
+        </div>
+
+        <!-- Full Name -->
+        <div class="column col-md-12">
+            <div class="form-group">
+                @Html.TextBoxFor(model => model.FullName, new { @class = "form-control", type = "text"})
+                <div class="help-block with-errors"></div>
+            </div>
+        </div>
+    </div>
+    <button type="submit" name="submit" id="submit" value="Submit" class="btn btn-default">Cập nhật</button>
+    <!-- Send Button -->
+}
+
+<!-- My Profile Form end -->
+

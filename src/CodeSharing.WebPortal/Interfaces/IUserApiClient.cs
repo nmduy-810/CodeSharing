@@ -8,4 +8,5 @@ public interface IUserApiClient
 {
     Task<UserVm> GetById(string id);
     Task<Pagination<PostQuickVm>> GetPostsByUserId(string userId, int pageIndex, int pageSize);
+    Task<bool> PutUser(string id, UserCreateRequest request);
 }
