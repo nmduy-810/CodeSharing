@@ -26,7 +26,6 @@
                     <button class="search icon-button">
                         <i class="icon-magnifier"></i>
                     </button>
-                    <partial name="_LoginPartial"/>
                 </div>
             </div>
         </div>
@@ -72,6 +71,24 @@
                     <li class="nav-item">
                         <a class="nav-link" href="/contact">Liên hệ</a>
                     </li>
+                    
+                    @if (User.Identity!.IsAuthenticated)
+                    {
+                        var lastName = Model.CurrentUser.LastName.Split(' ', StringSplitOptions.RemoveEmptyEntries).Last();
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#">Xin chào, <span class="fw-bold">@lastName</span></a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" asp-action="MyProfile" asp-controller="Account">Thông tin cá nhân</a></li>
+                                <li><a class="dropdown-item" asp-action="SignOut" asp-controller="Account">Đăng xuất</a></li>
+                            </ul>
+                        </li>
+                    }
+                    else
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link" asp-action="SignIn" asp-controller="Account">Đăng nhập</a>
+                        </li>
+                    }
                 </ul>
             </div>
         </div>
