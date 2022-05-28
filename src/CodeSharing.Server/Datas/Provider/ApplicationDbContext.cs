@@ -67,19 +67,15 @@ public class ApplicationDbContext : IdentityDbContext<User>
     public DbSet<Category> Categories { set; get; }
     public DbSet<Command> Commands { set; get; }
     public DbSet<CommandInFunction> CommandInFunctions { set; get; }
-    
     public DbSet<Comment> Comments { set; get; }
     public DbSet<Function> Functions { set; get; }
     public DbSet<Post> Posts { set; get; }
     public DbSet<Label> Labels { set; get; }
     public DbSet<LabelInPost> LabelInPosts { set; get; }
     public DbSet<Permission> Permissions { set; get; }
-    
     public DbSet<Report> Reports { set; get; }
-    
     public DbSet<Vote> Votes { set; get; }
-    
     public DbSet<Contact> Contacts { get; set; }
-    
     public DbSet<About> Abouts { get; set; }
+    public DbSet<Support> Supports { get; set; }
 }

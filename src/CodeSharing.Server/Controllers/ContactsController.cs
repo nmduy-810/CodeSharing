@@ -1,6 +1,8 @@
+using CodeSharing.Server.Datas.Entities;
 using CodeSharing.Server.Datas.Provider;
 using CodeSharing.Utilities.Helpers;
 using CodeSharing.ViewModels.Contents.Contact;
+using CodeSharing.ViewModels.Contents.Support;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -79,5 +81,27 @@ public class ContactsController : BaseController
         }
         
         return BadRequest(new ApiBadRequestResponse("Update contact failed"));
+    }
+
+    [AllowAnonymous]
+    [HttpPost]
+    public async Task<IActionResult> PostSupport([FromBody] SupportCreateRequest request)
+    {
+        var support = new Support()
+        {
+            Name = request.Name,
+            Email = request.Email,
+            Message = request.Message,
+            Subject = request.Subject
+        };
+        
+        _context.Supports.Add(support);
+
+        var result = await _context.SaveChangesAsync();
+        if (result > 0)
+        {
+            return Ok(result);
+        }
+        return BadRequest(new ApiBadRequestResponse($"Create support failed"));
     }
 }

@@ -107,7 +107,6 @@ public class PostController : Controller
         return Ok(result);
     }
     
-    [HttpPost]
     public async Task<IActionResult> PostReport([FromForm] ReportCreateRequest request)
     {
         var result = await _postApiClient.PostReport(request);
