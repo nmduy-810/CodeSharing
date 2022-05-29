@@ -90,10 +90,23 @@ builder.Services.AddIdentityCore<User>(options => options.SignIn.RequireConfirme
 
 builder.Services.AddControllersWithViews();
 
+// Add more external login
 builder.Services.AddAuthentication()
     .AddLocalApi("Bearer", option =>
     {
         option.ExpectedScope = "api.codesharing";
+    })
+    .AddGoogle(googleOptions =>
+    {
+        // Read authentication google information from appsettings.xxx.json
+        IConfiguration googleAuthSection = configuration.GetSection("Authentication:Google");
+
+        // Establish Client Id and Client Secret allow access API google
+        googleOptions.ClientId = googleAuthSection["ClientId"];
+        googleOptions.ClientSecret = googleAuthSection["ClientSecret"];
+
+        // Config callback url from google ( default callback url: /signin-google )
+        googleOptions.CallbackPath = "/dang-nhap-tu-google";
     });
 
 builder.Services.AddAuthorization(options =>
