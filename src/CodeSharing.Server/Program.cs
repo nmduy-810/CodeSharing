@@ -107,6 +107,18 @@ builder.Services.AddAuthentication()
 
         // Config callback url from google ( default callback url: /signin-google )
         googleOptions.CallbackPath = "/dang-nhap-tu-google";
+    })
+    .AddFacebook(facebookOptions =>
+    {
+        // Read authentication google information from appsettings.xxx.json
+        IConfiguration facebookAuthSection = configuration.GetSection("Authentication:Facebook");
+
+        // Establish Client Id and Client Secret allow access API google
+        facebookOptions.ClientId = facebookAuthSection["ClientId"];
+        facebookOptions.ClientSecret = facebookAuthSection["ClientSecret"];
+
+        // Config callback url from google ( default callback url: /signin-google )
+        facebookOptions.CallbackPath = "/dang-nhap-tu-facebook";
     });
 
 builder.Services.AddAuthorization(options =>
