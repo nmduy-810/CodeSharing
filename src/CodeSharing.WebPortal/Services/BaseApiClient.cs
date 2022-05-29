@@ -91,8 +91,10 @@ public class BaseApiClient
         {
             return JsonConvert.DeserializeObject<TResponse>(body);
         }
-
-        throw new Exception(body);
+        else
+        {
+            throw new Exception(body);
+        }
     }
     
     protected async Task<bool> PutAsync<TRequest, TResponse>(string url, TRequest requestContent, bool requiredLogin = true)

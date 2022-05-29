@@ -10,44 +10,6 @@ export const CommonLayout_ROUTES: Routes = [
         canActivate: [AuthGuard]
     },
 
-    //Apps
-    {
-        path: 'apps',
-        data: {
-            title: 'Apps'
-        },
-        children: [
-            {
-                path: '',
-                redirectTo: '/dashboard',
-                pathMatch: 'full'
-            }, 
-            {
-                path: '',
-                loadChildren: () => import('../../apps/apps.module').then(m => m.AppsModule)
-            },
-        ]    
-    },
-
-    //Pages
-    {
-        path: 'pages',
-        data: {
-            title: 'Pages '
-        },
-        children: [
-            {
-                path: '',
-                redirectTo: '/dashboard',
-                pathMatch: 'full'
-            }, 
-            {
-                path: '',
-                loadChildren: () => import('../../pages/pages.module').then(m => m.PagesModule)
-            },
-        ]    
-    },
-    
     // Contents
     {
         path: 'contents',

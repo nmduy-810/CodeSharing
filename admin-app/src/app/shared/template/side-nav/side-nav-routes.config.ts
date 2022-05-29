@@ -3,7 +3,7 @@ import { SideNavInterface } from '../../interfaces/side-nav.type';
 export const ROUTES: SideNavInterface[] = [
     {
         path: '',
-        title: 'Dashboard',
+        title: 'Trang chủ',
         iconType: 'nzIcon',
         iconTheme: 'outline',
         icon: 'dashboard',
@@ -12,14 +12,14 @@ export const ROUTES: SideNavInterface[] = [
 
     {
         path: '',
-        title: 'Contents',
+        title: 'Nội dung',
         iconType: 'nzIcon',
         iconTheme: 'outline',
         icon: 'read',
         submenu: [
             {
                 path: '/contents/categories',
-                title: 'Categories',
+                title: 'Danh mục',
                 iconType: '',
                 icon: '',
                 iconTheme: '',
@@ -27,7 +27,7 @@ export const ROUTES: SideNavInterface[] = [
             },
             {
                 path: '/contents/posts',
-                title: 'Posts',
+                title: 'Bài viết',
                 iconType: '',
                 icon: '',
                 iconTheme: '',
@@ -35,7 +35,7 @@ export const ROUTES: SideNavInterface[] = [
             },
             {
                 path: '/contents/comments',
-                title: 'Comments',
+                title: 'Bình luận',
                 iconType: '',
                 icon: '',
                 iconTheme: '',
@@ -43,7 +43,7 @@ export const ROUTES: SideNavInterface[] = [
             },
             {
                 path: '/contents/contact',
-                title: 'Contact',
+                title: 'Liên hệ',
                 iconType: '',
                 icon: '',
                 iconTheme: '',
@@ -51,7 +51,7 @@ export const ROUTES: SideNavInterface[] = [
             },
             {
                 path: '/contents/about',
-                title: 'About',
+                title: 'Thông tin về mình',
                 iconType: '',
                 icon: '',
                 iconTheme: '',
@@ -59,59 +59,16 @@ export const ROUTES: SideNavInterface[] = [
             }
         ]
     },
-
     {
         path: '',
-        title: 'Systems',
-        iconType: 'nzIcon',
-        iconTheme: 'outline',
-        icon: 'setting',
-        submenu: [
-            {
-                path: '/systems/users',
-                title: 'Users',
-                iconType: '',
-                icon: '',
-                iconTheme: '',
-                submenu: []
-            },
-            {
-                path: '/systems/permissions',
-                title: 'Permissions',
-                iconType: '',
-                icon: '',
-                iconTheme: '',
-                submenu: []
-            },
-            {
-                path: '/systems/roles',
-                title: 'Roles',
-                iconType: '',
-                icon: '',
-                iconTheme: '',
-                submenu: []
-            },
-            {
-                path: '/systems/functions',
-                title: 'Functions',
-                iconType: '',
-                icon: '',
-                iconTheme: '',
-                submenu: []
-            }
-        ]
-    },
-
-    {
-        path: '',
-        title: 'Statistics',
+        title: 'Thống kê',
         iconType: 'nzIcon',
         iconTheme: 'outline',
         icon: 'pie-chart',
         submenu: [
             {
                 path: '/statistics/monthly-new-members',
-                title: 'New Members',
+                title: 'Thành viên mới',
                 iconType: '',
                 icon: '',
                 iconTheme: '',
@@ -119,7 +76,7 @@ export const ROUTES: SideNavInterface[] = [
             },
             {
                 path: '/statistics/monthly-new-posts',
-                title: 'New Posts',
+                title: 'Bài viết mới',
                 iconType: '',
                 icon: '',
                 iconTheme: '',
@@ -127,124 +84,7 @@ export const ROUTES: SideNavInterface[] = [
             },
             {
                 path: '/statistics/monthly-new-comments',
-                title: 'New Comments',
-                iconType: '',
-                icon: '',
-                iconTheme: '',
-                submenu: []
-            }
-        ]
-    },
-
-    {
-        path: '',
-        title: 'Apps',
-        iconType: 'nzIcon',
-        iconTheme: 'outline',
-        icon: 'appstore',
-        submenu: [
-            {
-                path: '/apps/file-manager',
-                title: 'File Manager',
-                iconType: '',
-                icon: '',
-                iconTheme: '',
-                submenu: []
-            },
-            {
-                path: '/apps/mail',
-                title: 'Mail',
-                iconType: '',
-                icon: '',
-                iconTheme: '',
-                submenu: []
-            },
-            {
-                path: '',
-                title: 'Projects',
-                iconType: '',
-                icon: '',
-                iconTheme: '',
-                submenu: [
-                    {
-                        path: '/apps/projects/project-list',
-                        title: 'Project List',
-                        iconType: '',
-                        icon: '',
-                        iconTheme: '',
-                        submenu: []
-                    },
-                    {
-                        path: '/apps/projects/project-details',
-                        title: 'Project Details',
-                        iconType: '',
-                        icon: '',
-                        iconTheme: '',
-                        submenu: []
-                    },
-                ]
-            },
-            {
-                path: '',
-                title: 'E-commerce',
-                iconType: '',
-                icon: '',
-                iconTheme: '',
-                submenu: [
-                    {
-                        path: '/apps/e-commerce/orders-list',
-                        title: 'Orders List',
-                        iconType: '',
-                        icon: '',
-                        iconTheme: '',
-                        submenu: []
-                    },
-                    {
-                        path: '/apps/e-commerce/product',
-                        title: 'Products',
-                        iconType: '',
-                        icon: '',
-                        iconTheme: '',
-                        submenu: []
-                    },
-                    {
-                        path: '/apps/e-commerce/products-list',
-                        title: 'Products List',
-                        iconType: '',
-                        icon: '',
-                        iconTheme: '',
-                        submenu: []
-                    }
-                ]
-            }
-        ]
-    },
-    {
-        path: '',
-        title: 'Pages',
-        iconType: 'nzIcon',
-        iconTheme: 'outline',
-        icon: 'file',
-        submenu: [
-            {
-                path: '/pages/profile',
-                title: 'Profile',
-                iconType: '',
-                icon: '',
-                iconTheme: '',
-                submenu: []
-            },
-            {
-                path: '/pages/members',
-                title: 'Members',
-                iconType: '',
-                icon: '',
-                iconTheme: '',
-                submenu: []
-            },
-            {
-                path: '/pages/setting',
-                title: 'Setting',
+                title: 'Bình luận mới',
                 iconType: '',
                 icon: '',
                 iconTheme: '',
@@ -254,27 +94,43 @@ export const ROUTES: SideNavInterface[] = [
     },
     {
         path: '',
-        title: 'Authentication',
+        title: 'Hệ thống',
         iconType: 'nzIcon',
         iconTheme: 'outline',
-        icon: 'lock',
+        icon: 'setting',
         submenu: [
             {
-                path: '/authentication/error-1',
-                title: 'Error 1',
+                path: '/systems/users',
+                title: 'Người dùng',
                 iconType: '',
                 icon: '',
                 iconTheme: '',
                 submenu: []
             },
             {
-                path: '/authentication/error-2',
-                title: 'Error 2',
+                path: '/systems/permissions',
+                title: 'Phân quyền',
+                iconType: '',
+                icon: '',
+                iconTheme: '',
+                submenu: []
+            },
+            {
+                path: '/systems/roles',
+                title: 'Vai trò',
+                iconType: '',
+                icon: '',
+                iconTheme: '',
+                submenu: []
+            },
+            {
+                path: '/systems/functions',
+                title: 'Lệnh',
                 iconType: '',
                 icon: '',
                 iconTheme: '',
                 submenu: []
             }
         ]
-    },
+    }
 ]    

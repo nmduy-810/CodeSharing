@@ -4,5 +4,5 @@ namespace CodeSharing.WebPortal.ViewModels;
 
 public class ContactViewModel
 {
-    public List<ContactVm> Contacts { get; set; }
+    public ContactVm Contact { get; set; }
 }

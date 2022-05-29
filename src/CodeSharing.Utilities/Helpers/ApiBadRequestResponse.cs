@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace CodeSharing.Utilities.Helpers;
@@ -16,6 +17,13 @@ public class ApiBadRequestResponse : ApiResponse
 
         Errors = modelState.SelectMany(x => x.Value.Errors)
             .Select(x => x.ErrorMessage).ToArray();
+    }
+    
+    public ApiBadRequestResponse(IdentityResult identityResult)
+        : base(400)
+    {
+        Errors = identityResult.Errors
+            .Select(x => x.Code + " - " + x.Description).ToArray();
     }
 
     public ApiBadRequestResponse(string message)

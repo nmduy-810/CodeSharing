@@ -1,6 +1,6 @@
 <nz-modal [(nzVisible)]="isVisible" [nzTitle]="modalTitle" [nzContent]="modalContent" [nzFooter]="modalFooter"
     (nzOnCancel)="cancel()">
-    <ng-template #modalTitle>Category</ng-template>
+    <ng-template #modalTitle>Quản lý danh mục</ng-template>
 
     <ng-template #modalContent>
         <form [formGroup]="categoryForm" (ngSubmit)="save()">
@@ -8,9 +8,9 @@
                 <!--Title-->
                 <div class="col-md-12">
                     <nz-form-item>
-                        <nz-form-label>Title</nz-form-label>
-                        <nz-form-control nzErrorTip="Please input your title!">
-                            <input nz-input placeholder="Tiêu đề danh mục" (keyup)="generateSlug()" name="title" formControlName="title">
+                        <nz-form-label>Tên danh mục</nz-form-label>
+                        <nz-form-control nzErrorTip="Bạn chưa nhập tên danh mục!">
+                            <input nz-input placeholder="Tên danh mục" (keyup)="generateSlug()" name="title" formControlName="title">
                         </nz-form-control>
                     </nz-form-item>
                 </div>
@@ -18,8 +18,8 @@
                 <!--Slug-->
                 <div class="col-md-12">
                     <nz-form-item>
-                        <nz-form-label>Slug</nz-form-label>
-                        <nz-form-control nzErrorTip="Please input your slug!">
+                        <nz-form-label>Đường dẫn SEO</nz-form-label>
+                        <nz-form-control nzErrorTip="Bạn chưa nhập đường dẫn SEO!">
                             <input nz-input placeholder="Đường dẫn SEO" name="slug" formControlName="slug">
                         </nz-form-control>
                     </nz-form-item>
@@ -28,8 +28,8 @@
                 <!--Sort-->
                 <div class="col-md-12">
                     <nz-form-item>
-                        <nz-form-label>Sort</nz-form-label>
-                        <nz-form-control nzErrorTip="Please input your sort order!">
+                        <nz-form-label>Thứ tự sắp xếp</nz-form-label>
+                        <nz-form-control nzErrorTip="Bạn chưa nhập thứ tự hiển thị!">
                             <input nz-input placeholder="Thứ tự hiển thị" name="sortOrder" formControlName="sortOrder">
                         </nz-form-control>
                     </nz-form-item>
@@ -39,7 +39,7 @@
                 <div class="col-md-12">
                     <nz-form-item>
                         <nz-form-control>
-                            <label nz-checkbox (click)="checkParent()" formControlName="isParent" >Have parent?</label>
+                            <label nz-checkbox (click)="checkParent()" formControlName="isParent" >Chọn danh mục cha</label>
                         </nz-form-control>
                     </nz-form-item>
                 </div>
@@ -53,19 +53,19 @@
                     </nz-form-item>
                 </div>
 
-                <div class="col-md-12">
-                    <button nz-button nzType="primary" [nzLoading]="isConfirmLoading">Save</button>
+                <div class="col-md-12 text-center">
+                    <button nz-button nzType="primary" [nzLoading]="isConfirmLoading">Lưu lại</button>
                 </div>
             </div>
         </form>
     </ng-template>
 
     <ng-template #modalFooter>
-        <button (click)="cancel()" nz-button nzType="primary">Close</button>
+        <button (click)="cancel()" nz-button nzType="primary">Đóng</button>
     </ng-template>
 </nz-modal>
 
 <button (click)="open()" nz-button nzType="primary">
     <i nz-icon nzType="plus-circle" theme="outline"></i>
-    <span>Add Category</span>
+    <span>Thêm mới</span>
 </button>

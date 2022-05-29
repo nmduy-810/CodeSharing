@@ -147,6 +147,7 @@ builder.Services.AddTransient<IPostApiClient, PostApiClient>();
 builder.Services.AddTransient<ILabelApiClient, LabelApiClient>();
 builder.Services.AddTransient<IContactApiClient, ContactApiClient>();
 builder.Services.AddTransient<IUserApiClient, UserApiClient>();
+builder.Services.AddTransient<IAboutApiClient, AboutApiClient>();
 
 // Security Headers
 builder.WebHost.UseKestrel(serverOptions =>

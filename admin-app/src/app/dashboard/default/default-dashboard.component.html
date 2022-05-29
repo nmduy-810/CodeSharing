@@ -5,8 +5,8 @@
                 <nz-card>
                     <div class="d-flex justify-content-between align-items-center">
                         <div>
-                            <p class="m-b-0 text-muted">Sales</p>
-                            <h2 class="m-b-0">$23,523</h2>
+                            <p class="m-b-0 text-muted">Thành viên</p>
+                            <h2 class="m-b-0">{{totalOfRegisterUsers | number}}</h2>
                         </div>
                         <nz-tag class="m-r-0 m-b-0" [nzColor]="'cyan'">
                             <i nz-icon nzType="arrow-up" theme="outline"></i>
@@ -17,7 +17,7 @@
                         <div class="d-flex justify-content-between">
                             <div>
                                 <nz-badge nzStatus="default" [nzColor]="blue"></nz-badge>
-                                <span class="text-gray font-weight-semibold font-size-13">Monthly Goal</span>
+                                <span class="text-gray font-weight-semibold font-size-13">Mục tiêu hàng tháng</span>
                             </div>
                             <span class="text-dark font-weight-semibold font-size-13">70% </span>
                         </div>
@@ -29,8 +29,8 @@
                 <nz-card>
                     <div class="d-flex justify-content-between align-items-center">
                         <div>
-                            <p class="m-b-0 text-muted">Margin</p>
-                            <h2 class="m-b-0">$8,753</h2>
+                            <p class="m-b-0 text-muted">Bài viết</p>
+                            <h2 class="m-b-0">{{totalOfPosts | number}}</h2>
                         </div>
                         <nz-tag class="m-r-0 m-b-0" [nzColor]="'red'">
                             <i nz-icon nzType="arrow-down" theme="outline"></i>
@@ -41,7 +41,7 @@
                         <div class="d-flex justify-content-between">
                             <div>
                                 <nz-badge nzStatus="default" [nzColor]="cyan"></nz-badge>
-                                <span class="text-gray font-weight-semibold font-size-13">Monthly Goal</span>
+                                <span class="text-gray font-weight-semibold font-size-13">Mục tiêu hàng tháng</span>
                             </div>
                             <span class="text-dark font-weight-semibold font-size-13">60%</span>
                         </div>
@@ -55,8 +55,8 @@
                 <nz-card>
                     <div class="d-flex justify-content-between align-items-center">
                         <div>
-                            <p class="m-b-0 text-muted">Orders</p>
-                            <h2 class="m-b-0">1,753</h2>
+                            <p class="m-b-0 text-muted">Bình luận</p>
+                            <h2 class="m-b-0">{{totalOfComments | number}}</h2>
                         </div>
                         <nz-tag class="m-r-0 m-b-0" [nzColor]="'red'">
                             <i nz-icon nzType="arrow-down" theme="outline"></i>
@@ -67,7 +67,7 @@
                         <div class="d-flex justify-content-between">
                             <div>
                                 <nz-badge nzStatus="default" [nzColor]="gold"></nz-badge>
-                                <span class="text-gray font-weight-semibold font-size-13">Monthly Goal</span>
+                                <span class="text-gray font-weight-semibold font-size-13">Mục tiêu hàng tháng</span>
                             </div>
                             <span class="text-dark font-weight-semibold font-size-13">45% </span>
                         </div>
@@ -79,7 +79,7 @@
                 <nz-card>
                     <div class="d-flex justify-content-between align-items-center">
                         <div>
-                            <p class="m-b-0 text-muted">Affiliate</p>
+                            <p class="m-b-0 text-muted">Liên hệ</p>
                             <h2 class="m-b-0">236</h2>
                         </div>
                         <nz-tag class="m-r-0 m-b-0" [nzColor]="'gold'">
@@ -90,7 +90,7 @@
                         <div class="d-flex justify-content-between">
                             <div>
                                 <nz-badge nzStatus="default" [nzColor]="purple"></nz-badge>
-                                <span class="text-gray font-weight-semibold font-size-13">Monthly Goal</span>
+                                <span class="text-gray font-weight-semibold font-size-13">Mục tiêu hàng tháng</span>
                             </div>
                             <span class="text-dark font-weight-semibold font-size-13">50%</span>
                         </div>
@@ -103,7 +103,7 @@
     <div class="col-lg-7">
         <nz-card>
             <div class="d-flex justify-content-between align-items-center">
-                <h5>Sales Statistics</h5>
+                <h5>Thống kê</h5>
                 <div>
                     <a class="text-dark font-size-20" nz-dropdown [nzTrigger]="'click'" [nzPlacement]="'bottomRight'" [nzDropdownMenu]="salesStatisticsDropDown">
                         <i nz-icon nzType="ellipsis" theme="outline"></i>
@@ -208,30 +208,33 @@
     <div class="col-lg-4">
         <nz-card>
             <div class="d-flex justify-content-between align-items-center">
-                <h5>Top Products</h5>
+                <h5>Bài viết mới nhất</h5>
                 <div>
-                    <a nz-button nzType="default" nzSize="small">View All</a>
+                    <a nz-button nzType="default" nzSize="small">Xem tất cả</a>
                 </div>
             </div>
             <div class="m-t-30">
-                <nz-list [nzDataSource]="productsList" [nzRenderItem]="products" [nzItemLayout]="'horizontal'">
-                    <ng-template #products let-item>
+                <nz-list [nzDataSource]="postData" [nzRenderItem]="posts" [nzItemLayout]="'horizontal'">
+                    <ng-template #posts let-item>
                         <nz-list-item [nzContent]="productGrowth">
                             <nz-list-item-meta
                                 [nzTitle]="productName"
-                                [nzAvatar]="item.avatar"
                                 [nzDescription]="productCategory">
+
                                 <ng-template #productName>
-                                    <a class="font-size-15">{{item.name}}</a>
+                                    <a class="font-size-15">{{item.categoryTitle}} | {{item.createDate | date: 'dd-MM-yyyy'}}</a>
                                 </ng-template>
+
                                 <ng-template #productCategory>
-                                    <span class="m-b-0 text-muted">{{item.category}}</span>
+                                    <span class="m-b-0 text-muted">{{item.title}}</span>
                                 </ng-template>
+
                                 <ng-template #productGrowth>
                                     <nz-tag class="m-r-0 m-b-0" [nzColor]="'cyan'">
-                                        +{{item.growth}}%
+                                        +{{item.numberOfVotes}} <i nz-icon nzType="like" nzTheme="outline"></i>
                                     </nz-tag>
                                 </ng-template>
+
                             </nz-list-item-meta>
                         </nz-list-item>
                     </ng-template>
@@ -284,39 +287,24 @@
     <div class="col-lg-8">
         <nz-card>
             <div class="d-flex justify-content-between align-items-center">
-                <h5>Recent Orders</h5>
+                <h5>Thành viên mới</h5>
                 <div>
-                    <a nz-button nzType="default" nzSize="small">View All</a>
+                    <a nz-button nzType="default" nzSize="small" routerLink="/systems/users">Xem tất cả</a>
                 </div>
             </div>
             <div class="m-t-30">
-                <nz-table #ordersListTable [nzData]="ordersList"  [nzShowPagination]="false" class="no-border-last">
+                <nz-table #rowSelectionTable [nzData]="listOfData">
                     <thead>
                         <tr>
-                            <th>ID</th>
-                            <th>Customer</th>
-                            <th>Date</th>
-                            <th>Amount</th>
-                            <th>Status</th>
+                            <th *ngFor="let column of userColumn" [nzSortFn]="column.compare">{{ column.title }}</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr *ngFor="let item of ordersListTable.data">
-                            <td>#{{item.id}}</td>
-                            <td>
-                                <div class="d-flex align-items-center">
-                                    <nz-avatar [nzSize]="30" nzIcon="user" [nzSrc]="item.avatar"></nz-avatar>
-                                    <h6 class="m-l-10 m-b-0">{{item.name}}</h6>
-                                </div>
-                            </td>
-                            <td>{{item.date}}</td>
-                            <td>${{item.amount | number:'3.2-5'}}</td>
-                            <td>
-                                <nz-badge *ngIf="item.status == 'approved'" nzStatus="success"></nz-badge>
-                                <nz-badge *ngIf="item.status == 'rejected'" nzStatus="error"></nz-badge>
-                                <nz-badge *ngIf="item.status == 'pending'"  nzStatus="processing"></nz-badge> 
-                                <span class="text-capitalize">{{item.status}}</span>
-                            </td>
+                        <tr *ngFor="let data of rowSelectionTable.data">
+                            <td>{{data.userName}}</td>
+                            <td>{{data.firstName}} {{data.lastName}}</td>
+                            <td>{{data.email }}</td>
+                            <td>{{data.createDate | date: 'dd-MM-yyyy'}}</td>
                         </tr>
                     </tbody>
                 </nz-table>

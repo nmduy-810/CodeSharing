@@ -1,0 +1,35 @@
+<nz-card>
+    <div class="row m-b-30">
+        <div class="col-lg-4 text-right">
+            <app-contacts-detail></app-contacts-detail>
+        </div>
+    </div>
+    <nz-table #contactsListTable [nzData]="displayData">
+        <thead>
+            <tr>
+                <th *ngFor="let column of contactColumn" [nzSortFn]="column.compare">{{ column.title }}</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let item of contactsListTable.data; let i=index">
+
+                <!--Phone-->
+                <td>{{item.phone}}</td>
+
+                <!--Email-->
+                <td>{{item.email}}</td>
+
+                <!--Location-->
+                <td>{{item.location}}</td>
+
+                <!--Action-->
+                <td class="text-md-right">
+                    <a class="m-r-5" nz-button (click)="update(item.id)" nzType="default" nzShape="circle" nz-tooltip
+                        nzTooltipTitle="Chỉnh sửa">
+                        <i nz-icon nzType="edit" theme="outline"></i>
+                    </a>
+                </td>
+            </tr>
+        </tbody>
+    </nz-table>
+</nz-card>

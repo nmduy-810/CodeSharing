@@ -1,0 +1,35 @@
+<nz-card>
+    <div class="row m-b-30">
+        <div class="col-lg-8">
+                  
+        </div>
+        <div class="col-lg-4 text-right">
+            <a routerLink="/contents/posts" nz-button nzType="primary">
+                <i nz-icon nzType="left" nzTheme="outline"></i>
+                <span>Quay về</span>
+            </a>
+        </div>
+    </div>
+    <nz-table #commentsListTable [nzData]="displayData">
+        <thead>
+            <tr>
+                <th *ngFor="let column of commentsColumn" [nzSortFn]="column.compare">{{ column.title }}</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let item of commentsListTable.data; let i=index">
+                <td>{{item.content}}</td>
+                <td>{{item.ownerName}}</td>
+                <td>{{item.createDate | date: 'dd-MM-yyyy'}}</td>
+                <td class="text-md-right">
+                    <a class="m-r-5" nz-button nzType="default" nzShape="circle" nz-tooltip nzTooltipTitle="Chỉnh sửa" (click)="update(item.id)">
+                        <i nz-icon nzType="edit" theme="outline"></i>
+                    </a>
+                    <button nz-button nzType="default" nzShape="circle" nz-tooltip nzTooltipTitle="Xoá" (click)="delete(item.id)">
+                        <i nz-icon nzType="delete" theme="outline"></i>
+                    </button>
+                </td>
+            </tr>
+        </tbody>
+    </nz-table>
+</nz-card>

@@ -1,14 +1,13 @@
-<form class="form-horizontal form-label-left" novalidate [formGroup]="postForm" (ngSubmit)="save()">
+<form [formGroup]="postForm" (ngSubmit)="save()">
     <nz-card>
         <!--Category-->
         <div class="row">
             <div class="col-md-12">
                 <nz-form-item>
-                    <nz-form-label [nzSm]="2">Category</nz-form-label>
-                    <nz-form-control>
+                    <nz-form-label [nzSm]="2">Danh mục</nz-form-label>
+                    <nz-form-control nzErrorTip="Bạn chưa chọn danh mục!">
                         <nz-select class="w-100" nzPlaceHolder="Chọn danh mục" formControlName="categoryId">
-                            <nz-option *ngFor="let item of categories$" nzLabel="{{item.title}}" nzValue="{{item.id}}">
-                            </nz-option>
+                            <nz-option *ngFor="let item of categories$" nzLabel="{{item.title}}" nzValue="{{item.id}}"> </nz-option>
                         </nz-select>
                     </nz-form-control>
                 </nz-form-item>
@@ -19,10 +18,9 @@
         <div class="row">
             <div class="col-md-12">
                 <nz-form-item>
-                    <nz-form-label [nzSm]="2">Title</nz-form-label>
-                    <nz-form-control>
-                        <input nz-input (keyup)="generateSeoAlias()" placeholder="Tiêu đề bài viết"
-                            formControlName="title">
+                    <nz-form-label [nzSm]="2">Tiêu đề</nz-form-label>
+                    <nz-form-control nzErrorTip="Bạn chưa nhập tiêu đề!">
+                        <input nz-input (keyup)="generateSeoAlias()" placeholder="Tiêu đề bài viết" formControlName="title" />
                     </nz-form-control>
                 </nz-form-item>
             </div>
@@ -32,10 +30,9 @@
         <div class="row">
             <div class="col-md-12">
                 <nz-form-item>
-                    <nz-form-label [nzSm]="2">Sumary</nz-form-label>
-                    <nz-form-control>
-                        <input nz-input (keyup)="generateSeoAlias()" placeholder="Tổng quan bài viết"
-                            formControlName="summary">
+                    <nz-form-label [nzSm]="2">Tổng quan</nz-form-label>
+                    <nz-form-control nzErrorTip="Bạn chưa nhập tổng quan bài viết!">
+                        <textarea nz-input placeholder="Tổng quan bài viết" formControlName="summary" ></textarea>
                     </nz-form-control>
                 </nz-form-item>
             </div>
@@ -45,9 +42,9 @@
         <div class="row">
             <div class="col-md-12">
                 <nz-form-item>
-                    <nz-form-label [nzSm]="2">Slug</nz-form-label>
-                    <nz-form-control>
-                        <input nz-input placeholder="Tiêu đề SEO" formControlName="slug">
+                    <nz-form-label [nzSm]="2">Đường dẫn</nz-form-label>
+                    <nz-form-control nzErrorTip="Bạn chưa nhập đường dẫn SEO!">
+                        <input nz-input placeholder="Đường dẫn SEO" formControlName="slug" />
                     </nz-form-control>
                 </nz-form-item>
             </div>
@@ -57,13 +54,9 @@
         <div class="row">
             <div class="col-md-12">
                 <nz-form-item>
-                    <nz-form-label [nzSm]="2">Image</nz-form-label>
-                    <nz-form-control nzErrorTip="Please choose your cover image!">
-                        <input type="file" (change)="handleChange($event)">
-                        <div *ngIf="imagePath">
-                            <br />
-                            <img [src]="imagePath" width="100px">
-                        </div>
+                    <nz-form-label [nzSm]="2">Hình đại diện</nz-form-label>
+                    <nz-form-control nzErrorTip="Bạn chưa chọn hình đại diện bài viết!">
+                        <input type="file" (change)="handleChange($event)" />
                     </nz-form-control>
                 </nz-form-item>
             </div>
@@ -73,11 +66,10 @@
         <div class="row">
             <div class="col-md-12">
                 <nz-form-item>
-                    <nz-form-label [nzSm]="2">Labels</nz-form-label>
-                    <nz-form-control nzErrorTip="Please input your label!">
-                        <nz-mention [nzSuggestions]="suggestions" (nzOnSearchChange)="onSearchChange($event)"
-                            [nzPrefix]="['#']">
-                            <input nzMentionTrigger nz-input formControlName="labels" />
+                    <nz-form-label [nzSm]="2">Nhãn</nz-form-label>
+                    <nz-form-control nzErrorTip="Bạn chưa nhập nhãn bài viết!">
+                        <nz-mention [nzSuggestions]="suggestions" (nzOnSearchChange)="onSearchChange($event)" [nzPrefix]="['#']">
+                            <input placeholder="Nhãn bài viết (Nhập # để chọn nhãn)" nzMentionTrigger nz-input formControlName="labels" />
                         </nz-mention>
                     </nz-form-control>
                 </nz-form-item>
@@ -88,10 +80,9 @@
         <div class="row">
             <div class="col-md-12">
                 <nz-form-item>
-                    <nz-form-label [nzSm]="2">Note</nz-form-label>
-                    <nz-form-control nzErrorTip="Please input your note!">
-                        <textarea nz-input placeholder="Ghi chú" [nzAutosize]="{ minRows: 3, maxRows: 5 }"
-                            formControlName="note"></textarea>
+                    <nz-form-label [nzSm]="2">Ghi chú</nz-form-label>
+                    <nz-form-control nzErrorTip="Bạn chưa nhập ghi chú!">
+                        <textarea nz-input placeholder="Ghi chú" [nzAutosize]="{ minRows: 3, maxRows: 5 }" formControlName="note"></textarea>
                     </nz-form-control>
                 </nz-form-item>
             </div>
@@ -101,9 +92,8 @@
         <div class="row">
             <div class="col-md-12">
                 <nz-form-item>
-                    <nz-form-control>
-                        <ckeditor [editor]="Editor" formControlName="content" spellcheck="false" name="editor5"
-                            (ready)="onReady($event)"></ckeditor>
+                    <nz-form-control nzErrorTip="Bạn chưa nhập nội dung bài viết!">
+                        <ckeditor [editor]="Editor" formControlName="content" spellcheck="false" name="editor5" (ready)="onReady($event)"></ckeditor>
                     </nz-form-control>
                 </nz-form-item>
             </div>
@@ -111,9 +101,10 @@
 
         <nz-form-item>
             <nz-form-control [nzOffset]="10" [nzSpan]="12">
-                <button nz-button nzType="primary">Save</button>
-                <button style="margin-left: 8px;" (click)="reset($event)" nz-button>Reset</button>
+                <button nz-button nzType="primary">Lưu lại</button>
+                <button style="margin-left: 8px;" (click)="reset($event)" nz-button>Đặt lại từ đầu</button>
             </nz-form-control>
         </nz-form-item>
     </nz-card>
 </form>
+

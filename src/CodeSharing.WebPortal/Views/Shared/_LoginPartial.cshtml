@@ -1,12 +1,21 @@
+@model CodeSharing.WebPortal.ViewModels.HeaderViewModel
+
 @if (User.Identity!.IsAuthenticated)
 {
-    <button class="burger-menu icon-button ms-2 float-end float-md-none">
-        <span class="icon-user"></span>
-    </button>
+    <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#">Xin chào, </a>
+        <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="category.html">Category</a></li>
+            <li><a class="dropdown-item" href="blog-single.html">Blog Single</a></li>
+            <li><a class="dropdown-item" href="blog-single-alt.html">Blog Single Alt</a></li>
+            <li><a class="dropdown-item" href="about.html">About</a></li>
+            <li><a class="dropdown-item" href="contact.html">Contact</a></li>
+        </ul>
+    </li>
 }
 else
 {
-    <button class="icon-button ms-2 float-end float-md-none" title="Đăng nhập" onclick="location.href='@Url.Action("SignIn", "Account")'">
-        <span class="icon-login"></span>
-    </button>
+    <li class="nav-item">
+        <a class="nav-link" asp-action="SignIn" asp-controller="Account">Đăng nhập</a>
+    </li>
 }

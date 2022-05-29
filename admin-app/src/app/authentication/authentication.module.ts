@@ -10,8 +10,6 @@ import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzCardModule } from 'ng-zorro-antd/card';
 import { NzCheckboxModule } from 'ng-zorro-antd/checkbox';
 
-import { Error1Component } from './error-1/error-1.component';
-import { Error2Component } from './error-2/error-2.component';
 import { LoginComponent } from './login/login.component';
 
 const antdModule= [
@@ -31,8 +29,6 @@ const antdModule= [
         ...antdModule
     ],
     declarations: [
-        Error1Component,
-        Error2Component,
         LoginComponent
     ]
 })

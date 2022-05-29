@@ -1,1 +1,31 @@
-<p>about works!</p>
+<nz-card>
+    <div class="row m-b-30">
+        <div class="col-lg-8"></div>
+        <div class="col-lg-4 text-right">
+            <app-abouts-detail></app-abouts-detail>
+        </div>
+    </div>
+    <nz-table #aboutsListTable [nzData]="displayData" >
+        <thead>
+            <tr>
+                <th *ngFor="let column of aboutColumn" [nzSortFn]="column.compare">{{ column.title }}</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let item of aboutsListTable.data; let i=index">
+
+                <!--Description-->
+                <td innerHTML="{{item.description}}">/td>
+
+                <td><img [src]="item.image" width="200px"></td>
+
+                <!--Action-->
+                <td class="text-md-right">
+                    <a class="m-r-5" nz-button (click)="update(item.id)" nzType="default" nzShape="circle" nz-tooltip nzTooltipTitle="Chỉnh sửa">
+                        <i nz-icon nzType="edit" theme="outline"></i>
+                    </a>
+                </td>
+            </tr>
+        </tbody>
+    </nz-table>
+</nz-card>
