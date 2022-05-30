@@ -243,6 +243,9 @@ namespace CodeSharing.Server.Areas.Identity.Pages.Account
                 var result = await _userManager.CreateAsync(user);
                 if (result.Succeeded)
                 {
+                    // Set default roles is Member for user
+                    await _userManager.AddToRoleAsync(user, "Member");
+
                     // Liên kết tài khoản ngoài với tài khoản vừa tạo
                     result = await _userManager.AddLoginAsync(user, info);
                     if (result.Succeeded)

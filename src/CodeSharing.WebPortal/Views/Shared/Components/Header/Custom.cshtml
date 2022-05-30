@@ -50,9 +50,8 @@
           
           @if (User.Identity!.IsAuthenticated)
           {
-            var lastName = Model.CurrentUser.LastName.Split(' ', StringSplitOptions.RemoveEmptyEntries).Last();
             <li class="nav-item dropdown">
-                  <a class="nav-link dropdown-toggle" href="#">Xin chào, <span class="fw-bold">@lastName</span></a>
+                  <a class="nav-link dropdown-toggle" href="#">Xin chào, <span class="fw-bold">@Model.CurrentUser.LastName</span></a>
                   <ul class="dropdown-menu">
                       <li><a class="dropdown-item" asp-action="MyProfile" asp-controller="Account">Thông tin cá nhân</a></li>
                       <li><a class="dropdown-item" asp-action="SignOut" asp-controller="Account">Đăng xuất</a></li>
