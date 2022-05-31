@@ -60,7 +60,15 @@
     <div class="column col-md-6">
       <!-- Email input -->
       <div class="form-group">
-        <input type="email" class="form-control" id="Email" name="Email" placeholder="Địa chỉ email" required="required" data-error="Nhập email giúp mình nha.">
+        @if (User.Identity!.IsAuthenticated)
+        {
+          <input type="email" class="form-control" id="Email" name="Email" value="@Model.CurrentUser.Email" placeholder="Địa chỉ email" required="required" data-error="Nhập email giúp mình nha.">
+        }
+        else
+        {
+          <input type="email" class="form-control" id="Email" name="Email" placeholder="Địa chỉ email" required="required" data-error="Nhập email giúp mình nha.">
+        }
+        
         <div class="help-block with-errors"></div>
       </div>
     </div>

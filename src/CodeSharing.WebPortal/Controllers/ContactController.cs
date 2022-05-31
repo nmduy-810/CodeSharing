@@ -1,4 +1,6 @@
+using System.Security.Claims;
 using CodeSharing.ViewModels.Contents.Support;
+using CodeSharing.WebPortal.Extensions;
 using CodeSharing.WebPortal.Interfaces;
 using CodeSharing.WebPortal.ViewModels;
 using Microsoft.AspNetCore.Mvc;
@@ -8,10 +10,12 @@ namespace CodeSharing.WebPortal.Controllers;
 public class ContactController : Controller
 {
     private readonly IContactApiClient _contactApiClient;
-
-    public ContactController(IContactApiClient contactApiClient)
+    private readonly IUserApiClient _userApiClient;
+    
+    public ContactController(IContactApiClient contactApiClient, IUserApiClient userApiClient)
     {
         _contactApiClient = contactApiClient;
+        _userApiClient = userApiClient;
     }
     
     public async Task<IActionResult> Index()
@@ -21,6 +25,12 @@ public class ContactController : Controller
         {
             Contact = contact
         };
+        
+        var user = User as ClaimsPrincipal;
+        if (user?.Identity != null && user.Identity.IsAuthenticated)
+        {
+            items.CurrentUser = await _userApiClient.GetById(user.GetUserId());
+        }
         
         return View(items);
     }
