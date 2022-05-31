@@ -1,4 +1,5 @@
 using System.Security.Claims;
+using CodeSharing.ViewModels.Commons;
 using CodeSharing.ViewModels.Contents.Support;
 using CodeSharing.WebPortal.Extensions;
 using CodeSharing.WebPortal.Interfaces;
@@ -46,7 +47,13 @@ public class ContactController : Controller
             Message = message
         };
 
-        var result = await _contactApiClient.PostSupport(request);
-        return RedirectToAction("Index", "Home");
+        await _contactApiClient.PostSupport(request);
+        
+        return ViewComponent("MessagePage", new Message {
+            Title = "GỬI HỖ TRỢ",
+            Htmlcontent = "Thông tin góp ý của bạn đã được gửi thành công. Code Sharing sẽ sớm phản hồi qua email trong thời gian sớm nhất!",
+            Secondwait = 5,
+            Urlredirect = "/"
+        });
     }
 }
