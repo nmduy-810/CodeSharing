@@ -99,7 +99,6 @@ public class UsersController : BaseController
     }
     
     [HttpPut("{id}")]
-    [ClaimRequirement(FunctionCodeConstants.SYSTEM_USER, CommandCodeConstants.UPDATE)]
     public async Task<IActionResult> PutUser(string id, [FromBody] UserCreateRequest request)
     {
         var user = await _userManager.FindByIdAsync(id);
