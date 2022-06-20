@@ -1,8 +1,10 @@
 using CodeSharing.Server.Authorization;
 using CodeSharing.Server.Datas.Entities;
 using CodeSharing.Server.Datas.Provider;
+using CodeSharing.Utilities.Commons;
 using CodeSharing.Utilities.Constants;
 using CodeSharing.Utilities.Helpers;
+using CodeSharing.ViewModels.Contents.Post;
 using CodeSharing.ViewModels.Systems.Function;
 using CodeSharing.ViewModels.Systems.Role;
 using CodeSharing.ViewModels.Systems.User;
@@ -263,4 +265,47 @@ public class UsersController : BaseController
 
         return BadRequest(new ApiBadRequestResponse(result));
     }
+
+    #region Post
+
+    [HttpGet("{userId}/posts")]
+    public async Task<IActionResult> GetPostsByUserId(string userId, int pageIndex, int pageSize)
+    {
+        var query = from p in _context.Posts
+            join c in _context.Categories on p.CategoryId equals c.Id
+            where p.OwnerUserId == userId
+            orderby p.CreateDate descending
+            select new { p, c };
+
+        var totalRecords = await query.CountAsync();
+
+        var items = await query.Skip((pageIndex - 1) * pageSize)
+            .Take(pageSize)
+            .Select(x => new PostQuickVm()
+            {
+                Id = x.p.Id,
+                CategoryId = x.p.CategoryId,
+                Slug = x.p.Slug,
+                Title = x.p.Title,
+                Summary = x.p.Summary,
+                Content = x.p.Content,
+                CategorySlug = x.c.Slug,
+                CategoryTitle = x.c.Title,
+                NumberOfVotes = x.p.NumberOfVotes,
+                CreateDate = x.p.CreateDate,
+                ViewCount = x.p.ViewCount
+            }).ToListAsync();
+        
+        var pagination = new Pagination<PostQuickVm>
+        {
+            Items = items,
+            TotalRecords = totalRecords,
+            PageIndex = pageIndex,
+            PageSize = pageSize
+        };
+        
+        return Ok(pagination);
+    }
+
+    #endregion
 }
