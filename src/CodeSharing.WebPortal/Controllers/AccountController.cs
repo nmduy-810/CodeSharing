@@ -15,11 +15,13 @@ public class AccountController : Controller
     private readonly IUserApiClient _userApiClient;
     private readonly IPostApiClient _postApiClient;
     private readonly ICategoryApiClient _categoryApiClient;
-    public AccountController(IUserApiClient userApiClient, IPostApiClient postApiClient, ICategoryApiClient categoryApiClient)
+    private readonly IUploadApiClient _uploadApiClient;
+    public AccountController(IUserApiClient userApiClient, IPostApiClient postApiClient, ICategoryApiClient categoryApiClient, IUploadApiClient uploadApiClient)
     {
         _userApiClient = userApiClient;
         _postApiClient = postApiClient;
         _categoryApiClient = categoryApiClient;
+        _uploadApiClient = uploadApiClient;
     }
     public IActionResult SignIn()
     {
@@ -163,6 +165,21 @@ public class AccountController : Controller
         }
 
         return BadRequest();
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> UploadImage()
+    {
+        var imageUrl = string.Empty;
+        foreach (var photo in Request.Form.Files)
+        {
+            var response = await _uploadApiClient.UploadImage(photo);
+            if (response != null)
+            {
+                imageUrl = response.Url;
+            }
+        }
+        return Json(new { url = imageUrl });
     }
 
     #region Helper Method
