@@ -174,7 +174,7 @@ public class AccountController : Controller
         foreach (var photo in Request.Form.Files)
         {
             var response = await _uploadApiClient.UploadImage(photo);
-            if (response != null)
+            if (response is { Uploaded: true })
             {
                 imageUrl = response.Url;
             }
