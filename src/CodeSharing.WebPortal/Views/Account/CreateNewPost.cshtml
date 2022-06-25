@@ -1,0 +1,82 @@
+@model CodeSharing.ViewModels.Contents.Post.PostCreateRequest
+
+@{
+    Layout = "_SubLayout";
+    ViewData["Title"] = "Tạo mới bài viết · Code Sharing";
+}
+
+@section scripts{
+    <script src="~/lib/ckeditor5-build-classic/build/ckeditor.js"></script>
+    <script src="~/js/controllers/accountsController.js" asp-append-version="true"></script>
+    <script>
+        let controller = new accountsController();
+        controller.initialize();
+    </script>
+}
+
+<div class="section-header">
+    <h3 class="section-title">Tạo mới bài viết</h3>
+    <img src="~/images/wave.svg" class="wave" alt="wave" />
+</div>
+
+<form action="/Account/CreateNewPost" method="post" enctype="multipart/form-data" id="frm_new_post" class="post-form" novalidate>
+    <div class="messages">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    </div>
+    
+    <div class="row">
+        <div class="column col-md-12">
+            <!--Category-->
+            <div class="form-group">
+                <h6>Danh mục</h6>
+                <select asp-for="CategoryId" style="height: 50px" required="required" class="form-control" asp-items="ViewBag.Categories"></select>
+                <div class="help-block with-errors"></div>
+            </div>
+            
+            <!--Title-->
+            <div class="form-group">
+                <h6>Tiêu đề</h6>
+                @Html.TextBoxFor(model => model.Title, htmlAttributes: new { id = "form-control", required = "required", @class = " form-control" })
+                <div class="help-block with-errors"></div>
+            </div>
+            
+            <!--Summary-->
+            <div class="form-group">
+                <h6>Tổng quan</h6>
+                @Html.TextBoxFor(model => model.Summary, htmlAttributes: new { id = "form-control", required = "required", @class = " form-control" })
+                <div class="help-block with-errors"></div>
+            </div>
+            
+            <!--Cover image-->
+            <div class="form-group">
+                <h6>Hình đại diện</h6>
+                <input asp-for="CoverImage" type="file" accept="image/*" required="required">
+                <div class="help-block with-errors"></div>
+            </div>
+            
+            <!--Label-->
+            <div class="form-group">
+                <h6>Nhãn</h6>
+                @Html.TextBoxFor(model => model.Labels, htmlAttributes: new { id = "form-control", required = "required", @class = " form-control" })
+                <div class="help-block with-errors"></div>
+            </div>
+            
+            <!--Note-->
+            <div class="form-group">
+                <h6>Ghi chú</h6>
+                @Html.TextBoxFor(model => model.Note, htmlAttributes: new { id = "form-control", required = "required", @class = " form-control" })
+                <div class="help-block with-errors"></div>
+            </div>
+            
+            <!--Content-->
+            <div class="form-group">
+                <h6>Nội dung</h6>
+                <textarea asp-for="Content" id="txt_content" required="required" class="form-control" rows="10"></textarea>
+                <div class="help-block with-errors"></div>
+            </div>
+        </div>
+    </div>
+    
+    <button type="submit" name="submit" id="submit" value="Submit" class="btn btn-default">Tạo mới</button>
+    <!-- Send Button -->
+</form>

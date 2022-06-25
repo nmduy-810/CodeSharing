@@ -130,4 +130,29 @@ public class BaseApiClient
 
         return false;
     }
+    
+    protected async Task<bool> DeleteAsync<TRequest>(string url, bool requiredLogin = true)
+    {
+        var client = _httpClientFactory.CreateClient();
+        client.BaseAddress = new Uri(_configuration["ServerUrl"]);
+
+        if (requiredLogin)
+        {
+            if (_httpContextAccessor.HttpContext != null)
+            {
+                var token = await _httpContextAccessor.HttpContext.GetTokenAsync("access_token");
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            }
+        }
+
+        var response = await client.DeleteAsync(url);
+        var body = await response.Content.ReadAsStringAsync();
+
+        if (response.IsSuccessStatusCode)
+            return true;
+
+        throw new Exception(body);
+
+        return false;
+    }
 }

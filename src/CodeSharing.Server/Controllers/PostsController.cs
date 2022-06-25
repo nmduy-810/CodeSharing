@@ -468,7 +468,6 @@ public partial class PostsController : BaseController
             Title = request.Title,
             Summary = request.Summary,
             Content = request.Content,
-            Slug = request.Slug,
             Note = request.Note
         };
         

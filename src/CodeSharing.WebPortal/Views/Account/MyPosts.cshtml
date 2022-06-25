@@ -1,0 +1,63 @@
+@model CodeSharing.Utilities.Commons.Pagination<CodeSharing.ViewModels.Contents.Post.PostQuickVm>
+
+@{
+    Layout = "_SubLayout";
+    ViewData["Title"] = "Quản lý bài viết · Code Sharing";
+}
+
+<style>
+    .table {
+        border-collapse: separate;
+        border-spacing: 0 5px;
+    }
+    
+    .btn {
+      background-color: rgb(239, 134, 139);
+      border: none;
+      color: white;
+      padding: 12px 16px;
+      font-size: 14px;
+      cursor: pointer;
+    }
+    
+    /* Darker background on mouse-over */
+    .btn:hover {
+      background-color: rgb(226, 112, 139);
+    }
+</style>
+
+<div class="m-4">
+    <h3 class="text-center">Quản Lý Bài Viết</h3>
+    <div class="table-responsive">
+        <table class="table table-hover">
+            <thead>
+            <tr>
+                <th>Tiêu đề</th>
+                <th>Ngày tạo</th>
+                <th>Danh mục</th>
+                <th>Lượt xem</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            @foreach (var item in Model.Items)
+            {
+                <tr>
+                    <td>@item.Title</td>
+                    <td>@item.CreateDate.ToString("dd/MM/yyyy")</td>
+                    <td>@item.CategoryTitle</td>
+                    <td>@item.ViewCount.GetValueOrDefault(0).ToString("N0")</td>
+                    <td>
+                        <a title="Chi tiết" href="#"><span class="icon-eye"></span></a>&nbsp;&nbsp;
+                        <a title="Chỉnh sửa" href="/edit-post/@item.Id"><span class="icon-note"></span></a>&nbsp;&nbsp;
+                        <a title="Xoá" href="/delete-post/@item.Id" onclick="return confirm('Bạn có muốn xoá bài viết này?')"><span class="icon-trash"></span></a>
+                    </td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+    <button class="btn btn-success" onclick="location.href='@Url.Action("CreateNewPost", "Account")'" >
+        <i class="fa fa-edit"></i> Thêm mới
+    </button>
+</div>
