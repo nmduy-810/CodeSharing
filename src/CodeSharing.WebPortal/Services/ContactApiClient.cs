@@ -6,11 +6,12 @@ namespace CodeSharing.WebPortal.Services;
 
 public class ContactApiClient : BaseApiClient, IContactApiClient
 {
-    public ContactApiClient(IHttpClientFactory httpClientFactory, IConfiguration configuration, IHttpContextAccessor httpContextAccessor) 
+    public ContactApiClient(IHttpClientFactory httpClientFactory, IConfiguration configuration,
+        IHttpContextAccessor httpContextAccessor)
         : base(httpClientFactory, configuration, httpContextAccessor)
     {
     }
-    
+
     public async Task<ContactVm> GetById(int id)
     {
         return await GetAsync<ContactVm>($"/api/contacts/{id}");
@@ -18,6 +19,6 @@ public class ContactApiClient : BaseApiClient, IContactApiClient
 
     public async Task<bool> PostSupport(SupportCreateRequest request)
     {
-        return await PostAsync<SupportCreateRequest, bool>($"/api/contacts/", request, false);
+        return await PostAsync<SupportCreateRequest, bool>("/api/contacts/", request, false);
     }
 }

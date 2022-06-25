@@ -2,19 +2,18 @@
 using System.ComponentModel.DataAnnotations.Schema;
 using CodeSharing.Server.Datas.Interfaces;
 
-namespace CodeSharing.Server.Datas.Entities
+namespace CodeSharing.Server.Datas.Entities;
+
+[Table("Votes")]
+public class Vote : IDateTracking
 {
-    [Table("Votes")]
-    public class Vote : IDateTracking
-    {
-        public int PostId { get; set; }
+    public int PostId { get; set; }
 
-        [MaxLength(50)]
-        [Column(TypeName = "varchar(50)")]
-        public string UserId { get; set; }
+    [MaxLength(50)]
+    [Column(TypeName = "varchar(50)")]
+    public string UserId { get; set; }
 
-        public DateTime CreateDate { get; set; }
-        
-        public DateTime? LastModifiedDate { get; set; }
-    }
+    public DateTime CreateDate { get; set; }
+
+    public DateTime? LastModifiedDate { get; set; }
 }

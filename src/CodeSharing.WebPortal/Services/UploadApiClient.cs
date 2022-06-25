@@ -8,11 +8,12 @@ namespace CodeSharing.WebPortal.Services;
 
 public class UploadApiClient : BaseApiClient, IUploadApiClient
 {
-    private readonly IHttpClientFactory _httpClientFactory;
     private readonly IConfiguration _configuration;
+    private readonly IHttpClientFactory _httpClientFactory;
     private readonly IHttpContextAccessor _httpContextAccessor;
-    
-    public UploadApiClient(IHttpClientFactory httpClientFactory, IConfiguration configuration, IHttpContextAccessor httpContextAccessor) : base(httpClientFactory, configuration, httpContextAccessor)
+
+    public UploadApiClient(IHttpClientFactory httpClientFactory, IConfiguration configuration,
+        IHttpContextAccessor httpContextAccessor) : base(httpClientFactory, configuration, httpContextAccessor)
     {
         _httpClientFactory = httpClientFactory;
         _configuration = configuration;
@@ -24,7 +25,7 @@ public class UploadApiClient : BaseApiClient, IUploadApiClient
         var client = _httpClientFactory.CreateClient();
         client.BaseAddress = new Uri(_configuration["ServerUrl"]);
         using var requestContent = new MultipartFormDataContent();
-        
+
         // Image
         if (upload != null)
         {
@@ -37,17 +38,17 @@ public class UploadApiClient : BaseApiClient, IUploadApiClient
             var bytes = new ByteArrayContent(data);
             requestContent.Add(bytes, "upload", upload.FileName);
         }
-        
+
         if (_httpContextAccessor.HttpContext != null)
         {
             var token = await _httpContextAccessor.HttpContext.GetTokenAsync("access_token");
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
         }
-        
-        var response = await client.PostAsync($"/api/uploads/UploadImage", requestContent);
+
+        var response = await client.PostAsync("/api/uploads/UploadImage", requestContent);
         var body = await response.Content.ReadAsStringAsync();
-        return response.IsSuccessStatusCode 
-            ? JsonConvert.DeserializeObject<UploadImageVm>(body) 
+        return response.IsSuccessStatusCode
+            ? JsonConvert.DeserializeObject<UploadImageVm>(body)
             : null;
     }
 }

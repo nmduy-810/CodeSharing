@@ -16,21 +16,19 @@ public class HeaderViewComponent : ViewComponent
         _categoryApiClient = categoryApiClient;
         _userApiClient = userApiClient;
     }
-    
+
     public async Task<IViewComponentResult> InvokeAsync(string componentView = "Default")
     {
         var categories = await _categoryApiClient.GetCategories();
 
-        var items = new HeaderViewModel()
+        var items = new HeaderViewModel
         {
             Categories = categories
         };
-        
+
         var user = User as ClaimsPrincipal;
         if (user?.Identity != null && user.Identity.IsAuthenticated)
-        {
             items.CurrentUser = await _userApiClient.GetById(user.GetUserId());
-        }
 
         return View(componentView, items);
     }

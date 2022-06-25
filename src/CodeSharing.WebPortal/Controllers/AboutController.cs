@@ -12,15 +12,15 @@ public class AboutController : Controller
     {
         _aboutApiClient = aboutApiClient;
     }
-    
+
     public async Task<IActionResult> Index()
     {
         var about = await _aboutApiClient.GetById(1);
-        var items = new AboutViewModel()
+        var items = new AboutViewModel
         {
             About = about
         };
-        
+
         return View(items);
     }
 }

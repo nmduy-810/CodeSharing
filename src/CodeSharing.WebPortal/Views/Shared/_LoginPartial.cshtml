@@ -1,15 +1,25 @@
-@model CodeSharing.WebPortal.ViewModels.HeaderViewModel
+@model HeaderViewModel
 
 @if (User.Identity!.IsAuthenticated)
 {
     <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#">Xin chào, </a>
         <ul class="dropdown-menu">
-            <li><a class="dropdown-item" href="category.html">Category</a></li>
-            <li><a class="dropdown-item" href="blog-single.html">Blog Single</a></li>
-            <li><a class="dropdown-item" href="blog-single-alt.html">Blog Single Alt</a></li>
-            <li><a class="dropdown-item" href="about.html">About</a></li>
-            <li><a class="dropdown-item" href="contact.html">Contact</a></li>
+            <li>
+                <a class="dropdown-item" href="category.html">Category</a>
+            </li>
+            <li>
+                <a class="dropdown-item" href="blog-single.html">Blog Single</a>
+            </li>
+            <li>
+                <a class="dropdown-item" href="blog-single-alt.html">Blog Single Alt</a>
+            </li>
+            <li>
+                <a class="dropdown-item" href="about.html">About</a>
+            </li>
+            <li>
+                <a class="dropdown-item" href="contact.html">Contact</a>
+            </li>
         </ul>
     </li>
 }

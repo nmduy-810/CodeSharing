@@ -1,6 +1,6 @@
 ﻿<!DOCTYPE html>
 <html lang="en-US">
-  <head>
+<head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <title>@ViewData["Title"]</title>
     <meta name="description" content="@ViewData["Description"]">
@@ -12,68 +12,68 @@
     <link rel="stylesheet" href="~/css/slick.css" type="text/css" media="all">
     <link rel="stylesheet" href="~/css/simple-line-icons.css" type="text/css" media="all">
     <link rel="stylesheet" href="~/css/style.css" type="text/css" media="all">
-  </head>
-  <body>
-    <!-- preloader -->
-    <div id="preloader">
-      <div class="book">
+</head>
+<body>
+<!-- preloader -->
+<div id="preloader">
+    <div class="book">
         <div class="inner">
-          <div class="left"></div>
-          <div class="middle"></div>
-          <div class="right"></div>
+            <div class="left"></div>
+            <div class="middle"></div>
+            <div class="right"></div>
         </div>
         <ul>
-          <li></li>
-          <li></li>
-          <li></li>
-          <li></li>
-          <li></li>
-          <li></li>
-          <li></li>
-          <li></li>
-          <li></li>
-          <li></li>
-          <li></li>
-          <li></li>
-          <li></li>
-          <li></li>
-          <li></li>
-          <li></li>
-          <li></li>
-          <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
         </ul>
-      </div>
     </div>
-    <!-- site wrapper -->
-    <div class="site-wrapper">
-      <div class="main-overlay"></div>
-      <!-- header -->
-      @if (IsSectionDefined("customHeader"))
-      {
+</div>
+<!-- site wrapper -->
+<div class="site-wrapper">
+    <div class="main-overlay"></div>
+    <!-- header -->
+    @if (IsSectionDefined("customHeader"))
+    {
         @await RenderSectionAsync("customHeader")
-      }
-      else
-      {
+    }
+    else
+    {
         @await Component.InvokeAsync("Header", "Default")
-      }
-      <!-- section main content -->
-      <section class="main-content mt-3">
+    }
+    <!-- section main content -->
+    <section class="main-content mt-3">
         @RenderBody()
-      </section>
-      
-      <!-- footer -->
-      @await Component.InvokeAsync("Footer", "Default")
-    </div>
-    <!-- end site wrapper -->
-    <!-- search popup area -->
-    <partial name="_SearchPopup" />
-  <!-- JAVA SCRIPTS -->
-    <script src="~/js/jquery.min.js"></script>
-    <script src="~/js/popper.min.js"></script>
-    <script src="~/js/bootstrap.min.js"></script>
-    <script src="~/js/slick.min.js"></script>
-    <script src="~/js/jquery.sticky-sidebar.min.js"></script>
-    <script src="~/js/custom.js"></script>
-    @await RenderSectionAsync("scripts", required: false)
-  </body>
+    </section>
+
+    <!-- footer -->
+    @await Component.InvokeAsync("Footer", "Default")
+</div>
+<!-- end site wrapper -->
+<!-- search popup area -->
+<partial name="_SearchPopup"/>
+<!-- JAVA SCRIPTS -->
+<script src="~/js/jquery.min.js"></script>
+<script src="~/js/popper.min.js"></script>
+<script src="~/js/bootstrap.min.js"></script>
+<script src="~/js/slick.min.js"></script>
+<script src="~/js/jquery.sticky-sidebar.min.js"></script>
+<script src="~/js/custom.js"></script>
+@await RenderSectionAsync("scripts", false)
+</body>
 </html>

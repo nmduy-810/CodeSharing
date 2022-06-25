@@ -1,5 +1,3 @@
-using CodeSharing.ViewModels.Systems.User;
-
 namespace CodeSharing.WebPortal.ViewModels;
 
 public class UserDetailViewModel

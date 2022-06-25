@@ -3,29 +3,29 @@ using CodeSharing.Server.Authorization;
 using CodeSharing.Server.Datas.Entities;
 using CodeSharing.Server.Datas.Provider;
 using CodeSharing.Server.Extensions;
+using CodeSharing.Server.Services.Interfaces;
 using CodeSharing.Utilities.Commons;
+using CodeSharing.Utilities.Constants;
 using CodeSharing.Utilities.Helpers;
 using CodeSharing.ViewModels.Contents.Post;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using CodeSharing.Server.Services.Interfaces;
-using CodeSharing.Utilities.Constants;
 
 namespace CodeSharing.Server.Controllers;
 
 public partial class PostsController : BaseController
 {
     private readonly ApplicationDbContext _context;
+    private readonly ICacheService _distributedCacheService;
+    private readonly IHttpContextAccessor _httpContextAccessor;
     private readonly ILogger<PostsController> _logger;
     private readonly ISequenceService _sequenceService;
     private readonly IStorageService _storageService;
-    private readonly ICacheService _distributedCacheService;
-    private readonly IHttpContextAccessor _httpContextAccessor;
-    
+
     public PostsController(
-        ApplicationDbContext context, 
-        ILogger<PostsController> logger, 
+        ApplicationDbContext context,
+        ILogger<PostsController> logger,
         ISequenceService sequenceService,
         IStorageService storageService,
         ICacheService distributedCacheService,
@@ -38,7 +38,7 @@ public partial class PostsController : BaseController
         _distributedCacheService = distributedCacheService;
         _httpContextAccessor = httpContextAccessor;
     }
-    
+
     [HttpGet]
     [AllowAnonymous]
     public async Task<IActionResult> GetPosts()
@@ -48,8 +48,8 @@ public partial class PostsController : BaseController
             join u in _context.Users on p.OwnerUserId equals u.Id
             orderby p.CreateDate descending
             select new { p, c, u };
-        
-        var items = await posts.Select(x => new PostQuickVm()
+
+        var items = await posts.Select(x => new PostQuickVm
         {
             Id = x.p.Id,
             CategoryId = x.c.Id,
@@ -65,13 +65,12 @@ public partial class PostsController : BaseController
             ViewCount = x.p.ViewCount,
             CreateDate = x.p.CreateDate,
             LastModifiedDate = x.p.LastModifiedDate
-            
         }).ToListAsync();
 
         _logger.LogInformation("Successful execution of get posts request");
         return Ok(items);
     }
-    
+
     [HttpGet("latest/{take:int}")]
     [AllowAnonymous]
     public async Task<IActionResult> GetLatestPosts(int take)
@@ -87,7 +86,7 @@ public partial class PostsController : BaseController
 
             var items = await posts
                 .Take(take)
-                .Select(x => new PostQuickVm()
+                .Select(x => new PostQuickVm
                 {
                     Id = x.p.Id,
                     CategoryId = x.p.CategoryId,
@@ -106,11 +105,11 @@ public partial class PostsController : BaseController
             await _distributedCacheService.SetAsync(CacheConstants.LatestPosts, items, 2);
             cacheData = items;
         }
-        
+
         _logger.LogInformation("Successful execution of get latest posts request");
         return Ok(cacheData);
     }
-    
+
     [HttpGet("popular/{take:int}")]
     [AllowAnonymous]
     public async Task<IActionResult> GetPopularPosts(int take)
@@ -125,7 +124,7 @@ public partial class PostsController : BaseController
                 select new { p, c, u };
 
             var items = await posts.Take(take)
-                .Select(x => new PostQuickVm()
+                .Select(x => new PostQuickVm
                 {
                     Id = x.p.Id,
                     CategoryId = x.p.CategoryId,
@@ -144,11 +143,11 @@ public partial class PostsController : BaseController
             await _distributedCacheService.SetAsync(CacheConstants.PopularPosts, items, 2);
             cacheData = items;
         }
-        
+
         _logger.LogInformation("Successful execution of get popular posts request");
         return Ok(cacheData);
     }
-    
+
     [HttpGet("trending/{take:int}")]
     [AllowAnonymous]
     public async Task<IActionResult> GetTrendingPosts(int take)
@@ -161,9 +160,9 @@ public partial class PostsController : BaseController
                 join u in _context.Users on p.OwnerUserId equals u.Id
                 orderby p.NumberOfVotes descending
                 select new { p, c, u };
-        
+
             var items = await posts.Take(take)
-                .Select(x => new PostQuickVm()
+                .Select(x => new PostQuickVm
                 {
                     Id = x.p.Id,
                     CategoryId = x.p.CategoryId,
@@ -182,32 +181,25 @@ public partial class PostsController : BaseController
             await _distributedCacheService.SetAsync(CacheConstants.TrendingPosts, items, 2);
             cacheData = items;
         }
-        
+
         _logger.LogInformation("Successful execution of get popular posts request");
         return Ok(cacheData);
     }
-    
+
     [HttpGet("{id}")]
     [AllowAnonymous]
     public async Task<IActionResult> GetById(int id)
     {
         var post = await _context.Posts.FindAsync(id);
-        if (post == null)
-        {
-            return NotFound(new ApiNotFoundResponse($"Cannot found post item for id = {id} in database"));
-        }
+        if (post == null) return NotFound(new ApiNotFoundResponse($"Cannot found post item for id = {id} in database"));
 
         var category = _context.Categories.FirstOrDefault(x => x.Id == post.CategoryId);
         if (category == null)
-        {
             return NotFound(new ApiNotFoundResponse($"Cannot found category item for id = {id} in database"));
-        }
 
         var fullName = _context.Users.FirstOrDefault(x => x.Id == post.OwnerUserId);
         if (fullName == null)
-        {
             return NotFound(new ApiNotFoundResponse($"Cannot found full name for id = {id} in database"));
-        }
 
         var items = new PostVm
         {
@@ -235,7 +227,7 @@ public partial class PostsController : BaseController
         _logger.LogInformation("Successful execution of get post by id request");
         return Ok(items);
     }
-    
+
     [HttpGet("category/{categoryId:int}")]
     [AllowAnonymous]
     public async Task<IActionResult> GetPostsByCategoryId(int? categoryId, int pageIndex, int pageSize)
@@ -244,18 +236,15 @@ public partial class PostsController : BaseController
             join c in _context.Categories on p.CategoryId equals c.Id
             join u in _context.Users on p.OwnerUserId equals u.Id
             select new { p, c, u };
-        
+
         // Get all post by category Id
-        if (categoryId.HasValue)
-        {
-            query = query.Where(x => x.p.CategoryId == categoryId.Value);
-        }
+        if (categoryId.HasValue) query = query.Where(x => x.p.CategoryId == categoryId.Value);
 
         var totalRecords = await query.CountAsync();
         var items = await query
             .Skip((pageIndex - 1) * pageSize)
             .Take(pageSize)
-            .Select(x => new PostQuickVm()
+            .Select(x => new PostQuickVm
             {
                 Id = x.p.Id,
                 CategoryId = x.p.CategoryId,
@@ -283,7 +272,7 @@ public partial class PostsController : BaseController
         _logger.LogInformation("Successful execution of get posts by category id request");
         return Ok(pagination);
     }
-    
+
     [HttpGet("tags/{tagId}")]
     [AllowAnonymous]
     public async Task<IActionResult> GetPostsByTagId(string tagId, int pageIndex, int pageSize)
@@ -301,7 +290,7 @@ public partial class PostsController : BaseController
         var items = await query
             .Skip((pageIndex - 1) * pageSize)
             .Take(pageSize)
-            .Select(x => new PostQuickVm()
+            .Select(x => new PostQuickVm
             {
                 Id = x.p.Id,
                 CategoryId = x.p.CategoryId,
@@ -318,7 +307,7 @@ public partial class PostsController : BaseController
                 CoverImage = FunctionBase.GetBaseUrl(_httpContextAccessor) + x.p.CoverImage
             }).ToListAsync();
 
-        var pagination = new Pagination<PostQuickVm>()
+        var pagination = new Pagination<PostQuickVm>
         {
             PageSize = pageSize,
             PageIndex = pageIndex,
@@ -329,7 +318,7 @@ public partial class PostsController : BaseController
         _logger.LogInformation("Successful execution of get posts by tag id request");
         return Ok(pagination);
     }
-    
+
     [HttpGet("total-post")]
     [AllowAnonymous]
     public async Task<IActionResult> GetTotalPostInCategory()
@@ -345,8 +334,8 @@ public partial class PostsController : BaseController
                 g.Key.Slug,
                 Count = g.Count()
             };
-        
-        var items = await query.Select(x => new PostQuickVm()
+
+        var items = await query.Select(x => new PostQuickVm
         {
             Id = x.Id,
             Title = x.Title,
@@ -357,7 +346,7 @@ public partial class PostsController : BaseController
         _logger.LogInformation("Successful execution of get total post in category request");
         return Ok(items);
     }
-    
+
     [HttpGet("filter")]
     [AllowAnonymous]
     public async Task<IActionResult> GetPostsPaging(string filter, int? categoryId, int pageIndex, int pageSize)
@@ -366,18 +355,12 @@ public partial class PostsController : BaseController
             join c in _context.Categories on p.CategoryId equals c.Id
             join u in _context.Users on p.OwnerUserId equals u.Id
             select new { p, c, u };
-        if (!string.IsNullOrEmpty(filter))
-        {
-            query = query.Where(x => x.p.Title.Contains(filter));
-        }
-        if (categoryId.HasValue)
-        {
-            query = query.Where(x => x.p.CategoryId == categoryId.Value);
-        }
+        if (!string.IsNullOrEmpty(filter)) query = query.Where(x => x.p.Title.Contains(filter));
+        if (categoryId.HasValue) query = query.Where(x => x.p.CategoryId == categoryId.Value);
         var totalRecords = await query.CountAsync();
         var items = await query.Skip((pageIndex - 1) * pageSize)
             .Take(pageSize)
-            .Select(x => new PostQuickVm()
+            .Select(x => new PostQuickVm
             {
                 Id = x.p.Id,
                 CategoryId = x.p.CategoryId,
@@ -400,13 +383,13 @@ public partial class PostsController : BaseController
             PageSize = pageSize,
             PageIndex = pageIndex,
             Items = items,
-            TotalRecords = totalRecords,
+            TotalRecords = totalRecords
         };
-        
+
         _logger.LogInformation("Successful execution of get posts in paging have filter request");
         return Ok(pagination);
     }
-    
+
     [HttpGet("paging")]
     [AllowAnonymous]
     public async Task<IActionResult> GetPostsPaging(int pageIndex, int pageSize)
@@ -423,7 +406,7 @@ public partial class PostsController : BaseController
             var totalRecords = await query.CountAsync();
             var items = await query.Skip((pageIndex - 1) * pageSize)
                 .Take(pageSize)
-                .Select(x => new PostQuickVm()
+                .Select(x => new PostQuickVm
                 {
                     Id = x.p.Id,
                     CategoryId = x.p.CategoryId,
@@ -446,13 +429,13 @@ public partial class PostsController : BaseController
                 PageSize = pageSize,
                 PageIndex = pageIndex,
                 Items = items,
-                TotalRecords = totalRecords,
+                TotalRecords = totalRecords
             };
 
             await _distributedCacheService.SetAsync(CacheConstants.PostsPaging, pagination, 2);
             cacheData = pagination;
         }
-        
+
         _logger.LogInformation("Successful execution of get posts in paging no filter request");
         return Ok(cacheData);
     }
@@ -462,7 +445,7 @@ public partial class PostsController : BaseController
     [ClaimRequirement(FunctionCodeConstants.CONTENT_POST, CommandCodeConstants.CREATE)]
     public async Task<IActionResult> Post([FromForm] PostCreateRequest request)
     {
-        var post = new Post()
+        var post = new Post
         {
             CategoryId = request.CategoryId,
             Title = request.Title,
@@ -470,7 +453,7 @@ public partial class PostsController : BaseController
             Content = request.Content,
             Note = request.Note
         };
-        
+
         if (request.Labels.Length > 0)
         {
             // Remove cached previous save for post
@@ -478,7 +461,7 @@ public partial class PostsController : BaseController
             await _distributedCacheService.RemoveAsync(CacheConstants.PopularPosts);
             await _distributedCacheService.RemoveAsync(CacheConstants.TrendingPosts);
             await _distributedCacheService.RemoveAsync(CacheConstants.PostsPaging);
-            
+
             request.Labels = request.Labels[0].Split("#").Select(x => x.Trim())
                 .Where(x => !string.IsNullOrWhiteSpace(x))
                 .ToArray();
@@ -486,38 +469,29 @@ public partial class PostsController : BaseController
             post.Labels = string.Join(',', request.Labels);
             post.Labels = post.Labels.Trim().TrimStart(',');
         }
-        
+
         // Process Slug
-        if (string.IsNullOrEmpty(post.Slug))
-        {
-            post.Slug = TextHelper.ToUnsignString(post.Title);
-        }
-        
+        if (string.IsNullOrEmpty(post.Slug)) post.Slug = TextHelper.ToUnsignString(post.Title);
+
         // Process Owner User Id
         post.OwnerUserId = User.GetUserId();
-        
+
         // Id (using Sequence)
         post.Id = await _sequenceService.GetPostNewId();
-    
+
         // Process label
-        if (request.Labels.Length > 0)
-        {
-            await ProcessLabel(request, post);
-        }
+        if (request.Labels.Length > 0) await ProcessLabel(request, post);
         // Process Cover Image
         if (request.CoverImage != null)
         {
             var coverImagePath = await SaveFile(request.CoverImage);
             post.CoverImage = coverImagePath;
         }
-        
+
         _context.Posts.Add(post);
-        
+
         var result = await _context.SaveChangesAsync();
-        if (result > 0)
-        {
-            return CreatedAtAction(nameof(GetById), new { id = post.Id });
-        }
+        if (result > 0) return CreatedAtAction(nameof(GetById), new { id = post.Id });
 
         return BadRequest(new ApiBadRequestResponse("Insert post failed"));
     }
@@ -528,11 +502,8 @@ public partial class PostsController : BaseController
     public async Task<IActionResult> Put(int id, [FromForm] PostCreateRequest request)
     {
         var post = await _context.Posts.FindAsync(id);
-        if (post == null)
-        {
-            return NotFound(new ApiNotFoundResponse($"Cannot found post item for id = {id} in database"));
-        }
-        
+        if (post == null) return NotFound(new ApiNotFoundResponse($"Cannot found post item for id = {id} in database"));
+
         // Set post with new data
         post.CategoryId = request.CategoryId;
         post.Title = request.Title;
@@ -540,7 +511,7 @@ public partial class PostsController : BaseController
         post.Slug = string.IsNullOrEmpty(request.Slug) ? TextHelper.ToUnsignString(request.Title) : request.Slug;
         post.Content = request.Content;
         post.Note = request.Note;
-        
+
         // Process labels
         if (request.Labels.Length > 0)
         {
@@ -551,23 +522,20 @@ public partial class PostsController : BaseController
             post.Labels = string.Join(',', request.Labels);
             post.Labels = post.Labels.Trim().TrimStart(',');
         }
-        
+
         // Process Cover Image
         if (request.CoverImage != null)
         {
             var coverImagePath = await SaveFile(request.CoverImage);
             post.CoverImage = coverImagePath;
         }
-        
+
         // Process label
-        if (request.Labels.Length > 0)
-        {
-            await ProcessLabel(request, post);
-        }
+        if (request.Labels.Length > 0) await ProcessLabel(request, post);
 
         // Update post
         _context.Posts.Update(post);
-        
+
         var result = await _context.SaveChangesAsync();
 
         if (result > 0)
@@ -577,10 +545,11 @@ public partial class PostsController : BaseController
             await _distributedCacheService.RemoveAsync(CacheConstants.PopularPosts);
             await _distributedCacheService.RemoveAsync(CacheConstants.TrendingPosts);
             await _distributedCacheService.RemoveAsync(CacheConstants.PostsPaging);
-            
+
             return NoContent();
         }
-        return BadRequest(new ApiBadRequestResponse($"Update post failed"));
+
+        return BadRequest(new ApiBadRequestResponse("Update post failed"));
     }
 
     [HttpDelete("{id}")]
@@ -588,25 +557,19 @@ public partial class PostsController : BaseController
     public async Task<IActionResult> Delete(int id)
     {
         var post = await _context.Posts.FindAsync(id);
-        if (post == null)
-        {
-            return NotFound(new ApiNotFoundResponse($"Cannotfound post item for id = {id} in database"));
-        }
+        if (post == null) return NotFound(new ApiNotFoundResponse($"Cannotfound post item for id = {id} in database"));
 
         _context.Posts.Remove(post);
         var result = await _context.SaveChangesAsync();
-        if (result <= 0)
-        {
-            return BadRequest(new ApiBadRequestResponse("Delete post failed"));
-        }
-        
+        if (result <= 0) return BadRequest(new ApiBadRequestResponse("Delete post failed"));
+
         // Remove cached previous save for post
         await _distributedCacheService.RemoveAsync(CacheConstants.LatestPosts);
         await _distributedCacheService.RemoveAsync(CacheConstants.PopularPosts);
         await _distributedCacheService.RemoveAsync(CacheConstants.TrendingPosts);
         await _distributedCacheService.RemoveAsync(CacheConstants.PostsPaging);
-        
-        var postVm = new PostVm()
+
+        var postVm = new PostVm
         {
             Id = post.Id,
             CategoryId = post.CategoryId,
@@ -624,35 +587,26 @@ public partial class PostsController : BaseController
             NumberOfVotes = post.NumberOfVotes,
             NumberOfReports = post.NumberOfReports
         };
-        
+
         return Ok(postVm);
     }
-    
+
     [HttpPut("{id}/view-count")]
     [AllowAnonymous]
     public async Task<IActionResult> UpdateViewCount(int id)
     {
         var post = await _context.Posts.FindAsync(id);
-        if (post == null)
-        {
-            return NotFound(new ApiNotFoundResponse($"Cannot found post for id = {id} in database"));
-        }
+        if (post == null) return NotFound(new ApiNotFoundResponse($"Cannot found post for id = {id} in database"));
 
-        if (post.ViewCount == null)
-        {
-            post.ViewCount = 0;
-        }
-        
+        if (post.ViewCount == null) post.ViewCount = 0;
+
         post.ViewCount += 1;
-        
+
         _context.Posts.Update(post);
-        
+
         var result = await _context.SaveChangesAsync();
-        if (result > 0)
-        {
-            return Ok();
-        }
-        
+        if (result > 0) return Ok();
+
         return BadRequest(new ApiBadRequestResponse("Update view post failed"));
     }
 
@@ -666,24 +620,23 @@ public partial class PostsController : BaseController
             var existingLabel = await _context.Labels.FindAsync(labelId);
             if (existingLabel == null)
             {
-                var labelEntity = new Label()
+                var labelEntity = new Label
                 {
                     Id = labelId,
                     Name = labelText
                 };
                 _context.Labels.Add(labelEntity);
             }
+
             if (await _context.LabelInPosts.FindAsync(labelId, post.Id) == null)
-            {
-                _context.LabelInPosts.Add(new LabelInPost()
+                _context.LabelInPosts.Add(new LabelInPost
                 {
                     PostId = post.Id,
                     LabelId = labelId
                 });
-            }
         }
     }
-    
+
     private async Task<string> SaveFile(IFormFile file)
     {
         var originalFileName = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName?.Trim('"');

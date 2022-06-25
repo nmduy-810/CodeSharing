@@ -1,82 +1,88 @@
-@model CodeSharing.WebPortal.ViewModels.HeaderViewModel
+@model HeaderViewModel
 
 <!-- header -->
 <header class="header-default">
-  <nav class="navbar navbar-expand-lg">
-    <div class="container-xl">
-      <!-- site logo -->
-      <a class="navbar-brand" href="/">
-        <a href="/" class="d-block text-logo">CodeSharing<span class="dot">.</span></a>
-      </a>
-      <div class="collapse navbar-collapse">
-        <!-- menus -->
-        <ul class="navbar-nav mr-auto">
-          <li class="nav-item active">
-            <a class="nav-link" href="/">Trang chủ</a>
-          </li>
-          @foreach (var item in Model.Categories)
-          {
-            var url = "/category/" + item.Slug + "-" + item.Id;
-            if (item.ParentCategoryId == null && item.IsParent)
-            {
-              <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="@url">@item.Title</a>
-                <ul class="dropdown-menu">
-                  @foreach (var subItem in Model.Categories.Where(x => x.ParentCategoryId == item.Id))
-                  {
-                    var subUrl = "/category/" + subItem.Slug + "-" + subItem.Id;
-                    <li>
-                      <a class="dropdown-item" href="@subUrl">@subItem.Title</a>
+    <nav class="navbar navbar-expand-lg">
+        <div class="container-xl">
+            <!-- site logo -->
+            <a class="navbar-brand" href="/">
+                <a href="/" class="d-block text-logo">CodeSharing<span class="dot">.</span></a>
+            </a>
+            <div class="collapse navbar-collapse">
+                <!-- menus -->
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="/">Trang chủ</a>
                     </li>
-                  }
+                    @foreach (var item in Model.Categories)
+                    {
+                        var url = "/category/" + item.Slug + "-" + item.Id;
+                        if (item.ParentCategoryId == null && item.IsParent)
+                        {
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="@url">@item.Title</a>
+                                <ul class="dropdown-menu">
+                                    @foreach (var subItem in Model.Categories.Where(x => x.ParentCategoryId == item.Id))
+                                    {
+                                        var subUrl = "/category/" + subItem.Slug + "-" + subItem.Id;
+                                        <li>
+                                            <a class="dropdown-item" href="@subUrl">@subItem.Title</a>
+                                        </li>
+                                    }
+                                </ul>
+                            </li>
+                        }
+                        else if (item.ParentCategoryId == null && !item.IsParent)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link" href="@url">@item.Title</a>
+                            </li>
+                        }
+                    }
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="/about">Thông tin</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="/contact">Liên hệ</a>
+                    </li>
+
+                    @if (User.Identity!.IsAuthenticated)
+                    {
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#">Xin chào, <span class="fw-bold">@Model.CurrentUser.LastName</span></a>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <a class="dropdown-item" asp-action="MyProfile" asp-controller="Account">Thông tin cá nhân</a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" asp-action="MyPosts" asp-controller="Account">Quản lý bài viết</a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" asp-action="SignOut" asp-controller="Account">Đăng xuất</a>
+                                </li>
+                            </ul>
+                        </li>
+                    }
+                    else
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link" asp-action="SignIn" asp-controller="Account">Đăng nhập</a>
+                        </li>
+                    }
                 </ul>
-              </li>
-            }
-            else if (item.ParentCategoryId == null && !item.IsParent)
-            {
-              <li class="nav-item">
-                <a class="nav-link" href="@url">@item.Title</a>
-              </li>
-            }
-          }
-          
-          <li class="nav-item">
-            <a class="nav-link" href="/about">Thông tin</a>
-          </li>
-          
-          <li class="nav-item">
-            <a class="nav-link" href="/contact">Liên hệ</a>
-          </li>
-          
-          @if (User.Identity!.IsAuthenticated)
-          {
-            <li class="nav-item dropdown">
-                  <a class="nav-link dropdown-toggle" href="#">Xin chào, <span class="fw-bold">@Model.CurrentUser.LastName</span></a>
-                  <ul class="dropdown-menu">
-                    <li><a class="dropdown-item" asp-action="MyProfile" asp-controller="Account">Thông tin cá nhân</a></li>
-                    <li><a class="dropdown-item" asp-action="MyPosts" asp-controller="Account">Quản lý bài viết</a></li>
-                    <li><a class="dropdown-item" asp-action="SignOut" asp-controller="Account">Đăng xuất</a></li>
-                  </ul>
-              </li>
-          }
-          else
-          {
-              <li class="nav-item">
-                  <a class="nav-link" asp-action="SignIn" asp-controller="Account">Đăng nhập</a>
-              </li>
-          }
-        </ul>
-      </div>
-      <!-- header right section -->
-      <div class="header-right">
-        
-        <!-- header buttons -->
-        <div class="header-buttons">
-          <button class="search icon-button">
-            <i class="icon-magnifier"></i>
-          </button>
+            </div>
+            <!-- header right section -->
+            <div class="header-right">
+
+                <!-- header buttons -->
+                <div class="header-buttons">
+                    <button class="search icon-button">
+                        <i class="icon-magnifier"></i>
+                    </button>
+                </div>
+            </div>
         </div>
-      </div>
-    </div>
-  </nav>
+    </nav>
 </header>

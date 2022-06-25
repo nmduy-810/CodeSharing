@@ -10,46 +10,43 @@ namespace CodeSharing.Server.Controllers;
 
 public class RolesController : BaseController
 {
-    private readonly RoleManager<IdentityRole> _roleManager;
     private readonly ILogger<RolesController> _logger;
-    
+    private readonly RoleManager<IdentityRole> _roleManager;
+
     public RolesController(RoleManager<IdentityRole> roleManager, ILogger<RolesController> logger)
     {
         _roleManager = roleManager;
         _logger = logger ?? throw new ArgumentException(null, nameof(logger));
     }
-    
+
     [HttpGet]
     [ClaimRequirement(FunctionCodeConstants.SYSTEM_ROLE, CommandCodeConstants.VIEW)]
     public async Task<IActionResult> GetRoles()
     {
         var items = await _roleManager.Roles
-            .Select(r => new RoleVm()
-        {
-            Id = r.Id,
-            Name = r.Name
-        }).ToListAsync();
+            .Select(r => new RoleVm
+            {
+                Id = r.Id,
+                Name = r.Name
+            }).ToListAsync();
 
         _logger.LogInformation("Successful execution of get roles request");
         return Ok(items);
     }
-    
+
     [HttpGet("{id}")]
     [ClaimRequirement(FunctionCodeConstants.SYSTEM_ROLE, CommandCodeConstants.VIEW)]
     public async Task<IActionResult> GetById(string id)
     {
         var role = await _roleManager.FindByIdAsync(id);
-        if (role == null)
-        {
-            return NotFound(new ApiNotFoundResponse($"Cannot found role item for id = {id} in database"));
-        }
+        if (role == null) return NotFound(new ApiNotFoundResponse($"Cannot found role item for id = {id} in database"));
 
-        var items = new RoleVm()
+        var items = new RoleVm
         {
             Id = role.Id,
-            Name = role.Name,
+            Name = role.Name
         };
-        
+
         _logger.LogInformation("Successful execution of get role by id request");
         return Ok(items);
     }

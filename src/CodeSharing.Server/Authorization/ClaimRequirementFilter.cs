@@ -7,8 +7,8 @@ namespace CodeSharing.Server.Authorization;
 
 public class ClaimRequirementFilter : IAuthorizationFilter
 {
-    private readonly FunctionCodeConstants _functionCode;
     private readonly CommandCodeConstants _commandCode;
+    private readonly FunctionCodeConstants _functionCode;
 
     public ClaimRequirementFilter(FunctionCodeConstants functionCode, CommandCodeConstants commandCode)
     {
@@ -24,9 +24,7 @@ public class ClaimRequirementFilter : IAuthorizationFilter
         {
             var permissions = JsonConvert.DeserializeObject<List<string>>(permissionsClaim.Value);
             if (permissions != null && !permissions.Contains(_functionCode + "_" + _commandCode))
-            {
                 context.Result = new ForbidResult();
-            }
         }
         else
         {

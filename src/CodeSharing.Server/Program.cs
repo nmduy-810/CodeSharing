@@ -1,4 +1,3 @@
-using System.Configuration;
 using CodeSharing.Server.Datas.Entities;
 using CodeSharing.Server.Datas.Initialize;
 using CodeSharing.Server.Datas.Provider;
@@ -78,10 +77,7 @@ builder.Services.Configure<IdentityOptions>(options =>
     options.User.RequireUniqueEmail = true;
 });
 
-builder.Services.Configure<ApiBehaviorOptions>(options =>
-{
-    options.SuppressModelStateInvalidFilter = true;
-});
+builder.Services.Configure<ApiBehaviorOptions>(options => { options.SuppressModelStateInvalidFilter = true; });
 
 // Setup token when reset password using identity
 builder.Services.AddIdentityCore<User>(options => options.SignIn.RequireConfirmedAccount = true)
@@ -92,10 +88,7 @@ builder.Services.AddControllersWithViews();
 
 // Add more external login
 builder.Services.AddAuthentication()
-    .AddLocalApi("Bearer", option =>
-    {
-        option.ExpectedScope = "api.codesharing";
-    })
+    .AddLocalApi("Bearer", option => { option.ExpectedScope = "api.codesharing"; })
     .AddGoogle(googleOptions =>
     {
         // Read authentication google information from appsettings.xxx.json
@@ -137,9 +130,9 @@ builder.Services.AddRazorPages(options =>
         foreach (var selector in model.Selectors)
         {
             var attributeRouteModel = selector.AttributeRouteModel;
-            if(attributeRouteModel == null) 
+            if (attributeRouteModel == null)
                 continue;
-            
+
             attributeRouteModel.Order = -1;
             attributeRouteModel.Template = attributeRouteModel.Template?.Remove(0, "Identity".Length);
         }
@@ -175,8 +168,8 @@ builder.Services.AddSwaggerGen(c =>
             {
                 AuthorizationUrl = new Uri("https://localhost:5000/connect/authorize"),
                 Scopes = new Dictionary<string, string> { { "api.codesharing", "CodeSharing API" } }
-            },
-        },
+            }
+        }
     });
     c.AddSecurityRequirement(new OpenApiSecurityRequirement
     {
@@ -185,7 +178,7 @@ builder.Services.AddSwaggerGen(c =>
             {
                 Reference = new OpenApiReference { Type = ReferenceType.SecurityScheme, Id = "Bearer" }
             },
-            new List<string>{ "api.codesharing" }
+            new List<string> { "api.codesharing" }
         }
     });
 });
@@ -199,10 +192,7 @@ builder.Services.AddDistributedSqlServerCache(o =>
 });
 
 var enviroment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
-if (enviroment == Environments.Development)
-{
-    builder.Services.AddRazorPages().AddRazorRuntimeCompilation();
-}
+if (enviroment == Environments.Development) builder.Services.AddRazorPages().AddRazorRuntimeCompilation();
 
 var app = builder.Build();
 

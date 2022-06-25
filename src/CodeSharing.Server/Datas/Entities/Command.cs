@@ -1,18 +1,15 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace CodeSharing.Server.Datas.Entities
-{
-    [Table("Commands")]
-    public class Command
-    {
-        [MaxLength(50)]
-        [Column(TypeName = "varchar(50)")]
-        [Key]
-        public string Id { get; set; }
+namespace CodeSharing.Server.Datas.Entities;
 
-        [Required]
-        [MaxLength(50)]
-        public string Name { get; set; }
-    }
+[Table("Commands")]
+public class Command
+{
+    [MaxLength(50)]
+    [Column(TypeName = "varchar(50)")]
+    [Key]
+    public string Id { get; set; }
+
+    [Required] [MaxLength(50)] public string Name { get; set; }
 }

@@ -1,11 +1,10 @@
-﻿namespace CodeSharing.Utilities.Constants
+﻿namespace CodeSharing.Utilities.Constants;
+
+public enum CommandCodeConstants
 {
-    public enum CommandCodeConstants
-    {
-        CREATE,
-        UPDATE,
-        DELETE,
-        VIEW,
-        APPROVE
-    }
+    CREATE,
+    UPDATE,
+    DELETE,
+    VIEW,
+    APPROVE
 }

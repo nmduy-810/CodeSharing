@@ -1,4 +1,4 @@
-@model CodeSharing.WebPortal.ViewModels.PostDetailViewModel
+@model PostDetailViewModel
 
 @{
     Layout = "_SubLayout";
@@ -56,7 +56,7 @@
                     <li class="list-inline-item">@Model.Post.CreateDate.ToString("dd MMMM, yyyy")</li>
                     <li class="list-inline-item">
                         <span class="like-count">@Model.Post.NumberOfVotes.GetValueOrDefault(0).ToString("N0")</span>
-                         <i class="icon-like" style="vertical-align: inherit !important;"></i>
+                        <i class="icon-like" style="vertical-align: inherit !important;"></i>
                     </li>
                     <li class="list-inline-item">
                         <span>@Model.Post.ViewCount.GetValueOrDefault(0).ToString("N0")</span>
@@ -76,7 +76,7 @@
             </div>
             <!-- post content -->
             <div class="post-content clearfix">
-                <p>@Html.Raw(@Model.Post.Content)</p>
+                <p>@Html.Raw(Model.Post.Content)</p>
             </div>
 
             @if (User.Identity.IsAuthenticated)
@@ -241,7 +241,7 @@
             </div>
             <div class="modal-body">
                 <form id="frm_report">
-                    <input type="hidden" value="@Model.Post.Id" name="postId" />
+                    <input type="hidden" value="@Model.Post.Id" name="postId"/>
                     <div class="mb-3">
                         <label for="content" class="col-form-label">Nội dung:</label>
                         <textarea class="form-control" name="content" id="txt_report_content"></textarea>

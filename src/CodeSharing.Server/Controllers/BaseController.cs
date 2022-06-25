@@ -8,5 +8,4 @@ namespace CodeSharing.Server.Controllers;
 [Authorize("Bearer")]
 public class BaseController : ControllerBase
 {
-   
 }

@@ -16,14 +16,14 @@
 
 <div class="section-header">
     <h3 class="section-title">Tạo mới bài viết</h3>
-    <img src="~/images/wave.svg" class="wave" alt="wave" />
+    <img src="~/images/wave.svg" class="wave" alt="wave"/>
 </div>
 
 <form action="/Account/CreateNewPost" method="post" enctype="multipart/form-data" id="frm_new_post" class="post-form" novalidate>
     <div class="messages">
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     </div>
-    
+
     <div class="row">
         <div class="column col-md-12">
             <!--Category-->
@@ -32,42 +32,42 @@
                 <select asp-for="CategoryId" style="height: 50px" required="required" class="form-control" asp-items="ViewBag.Categories"></select>
                 <div class="help-block with-errors"></div>
             </div>
-            
+
             <!--Title-->
             <div class="form-group">
                 <h6>Tiêu đề</h6>
-                @Html.TextBoxFor(model => model.Title, htmlAttributes: new { id = "form-control", required = "required", @class = " form-control" })
+                @Html.TextBoxFor(model => model.Title, new { id = "form-control", required = "required", @class = " form-control" })
                 <div class="help-block with-errors"></div>
             </div>
-            
+
             <!--Summary-->
             <div class="form-group">
                 <h6>Tổng quan</h6>
-                @Html.TextBoxFor(model => model.Summary, htmlAttributes: new { id = "form-control", required = "required", @class = " form-control" })
+                @Html.TextBoxFor(model => model.Summary, new { id = "form-control", required = "required", @class = " form-control" })
                 <div class="help-block with-errors"></div>
             </div>
-            
+
             <!--Cover image-->
             <div class="form-group">
                 <h6>Hình đại diện</h6>
                 <input asp-for="CoverImage" type="file" accept="image/*" required="required">
                 <div class="help-block with-errors"></div>
             </div>
-            
+
             <!--Label-->
             <div class="form-group">
                 <h6>Nhãn</h6>
-                @Html.TextBoxFor(model => model.Labels, htmlAttributes: new { id = "form-control", required = "required", @class = " form-control" })
+                @Html.TextBoxFor(model => model.Labels, new { id = "form-control", required = "required", @class = " form-control" })
                 <div class="help-block with-errors"></div>
             </div>
-            
+
             <!--Note-->
             <div class="form-group">
                 <h6>Ghi chú</h6>
-                @Html.TextBoxFor(model => model.Note, htmlAttributes: new { id = "form-control", required = "required", @class = " form-control" })
+                @Html.TextBoxFor(model => model.Note, new { id = "form-control", required = "required", @class = " form-control" })
                 <div class="help-block with-errors"></div>
             </div>
-            
+
             <!--Content-->
             <div class="form-group">
                 <h6>Nội dung</h6>
@@ -76,7 +76,7 @@
             </div>
         </div>
     </div>
-    
+
     <button type="submit" name="submit" id="submit" value="Submit" class="btn btn-default">Tạo mới</button>
     <!-- Send Button -->
 </form>

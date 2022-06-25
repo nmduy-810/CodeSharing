@@ -2,8 +2,8 @@
 <!doctype html>
 <html>
 <head>
-    <meta name="viewport" content="width=device-width" />
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <title>Simple Transactional Email</title>
     <style>
         /* -------------------------------------
@@ -356,66 +356,68 @@
     </style>
 </head>
 <body class="">
-    <span class="preheader">This is preheader text. Some clients will show this text as a preview.</span>
-    <table role="presentation" border="0" cellpadding="0" cellspacing="0" class="body">
-        <tr>
-            <td>&nbsp;</td>
-            <td class="container">
-                <div class="content">
+<span class="preheader">This is preheader text. Some clients will show this text as a preview.</span>
+<table role="presentation" border="0" cellpadding="0" cellspacing="0" class="body">
+    <tr>
+        <td>&nbsp;</td>
+        <td class="container">
+            <div class="content">
 
-                    <!-- START CENTERED WHITE CONTAINER -->
-                    <table role="presentation" class="main">
-                        
-                        <!-- START MAIN CONTENT AREA -->
+                <!-- START CENTERED WHITE CONTAINER -->
+                <table role="presentation" class="main">
+
+                    <!-- START MAIN CONTENT AREA -->
+                    <tr>
+                        <td class="wrapper">
+                            <table role="presentation" border="0" cellpadding="0" cellspacing="0">
+                                <tr>
+                                    <td>
+                                        <p>Chào @Model.RepliedName</p>
+                                        <p>Có người đã trả lời bình luận của bạn trên @_configuration["PortalUrl"]</p>
+                                        <table role="presentation" border="0" cellpadding="0" cellspacing="0" class="btn btn-primary">
+                                            <tbody>
+                                            <tr>
+                                                <td align="left">
+                                                    <table role="presentation" border="0" cellpadding="0" cellspacing="0">
+                                                        <tbody>
+                                                        <tr>
+                                                            <td>
+                                                                <a href="/kb/@Model.PostSlug-@Model.PostId" target="_blank">Đến bài đăng</a>
+                                                            </td>
+                                                        </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                        <p>@Model.CommentContent</p>
+                                        <p>Cảm ơn.</p>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+
+                    <!-- END MAIN CONTENT AREA -->
+                </table>
+                <!-- END CENTERED WHITE CONTAINER -->
+                <!-- START FOOTER -->
+                <div class="footer">
+                    <table role="presentation" border="0" cellpadding="0" cellspacing="0">
                         <tr>
-                            <td class="wrapper">
-                                <table role="presentation" border="0" cellpadding="0" cellspacing="0">
-                                    <tr>
-                                        <td>
-                                            <p>Chào @Model.RepliedName</p>
-                                            <p>Có người đã trả lời bình luận của bạn trên @_configuration["PortalUrl"]</p>
-                                            <table role="presentation" border="0" cellpadding="0" cellspacing="0" class="btn btn-primary">
-                                                <tbody>
-                                                <tr>
-                                                    <td align="left">
-                                                        <table role="presentation" border="0" cellpadding="0" cellspacing="0">
-                                                            <tbody>
-                                                            <tr>
-                                                                <td> <a href="/kb/@Model.PostSlug-@Model.PostId" target="_blank">Đến bài đăng</a> </td>
-                                                            </tr>
-                                                            </tbody>
-                                                        </table>
-                                                    </td>
-                                                </tr>
-                                                </tbody>
-                                            </table>
-                                            <p>@Model.CommentContent</p>
-                                            <p>Cảm ơn.</p>
-                                        </td>
-                                    </tr>
-                                </table>
+                            <td class="content-block">
+                                <span class="apple-link">Code Sharing</span>
+                                <br> Bạn không thích email này? <a href="http://i.imgur.com/CScmqnj.gif">Bỏ subscribe</a>.
                             </td>
                         </tr>
-
-                        <!-- END MAIN CONTENT AREA -->
                     </table>
-                    <!-- END CENTERED WHITE CONTAINER -->
-                    <!-- START FOOTER -->
-                    <div class="footer">
-                        <table role="presentation" border="0" cellpadding="0" cellspacing="0">
-                            <tr>
-                                <td class="content-block">
-                                    <span class="apple-link">Code Sharing</span>
-                                    <br> Bạn không thích email này? <a href="http://i.imgur.com/CScmqnj.gif">Bỏ subscribe</a>.
-                                </td>
-                            </tr>
-                        </table>
-                    </div>
-                    <!-- END FOOTER -->
                 </div>
-            </td>
-            <td>&nbsp;</td>
-        </tr>
-    </table>
+                <!-- END FOOTER -->
+            </div>
+        </td>
+        <td>&nbsp;</td>
+    </tr>
+</table>
 </body>
 </html>

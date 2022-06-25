@@ -4,8 +4,8 @@ namespace CodeSharing.Server.Services;
 
 public class FileStorageService : IStorageService
 {
-    private readonly string _userContentFolder;
     private const string UserContentFolderName = "user-attachments";
+    private readonly string _userContentFolder;
 
     public FileStorageService(IWebHostEnvironment webHostEnvironment)
     {
@@ -30,9 +30,6 @@ public class FileStorageService : IStorageService
     public async Task DeleteFileAsync(string fileName)
     {
         var filePath = Path.Combine(_userContentFolder, fileName);
-        if (File.Exists(filePath))
-        {
-            await Task.Run(() => File.Delete(filePath));
-        }
+        if (File.Exists(filePath)) await Task.Run(() => File.Delete(filePath));
     }
 }

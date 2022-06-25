@@ -25,7 +25,7 @@ public class StatisticsController : BaseController
         var items = await _context.Comments.Where(x => x.CreateDate.Date.Year == year)
             .GroupBy(x => x.CreateDate.Date.Month)
             .OrderBy(x => x.Key)
-            .Select(x => new MonthlyNewCommentsVm()
+            .Select(x => new MonthlyNewCommentsVm
             {
                 Month = x.Key,
                 NumberOfComments = x.Count()
@@ -40,7 +40,7 @@ public class StatisticsController : BaseController
     {
         var items = await _context.Posts.Where(x => x.CreateDate.Date.Year == year)
             .GroupBy(x => x.CreateDate.Date.Month)
-            .Select(x => new MonthlyNewPostsVm()
+            .Select(x => new MonthlyNewPostsVm
             {
                 Month = x.Key,
                 NumberOfNewPosts = x.Count()
@@ -48,14 +48,14 @@ public class StatisticsController : BaseController
 
         return Ok(items);
     }
-    
+
     [HttpGet("monthly-new-registers")]
     [ClaimRequirement(FunctionCodeConstants.STATISTIC, CommandCodeConstants.VIEW)]
     public async Task<IActionResult> GetMonthlyNewRegisters(int year)
     {
         var items = await _context.Users.Where(x => x.CreateDate.Date.Year == year)
             .GroupBy(x => x.CreateDate.Date.Month)
-            .Select(x => new MonthlyNewRegisterUsersVm()
+            .Select(x => new MonthlyNewRegisterUsersVm
             {
                 Month = x.Key,
                 NumberOfRegisterUsers = x.Count()

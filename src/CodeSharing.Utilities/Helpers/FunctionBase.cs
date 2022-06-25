@@ -1,5 +1,3 @@
-using System.Drawing;
-using System.Net.Http.Headers;
 using Microsoft.AspNetCore.Http;
 
 namespace CodeSharing.Utilities.Helpers;
@@ -16,7 +14,7 @@ public static class FunctionBase
     public static string ConvertToBase64(IFormFile file)
     {
         var result = string.Empty;
-        if (file.Length <= 0) 
+        if (file.Length <= 0)
             return result;
 
         using var ms = new MemoryStream();
@@ -32,7 +30,7 @@ public static class FunctionBase
         var baseUrl = $"{request?.Scheme}://{request?.Host}/";
         return baseUrl;
     }
-    
+
     public static string GenerateFileName(string context)
     {
         return context + "_" + DateTime.Now.ToString("yyyyMMddHHmmss") + "_" + Guid.NewGuid().ToString("N");

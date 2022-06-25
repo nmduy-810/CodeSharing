@@ -12,17 +12,20 @@ namespace CodeSharing.WebPortal.Controllers;
 
 public class AccountController : Controller
 {
-    private readonly IUserApiClient _userApiClient;
-    private readonly IPostApiClient _postApiClient;
     private readonly ICategoryApiClient _categoryApiClient;
+    private readonly IPostApiClient _postApiClient;
     private readonly IUploadApiClient _uploadApiClient;
-    public AccountController(IUserApiClient userApiClient, IPostApiClient postApiClient, ICategoryApiClient categoryApiClient, IUploadApiClient uploadApiClient)
+    private readonly IUserApiClient _userApiClient;
+
+    public AccountController(IUserApiClient userApiClient, IPostApiClient postApiClient,
+        ICategoryApiClient categoryApiClient, IUploadApiClient uploadApiClient)
     {
         _userApiClient = userApiClient;
         _postApiClient = postApiClient;
         _categoryApiClient = categoryApiClient;
         _uploadApiClient = uploadApiClient;
     }
+
     public IActionResult SignIn()
     {
         return Challenge(new AuthenticationProperties { RedirectUri = "/" }, "oidc");
@@ -38,7 +41,7 @@ public class AccountController : Controller
     {
         var user = await _userApiClient.GetById(User.GetUserId());
 
-        var items = new UserDetailViewModel()
+        var items = new UserDetailViewModel
         {
             UserName = user.UserName,
             FullName = string.Concat(user.FirstName, " ", user.LastName),
@@ -49,7 +52,7 @@ public class AccountController : Controller
 
         return View(items);
     }
-    
+
     [HttpPost]
     [Authorize]
     public async Task<IActionResult> MyProfile(UserDetailViewModel request)
@@ -59,7 +62,7 @@ public class AccountController : Controller
         var middleName = string.Join(" ", nameSegments.Skip(1).Take(nameSegments.Length - 2));
         var lastName = nameSegments.Last();
 
-        var userRequest = new UserCreateRequest()
+        var userRequest = new UserCreateRequest
         {
             FirstName = firstName,
             LastName = middleName + " " + lastName,
@@ -70,7 +73,7 @@ public class AccountController : Controller
 
         return Redirect("/");
     }
-    
+
     [HttpGet]
     [Authorize]
     public async Task<IActionResult> MyPosts(int page = 1, int pageSize = 10)
@@ -89,16 +92,10 @@ public class AccountController : Controller
     [HttpPost]
     public async Task<IActionResult> CreateNewPost([FromForm] PostCreateRequest request)
     {
-        if (!ModelState.IsValid)
-        {
-            return BadRequest(ModelState);
-        }
+        if (!ModelState.IsValid) return BadRequest(ModelState);
 
         var result = await _postApiClient.PostPost(request);
-        if (result)
-        {
-            return RedirectToAction("MyPosts", "Account");
-        }
+        if (result) return RedirectToAction("MyPosts", "Account");
 
         return BadRequest();
     }
@@ -109,7 +106,7 @@ public class AccountController : Controller
         var post = await _postApiClient.GetDetailsPost(id);
         await SetCategories();
 
-        var items = new PostCreateRequest()
+        var items = new PostCreateRequest
         {
             CategoryId = post.CategoryId,
             Title = post.Title,
@@ -117,22 +114,18 @@ public class AccountController : Controller
             Content = post.Content,
             Note = post.Note,
             PreviewCoverImage = post.CoverImage,
-            Slug = post.Slug,
+            Slug = post.Slug
         };
 
         var tagList = new List<string>();
-        
+
         // Labels
         if (post.Labels != null)
-        {
             foreach (var label in post.Labels)
-            {
                 tagList.Add("#" + label);
-            }
-        }
 
         items.Labels = tagList.Select(x => x.ToString()).ToArray();
-        
+
         // Show label for user
         items.PreviewLabel = string.Join(" ", items.Labels);
 
@@ -143,26 +136,14 @@ public class AccountController : Controller
     public async Task<IActionResult> EditPost([FromForm] PostCreateRequest request)
     {
         // Check label
-        if (!string.IsNullOrEmpty(request.PreviewLabel))
-        {
-            request.Labels = new[] { request.PreviewLabel };
-        }
-        
-        if (!ModelState.IsValid)
-        {
-            return BadRequest(ModelState);
-        }
+        if (!string.IsNullOrEmpty(request.PreviewLabel)) request.Labels = new[] { request.PreviewLabel };
 
-        if (request.Id == null)
-        {
-            return BadRequest();
-        }
-        
+        if (!ModelState.IsValid) return BadRequest(ModelState);
+
+        if (request.Id == null) return BadRequest();
+
         var result = await _postApiClient.PutPost(request.Id.Value, request);
-        if (result)
-        {
-            return RedirectToAction("MyPosts", "Account");
-        }
+        if (result) return RedirectToAction("MyPosts", "Account");
 
         return BadRequest();
     }
@@ -173,13 +154,8 @@ public class AccountController : Controller
         var post = await _postApiClient.GetDetailsPost(id);
         var response = await _postApiClient.DeletePost(post.Id);
         if (response)
-        {
-            return RedirectToAction("MyPosts", "Account");    
-        }
-        else
-        {
-            return BadRequest();
-        }
+            return RedirectToAction("MyPosts", "Account");
+        return BadRequest();
     }
 
     [HttpPost]
@@ -189,11 +165,9 @@ public class AccountController : Controller
         foreach (var photo in Request.Form.Files)
         {
             var response = await _uploadApiClient.UploadImage(photo);
-            if (response is { Uploaded: true })
-            {
-                imageUrl = response.Url;
-            }
+            if (response is { Uploaded: true }) imageUrl = response.Url;
         }
+
         return Json(new { url = imageUrl });
     }
 
@@ -202,13 +176,13 @@ public class AccountController : Controller
     private async Task SetCategories(int? selectedValue = null)
     {
         var categories = await _categoryApiClient.GetCategories();
-        var items = categories.Select(x => new SelectListItem()
+        var items = categories.Select(x => new SelectListItem
         {
             Text = x.Title,
             Value = x.Id.ToString()
         }).ToList();
-        
-        items.Insert(0, new SelectListItem()
+
+        items.Insert(0, new SelectListItem
         {
             Value = null,
             Text = "Chọn danh mục"

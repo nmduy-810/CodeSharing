@@ -6,13 +6,14 @@ namespace CodeSharing.Server.Datas.Initialize;
 
 public class DbInitializer
 {
-    private readonly ApplicationDbContext _context;
-    private readonly UserManager<User> _userManager;
-    private readonly RoleManager<IdentityRole> _roleManager;
     private const string AdminRoleName = "Admin";
     private const string UserRoleName = "Member";
+    private readonly ApplicationDbContext _context;
+    private readonly RoleManager<IdentityRole> _roleManager;
+    private readonly UserManager<User> _userManager;
 
-    public DbInitializer(ApplicationDbContext context, UserManager<User> userManager, RoleManager<IdentityRole> roleManager)
+    public DbInitializer(ApplicationDbContext context, UserManager<User> userManager,
+        RoleManager<IdentityRole> roleManager)
     {
         _context = context;
         _userManager = userManager;
@@ -22,24 +23,27 @@ public class DbInitializer
     public async Task Seed()
     {
         #region Role
+
         if (!_roleManager.Roles.Any())
         {
             await _roleManager.CreateAsync(new IdentityRole
             {
                 Id = AdminRoleName,
                 Name = AdminRoleName,
-                NormalizedName = AdminRoleName.ToUpper(),
+                NormalizedName = AdminRoleName.ToUpper()
             });
             await _roleManager.CreateAsync(new IdentityRole
             {
                 Id = UserRoleName,
                 Name = UserRoleName,
-                NormalizedName = UserRoleName.ToUpper(),
+                NormalizedName = UserRoleName.ToUpper()
             });
         }
+
         #endregion Role
-        
+
         #region User
+
         if (!_userManager.Users.Any())
         {
             var admin = await _userManager.CreateAsync(new User
@@ -56,7 +60,7 @@ public class DbInitializer
                 var user = await _userManager.FindByNameAsync("admin");
                 await _userManager.AddToRoleAsync(user, AdminRoleName);
             }
-            
+
             var member = await _userManager.CreateAsync(new User
             {
                 Id = Guid.NewGuid().ToString(),
@@ -72,196 +76,197 @@ public class DbInitializer
                 await _userManager.AddToRoleAsync(user, UserRoleName);
             }
         }
+
         #endregion User
-        
+
         #region Function
+
         if (!_context.Functions.Any())
         {
             _context.Functions.AddRange(new List<Function>
             {
-                new Function
+                new()
                 {
-                    Id = "DASHBOARD", 
-                    Name = "Thống kê", 
-                    ParentId = null, 
-                    SortOrder = 1, 
+                    Id = "DASHBOARD",
+                    Name = "Thống kê",
+                    ParentId = null,
+                    SortOrder = 1,
                     Url = "/dashboard",
                     Icon = "fa-dashboard"
                 },
 
-                new Function
+                new()
                 {
-                    Id = "CONTENT", 
-                    Name = "Nội dung", 
-                    ParentId = null, 
-                    Url = "/contents", 
+                    Id = "CONTENT",
+                    Name = "Nội dung",
+                    ParentId = null,
+                    Url = "/contents",
                     Icon = "fa-table"
                 },
 
-                new Function
+                new()
                 {
-                    Id = "CONTENT_CATEGORY", 
-                    Name = "Danh mục", 
-                    ParentId = "CONTENT", 
+                    Id = "CONTENT_CATEGORY",
+                    Name = "Danh mục",
+                    ParentId = "CONTENT",
                     Url = "/contents/categories"
                 },
-                new Function
+                new()
                 {
-                    Id = "CONTENT_POST", 
-                    Name = "Bài viết", 
-                    ParentId = "CONTENT", 
+                    Id = "CONTENT_POST",
+                    Name = "Bài viết",
+                    ParentId = "CONTENT",
                     SortOrder = 2,
-                    Url = "/content/posts", 
+                    Url = "/content/posts",
                     Icon = "fa-edit"
                 },
-                new Function
+                new()
                 {
-                    Id = "CONTENT_COMMENT", 
-                    Name = "Trang", 
-                    ParentId = "CONTENT", 
+                    Id = "CONTENT_COMMENT",
+                    Name = "Trang",
+                    ParentId = "CONTENT",
                     SortOrder = 3,
-                    Url = "/contents/comments", 
+                    Url = "/contents/comments",
                     Icon = "fa-edit"
                 },
-                new Function
+                new()
                 {
-                    Id = "CONTENT_REPORT", 
-                    Name = "Báo xấu", 
-                    ParentId = "CONTENT", 
+                    Id = "CONTENT_REPORT",
+                    Name = "Báo xấu",
+                    ParentId = "CONTENT",
                     SortOrder = 3,
-                    Url = "/contents/reports", 
+                    Url = "/contents/reports",
                     Icon = "fa-edit"
                 },
 
-                new Function
+                new()
                 {
-                    Id = "STATISTIC", 
-                    Name = "Thống kê", 
-                    ParentId = null, 
-                    Url = "/statistics", 
+                    Id = "STATISTIC",
+                    Name = "Thống kê",
+                    ParentId = null,
+                    Url = "/statistics",
                     Icon = "fa-bar-chart-o"
                 },
 
-                new Function
+                new()
                 {
-                    Id = "STATISTIC_MONTHLY_NEWMEMBER", 
-                    Name = "Đăng ký từng tháng", 
+                    Id = "STATISTIC_MONTHLY_NEWMEMBER",
+                    Name = "Đăng ký từng tháng",
                     ParentId = "STATISTIC",
-                    SortOrder = 1, 
-                    Url = "/statistics/monthly-registers", 
+                    SortOrder = 1,
+                    Url = "/statistics/monthly-registers",
                     Icon = "fa-wrench"
                 },
-                new Function
+                new()
                 {
-                    Id = "STATISTIC_MONTHLY_NEWKB", 
-                    Name = "Bài đăng hàng tháng", 
-                    ParentId = "STATISTIC", 
+                    Id = "STATISTIC_MONTHLY_NEWKB",
+                    Name = "Bài đăng hàng tháng",
+                    ParentId = "STATISTIC",
                     SortOrder = 2,
-                    Url = "/statistics/monthly-newkbs", 
+                    Url = "/statistics/monthly-newkbs",
                     Icon = "fa-wrench"
                 },
-                new Function
+                new()
                 {
-                    Id = "STATISTIC_MONTHLY_COMMENT", 
-                    Name = "Comment theo tháng", 
+                    Id = "STATISTIC_MONTHLY_COMMENT",
+                    Name = "Comment theo tháng",
                     ParentId = "STATISTIC",
-                    SortOrder = 3, 
-                    Url = "/statistics/monthly-comments", 
+                    SortOrder = 3,
+                    Url = "/statistics/monthly-comments",
                     Icon = "fa-wrench"
                 },
 
-                new Function
-                    { 
-                        Id = "SYSTEM", 
-                        Name = "Hệ thống", 
-                        ParentId = null, 
-                        Url = "/systems", 
-                        Icon = "fa-th-list" },
-
-                new Function
+                new()
                 {
-                    Id = "SYSTEM_USER", 
-                    Name = "Người dùng", 
-                    ParentId = "SYSTEM", 
+                    Id = "SYSTEM",
+                    Name = "Hệ thống",
+                    ParentId = null,
+                    Url = "/systems",
+                    Icon = "fa-th-list"
+                },
+
+                new()
+                {
+                    Id = "SYSTEM_USER",
+                    Name = "Người dùng",
+                    ParentId = "SYSTEM",
                     Url = "/system/users",
                     Icon = "fa-desktop"
                 },
-                new Function
+                new()
                 {
-                    Id = "SYSTEM_ROLE", 
-                    Name = "Nhóm quyền", 
-                    ParentId = "SYSTEM", 
+                    Id = "SYSTEM_ROLE",
+                    Name = "Nhóm quyền",
+                    ParentId = "SYSTEM",
                     Url = "/system/roles",
                     Icon = "fa-desktop"
                 },
-                new Function
+                new()
                 {
-                    Id = "SYSTEM_FUNCTION", 
-                    Name = "Chức năng", 
-                    ParentId = "SYSTEM", 
+                    Id = "SYSTEM_FUNCTION",
+                    Name = "Chức năng",
+                    ParentId = "SYSTEM",
                     Url = "/system/functions",
                     Icon = "fa-desktop"
                 },
-                new Function
+                new()
                 {
-                    Id = "SYSTEM_PERMISSION", 
-                    Name = "Quyền hạn", 
-                    ParentId = "SYSTEM", 
+                    Id = "SYSTEM_PERMISSION",
+                    Name = "Quyền hạn",
+                    ParentId = "SYSTEM",
                     Url = "/system/permissions",
                     Icon = "fa-desktop"
-                },
+                }
             });
             await _context.SaveChangesAsync();
         }
 
         if (!_context.Commands.Any())
-        {
-            _context.Commands.AddRange(new List<Command>()
+            _context.Commands.AddRange(new List<Command>
             {
-                new Command() { Id = "VIEW", Name = "Xem" },
-                new Command() { Id = "CREATE", Name = "Thêm" },
-                new Command() { Id = "UPDATE", Name = "Sửa" },
-                new Command() { Id = "DELETE", Name = "Xoá" },
-                new Command() { Id = "APPROVE", Name = "Duyệt" },
+                new() { Id = "VIEW", Name = "Xem" },
+                new() { Id = "CREATE", Name = "Thêm" },
+                new() { Id = "UPDATE", Name = "Sửa" },
+                new() { Id = "DELETE", Name = "Xoá" },
+                new() { Id = "APPROVE", Name = "Duyệt" }
             });
-        }
+
         #endregion Function
 
         #region CommandInFunction
+
         var functions = _context.Functions;
 
         if (!_context.CommandInFunctions.Any())
-        {
             foreach (var function in functions)
             {
-                var createAction = new CommandInFunction()
+                var createAction = new CommandInFunction
                 {
                     CommandId = "CREATE",
                     FunctionId = function.Id
                 };
                 _context.CommandInFunctions.Add(createAction);
 
-                var updateAction = new CommandInFunction()
+                var updateAction = new CommandInFunction
                 {
                     CommandId = "UPDATE",
                     FunctionId = function.Id
                 };
                 _context.CommandInFunctions.Add(updateAction);
-                var deleteAction = new CommandInFunction()
+                var deleteAction = new CommandInFunction
                 {
                     CommandId = "DELETE",
                     FunctionId = function.Id
                 };
                 _context.CommandInFunctions.Add(deleteAction);
 
-                var viewAction = new CommandInFunction()
+                var viewAction = new CommandInFunction
                 {
                     CommandId = "VIEW",
                     FunctionId = function.Id
                 };
                 _context.CommandInFunctions.Add(viewAction);
             }
-        }
 
         if (!_context.Permissions.Any())
         {
@@ -276,16 +281,16 @@ public class DbInitializer
 
             var memberRole = await _roleManager.FindByNameAsync(UserRoleName);
             foreach (var function in functions)
-            {
                 _context.Permissions.Add(new Permission(function.Id, memberRole.Id, "VIEW"));
-            }
         }
+
         #endregion CommandInFunction
-        
+
         #region Post
+
         if (!_context.Posts.Any())
         {
-            _context.Posts.AddRange(new List<Post>()
+            _context.Posts.AddRange(new List<Post>
             {
                 new()
                 {
@@ -610,7 +615,8 @@ public class DbInitializer
                     NumberOfReports = 0,
                     NumberOfVotes = 0,
                     ViewCount = 0
-                },new()
+                },
+                new()
                 {
                     Id = 19,
                     CategoryId = 3,
@@ -647,181 +653,180 @@ public class DbInitializer
                     ViewCount = 0
                 }
             });
-            
+
             #region Labels
+
             if (!_context.Labels.Any())
-            {
-                _context.Labels.AddRange(new List<Label>()
+                _context.Labels.AddRange(new List<Label>
                 {
                     new()
                     {
                         Id = "test",
-                        Name = "test",
+                        Name = "test"
                     },
                     new()
                     {
                         Id = "tech",
-                        Name = "tech",
+                        Name = "tech"
                     },
                     new()
                     {
                         Id = "programming",
-                        Name = "programming",
+                        Name = "programming"
                     },
                     new()
                     {
                         Id = "development",
-                        Name = "development",
+                        Name = "development"
                     },
                     new()
                     {
                         Id = "angular",
-                        Name = "angular",
+                        Name = "angular"
                     },
                     new()
                     {
                         Id = "csharp",
-                        Name = "c#",
+                        Name = "c#"
                     },
                     new()
                     {
                         Id = "net",
-                        Name = "net",
+                        Name = "net"
                     },
                     new()
                     {
                         Id = "sql",
-                        Name = "sql",
+                        Name = "sql"
                     }
                 });
-            }
+
             #endregion Labels
-            
+
             #region LabelInPost
+
             if (!_context.LabelInPosts.Any())
-            {
-                _context.LabelInPosts.AddRange(new List<LabelInPost>()
+                _context.LabelInPosts.AddRange(new List<LabelInPost>
                 {
                     new()
                     {
                         PostId = 1,
-                        LabelId = "test",
+                        LabelId = "test"
                     },
                     new()
                     {
                         PostId = 1,
-                        LabelId = "csharp",
+                        LabelId = "csharp"
                     },
                     new()
                     {
                         PostId = 1,
-                        LabelId = "programming",
+                        LabelId = "programming"
                     },
                     new()
                     {
                         PostId = 1,
-                        LabelId = "tech",
+                        LabelId = "tech"
                     },
                     new()
                     {
                         PostId = 2,
-                        LabelId = "development",
+                        LabelId = "development"
                     },
                     new()
                     {
                         PostId = 2,
-                        LabelId = "csharp",
+                        LabelId = "csharp"
                     },
                     new()
                     {
                         PostId = 3,
-                        LabelId = "development",
+                        LabelId = "development"
                     },
                     new()
                     {
                         PostId = 3,
-                        LabelId = "csharp",
+                        LabelId = "csharp"
                     },
                     new()
                     {
                         PostId = 4,
-                        LabelId = "development",
+                        LabelId = "development"
                     },
                     new()
                     {
                         PostId = 4,
-                        LabelId = "csharp",
+                        LabelId = "csharp"
                     },
                     new()
                     {
                         PostId = 5,
-                        LabelId = "development",
+                        LabelId = "development"
                     },
                     new()
                     {
                         PostId = 6,
-                        LabelId = "csharp",
+                        LabelId = "csharp"
                     },
                     new()
                     {
                         PostId = 7,
-                        LabelId = "development",
+                        LabelId = "development"
                     },
                     new()
                     {
                         PostId = 7,
-                        LabelId = "csharp",
+                        LabelId = "csharp"
                     },
                     new()
                     {
                         PostId = 8,
-                        LabelId = "development",
+                        LabelId = "development"
                     },
                     new()
                     {
                         PostId = 8,
-                        LabelId = "csharp",
+                        LabelId = "csharp"
                     },
                     new()
                     {
                         PostId = 9,
-                        LabelId = "development",
+                        LabelId = "development"
                     },
                     new()
                     {
                         PostId = 9,
-                        LabelId = "csharp",
+                        LabelId = "csharp"
                     },
                     new()
                     {
                         PostId = 9,
-                        LabelId = "programming",
+                        LabelId = "programming"
                     },
                     new()
                     {
                         PostId = 10,
-                        LabelId = "programming",
-                    },
+                        LabelId = "programming"
+                    }
                 });
-            }
+
             #endregion LabelInPost
         }
+
         #endregion Post
 
         #region Contact
 
         if (!_context.Contacts.Any())
-        {
-            _context.Contacts.AddRange(new Contact()
+            _context.Contacts.AddRange(new Contact
             {
                 Email = "codesharing@hotmail.com",
                 Location = "Thành phố Hồ Chí Minh, Việt Nam",
                 Phone = "0969 772 069"
             });
-        }
 
         #endregion Contact
-        
+
         await _context.SaveChangesAsync();
     }
 }

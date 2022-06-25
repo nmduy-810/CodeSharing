@@ -19,12 +19,12 @@ public class ContactsController : BaseController
         _context = context;
         _logger = logger ?? throw new ArgumentException(null, nameof(logger));
     }
-    
+
     [HttpGet]
     [AllowAnonymous]
     public async Task<IActionResult> GetContacts()
     {
-        var items = await _context.Contacts.Select(x => new ContactVm()
+        var items = await _context.Contacts.Select(x => new ContactVm
         {
             Id = x.Id,
             Phone = x.Phone,
@@ -35,18 +35,16 @@ public class ContactsController : BaseController
         _logger.LogInformation("Successful execution of get contact request");
         return Ok(items);
     }
-    
+
     [HttpGet("{id:int}")]
     [AllowAnonymous]
     public async Task<IActionResult> GetById(int id)
     {
         var contact = await _context.Contacts.FindAsync(id);
         if (contact == null)
-        {
             return NotFound(new ApiNotFoundResponse($"Cannot found contact for id = {id} in database"));
-        }
 
-        var items = new ContactVm()
+        var items = new ContactVm
         {
             Id = contact.Id,
             Phone = contact.Phone,
@@ -64,22 +62,17 @@ public class ContactsController : BaseController
     {
         var contact = await _context.Contacts.FindAsync(id);
         if (contact == null)
-        {
             return NotFound(new ApiNotFoundResponse($"Cannot found contact for id = {id} in database"));
-        }
-        
+
         contact.Phone = request.Phone;
         contact.Email = request.Email;
         contact.Location = request.Location;
-        
+
         _context.Contacts.Update(contact);
-        
+
         var result = await _context.SaveChangesAsync();
-        if (result > 0)
-        {
-            return NoContent();
-        }
-        
+        if (result > 0) return NoContent();
+
         return BadRequest(new ApiBadRequestResponse("Update contact failed"));
     }
 
@@ -87,21 +80,18 @@ public class ContactsController : BaseController
     [HttpPost]
     public async Task<IActionResult> PostSupport([FromBody] SupportCreateRequest request)
     {
-        var support = new Support()
+        var support = new Support
         {
             Name = request.Name,
             Email = request.Email,
             Message = request.Message,
             Subject = request.Subject
         };
-        
+
         _context.Supports.Add(support);
 
         var result = await _context.SaveChangesAsync();
-        if (result > 0)
-        {
-            return Ok(result);
-        }
-        return BadRequest(new ApiBadRequestResponse($"Create support failed"));
+        if (result > 0) return Ok(result);
+        return BadRequest(new ApiBadRequestResponse("Create support failed"));
     }
 }

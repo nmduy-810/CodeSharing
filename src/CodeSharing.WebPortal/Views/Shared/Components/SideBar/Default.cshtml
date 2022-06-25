@@ -1,4 +1,4 @@
-@model CodeSharing.WebPortal.ViewModels.SideBarViewModel
+@model SideBarViewModel
 
 <div class="sidebar">
     <!-- widget about -->
@@ -14,20 +14,24 @@
     <!-- widget popular posts -->
     <div class="post-tabs widget rounded bordered">
         <ul class="nav nav-tabs nav-pills nav-fill" id="postsTab" role="tablist">
-            <li class="nav-item" role="presentation"><button aria-controls="popular" aria-selected="true" class="nav-link active" data-bs-target="#popular" data-bs-toggle="tab" id="popular-tab" role="tab" type="button">Xu hướng</button></li>
-            <li class="nav-item" role="presentation"><button aria-controls="recent" aria-selected="false" class="nav-link" data-bs-target="#recent" data-bs-toggle="tab" id="recent-tab" role="tab" type="button">Gần đây</button></li>
+            <li class="nav-item" role="presentation">
+                <button aria-controls="popular" aria-selected="true" class="nav-link active" data-bs-target="#popular" data-bs-toggle="tab" id="popular-tab" role="tab" type="button">Xu hướng</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button aria-controls="recent" aria-selected="false" class="nav-link" data-bs-target="#recent" data-bs-toggle="tab" id="recent-tab" role="tab" type="button">Gần đây</button>
+            </li>
         </ul>
         <!-- tab contents -->
         <div class="tab-content" id="postsTabContent">
-        	<!-- loader -->
-        	<div class="lds-dual-ring"></div>
-        	<!-- trending posts -->
-	        <div aria-labelledby="popular-tab" class="tab-pane fade show active" id="popular" role="tabpanel">
-		        @foreach (var item in Model.TrendingPosts)
-		        {
-		            var detailPostUrl = "/post/" + item.Slug + "-" + item.Id + "/";
-		            <!-- post -->
-		            <div class="post post-list-sm circle">
+            <!-- loader -->
+            <div class="lds-dual-ring"></div>
+            <!-- trending posts -->
+            <div aria-labelledby="popular-tab" class="tab-pane fade show active" id="popular" role="tabpanel">
+                @foreach (var item in Model.TrendingPosts)
+                {
+                    var detailPostUrl = "/post/" + item.Slug + "-" + item.Id + "/";
+                    <!-- post -->
+                    <div class="post post-list-sm circle">
                         <div class="thumb">
                             <a href="@detailPostUrl" title="@item.Title">
                                 <div class="inner">
@@ -36,15 +40,17 @@
                             </a>
                         </div>
                         <div class="details clearfix">
-                            <h6 class="post-title my-0"><a href="@detailPostUrl" title="@item.Title">@Html.Raw(item.Title)</a></h6>
+                            <h6 class="post-title my-0">
+                                <a href="@detailPostUrl" title="@item.Title">@Html.Raw(item.Title)</a>
+                            </h6>
                             <ul class="meta list-inline mt-1 mb-0">
                                 <li class="list-inline-item">@item.CreateDate.ToString("dd MMMM, yyyy")</li>
                             </ul>
                         </div>
                     </div>
-		        }
+                }
             </div>
-        	<!-- recent posts -->
+            <!-- recent posts -->
             <div aria-labelledby="recent-tab" class="tab-pane fade" id="recent" role="tabpanel">
                 @foreach (var item in Model.LatestPosts)
                 {
@@ -59,7 +65,9 @@
                             </a>
                         </div>
                         <div class="details clearfix">
-                            <h6 class="post-title my-0"><a href="@detailPostUrl" title="@item.Title">@Html.Raw(item.Title)</a></h6>
+                            <h6 class="post-title my-0">
+                                <a href="@detailPostUrl" title="@item.Title">@Html.Raw(item.Title)</a>
+                            </h6>
                             <ul class="meta list-inline mt-1 mb-0">
                                 <li class="list-inline-item">@item.CreateDate.ToString("dd MMMM, yyyy")</li>
                             </ul>
