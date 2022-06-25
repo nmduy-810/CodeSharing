@@ -25,4 +25,5 @@ public interface IPostApiClient
     Task<ReportVm> PostReport(ReportCreateRequest request);
     Task<bool> PostPost(PostCreateRequest request);
     Task<bool> PutPost(int id, PostCreateRequest request);
+    Task<bool> DeletePost(int id);
 }

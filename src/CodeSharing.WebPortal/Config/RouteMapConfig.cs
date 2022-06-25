@@ -44,6 +44,11 @@ public static class RouteMapConfig
             name: "editPost",
             pattern: "/edit-post/{id}",
             new { controller = "Account", action = "EditPost" });
+        
+        endpoints.MapControllerRoute(
+            name: "deletePost",
+            pattern: "/delete-post/{id}",
+            new { controller = "Account", action = "DeletePost" });
 
         endpoints.MapControllerRoute(
             name: "newPost",

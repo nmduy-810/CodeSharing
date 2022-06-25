@@ -117,7 +117,7 @@ public class AccountController : Controller
             Content = post.Content,
             Note = post.Note,
             PreviewCoverImage = post.CoverImage,
-            Slug = post.Slug
+            Slug = post.Slug,
         };
 
         var tagList = new List<string>();
@@ -165,6 +165,21 @@ public class AccountController : Controller
         }
 
         return BadRequest();
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> DeletePost(int id)
+    {
+        var post = await _postApiClient.GetDetailsPost(id);
+        var response = await _postApiClient.DeletePost(post.Id);
+        if (response)
+        {
+            return RedirectToAction("MyPosts", "Account");    
+        }
+        else
+        {
+            return BadRequest();
+        }
     }
 
     [HttpPost]

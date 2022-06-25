@@ -209,4 +209,9 @@ public class PostApiClient : BaseApiClient, IPostApiClient
         var response = await client.PutAsync($"/api/posts/{id}", requestContent);
         return response.IsSuccessStatusCode;
     }
+
+    public async Task<bool> DeletePost(int id)
+    {
+        return await DeleteAsync<bool>($"/api/posts/{id}");
+    }
 }
