@@ -7,6 +7,7 @@ using CodeSharing.Server.Services.Interfaces;
 using CodeSharing.Utilities.Commons;
 using CodeSharing.Utilities.Constants;
 using CodeSharing.Utilities.Helpers;
+using CodeSharing.ViewModels.Contents.Comment;
 using CodeSharing.ViewModels.Contents.Post;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -557,9 +558,33 @@ public partial class PostsController : BaseController
     public async Task<IActionResult> Delete(int id)
     {
         var post = await _context.Posts.FindAsync(id);
-        if (post == null) return NotFound(new ApiNotFoundResponse($"Cannotfound post item for id = {id} in database"));
-
+        if (post == null)
+        {
+            return NotFound(new ApiNotFoundResponse($"Cannot found post item for id = {id} in database"));
+        }
         _context.Posts.Remove(post);
+        
+        // Remove comments related post
+        var comments = await _context.Comments.Where(x => x.PostId == id).ToListAsync();
+        foreach (var comment in comments)
+        {
+            _context.Comments.Remove(comment);
+        }
+
+        // Remove label in post
+        var labelInPosts = await _context.LabelInPosts.Where(x => x.PostId == id).ToListAsync();
+        foreach (var labelInPost in labelInPosts)
+        {
+            _context.LabelInPosts.Remove(labelInPost);
+        }
+        
+        // Remove vote
+        var vote = _context.Votes.FirstOrDefault(x => x.PostId == id);
+        if (vote != null)
+        {
+            _context.Votes.Remove(vote);
+        }
+
         var result = await _context.SaveChangesAsync();
         if (result <= 0) return BadRequest(new ApiBadRequestResponse("Delete post failed"));
 

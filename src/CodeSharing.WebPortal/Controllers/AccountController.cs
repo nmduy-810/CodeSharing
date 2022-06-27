@@ -92,12 +92,17 @@ public class AccountController : Controller
     [HttpPost]
     public async Task<IActionResult> CreateNewPost([FromForm] PostCreateRequest request)
     {
-        if (!ModelState.IsValid) return BadRequest(ModelState);
+        if (ModelState.IsValid)
+        {
+            var result = await _postApiClient.PostPost(request);
+            if (result)
+            {
+                return RedirectToAction("MyPosts", "Account");
+            }
+        }
 
-        var result = await _postApiClient.PostPost(request);
-        if (result) return RedirectToAction("MyPosts", "Account");
-
-        return BadRequest();
+        await SetCategories();
+        return View(request);
     }
 
     [HttpGet]
