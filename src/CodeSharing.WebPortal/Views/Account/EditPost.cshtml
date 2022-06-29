@@ -12,6 +12,12 @@
         let controller = new accountsController();
         controller.initialize();
     </script>
+    <script>
+        function populateLabelVal(val) {
+         let selection = $('#selection');
+         selection.val(selection.val() + val.concat(" "));    
+        }
+    </script>
 }
 
 <style>
@@ -51,14 +57,14 @@
             <!--Title-->
             <div class="form-group">
                 <h6>Tiêu đề</h6>
-                @Html.TextBoxFor(model => model.Title, new { id = "form-control", required = "required", @class = " form-control" })
+                @Html.TextBoxFor(model => model.Title, new { required = "required", @class = " form-control" })
                 <div class="help-block with-errors"></div>
             </div>
 
             <!--Summary-->
             <div class="form-group">
                 <h6>Tổng quan</h6>
-                @Html.TextBoxFor(model => model.Summary, new { id = "form-control", required = "required", @class = " form-control" })
+                @Html.TextBoxFor(model => model.Summary, new { required = "required", @class = " form-control" })
                 <div class="help-block with-errors"></div>
             </div>
 
@@ -75,14 +81,21 @@
             <!--Label-->
             <div class="form-group">
                 <h6>Nhãn</h6>
-                @Html.TextBoxFor(model => model.PreviewLabel, new { id = "form-control", required = "required", @class = " form-control" })
+                @Html.TextBoxFor(model => model.PreviewLabel, new { id = "selection", required = "required", @class = " form-control" })
+                <br>
+                <div class="widget-content">
+                    @foreach (var item in ViewBag.PopularLabels)
+                    {
+                        <a type="button" class="tag" onclick="populateLabelVal('#@item.Name'); return false;">#@item.Name</a>
+                    }
+                </div>
                 <div class="help-block with-errors"></div>
             </div>
 
             <!--Note-->
             <div class="form-group">
                 <h6>Ghi chú</h6>
-                @Html.TextBoxFor(model => model.Note, new { id = "form-control", required = "required", @class = " form-control" })
+                @Html.TextBoxFor(model => model.Note, new { required = "required", @class = " form-control" })
                 <div class="help-block with-errors"></div>
             </div>
 

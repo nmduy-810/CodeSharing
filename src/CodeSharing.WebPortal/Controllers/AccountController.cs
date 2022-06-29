@@ -16,14 +16,16 @@ public class AccountController : Controller
     private readonly IPostApiClient _postApiClient;
     private readonly IUploadApiClient _uploadApiClient;
     private readonly IUserApiClient _userApiClient;
+    private readonly ILabelApiClient _labelApiClient;
 
     public AccountController(IUserApiClient userApiClient, IPostApiClient postApiClient,
-        ICategoryApiClient categoryApiClient, IUploadApiClient uploadApiClient)
+        ICategoryApiClient categoryApiClient, IUploadApiClient uploadApiClient, ILabelApiClient labelApiClient)
     {
         _userApiClient = userApiClient;
         _postApiClient = postApiClient;
         _categoryApiClient = categoryApiClient;
         _uploadApiClient = uploadApiClient;
+        _labelApiClient = labelApiClient;
     }
 
     public IActionResult SignIn()
@@ -86,6 +88,7 @@ public class AccountController : Controller
     public async Task<IActionResult> CreateNewPost()
     {
         await SetCategories();
+        await LoadPopularLabels();
         return View();
     }
 
@@ -102,6 +105,7 @@ public class AccountController : Controller
         }
 
         await SetCategories();
+        await LoadPopularLabels();
         return View(request);
     }
 
@@ -110,7 +114,8 @@ public class AccountController : Controller
     {
         var post = await _postApiClient.GetDetailsPost(id);
         await SetCategories();
-
+        await LoadPopularLabels();
+        
         var items = new PostCreateRequest
         {
             CategoryId = post.CategoryId,
@@ -126,8 +131,12 @@ public class AccountController : Controller
 
         // Labels
         if (post.Labels != null)
+        {
             foreach (var label in post.Labels)
+            {
                 tagList.Add("#" + label);
+            }
+        }
 
         items.Labels = tagList.Select(x => x.ToString()).ToArray();
 
@@ -143,12 +152,21 @@ public class AccountController : Controller
         // Check label
         if (!string.IsNullOrEmpty(request.PreviewLabel)) request.Labels = new[] { request.PreviewLabel };
 
-        if (!ModelState.IsValid) return BadRequest(ModelState);
+        if (ModelState.IsValid)
+        {
+            return View(request);
+        }
 
-        if (request.Id == null) return BadRequest();
+        if (request.Id == null)
+        {
+            return BadRequest();
+        }
 
         var result = await _postApiClient.PutPost(request.Id.Value, request);
-        if (result) return RedirectToAction("MyPosts", "Account");
+        if (result)
+        {
+            return RedirectToAction("MyPosts", "Account");
+        }
 
         return BadRequest();
     }
@@ -159,7 +177,9 @@ public class AccountController : Controller
         var post = await _postApiClient.GetDetailsPost(id);
         var response = await _postApiClient.DeletePost(post.Id);
         if (response)
+        {
             return RedirectToAction("MyPosts", "Account");
+        }
         return BadRequest();
     }
 
@@ -196,5 +216,11 @@ public class AccountController : Controller
         ViewBag.Categories = new SelectList(items, "Value", "Text", selectedValue);
     }
 
-    #endregion
+    public async Task LoadPopularLabels()
+    {
+        var popularLabels = await _labelApiClient.GetPopularLabels(10);
+        ViewBag.PopularLabels = popularLabels;
+    }
+
+    #endregion Helper Method
 }

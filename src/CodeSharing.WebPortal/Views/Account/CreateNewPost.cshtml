@@ -6,11 +6,17 @@
 }
 
 @section scripts{
-    <script src="~/lib/ckeditor5-build-classic/build/ckeditor.js"></script>
+<script src="~/lib/ckeditor5-build-classic/build/ckeditor.js" xmlns="http://www.w3.org/1999/html"></script>
     <script src="~/js/controllers/accountsController.js" asp-append-version="true"></script>
     <script>
         let controller = new accountsController();
         controller.initialize();
+    </script>
+    <script>
+        function populateLabelVal(val) {
+         let selection = $('#selection');
+         selection.val(selection.val() + val.concat(" "));    
+        }
     </script>
 }
 
@@ -54,7 +60,14 @@
             <!--Label-->
             <div class="form-group">
                 <h6>Nhãn</h6>
-                <input asp-for="@Model.Labels" class="form-control">
+                <input asp-for="@Model.Labels" class="form-control" id="selection">
+                <br>
+                <div class="widget-content">
+                    @foreach (var item in ViewBag.PopularLabels)
+                    {
+                        <a type="button" class="tag" onclick="populateLabelVal('#@item.Name'); return false;">#@item.Name</a>
+                    }
+                </div>
                 <span asp-validation-for="@Model.Labels"></span>
             </div>
 
