@@ -28,7 +28,9 @@ public class HeaderViewComponent : ViewComponent
 
         var user = User as ClaimsPrincipal;
         if (user?.Identity != null && user.Identity.IsAuthenticated)
+        {
             items.CurrentUser = await _userApiClient.GetById(user.GetUserId());
+        }
 
         return View(componentView, items);
     }

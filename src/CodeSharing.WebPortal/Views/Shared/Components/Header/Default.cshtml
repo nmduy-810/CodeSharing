@@ -74,15 +74,20 @@
 
                     @if (User.Identity!.IsAuthenticated)
                     {
+                        var listRole = Model.CurrentUser.Roles;
+                        
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#">Xin chào, <span class="fw-bold">@Model.CurrentUser.LastName</span></a>
                             <ul class="dropdown-menu">
                                 <li>
                                     <a class="dropdown-item" asp-action="MyProfile" asp-controller="Account">Thông tin cá nhân</a>
                                 </li>
-                                <li>
-                                    <a class="dropdown-item" asp-action="MyPosts" asp-controller="Account">Quản lý bài viết</a>
-                                </li>
+                                @foreach (var item in listRole.Where(item => item == "Admin"))
+                                {
+                                    <li>
+                                        <a class="dropdown-item" asp-action="MyPosts" asp-controller="Account">Quản lý bài viết</a>
+                                    </li>
+                                }
                                 <li>
                                     <a class="dropdown-item" asp-action="SignOut" asp-controller="Account">Đăng xuất</a>
                                 </li>

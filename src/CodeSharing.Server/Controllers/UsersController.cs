@@ -57,6 +57,8 @@ public class UsersController : BaseController
         var user = await _userManager.FindByIdAsync(id);
         if (user == null) return NotFound(new ApiNotFoundResponse($"Cannot found user item for id = {id} in database"));
 
+        var roles = await _userManager.GetRolesAsync(user);
+        
         var item = new UserVm
         {
             Id = user.Id,
@@ -66,7 +68,8 @@ public class UsersController : BaseController
             PhoneNumber = user.PhoneNumber,
             FirstName = user.FirstName,
             LastName = user.LastName,
-            CreateDate = user.CreateDate
+            CreateDate = user.CreateDate,
+            Roles = roles.ToList()
         };
 
         _logger.LogInformation("Successful execution of get use by id request");
