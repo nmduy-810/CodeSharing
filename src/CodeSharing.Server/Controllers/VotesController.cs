@@ -63,6 +63,14 @@ public partial class PostsController
             _context.Votes.Add(vote);
             numberOfVotes += 1;
         }
+        
+        // Update number of votes in user
+        var user = await _userManager.FindByIdAsync(userId);
+        if (user != null)
+        {
+            user.NumberOfVotes = numberOfVotes;
+            await _userManager.UpdateAsync(user);
+        }
 
         post.NumberOfVotes = numberOfVotes;
         _context.Posts.Update(post);

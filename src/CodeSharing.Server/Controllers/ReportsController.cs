@@ -27,6 +27,15 @@ public partial class PostsController
         if (post == null)
             return BadRequest(new ApiBadRequestResponse($"Cannot found post with id {postId}"));
 
+        var user = await _userManager.FindByIdAsync(User.GetUserId());
+        if (user != null)
+        {
+            var numberOfPosts = user.NumberOfPosts;
+            numberOfPosts += 1;
+            user.NumberOfReports = numberOfPosts;
+            await _userManager.UpdateAsync(user);
+        }
+
         post.NumberOfReports = post.NumberOfReports.GetValueOrDefault(0) + 1;
         _context.Posts.Update(post);
 

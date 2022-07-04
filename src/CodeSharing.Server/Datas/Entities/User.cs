@@ -19,7 +19,7 @@ public class User : IdentityUser, IDateTracking
 
     [Required] public DateTime Birthday { get; set; }
 
-    public int? NumberOfKnowledgeBases { get; set; }
+    public int? NumberOfPosts { get; set; }
 
     public int? NumberOfVotes { get; set; }
 

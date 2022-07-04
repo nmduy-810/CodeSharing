@@ -82,11 +82,14 @@
                                 <li>
                                     <a class="dropdown-item" asp-action="MyProfile" asp-controller="Account">Thông tin cá nhân</a>
                                 </li>
-                                @foreach (var item in listRole.Where(item => item == "Admin"))
+                                @foreach (var item in listRole)
                                 {
-                                    <li>
-                                        <a class="dropdown-item" asp-action="MyPosts" asp-controller="Account">Quản lý bài viết</a>
-                                    </li>
+                                    @if (item == "Admin")
+                                    {
+                                        <li>
+                                            <a class="dropdown-item" asp-action="MyPosts" asp-controller="Account">Quản lý bài viết</a>
+                                        </li>
+                                    }
                                 }
                                 <li>
                                     <a class="dropdown-item" asp-action="SignOut" asp-controller="Account">Đăng xuất</a>

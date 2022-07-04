@@ -271,202 +271,119 @@ public class DbInitializer
 
         #endregion CommandInFunction
 
-        #region Post
+        #region Category
 
-        if (!_context.Posts.Any())
+        if (!_context.Categories.Any())
         {
-            _context.Posts.AddRange(new List<Post>
+            _context.Categories.AddRange(new List<Category>
             {
                 new()
                 {
-                    Id = 1,
-                    CategoryId = 1,
-                    Title = "Lorem Ipsum 1",
-                    Content =
-                        "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, " +
-                        "when an unknown printer took a galley of type and scrambled it to make a type specimen book. ",
-                    Slug = "lorem-ipsum-1",
-                    Summary = "",
-                    CoverImage = "",
-                    Note = "",
-                    Labels = "test",
+                    ParentCategoryId = null,
+                    Title = "C#",
+                    Slug = "C-Sharp",
+                    SortOrder = 1,
                     CreateDate = DateTime.Now,
-                    LastModifiedDate = DateTime.Now,
-                    NumberOfComments = 0,
-                    NumberOfReports = 0,
-                    NumberOfVotes = 0,
-                    ViewCount = 0,
-                    OwnerUserId = ""
+                    IsParent = true
+                },
+                new()
+                {
+                    ParentCategoryId = 1,
+                    Title = "NET Framework",
+                    Slug = "NET-Framework",
+                    SortOrder = 1,
+                    CreateDate = DateTime.Now,
+                    IsParent = false
+                },
+                new()
+                {
+                    ParentCategoryId = 1,
+                    Title = "NET Core",
+                    Slug = "NET-Core",
+                    SortOrder = 2,
+                    CreateDate = DateTime.Now,
+                    IsParent = false
+                },
+                new()
+                {
+                    ParentCategoryId = null,
+                    Title = "Angular",
+                    Slug = "Angular",
+                    SortOrder = 2,
+                    CreateDate = DateTime.Now,
+                    IsParent = false
+                },
+                new()
+                {
+                    ParentCategoryId = null,
+                    Title = "SQL",
+                    Slug = "SQL",
+                    SortOrder = 3,
+                    CreateDate = DateTime.Now,
+                    IsParent = false
+                },
+            });
+        }
+        
+        #endregion Category
+
+        #region Labels
+
+        if (!_context.Labels.Any())
+        {
+            _context.Labels.AddRange(new List<Label>
+            {
+                new()
+                {
+                    Id = "Technology",
+                    Name = "Technology"
+                },
+                new()
+                {
+                    Id = "Programming",
+                    Name = "Programming"
+                },
+                new()
+                {
+                    Id = "Development",
+                    Name = "Development"
+                },
+                new()
+                {
+                    Id = "Angular",
+                    Name = "Angular"
+                },
+                new()
+                {
+                    Id = "CSharp",
+                    Name = "C#"
+                },
+                new()
+                {
+                    Id = "NETCore",
+                    Name = "NETCore"
+                },
+                new()
+                {
+                    Id = "NETFramework",
+                    Name = "NETFramework"
+                },
+                new()
+                {
+                    Id = "SQL",
+                    Name = "SQL"
                 }
             });
-
-            #region Labels
-
-            if (!_context.Labels.Any())
-                _context.Labels.AddRange(new List<Label>
-                {
-                    new()
-                    {
-                        Id = "test",
-                        Name = "test"
-                    },
-                    new()
-                    {
-                        Id = "tech",
-                        Name = "tech"
-                    },
-                    new()
-                    {
-                        Id = "programming",
-                        Name = "programming"
-                    },
-                    new()
-                    {
-                        Id = "development",
-                        Name = "development"
-                    },
-                    new()
-                    {
-                        Id = "angular",
-                        Name = "angular"
-                    },
-                    new()
-                    {
-                        Id = "csharp",
-                        Name = "c#"
-                    },
-                    new()
-                    {
-                        Id = "net",
-                        Name = "net"
-                    },
-                    new()
-                    {
-                        Id = "sql",
-                        Name = "sql"
-                    }
-                });
-
-            #endregion Labels
-
-            #region LabelInPost
-
-            if (!_context.LabelInPosts.Any())
-                _context.LabelInPosts.AddRange(new List<LabelInPost>
-                {
-                    new()
-                    {
-                        PostId = 1,
-                        LabelId = "test"
-                    },
-                    new()
-                    {
-                        PostId = 1,
-                        LabelId = "csharp"
-                    },
-                    new()
-                    {
-                        PostId = 1,
-                        LabelId = "programming"
-                    },
-                    new()
-                    {
-                        PostId = 1,
-                        LabelId = "tech"
-                    },
-                    new()
-                    {
-                        PostId = 2,
-                        LabelId = "development"
-                    },
-                    new()
-                    {
-                        PostId = 2,
-                        LabelId = "csharp"
-                    },
-                    new()
-                    {
-                        PostId = 3,
-                        LabelId = "development"
-                    },
-                    new()
-                    {
-                        PostId = 3,
-                        LabelId = "csharp"
-                    },
-                    new()
-                    {
-                        PostId = 4,
-                        LabelId = "development"
-                    },
-                    new()
-                    {
-                        PostId = 4,
-                        LabelId = "csharp"
-                    },
-                    new()
-                    {
-                        PostId = 5,
-                        LabelId = "development"
-                    },
-                    new()
-                    {
-                        PostId = 6,
-                        LabelId = "csharp"
-                    },
-                    new()
-                    {
-                        PostId = 7,
-                        LabelId = "development"
-                    },
-                    new()
-                    {
-                        PostId = 7,
-                        LabelId = "csharp"
-                    },
-                    new()
-                    {
-                        PostId = 8,
-                        LabelId = "development"
-                    },
-                    new()
-                    {
-                        PostId = 8,
-                        LabelId = "csharp"
-                    },
-                    new()
-                    {
-                        PostId = 9,
-                        LabelId = "development"
-                    },
-                    new()
-                    {
-                        PostId = 9,
-                        LabelId = "csharp"
-                    },
-                    new()
-                    {
-                        PostId = 9,
-                        LabelId = "programming"
-                    },
-                    new()
-                    {
-                        PostId = 10,
-                        LabelId = "programming"
-                    }
-                });
-
-            #endregion LabelInPost
         }
 
-        #endregion Post
+        #endregion Labels
 
         #region Contact
 
         if (!_context.Contacts.Any())
             _context.Contacts.AddRange(new Contact
             {
-                Email = "codesharing@hotmail.com",
+                Email = "codesharing.contact@gmail.com",
                 Location = "Thành phố Hồ Chí Minh, Việt Nam",
                 Phone = "0969 772 069"
             });

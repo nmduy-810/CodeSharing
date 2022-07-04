@@ -10,6 +10,7 @@ using CodeSharing.Utilities.Helpers;
 using CodeSharing.ViewModels.Contents.Comment;
 using CodeSharing.ViewModels.Contents.Post;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -23,14 +24,14 @@ public partial class PostsController : BaseController
     private readonly ILogger<PostsController> _logger;
     private readonly ISequenceService _sequenceService;
     private readonly IStorageService _storageService;
-
+    private readonly UserManager<User> _userManager;
     public PostsController(
         ApplicationDbContext context,
         ILogger<PostsController> logger,
         ISequenceService sequenceService,
         IStorageService storageService,
         ICacheService distributedCacheService,
-        IHttpContextAccessor httpContextAccessor)
+        IHttpContextAccessor httpContextAccessor, UserManager<User> userManager)
     {
         _context = context;
         _logger = logger ?? throw new ArgumentException(null, nameof(logger));
@@ -38,6 +39,7 @@ public partial class PostsController : BaseController
         _storageService = storageService;
         _distributedCacheService = distributedCacheService;
         _httpContextAccessor = httpContextAccessor;
+        _userManager = userManager;
     }
 
     [HttpGet]
@@ -462,6 +464,7 @@ public partial class PostsController : BaseController
             await _distributedCacheService.RemoveAsync(CacheConstants.PopularPosts);
             await _distributedCacheService.RemoveAsync(CacheConstants.TrendingPosts);
             await _distributedCacheService.RemoveAsync(CacheConstants.PostsPaging);
+            await _distributedCacheService.RemoveAsync(CacheConstants.Categories);
 
             request.Labels = request.Labels[0].Split("#").Select(x => x.Trim())
                 .Where(x => !string.IsNullOrWhiteSpace(x))
@@ -487,6 +490,16 @@ public partial class PostsController : BaseController
         {
             var coverImagePath = await SaveFile(request.CoverImage);
             post.CoverImage = coverImagePath;
+        }
+        
+        // Update number of post in user
+        var user = await _userManager.FindByIdAsync(post.OwnerUserId);
+        if (user != null)
+        {
+            var numberOfPost = user.NumberOfPosts;
+            numberOfPost += 1;
+            user.NumberOfPosts = numberOfPost;
+            await _userManager.UpdateAsync(user);
         }
 
         _context.Posts.Add(post);
@@ -546,7 +559,7 @@ public partial class PostsController : BaseController
             await _distributedCacheService.RemoveAsync(CacheConstants.PopularPosts);
             await _distributedCacheService.RemoveAsync(CacheConstants.TrendingPosts);
             await _distributedCacheService.RemoveAsync(CacheConstants.PostsPaging);
-
+            await _distributedCacheService.RemoveAsync(CacheConstants.Categories);
             return NoContent();
         }
 
@@ -593,7 +606,8 @@ public partial class PostsController : BaseController
         await _distributedCacheService.RemoveAsync(CacheConstants.PopularPosts);
         await _distributedCacheService.RemoveAsync(CacheConstants.TrendingPosts);
         await _distributedCacheService.RemoveAsync(CacheConstants.PostsPaging);
-
+        await _distributedCacheService.RemoveAsync(CacheConstants.Categories);
+        
         var postVm = new PostVm
         {
             Id = post.Id,
