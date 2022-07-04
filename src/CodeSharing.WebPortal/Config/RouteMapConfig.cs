@@ -52,5 +52,25 @@ public static class RouteMapConfig
             "newPost",
             "/new-post",
             new { controller = "Account", action = "CreateNewPost" });
+        
+        endpoints.MapControllerRoute(
+            "myPost",
+            "/my-post",
+            new { controller = "Account", action = "MyPosts" });
+        
+        endpoints.MapControllerRoute(
+            "myProfile",
+            "/my-profile",
+            new { controller = "Account", action = "MyProfile" });
+        
+        endpoints.MapControllerRoute(
+            "signin",
+            "/account/sign-in",
+            new { controller = "Account", action = "SignIn" });
+        
+        endpoints.MapControllerRoute(
+            "signout",
+            "/account/sign-out",
+            new { controller = "Account", action = "SignOut" });
     }
 }
