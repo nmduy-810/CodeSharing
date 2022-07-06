@@ -6,8 +6,8 @@ namespace CodeSharing.Utilities.Helpers;
 
 public class ErrorWrappingMiddleware
 {
-    private readonly RequestDelegate _next;
     private readonly ILogger<ErrorWrappingMiddleware> _logger;
+    private readonly RequestDelegate _next;
 
     public ErrorWrappingMiddleware(RequestDelegate next, ILogger<ErrorWrappingMiddleware> logger)
     {

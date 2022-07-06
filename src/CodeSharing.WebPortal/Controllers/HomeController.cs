@@ -1,16 +1,16 @@
 ﻿using System.Diagnostics;
 using CodeSharing.WebPortal.Interfaces;
-using Microsoft.AspNetCore.Mvc;
 using CodeSharing.WebPortal.ViewModels;
+using Microsoft.AspNetCore.Mvc;
 
 namespace CodeSharing.WebPortal.Controllers;
 
 public class HomeController : Controller
 {
+    private readonly IConfiguration _configuration;
     private readonly ILogger<HomeController> _logger;
     private readonly IPostApiClient _postApiClient;
-    private readonly IConfiguration _configuration;
-    
+
     public HomeController(ILogger<HomeController> logger, IPostApiClient postApiClient, IConfiguration configuration)
     {
         _logger = logger;
@@ -23,11 +23,11 @@ public class HomeController : Controller
         var pageSize = int.Parse(_configuration["PageIndexSize"]);
         var latestPosts = await _postApiClient.GetLatestPostsPaging(page, pageSize);
 
-        var items = new HomeViewModel()
+        var items = new HomeViewModel
         {
-            LatestPosts = latestPosts,
+            LatestPosts = latestPosts
         };
-        
+
         return View(items);
     }
 

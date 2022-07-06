@@ -1,4 +1,4 @@
-@model CodeSharing.WebPortal.ViewModels.UserDetailViewModel
+@model UserDetailViewModel
 
 @{
     Layout = "_SubLayout";
@@ -10,7 +10,7 @@
 <!-- section header -->
 <div class="section-header">
     <h3 class="section-title">Thông tin cá nhân</h3>
-    <img src="~/images/wave.svg" class="wave" alt="wave" />
+    <img src="~/images/wave.svg" class="wave" alt="wave"/>
 </div>
 
 <!-- Contact Form -->
@@ -18,30 +18,30 @@
 {
     <div class="messages"></div>
     <div class="row">
-        
+
         <!-- User name -->
         <div class="column col-md-6">
             <div class="form-group">
-                @Html.TextBoxFor(model => model.UserName, new { @class = "form-control", type = "text", disabled="disabled" })
+                @Html.TextBoxFor(model => model.UserName, new { @class = "form-control", type = "text", disabled = "disabled" })
             </div>
         </div>
 
         <!-- Email -->
         <div class="column col-md-6">
             <div class="form-group">
-                @Html.TextBoxFor(model => model.Email, new { @class = "form-control", type = "text", disabled="disabled" })
+                @Html.TextBoxFor(model => model.Email, new { @class = "form-control", type = "text", disabled = "disabled" })
             </div>
         </div>
 
         <!-- Birthday -->
         <div class="column col-md-6">
             <div class="form-group">
-                @Html.TextBoxFor(model => model.Birthday, "{0:yyyy-MM-dd}", 
+                @Html.TextBoxFor(model => model.Birthday, "{0:yyyy-MM-dd}",
                     new
                     {
-                        @class = "form-control input-sm datepicker", 
-                        type = "date",  
-                        name="birthday", 
+                        @class = "form-control input-sm datepicker",
+                        type = "date",
+                        name = "birthday",
                         max = DateTime.Today.ToString("yyyy-MM-dd")
                     })
             </div>
@@ -50,14 +50,14 @@
         <!-- Phone Number -->
         <div class="column col-md-6">
             <div class="form-group">
-                @Html.TextBoxFor(model => model.PhoneNumber, new { @class = "form-control", type = "text", disabled="disabled" })
+                @Html.TextBoxFor(model => model.PhoneNumber, new { @class = "form-control", type = "text", disabled = "disabled" })
             </div>
         </div>
 
         <!-- Full Name -->
         <div class="column col-md-12">
             <div class="form-group">
-                @Html.TextBoxFor(model => model.FullName, new { @class = "form-control", type = "text"})
+                @Html.TextBoxFor(model => model.FullName, new { @class = "form-control", type = "text" })
                 <div class="help-block with-errors"></div>
             </div>
         </div>
@@ -67,4 +67,3 @@
 }
 
 <!-- My Profile Form end -->
-

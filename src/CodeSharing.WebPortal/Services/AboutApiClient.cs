@@ -5,7 +5,8 @@ namespace CodeSharing.WebPortal.Services;
 
 public class AboutApiClient : BaseApiClient, IAboutApiClient
 {
-    public AboutApiClient(IHttpClientFactory httpClientFactory, IConfiguration configuration, IHttpContextAccessor httpContextAccessor) : base(httpClientFactory, configuration, httpContextAccessor)
+    public AboutApiClient(IHttpClientFactory httpClientFactory, IConfiguration configuration,
+        IHttpContextAccessor httpContextAccessor) : base(httpClientFactory, configuration, httpContextAccessor)
     {
     }
 

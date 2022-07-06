@@ -16,24 +16,25 @@ namespace CodeSharing.Server.Controllers;
 
 public class UsersController : BaseController
 {
-    private readonly UserManager<User> _userManager;
-    private readonly ILogger<UsersController> _logger;
     private readonly ApplicationDbContext _context;
+    private readonly ILogger<UsersController> _logger;
     private readonly RoleManager<IdentityRole> _roleManager;
-    
-    public UsersController(UserManager<User> userManager, ILogger<UsersController> logger, ApplicationDbContext context, RoleManager<IdentityRole> roleManager)
+    private readonly UserManager<User> _userManager;
+
+    public UsersController(UserManager<User> userManager, ILogger<UsersController> logger, ApplicationDbContext context,
+        RoleManager<IdentityRole> roleManager)
     {
         _userManager = userManager;
         _logger = logger ?? throw new ArgumentException(null, nameof(logger));
         _context = context;
         _roleManager = roleManager;
     }
-    
+
     [HttpGet]
     [ClaimRequirement(FunctionCodeConstants.SYSTEM_USER, CommandCodeConstants.VIEW)]
     public async Task<IActionResult> GetUsers()
     {
-        var items = await _userManager.Users.Select(u => new UserVm()
+        var items = await _userManager.Users.Select(u => new UserVm
         {
             Id = u.Id,
             UserName = u.UserName,
@@ -49,17 +50,47 @@ public class UsersController : BaseController
         return Ok(items);
     }
     
+    [HttpGet("paging")]
+    [ClaimRequirement(FunctionCodeConstants.SYSTEM_USER, CommandCodeConstants.VIEW)]
+    public async Task<IActionResult> GetUsersPaging(int pageIndex, int pageSize)
+    {
+        var query = _userManager.Users;
+        
+        var totalRecords = await query.CountAsync();
+        var items = await query.Skip((pageIndex - 1) * pageSize)
+            .Take(pageSize)
+            .Select(u => new UserVm()
+            {
+                Id = u.Id,
+                UserName = u.UserName,
+                FullName = string.Concat(u.FirstName, " ", u.LastName),
+                Birthday = u.Birthday,
+                Email = u.Email,
+                PhoneNumber = u.PhoneNumber,
+                FirstName = u.FirstName,
+                LastName = u.LastName,
+                CreateDate = u.CreateDate
+            })
+            .ToListAsync();
+
+        var pagination = new Pagination<UserVm>
+        {
+            Items = items,
+            TotalRecords = totalRecords,
+        };
+        return Ok(pagination);
+    }
+
     [HttpGet("{id}")]
     [ClaimRequirement(FunctionCodeConstants.SYSTEM_USER, CommandCodeConstants.VIEW)]
     public async Task<IActionResult> GetById(string id)
     {
         var user = await _userManager.FindByIdAsync(id);
-        if (user == null)
-        {
-            return NotFound(new ApiNotFoundResponse($"Cannot found user item for id = {id} in database"));
-        }
+        if (user == null) return NotFound(new ApiNotFoundResponse($"Cannot found user item for id = {id} in database"));
 
-        var item = new UserVm()
+        var roles = await _userManager.GetRolesAsync(user);
+        
+        var item = new UserVm
         {
             Id = user.Id,
             UserName = user.UserName,
@@ -68,18 +99,19 @@ public class UsersController : BaseController
             PhoneNumber = user.PhoneNumber,
             FirstName = user.FirstName,
             LastName = user.LastName,
-            CreateDate = user.CreateDate
+            CreateDate = user.CreateDate,
+            Roles = roles.ToList()
         };
-        
+
         _logger.LogInformation("Successful execution of get use by id request");
         return Ok(item);
     }
-    
+
     [HttpPost]
     [ClaimRequirement(FunctionCodeConstants.SYSTEM_USER, CommandCodeConstants.CREATE)]
     public async Task<IActionResult> PostUser(UserCreateRequest request)
     {
-        var user = new User()
+        var user = new User
         {
             Id = Guid.NewGuid().ToString(),
             Email = request.Email,
@@ -91,15 +123,10 @@ public class UsersController : BaseController
         };
         var result = await _userManager.CreateAsync(user, request.Password);
         if (result.Succeeded)
-        {
             return CreatedAtAction(nameof(GetById), new { id = user.Id }, request);
-        }
-        else
-        {
-            return BadRequest(new ApiBadRequestResponse(result));
-        }
+        return BadRequest(new ApiBadRequestResponse(result));
     }
-    
+
     [HttpPut("{id}")]
     public async Task<IActionResult> PutUser(string id, [FromBody] UserCreateRequest request)
     {
@@ -113,14 +140,11 @@ public class UsersController : BaseController
 
         var result = await _userManager.UpdateAsync(user);
 
-        if (result.Succeeded)
-        {
-            return NoContent();
-        }
-        
+        if (result.Succeeded) return NoContent();
+
         return BadRequest(new ApiBadRequestResponse(result));
     }
-    
+
     [HttpPut("{id}/change-password")]
     [ClaimRequirement(FunctionCodeConstants.SYSTEM_USER, CommandCodeConstants.UPDATE)]
     public async Task<IActionResult> PutUserPassword(string id, [FromBody] UserPasswordChangeRequest request)
@@ -131,13 +155,10 @@ public class UsersController : BaseController
 
         var result = await _userManager.ChangePasswordAsync(user, request.CurrentPassword, request.NewPassword);
 
-        if (result.Succeeded)
-        {
-            return NoContent();
-        }
+        if (result.Succeeded) return NoContent();
         return BadRequest(new ApiBadRequestResponse(result));
     }
-    
+
     [HttpDelete("{id}")]
     [ClaimRequirement(FunctionCodeConstants.SYSTEM_USER, CommandCodeConstants.DELETE)]
     public async Task<IActionResult> DeleteUser(string id)
@@ -149,14 +170,12 @@ public class UsersController : BaseController
         var adminUsers = await _userManager.GetUsersInRoleAsync(SystemConstants.Roles.Admin);
         var otherUsers = adminUsers.Where(x => x.Id != id).ToList();
         if (otherUsers.Count == 0)
-        {
             return BadRequest(new ApiBadRequestResponse("You cannot remove the only admin user remaining."));
-        }
         var result = await _userManager.DeleteAsync(user);
 
         if (result.Succeeded)
         {
-            var uservm = new UserVm()
+            var uservm = new UserVm
             {
                 Id = user.Id,
                 UserName = user.UserName,
@@ -168,9 +187,10 @@ public class UsersController : BaseController
             };
             return Ok(uservm);
         }
+
         return BadRequest(new ApiBadRequestResponse(result));
     }
-    
+
     [HttpGet("{userId}/menu")]
     public async Task<IActionResult> GetMenuByUserPermission(string userId)
     {
@@ -196,72 +216,50 @@ public class UsersController : BaseController
             .ToListAsync();
         return Ok(data);
     }
-    
+
     [HttpGet("{userId}/roles")]
     [ClaimRequirement(FunctionCodeConstants.SYSTEM_USER, CommandCodeConstants.VIEW)]
     public async Task<IActionResult> GetUserRoles(string userId)
     {
         var user = await _userManager.FindByIdAsync(userId);
-        if (user == null)
-        {
-            return NotFound(new ApiNotFoundResponse($"Cannot found user with id: {userId}"));
-        }
-        
+        if (user == null) return NotFound(new ApiNotFoundResponse($"Cannot found user with id: {userId}"));
+
         var roles = await _userManager.GetRolesAsync(user);
-        
+
         return Ok(roles);
     }
-    
+
     [HttpPost("{userId}/roles")]
     [ClaimRequirement(FunctionCodeConstants.SYSTEM_USER, CommandCodeConstants.UPDATE)]
     public async Task<IActionResult> PostRolesToUserUser(string userId, [FromBody] RoleAssignRequest request)
     {
-        if (request.RoleNames.Length == 0)
-        {
-            return BadRequest(new ApiBadRequestResponse("Role names cannot empty"));
-        }
-        
+        if (request.RoleNames.Length == 0) return BadRequest(new ApiBadRequestResponse("Role names cannot empty"));
+
         var user = await _userManager.FindByIdAsync(userId);
-        if (user == null)
-        {
-            return NotFound(new ApiNotFoundResponse($"Cannot found user with id: {userId}"));
-        }
-        
+        if (user == null) return NotFound(new ApiNotFoundResponse($"Cannot found user with id: {userId}"));
+
         var result = await _userManager.AddToRolesAsync(user, request.RoleNames);
-        if (result.Succeeded)
-        {
-            return Ok();
-        }
+        if (result.Succeeded) return Ok();
 
         return BadRequest(new ApiBadRequestResponse(result));
     }
-    
+
     [HttpDelete("{userId}/roles")]
     [ClaimRequirement(FunctionCodeConstants.SYSTEM_USER, CommandCodeConstants.VIEW)]
     public async Task<IActionResult> RemoveRolesFromUser(string userId, [FromQuery] RoleAssignRequest request)
     {
         var user = await _userManager.FindByIdAsync(userId);
-        
-        if (user == null)
-        {
-            return NotFound(new ApiNotFoundResponse($"Cannot found user with id: {userId}"));
-        }
 
-        if (request.RoleNames.Length == 0)
-        {
-            return BadRequest(new ApiBadRequestResponse("Role names cannot empty"));
-        }
-        
-        if (request.RoleNames.Length == 1 && request.RoleNames[0] == SystemConstants.Roles.Admin && user.UserName == "admin")
-        {
+        if (user == null) return NotFound(new ApiNotFoundResponse($"Cannot found user with id: {userId}"));
+
+        if (request.RoleNames.Length == 0) return BadRequest(new ApiBadRequestResponse("Role names cannot empty"));
+
+        if (request.RoleNames.Length == 1 && request.RoleNames[0] == SystemConstants.Roles.Admin &&
+            user.UserName == "admin")
             return BadRequest(new ApiBadRequestResponse($"Cannot remove {SystemConstants.Roles.Admin} role"));
-        }
 
         var result = await _userManager.RemoveFromRolesAsync(user, request.RoleNames);
-        if (result.Succeeded)
-        {
-            return Ok();
-        }
+        if (result.Succeeded) return Ok();
 
         return BadRequest(new ApiBadRequestResponse(result));
     }
@@ -281,7 +279,7 @@ public class UsersController : BaseController
 
         var items = await query.Skip((pageIndex - 1) * pageSize)
             .Take(pageSize)
-            .Select(x => new PostQuickVm()
+            .Select(x => new PostQuickVm
             {
                 Id = x.p.Id,
                 CategoryId = x.p.CategoryId,
@@ -295,7 +293,7 @@ public class UsersController : BaseController
                 CreateDate = x.p.CreateDate,
                 ViewCount = x.p.ViewCount
             }).ToListAsync();
-        
+
         var pagination = new Pagination<PostQuickVm>
         {
             Items = items,
@@ -303,7 +301,7 @@ public class UsersController : BaseController
             PageIndex = pageIndex,
             PageSize = pageSize
         };
-        
+
         return Ok(pagination);
     }
 

@@ -14,26 +14,24 @@ namespace CodeSharing.Server.Services;
 public class IdentityProfileService : IProfileService
 {
     private readonly IUserClaimsPrincipalFactory<User> _claimsPrincipalFactory;
-    private readonly UserManager<User> _userManager;
     private readonly ApplicationDbContext _context;
     private readonly RoleManager<IdentityRole> _roleManager;
+    private readonly UserManager<User> _userManager;
 
-    public IdentityProfileService(IUserClaimsPrincipalFactory<User> claimsPrincipalFactory, UserManager<User> userManager, ApplicationDbContext context, RoleManager<IdentityRole> roleManager)
+    public IdentityProfileService(IUserClaimsPrincipalFactory<User> claimsPrincipalFactory,
+        UserManager<User> userManager, ApplicationDbContext context, RoleManager<IdentityRole> roleManager)
     {
         _claimsPrincipalFactory = claimsPrincipalFactory;
         _userManager = userManager;
         _context = context;
         _roleManager = roleManager;
     }
-    
+
     public async Task GetProfileDataAsync(ProfileDataRequestContext context)
     {
         var sub = context.Subject.GetSubjectId();
         var user = await _userManager.FindByIdAsync(sub);
-        if (user == null)
-        {
-            throw new ArgumentException("");
-        }
+        if (user == null) throw new ArgumentException("");
 
         var principal = await _claimsPrincipalFactory.CreateAsync(user);
         var claims = principal.Claims.ToList();
@@ -47,7 +45,7 @@ public class IdentityProfileService : IProfileService
             join r in _roleManager.Roles on p.RoleId equals r.Id
             where roles.Contains(r.Name)
             select f.Id + "_" + c.Id;
-        
+
         var permissions = await query.Distinct().ToListAsync();
 
         //Add more claims like this

@@ -17,16 +17,15 @@ public class User : IdentityUser, IDateTracking
     [Column(TypeName = "nvarchar(50)")]
     public string LastName { get; set; }
 
-    [Required]
-    public DateTime Birthday { get; set; }
-    
-    public int? NumberOfKnowledgeBases { get; set; }
+    [Required] public DateTime Birthday { get; set; }
+
+    public int? NumberOfPosts { get; set; }
 
     public int? NumberOfVotes { get; set; }
 
     public int? NumberOfReports { get; set; }
 
     public DateTime CreateDate { get; set; }
-    
+
     public DateTime? LastModifiedDate { get; set; }
 }

@@ -22,5 +22,5 @@ public class CommentVm
 
     public int? ReplyId { get; set; }
 
-    public List<CommentVm> Children { get; set; } = new List<CommentVm>();
+    public List<CommentVm> Children { get; set; } = new();
 }

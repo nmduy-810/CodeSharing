@@ -11,19 +11,18 @@ public class LabelsController : BaseController
 {
     private readonly ApplicationDbContext _context;
     private readonly ILogger<LabelsController> _logger;
-    
+
     public LabelsController(ApplicationDbContext context, ILogger<LabelsController> logger)
     {
         _context = context;
         _logger = logger ?? throw new ArgumentException(null, nameof(logger));
     }
-    
+
     [HttpGet]
     [AllowAnonymous]
     public async Task<List<LabelVm>> GetLabels()
     {
-
-        var items = await _context.Labels.Select(x => new LabelVm()
+        var items = await _context.Labels.Select(x => new LabelVm
         {
             Id = x.Id,
             Name = x.Name
@@ -48,7 +47,7 @@ public class LabelsController : BaseController
                 Count = g.Count()
             };
 
-        var items = await query.OrderByDescending(x => x.Count).Take(take).Select(x => new LabelVm()
+        var items = await query.OrderByDescending(x => x.Count).Take(take).Select(x => new LabelVm
         {
             Id = x.Id,
             Name = x.Name
@@ -57,18 +56,16 @@ public class LabelsController : BaseController
         _logger.LogInformation("Successful execution of get popular labels request");
         return items;
     }
-    
+
     [HttpGet("{id}")]
     [AllowAnonymous]
     public async Task<IActionResult> GetById(string id)
     {
         var label = await _context.Labels.FindAsync(id);
         if (label == null)
-        {
             return NotFound(new ApiNotFoundResponse($"Cannotfound label item for id = {id} in database"));
-        }
-        
-        var labelVm = new LabelVm()
+
+        var labelVm = new LabelVm
         {
             Id = label.Id,
             Name = label.Name
@@ -88,11 +85,9 @@ public class LabelsController : BaseController
             select new { lip, p };
 
         if (!post.Any())
-        {
             return NotFound(new ApiNotFoundResponse($"Cannot found label item for id = {postId} in database"));
-        }
 
-        var items = await post.Select(x => new LabelInPostVm()
+        var items = await post.Select(x => new LabelInPostVm
         {
             PostId = x.p.Id,
             LabelId = x.lip.LabelId

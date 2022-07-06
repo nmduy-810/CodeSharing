@@ -7,12 +7,14 @@ Online builder code samples are licensed under the terms of the MIT License (see
 
 	http://en.wikipedia.org/wiki/MIT_License
 
-CKEditor 5 collaboration features are only available under a commercial license. [Contact us](https://ckeditor.com/contact/) for more details.
+CKEditor 5 collaboration features are only available under a commercial
+license. [Contact us](https://ckeditor.com/contact/) for more details.
 
 Free 30-days trials of CKEditor 5 collaboration features are available:
- * https://ckeditor.com/collaboration/ - Real-time collaboration (with all features).
- * https://ckeditor.com/collaboration/comments/ - Inline comments feature (without real-time collaborative editing).
- * https://ckeditor.com/collaboration/track-changes/ - Track changes feature (without real-time collaborative editing).
+
+* https://ckeditor.com/collaboration/ - Real-time collaboration (with all features).
+* https://ckeditor.com/collaboration/comments/ - Inline comments feature (without real-time collaborative editing).
+* https://ckeditor.com/collaboration/track-changes/ - Track changes feature (without real-time collaborative editing).
 
 Trademarks
 ----------

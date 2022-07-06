@@ -6,14 +6,15 @@ namespace CodeSharing.WebPortal.Controllers.Components;
 
 public class SideBarViewComponent : ViewComponent
 {
-    private readonly IPostApiClient _postApiClient;
     private readonly ILabelApiClient _labelApiClient;
+    private readonly IPostApiClient _postApiClient;
+
     public SideBarViewComponent(IPostApiClient postApiClient, ILabelApiClient labelApiClient)
     {
         _postApiClient = postApiClient;
         _labelApiClient = labelApiClient;
     }
-    
+
     public async Task<IViewComponentResult> InvokeAsync()
     {
         var popularPosts = await _postApiClient.GetPopularPosts(5);
@@ -21,7 +22,7 @@ public class SideBarViewComponent : ViewComponent
         var trendingPosts = await _postApiClient.GetTrendingPosts(4);
         var popularLabels = await _labelApiClient.GetPopularLabels(5);
         var explorerTopics = await _postApiClient.GetTotalPostInCategory();
-        var items = new SideBarViewModel()
+        var items = new SideBarViewModel
         {
             PopularPosts = popularPosts,
             LatestPosts = latestPosts,

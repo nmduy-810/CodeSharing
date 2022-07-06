@@ -15,7 +15,7 @@ var postsController = function () {
 
             $.post(url, form.serialize()).done(function (response) {
                 var content = $("#txt_new_comment_content").val();
-                
+
                 var template = $('#tmpl_comments').html();
                 var newComment = Mustache.render(template, {
                     id: response.id,
@@ -148,25 +148,15 @@ var postsController = function () {
 
         if (elapsed < msPerMinute) {
             return Math.round(elapsed / 1000) + ' giây trước';
-        }
-
-        else if (elapsed < msPerHour) {
+        } else if (elapsed < msPerHour) {
             return Math.round(elapsed / msPerMinute) + ' phút trước';
-        }
-
-        else if (elapsed < msPerDay) {
+        } else if (elapsed < msPerDay) {
             return Math.round(elapsed / msPerHour) + ' giờ trước';
-        }
-
-        else if (elapsed < msPerMonth) {
+        } else if (elapsed < msPerMonth) {
             return 'approximately ' + Math.round(elapsed / msPerDay) + ' ngày trước';
-        }
-
-        else if (elapsed < msPerYear) {
+        } else if (elapsed < msPerYear) {
             return 'approximately ' + Math.round(elapsed / msPerMonth) + ' tháng trước';
-        }
-
-        else {
+        } else {
             return 'approximately ' + Math.round(elapsed / msPerYear) + ' năm trước';
         }
     }

@@ -7,5 +7,4 @@ public class HeaderViewModel
 {
     public List<CategoryVm> Categories { get; set; }
     public UserVm CurrentUser { get; set; }
-    
 }

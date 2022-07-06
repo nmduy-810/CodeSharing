@@ -11,18 +11,19 @@ namespace CodeSharing.WebPortal.Services;
 
 public class PostApiClient : BaseApiClient, IPostApiClient
 {
-    private readonly IHttpClientFactory _httpClientFactory;
     private readonly IConfiguration _configuration;
+    private readonly IHttpClientFactory _httpClientFactory;
     private readonly IHttpContextAccessor _httpContextAccessor;
-    
-    public PostApiClient(IHttpClientFactory httpClientFactory, IConfiguration configuration, IHttpContextAccessor httpContextAccessor) 
+
+    public PostApiClient(IHttpClientFactory httpClientFactory, IConfiguration configuration,
+        IHttpContextAccessor httpContextAccessor)
         : base(httpClientFactory, configuration, httpContextAccessor)
     {
         _httpClientFactory = httpClientFactory;
         _configuration = configuration;
         _httpContextAccessor = httpContextAccessor;
     }
-    
+
     public async Task<List<PostQuickVm>> GetPopularPosts(int take)
     {
         return await GetListAsync<PostQuickVm>($"/api/posts/popular/{take}");
@@ -51,20 +52,20 @@ public class PostApiClient : BaseApiClient, IPostApiClient
 
     public async Task<Pagination<PostQuickVm>> GetPostsByTagId(string tagId, int pageIndex, int pageSize)
     {
-        return await GetAsync<Pagination<PostQuickVm>>($"/api/posts/tags/{tagId}?pageIndex={pageIndex}&pageSize={pageSize}");
+        return await GetAsync<Pagination<PostQuickVm>>(
+            $"/api/posts/tags/{tagId}?pageIndex={pageIndex}&pageSize={pageSize}");
     }
 
     public async Task<List<PostQuickVm>> GetTotalPostInCategory()
     {
-        return await GetListAsync<PostQuickVm>($"/api/posts/total-post");
+        return await GetListAsync<PostQuickVm>("/api/posts/total-post");
     }
 
     public async Task<Pagination<PostQuickVm>> SearchPosts(string keyword, int pageIndex, int pageSize)
     {
         if (!string.IsNullOrEmpty(keyword))
-        {
-            return await GetAsync<Pagination<PostQuickVm>>($"/api/posts/filter?filter={keyword}&pageIndex={pageIndex}&pageSize={pageSize}");
-        }
+            return await GetAsync<Pagination<PostQuickVm>>(
+                $"/api/posts/filter?filter={keyword}&pageIndex={pageIndex}&pageSize={pageSize}");
 
         return await GetAsync<Pagination<PostQuickVm>>($"/api/posts/paging?pageIndex={pageIndex}&pageSize={pageSize}");
     }
@@ -91,7 +92,7 @@ public class PostApiClient : BaseApiClient, IPostApiClient
 
     public async Task<int> PostVote(VoteCreateRequest request)
     {
-        return await PostAsync<VoteCreateRequest, int>($"/api/posts/{request.PostId}/votes", request, true);
+        return await PostAsync<VoteCreateRequest, int>($"/api/posts/{request.PostId}/votes", request);
     }
 
     public async Task<bool> UpdateViewCount(int id)
@@ -109,22 +110,22 @@ public class PostApiClient : BaseApiClient, IPostApiClient
         var client = _httpClientFactory.CreateClient();
         client.BaseAddress = new Uri(_configuration["ServerUrl"]);
         using var requestContent = new MultipartFormDataContent();
-        
+
         // Category Id
         requestContent.Add(new StringContent(request.CategoryId.ToString()), "categoryId");
-        
+
         // Title
         requestContent.Add(new StringContent(request.Title), "title");
-        
+
         // Summary
         requestContent.Add(new StringContent(request.Summary), "summary");
-        
+
         // Content
         requestContent.Add(new StringContent(request.Content), "content");
-        
+
         // Note
         requestContent.Add(new StringContent(request.Note), "note");
-        
+
         // Cover Image
         if (request.CoverImage != null)
         {
@@ -137,23 +138,19 @@ public class PostApiClient : BaseApiClient, IPostApiClient
             var bytes = new ByteArrayContent(data);
             requestContent.Add(bytes, "coverImage", request.CoverImage.FileName);
         }
-        
+
         // Labels
         if (request.Labels.Length > 0)
-        {
             foreach (var label in request.Labels)
-            {
                 requestContent.Add(new StringContent(label), "labels");
-            }
-        }
-        
+
         if (_httpContextAccessor.HttpContext != null)
         {
             var token = await _httpContextAccessor.HttpContext.GetTokenAsync("access_token");
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
         }
-        
-        var response = await client.PostAsync($"/api/posts/", requestContent);
+
+        var response = await client.PostAsync("/api/posts/", requestContent);
         return response.IsSuccessStatusCode;
     }
 
@@ -162,22 +159,22 @@ public class PostApiClient : BaseApiClient, IPostApiClient
         var client = _httpClientFactory.CreateClient();
         client.BaseAddress = new Uri(_configuration["ServerUrl"]);
         using var requestContent = new MultipartFormDataContent();
-        
+
         // Category Id
         requestContent.Add(new StringContent(request.CategoryId.ToString()), "categoryId");
-        
+
         // Title
         requestContent.Add(new StringContent(request.Title), "title");
-        
+
         // Summary
         requestContent.Add(new StringContent(request.Summary), "summary");
-        
+
         // Content
         requestContent.Add(new StringContent(request.Content), "content");
-        
+
         // Note
         requestContent.Add(new StringContent(request.Note), "note");
-        
+
         // Cover Image
         if (request.CoverImage != null)
         {
@@ -190,22 +187,18 @@ public class PostApiClient : BaseApiClient, IPostApiClient
             var bytes = new ByteArrayContent(data);
             requestContent.Add(bytes, "coverImage", request.CoverImage.FileName);
         }
-        
+
         // Labels
         if (request.Labels.Length > 0)
-        {
             foreach (var label in request.Labels)
-            {
                 requestContent.Add(new StringContent(label), "labels");
-            }
-        }
-        
+
         if (_httpContextAccessor.HttpContext != null)
         {
             var token = await _httpContextAccessor.HttpContext.GetTokenAsync("access_token");
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
         }
-        
+
         var response = await client.PutAsync($"/api/posts/{id}", requestContent);
         return response.IsSuccessStatusCode;
     }

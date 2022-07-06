@@ -53,119 +53,120 @@ import TodoList from '@ckeditor/ckeditor5-list/src/todolist';
 import Underline from '@ckeditor/ckeditor5-basic-styles/src/underline.js';
 import WordCount from '@ckeditor/ckeditor5-word-count/src/wordcount.js';
 
-class Editor extends ClassicEditor {}
+class Editor extends ClassicEditor {
+}
 
 // Plugins to include in the build.
 Editor.builtinPlugins = [
-	Alignment,
-	Autoformat,
-	AutoImage,
-	AutoLink,
-	BlockQuote,
-	Bold,
-	CKFinderUploadAdapter,
-	CloudServices,
-	Code,
-	CodeBlock,
-	Essentials,
-	FontBackgroundColor,
-	FontColor,
-	FontFamily,
-	FontSize,
-	GeneralHtmlSupport,
-	Heading,
-	Highlight,
-	HorizontalLine,
-	HtmlComment,
-	HtmlEmbed,
-	Image,
-	ImageCaption,
-	ImageInsert,
-	ImageResize,
-	ImageStyle,
-	ImageToolbar,
-	ImageUpload,
-	Indent,
-	IndentBlock,
-	Italic,
-	Link,
-	LinkImage,
-	List,
-	ListProperties,
-	MediaEmbed,
-	Paragraph,
-	PasteFromOffice,
-	RemoveFormat,
-	SourceEditing,
-	Strikethrough,
-	Subscript,
-	Superscript,
-	Table,
-	TableToolbar,
-	TextTransformation,
-	TodoList,
-	Underline,
-	WordCount
+    Alignment,
+    Autoformat,
+    AutoImage,
+    AutoLink,
+    BlockQuote,
+    Bold,
+    CKFinderUploadAdapter,
+    CloudServices,
+    Code,
+    CodeBlock,
+    Essentials,
+    FontBackgroundColor,
+    FontColor,
+    FontFamily,
+    FontSize,
+    GeneralHtmlSupport,
+    Heading,
+    Highlight,
+    HorizontalLine,
+    HtmlComment,
+    HtmlEmbed,
+    Image,
+    ImageCaption,
+    ImageInsert,
+    ImageResize,
+    ImageStyle,
+    ImageToolbar,
+    ImageUpload,
+    Indent,
+    IndentBlock,
+    Italic,
+    Link,
+    LinkImage,
+    List,
+    ListProperties,
+    MediaEmbed,
+    Paragraph,
+    PasteFromOffice,
+    RemoveFormat,
+    SourceEditing,
+    Strikethrough,
+    Subscript,
+    Superscript,
+    Table,
+    TableToolbar,
+    TextTransformation,
+    TodoList,
+    Underline,
+    WordCount
 ];
 
 // Editor configuration.
 Editor.defaultConfig = {
-	toolbar: {
-		items: [
-			'heading',
-			'|',
-			'bold',
-			'italic',
-			'underline',
-			'link',
-			'bulletedList',
-			'numberedList',
-			'todoList',
-			'|',
-			'outdent',
-			'indent',
-			'alignment',
-			'|',
-			'imageInsert',
-			'blockQuote',
-			'insertTable',
-			'mediaEmbed',
-			'htmlEmbed',
-			'codeBlock',
-			'highlight',
-			'code',
-			'horizontalLine',
-			'undo',
-			'redo',
-			'|',
-			'fontBackgroundColor',
-			'fontColor',
-			'fontFamily',
-			'fontSize',
-			'removeFormat',
-			'|',
-			'strikethrough',
-			'subscript',
-			'superscript'
-		]
-	},
-	language: 'en',
-	image: {
-		toolbar: [
-			'imageTextAlternative',
-			'imageStyle:inline',
-			'imageStyle:block',
-			'imageStyle:side',
-			'linkImage'
-		]
-	},
-	table: {
-		contentToolbar: [
-			'tableColumn',
-			'tableRow',
-			'mergeTableCells'
-		]
-	}
+    toolbar: {
+        items: [
+            'heading',
+            '|',
+            'bold',
+            'italic',
+            'underline',
+            'link',
+            'bulletedList',
+            'numberedList',
+            'todoList',
+            '|',
+            'outdent',
+            'indent',
+            'alignment',
+            '|',
+            'imageInsert',
+            'blockQuote',
+            'insertTable',
+            'mediaEmbed',
+            'htmlEmbed',
+            'codeBlock',
+            'highlight',
+            'code',
+            'horizontalLine',
+            'undo',
+            'redo',
+            '|',
+            'fontBackgroundColor',
+            'fontColor',
+            'fontFamily',
+            'fontSize',
+            'removeFormat',
+            '|',
+            'strikethrough',
+            'subscript',
+            'superscript'
+        ]
+    },
+    language: 'en',
+    image: {
+        toolbar: [
+            'imageTextAlternative',
+            'imageStyle:inline',
+            'imageStyle:block',
+            'imageStyle:side',
+            'linkImage'
+        ]
+    },
+    table: {
+        contentToolbar: [
+            'tableColumn',
+            'tableRow',
+            'mergeTableCells'
+        ]
+    }
 };
 
 export default Editor;

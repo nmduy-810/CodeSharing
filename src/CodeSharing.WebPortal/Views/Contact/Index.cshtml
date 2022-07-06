@@ -1,4 +1,4 @@
-@model CodeSharing.WebPortal.ViewModels.ContactViewModel
+@model ContactViewModel
 
 @{
     Layout = "_SubLayout";
@@ -7,87 +7,87 @@
 }
 
 <div class="row">
-  <div class="col-md-4">
-    <!-- contact info item -->
-    <div class="contact-item bordered rounded d-flex align-items-center">
-      <span class="icon icon-phone"></span>
-      <div class="details">
-        <h3 class="mb-0 mt-0">Điện thoại</h3>
-        <p class="mb-0">+84-@Model.Contact.Phone</p>
-      </div>
+    <div class="col-md-4">
+        <!-- contact info item -->
+        <div class="contact-item bordered rounded d-flex align-items-center">
+            <span class="icon icon-phone"></span>
+            <div class="details">
+                <h3 class="mb-0 mt-0">Điện thoại</h3>
+                <p class="mb-0">+84-@Model.Contact.Phone</p>
+            </div>
+        </div>
+        <div class="spacer d-md-none d-lg-none" data-height="30"></div>
     </div>
-    <div class="spacer d-md-none d-lg-none" data-height="30"></div>
-  </div>
-  <div class="col-md-4">
-    <!-- contact info item -->
-    <div class="contact-item bordered rounded d-flex align-items-center">
-      <span class="icon icon-envelope-open"></span>
-      <div class="details">
-        <h3 class="mb-0 mt-0">Địa chỉ email</h3>
-        <p class="mb-0">@Model.Contact.Email</p>
-      </div>
+    <div class="col-md-4">
+        <!-- contact info item -->
+        <div class="contact-item bordered rounded d-flex align-items-center">
+            <span class="icon icon-envelope-open"></span>
+            <div class="details">
+                <h3 class="mb-0 mt-0">Địa chỉ email</h3>
+                <p class="mb-0">@Model.Contact.Email</p>
+            </div>
+        </div>
+        <div class="spacer d-md-none d-lg-none" data-height="30"></div>
     </div>
-    <div class="spacer d-md-none d-lg-none" data-height="30"></div>
-  </div>
-  <div class="col-md-4">
-    <!-- contact info item -->
-    <div class="contact-item bordered rounded d-flex align-items-center">
-      <span class="icon icon-map"></span>
-      <div class="details">
-        <h3 class="mb-0 mt-0">Nơi sống</h3>
-        <p class="mb-0">@Model.Contact.Location</p>
-      </div>
+    <div class="col-md-4">
+        <!-- contact info item -->
+        <div class="contact-item bordered rounded d-flex align-items-center">
+            <span class="icon icon-map"></span>
+            <div class="details">
+                <h3 class="mb-0 mt-0">Nơi sống</h3>
+                <p class="mb-0">@Model.Contact.Location</p>
+            </div>
+        </div>
     </div>
-  </div>
 </div>
 <div class="spacer" data-height="50"></div>
 <!-- section header -->
 <div class="section-header">
-  <h3 class="section-title">Để lời lại nhắn</h3>
-  <img src="~/images/wave.svg" class="wave" alt="wave" />
+    <h3 class="section-title">Để lời lại nhắn</h3>
+    <img src="~/images/wave.svg" class="wave" alt="wave"/>
 </div>
 <!-- Contact Form -->
 <form id="contact-form" class="contact-form" method="post">
-  <div class="messages"></div>
-  <div class="row">
-    <div class="column col-md-6">
-      <!-- Name input -->
-      <div class="form-group">
-        <input type="text" class="form-control" name="Name" id="Name" placeholder="Tên của bạn.." required="required" data-error="Nhập họ tên giúp mình nghen.">
-        <div class="help-block with-errors"></div>
-      </div>
+    <div class="messages"></div>
+    <div class="row">
+        <div class="column col-md-6">
+            <!-- Name input -->
+            <div class="form-group">
+                <input type="text" class="form-control" name="Name" id="Name" placeholder="Tên của bạn.." required="required" data-error="Nhập họ tên giúp mình nghen.">
+                <div class="help-block with-errors"></div>
+            </div>
+        </div>
+        <div class="column col-md-6">
+            <!-- Email input -->
+            <div class="form-group">
+                @if (User.Identity!.IsAuthenticated)
+                {
+                    <input type="email" class="form-control" id="Email" name="Email" value="@Model.CurrentUser.Email" placeholder="Địa chỉ email" required="required" data-error="Nhập email giúp mình nha.">
+                }
+                else
+                {
+                    <input type="email" class="form-control" id="Email" name="Email" placeholder="Địa chỉ email" required="required" data-error="Nhập email giúp mình nha.">
+                }
+
+                <div class="help-block with-errors"></div>
+            </div>
+        </div>
+        <div class="column col-md-12">
+            <!-- Email input -->
+            <div class="form-group">
+                <input type="text" class="form-control" id="Subject" name="Subject" placeholder="Tiêu đề" required="required" data-error="Thiếu tiêu đề rồi nè.">
+                <div class="help-block with-errors"></div>
+            </div>
+        </div>
+        <div class="column col-md-12">
+            <!-- Message textarea -->
+            <div class="form-group">
+                <textarea name="Message" class="form-control" id="Message" rows="4" placeholder="Nội dung tin nhắn..." required="required" data-error="Cám ơn bạn đã để lại lời nhắn"></textarea>
+                <div class="help-block with-errors"></div>
+            </div>
+        </div>
     </div>
-    <div class="column col-md-6">
-      <!-- Email input -->
-      <div class="form-group">
-        @if (User.Identity!.IsAuthenticated)
-        {
-          <input type="email" class="form-control" id="Email" name="Email" value="@Model.CurrentUser.Email" placeholder="Địa chỉ email" required="required" data-error="Nhập email giúp mình nha.">
-        }
-        else
-        {
-          <input type="email" class="form-control" id="Email" name="Email" placeholder="Địa chỉ email" required="required" data-error="Nhập email giúp mình nha.">
-        }
-        
-        <div class="help-block with-errors"></div>
-      </div>
-    </div>
-    <div class="column col-md-12">
-      <!-- Email input -->
-      <div class="form-group">
-        <input type="text" class="form-control" id="Subject" name="Subject" placeholder="Tiêu đề" required="required" data-error="Thiếu tiêu đề rồi nè.">
-        <div class="help-block with-errors"></div>
-      </div>
-    </div>
-    <div class="column col-md-12">
-      <!-- Message textarea -->
-      <div class="form-group">
-        <textarea name="Message" class="form-control" id="Message" rows="4" placeholder="Nội dung tin nhắn..." required="required" data-error="Cám ơn bạn đã để lại lời nhắn"></textarea>
-        <div class="help-block with-errors"></div>
-      </div>
-    </div>
-  </div>
-  <button type="submit" name="submit" id="submit" value="Submit" class="btn btn-default">Gửi</button>
-  <!-- Send Button -->
+    <button type="submit" name="submit" id="submit" value="Submit" class="btn btn-default">Gửi</button>
+    <!-- Send Button -->
 </form>
 <!-- Contact Form end -->

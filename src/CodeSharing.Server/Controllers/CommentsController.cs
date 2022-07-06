@@ -1,7 +1,6 @@
 using CodeSharing.Server.Authorization;
 using CodeSharing.Server.Datas.Entities;
 using CodeSharing.Server.Extensions;
-using CodeSharing.Utilities.Commons;
 using CodeSharing.Utilities.Constants;
 using CodeSharing.Utilities.Helpers;
 using CodeSharing.ViewModels.Contents.Comment;
@@ -14,7 +13,7 @@ namespace CodeSharing.Server.Controllers;
 public partial class PostsController
 {
     #region Comments
-    
+
     [HttpGet("comments/recent/{take}")]
     [AllowAnonymous]
     public async Task<IActionResult> GetRecentComments(int take)
@@ -25,7 +24,7 @@ public partial class PostsController
             orderby c.CreateDate descending
             select new { c, u, k };
 
-        var comments = await query.Take(take).Select(x => new CommentVm()
+        var comments = await query.Take(take).Select(x => new CommentVm
         {
             Id = x.c.Id,
             CreateDate = x.c.CreateDate,
@@ -38,7 +37,7 @@ public partial class PostsController
 
         return Ok(comments);
     }
-    
+
     [HttpGet("{postId}/comments/tree")]
     [AllowAnonymous]
     public async Task<IActionResult> GetCommentTreeByPostId(int postId, int pageIndex, int pageSize)
@@ -48,7 +47,7 @@ public partial class PostsController
             where c.PostId == postId
             select new { c, u };
 
-        var flatComments = await query.Select(x => new CommentVm()
+        var flatComments = await query.Select(x => new CommentVm
         {
             Id = x.c.Id,
             Content = x.c.Content,
@@ -64,18 +63,14 @@ public partial class PostsController
 
         // Only loop through root categories
         foreach (var c in rootCategories)
-        {
             // You can skip the check if you want an empty list instead of null
             // when there is no children
             if (lookup.Contains(c.Id))
-            {
                 c.Children = lookup[c.Id].ToList();
-            }
-        }
 
         return Ok(rootCategories);
     }
-    
+
     [HttpGet("comments/all")]
     [AllowAnonymous]
     public async Task<IActionResult> GetComments()
@@ -84,8 +79,8 @@ public partial class PostsController
             join c in _context.Comments on p.Id equals c.PostId
             join u in _context.Users on c.OwnerUserId equals u.Id
             select new { p, c, u };
-        
-        var items = await query.Select(x => new CommentVm()
+
+        var items = await query.Select(x => new CommentVm
         {
             Id = x.c.Id,
             Content = x.c.Content,
@@ -96,7 +91,7 @@ public partial class PostsController
             OwnerName = x.u.FirstName + " " + x.u.LastName,
             ReplyId = x.c.ReplyId
         }).ToListAsync();
-        
+
         _logger.LogInformation("Successful execution of get comments request");
         return Ok(items);
     }
@@ -110,8 +105,8 @@ public partial class PostsController
             join u in _context.Users on c.OwnerUserId equals u.Id
             where c.PostId == postId
             select new { p, c, u };
-        
-        var comments = await query.Select(x => new CommentVm()
+
+        var comments = await query.Select(x => new CommentVm
         {
             Id = x.c.Id,
             Content = x.c.Content,
@@ -121,7 +116,7 @@ public partial class PostsController
             OwnerName = x.u.FirstName + " " + x.u.LastName,
             ReplyId = x.c.ReplyId
         }).ToListAsync();
-        
+
         return Ok(comments);
     }
 
@@ -131,12 +126,10 @@ public partial class PostsController
     {
         var comment = await _context.Comments.FindAsync(commentId);
         if (comment == null)
-        {
             return NotFound(new ApiNotFoundResponse($"Cannot found comment for id = {commentId} in database"));
-        }
 
         var user = await _context.Users.FindAsync(comment.OwnerUserId);
-        var commentVm = new CommentVm()
+        var commentVm = new CommentVm
         {
             Id = comment.Id,
             Content = comment.Content,
@@ -153,7 +146,7 @@ public partial class PostsController
     [HttpPost("{postId}/comments")]
     public async Task<IActionResult> PostComment(int postId, [FromBody] CommentCreateRequest request)
     {
-        var comment = new Comment()
+        var comment = new Comment
         {
             Content = request.Content,
             PostId = postId,
@@ -163,17 +156,14 @@ public partial class PostsController
         _context.Comments.Add(comment);
 
         var post = await _context.Posts.FindAsync(postId);
-        if (post == null)
-        {
-            return BadRequest(new ApiBadRequestResponse($"Cannot found post with id: {postId}"));
-        }
+        if (post == null) return BadRequest(new ApiBadRequestResponse($"Cannot found post with id: {postId}"));
 
         post.NumberOfComments = post.NumberOfComments.GetValueOrDefault(0) + 1;
         _context.Posts.Update(post);
 
         var result = await _context.SaveChangesAsync();
 
-        var respose = new CommentCreateResponse()
+        var respose = new CommentCreateResponse
         {
             Id = comment.Id,
             Content = request.Content,
@@ -181,11 +171,8 @@ public partial class PostsController
             ReplyId = request.ReplyId
         };
 
-        if (result <= 0)
-        {
-            return BadRequest(new ApiBadRequestResponse("Create comment failed"));
-        }
-        
+        if (result <= 0) return BadRequest(new ApiBadRequestResponse("Create comment failed"));
+
         return CreatedAtAction(nameof(GetCommentDetail), new { id = postId, commentId = comment.Id }, respose);
     }
 
@@ -194,56 +181,38 @@ public partial class PostsController
     public async Task<IActionResult> PutComment(int commentId, [FromBody] CommentCreateRequest request)
     {
         var comment = await _context.Comments.FindAsync(commentId);
-        if (comment == null)
-        {
-            return BadRequest(new ApiBadRequestResponse($"Cannot found comment with id: {commentId}"));
-        }
+        if (comment == null) return BadRequest(new ApiBadRequestResponse($"Cannot found comment with id: {commentId}"));
 
-        if (comment.OwnerUserId != User.GetUserId())
-        {
-            return Forbid();
-        }
-        
+        if (comment.OwnerUserId != User.GetUserId()) return Forbid();
+
         comment.Content = request.Content;
         _context.Comments.Update(comment);
 
         var result = await _context.SaveChangesAsync();
-        if (result > 0)
-        {
-            return NoContent();
-        }
+        if (result > 0) return NoContent();
 
-        return BadRequest(new ApiBadRequestResponse($"Update comment failed"));
+        return BadRequest(new ApiBadRequestResponse("Update comment failed"));
     }
-    
+
     [HttpDelete("{postId}/comments/{commentId}")]
     [ClaimRequirement(FunctionCodeConstants.CONTENT_COMMENT, CommandCodeConstants.DELETE)]
     public async Task<IActionResult> DeleteComment(int postId, int commentId)
     {
         var comment = await _context.Comments.FindAsync(commentId);
-        if (comment == null)
-        {
-            return NotFound(new ApiNotFoundResponse($"Cannot found the comment with id: {commentId}"));
-        }
-        
+        if (comment == null) return NotFound(new ApiNotFoundResponse($"Cannot found the comment with id: {commentId}"));
+
         _context.Comments.Remove(comment);
 
         var post = await _context.Posts.FindAsync(postId);
-        if (post == null)
-        {
-            return BadRequest(new ApiBadRequestResponse($"Cannot found post with id: {postId}"));
-        }
-        
+        if (post == null) return BadRequest(new ApiBadRequestResponse($"Cannot found post with id: {postId}"));
+
         post.NumberOfComments = post.NumberOfVotes.GetValueOrDefault(0) - 1;
         _context.Posts.Update(post);
 
         var result = await _context.SaveChangesAsync();
-        if (result <= 0)
-        {
-            return BadRequest(new ApiBadRequestResponse($"Delete comment failed"));
-        }
-        
-        var commentVm = new CommentVm()
+        if (result <= 0) return BadRequest(new ApiBadRequestResponse("Delete comment failed"));
+
+        var commentVm = new CommentVm
         {
             Id = comment.Id,
             Content = comment.Content,
@@ -254,6 +223,6 @@ public partial class PostsController
         };
         return Ok(commentVm);
     }
-    
+
     #endregion Comments
 }

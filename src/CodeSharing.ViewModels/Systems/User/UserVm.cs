@@ -12,4 +12,5 @@ public class UserVm
     public DateTime Birthday { get; set; }
     public DateTime CreateDate { get; set; }
     public DateTime? LastModifiedDate { get; set; }
+    public List<string> Roles { get; set; }
 }

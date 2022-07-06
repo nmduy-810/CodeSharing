@@ -8,11 +8,11 @@ namespace CodeSharing.Utilities.Helpers;
 
 public static class AmazonS3Helper
 {
-    private static string _accessId = "AKIAQ5CNMO3BV5PJXN4X";
-    private static string _secret = "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";
-    private static string _bucketName = "codesharingserver";
-    private static string _folderName = "CoverImage/";
-    private static string _serverUrl = "https://s3-ap-southeast-1.amazonaws.com";
+    private static readonly string _accessId = "AKIAQ5CNMO3BV5PJXN4X";
+    private static readonly string _secret = "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";
+    private static readonly string _bucketName = "codesharingserver";
+    private static readonly string _folderName = "CoverImage/";
+    private static readonly string _serverUrl = "https://s3-ap-southeast-1.amazonaws.com";
     private static readonly RegionEndpoint BucketRegion = RegionEndpoint.APSoutheast1;
 
     private static bool UploadFile(string fileName, byte[] content, out string fileUrl)
@@ -20,13 +20,13 @@ public static class AmazonS3Helper
         var filePath = $"{_folderName}{fileName}";
         fileUrl = string.Empty;
 
-        BasicAWSCredentials credentials = new BasicAWSCredentials(_accessId, _secret);
+        var credentials = new BasicAWSCredentials(_accessId, _secret);
         IAmazonS3 client = new AmazonS3Client(credentials, BucketRegion);
-        TransferUtility transferUtility = new TransferUtility(client);
+        var transferUtility = new TransferUtility(client);
 
         try
         {
-            using MemoryStream stream = new MemoryStream(content);
+            using var stream = new MemoryStream(content);
             transferUtility.Upload(stream, _bucketName, filePath);
             fileUrl = $"{_serverUrl}/{_bucketName}/{filePath}";
             return true;
@@ -48,22 +48,16 @@ public static class AmazonS3Helper
         var fileName = new Uri(url).AbsolutePath;
         var bucketFolder = $"/{_bucketName}";
 
-        if (fileName.StartsWith(bucketFolder))
-        {
-            fileName = fileName.Replace(bucketFolder, string.Empty);
-        }
+        if (fileName.StartsWith(bucketFolder)) fileName = fileName.Replace(bucketFolder, string.Empty);
 
-        if (fileName.StartsWith("/"))
-        {
-            fileName = fileName.Remove(0, 1);
-        }
+        if (fileName.StartsWith("/")) fileName = fileName.Remove(0, 1);
 
         try
         {
-            BasicAWSCredentials credentials = new BasicAWSCredentials(_accessId, _secret);
+            var credentials = new BasicAWSCredentials(_accessId, _secret);
             IAmazonS3 client = new AmazonS3Client(credentials, BucketRegion);
 
-            GetPreSignedUrlRequest request = new GetPreSignedUrlRequest
+            var request = new GetPreSignedUrlRequest
             {
                 BucketName = _bucketName,
                 Key = fileName,

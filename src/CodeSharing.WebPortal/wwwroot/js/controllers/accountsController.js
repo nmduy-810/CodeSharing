@@ -2,7 +2,7 @@ let accountsController = function () {
     this.initialize = function () {
         registerEvents();
     };
-    
+
     function registerEvents() {
         class MyUploadAdapter {
             xhr;
@@ -111,14 +111,14 @@ let accountsController = function () {
         }
 
         ClassicEditor
-            .create( document.querySelector( '#txt_content' ), {
-                extraPlugins: [ MyCustomUploadAdapterPlugin ],
+            .create(document.querySelector('#txt_content'), {
+                extraPlugins: [MyCustomUploadAdapterPlugin],
             })
             .then(editor => {
                 window.editor = editor;
             })
-            .catch( error => {
-                console.error( error );
-        } );
+            .catch(error => {
+                console.error(error);
+            });
     }
 } 

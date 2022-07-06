@@ -32,6 +32,9 @@ namespace CodeSharing.Server.Datas.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
+                    b.Property<DateTime>("CreateDate")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -39,6 +42,9 @@ namespace CodeSharing.Server.Datas.Migrations
                     b.Property<string>("Image")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("LastModifiedDate")
+                        .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
@@ -539,7 +545,7 @@ namespace CodeSharing.Server.Datas.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
-                    b.Property<int?>("NumberOfKnowledgeBases")
+                    b.Property<int?>("NumberOfPosts")
                         .HasColumnType("int");
 
                     b.Property<int?>("NumberOfReports")

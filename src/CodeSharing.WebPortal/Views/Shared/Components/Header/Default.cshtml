@@ -1,5 +1,4 @@
-@using System.Security.Claims
-@model CodeSharing.WebPortal.ViewModels.HeaderViewModel
+@model HeaderViewModel
 
 <!-- header -->
 <header class="header-personal">
@@ -66,28 +65,46 @@
                     }
 
                     <li class="nav-item">
-                        <a class="nav-link"  href="/about">Thông tin</a>
+                        <a class="nav-link" href="/about">Thông tin</a>
                     </li>
 
                     <li class="nav-item">
                         <a class="nav-link" href="/contact">Liên hệ</a>
                     </li>
-                    
+
                     @if (User.Identity!.IsAuthenticated)
                     {
+                        var listRole = Model.CurrentUser.Roles;
+                        
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#">Xin chào, <span class="fw-bold">@Model.CurrentUser.LastName</span></a>
                             <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" asp-action="MyProfile" asp-controller="Account">Thông tin cá nhân</a></li>
-                                <li><a class="dropdown-item" asp-action="MyPosts" asp-controller="Account">Quản lý bài viết</a></li>
-                                <li><a class="dropdown-item" asp-action="SignOut" asp-controller="Account">Đăng xuất</a></li>
+                                <li>
+                                    <a class="dropdown-item" href="/my-profile">Thông tin cá nhân</a>
+                                </li>
+                                @foreach (var item in listRole)
+                                {
+                                    @if (item == "Admin")
+                                    {
+                                        <li>
+                                            <a class="dropdown-item" href="/my-post">Quản lý bài viết</a>
+                                        </li>
+                                        
+                                        <li>
+                                            <a class="dropdown-item" href="/my-users">Quản lý người dùng</a>
+                                        </li>
+                                    }
+                                }
+                                <li>
+                                    <a class="dropdown-item" href="/account/sign-out">Đăng xuất</a>
+                                </li>
                             </ul>
                         </li>
                     }
                     else
                     {
                         <li class="nav-item">
-                            <a class="nav-link" asp-action="SignIn" asp-controller="Account">Đăng nhập</a>
+                            <a class="nav-link" href="/account/sign-in">Đăng nhập</a>
                         </li>
                     }
                 </ul>
