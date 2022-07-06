@@ -14,6 +14,11 @@ public class UserApiClient : BaseApiClient, IUserApiClient
     {
     }
 
+    public async Task<Pagination<UserVm>> GetUsersPaging(int pageIndex, int pageSize)
+    {
+        return await GetAsync<Pagination<UserVm>>($"/api/users/paging?pageIndex={pageIndex}&pageSize={pageSize}", true);
+    }
+
     public async Task<UserVm> GetById(string id)
     {
         return await GetAsync<UserVm>($"/api/users/{id}", true);

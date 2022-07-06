@@ -57,7 +57,8 @@
                         </div>
                     </div>
                 }
-            </div> @await Component.InvokeAsync("Pager", Model.LatestPosts)
+            </div> 
+            @await Component.InvokeAsync("Pager", Model.LatestPosts)
         </div>
         <div class="col-lg-4">
             <!-- sidebar --> @await Component.InvokeAsync("SideBar", "Default")

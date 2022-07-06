@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace CodeSharing.WebPortal.Controllers;
 
+[Authorize]
 public class AccountController : Controller
 {
     private readonly ICategoryApiClient _categoryApiClient;
@@ -17,17 +18,20 @@ public class AccountController : Controller
     private readonly IUploadApiClient _uploadApiClient;
     private readonly IUserApiClient _userApiClient;
     private readonly ILabelApiClient _labelApiClient;
+    private readonly IConfiguration _configuration;
 
     public AccountController(IUserApiClient userApiClient, IPostApiClient postApiClient,
-        ICategoryApiClient categoryApiClient, IUploadApiClient uploadApiClient, ILabelApiClient labelApiClient)
+        ICategoryApiClient categoryApiClient, IUploadApiClient uploadApiClient, ILabelApiClient labelApiClient, IConfiguration configuration)
     {
         _userApiClient = userApiClient;
         _postApiClient = postApiClient;
         _categoryApiClient = categoryApiClient;
         _uploadApiClient = uploadApiClient;
         _labelApiClient = labelApiClient;
+        _configuration = configuration;
     }
 
+    [AllowAnonymous]
     public IActionResult SignIn()
     {
         return Challenge(new AuthenticationProperties { RedirectUri = "/" }, "oidc");
@@ -38,7 +42,7 @@ public class AccountController : Controller
         return SignOut(new AuthenticationProperties { RedirectUri = "/" }, "Cookies", "oidc");
     }
 
-    [Authorize]
+    [HttpGet]
     public async Task<IActionResult> MyProfile()
     {
         var user = await _userApiClient.GetById(User.GetUserId());
@@ -56,7 +60,6 @@ public class AccountController : Controller
     }
 
     [HttpPost]
-    [Authorize]
     public async Task<IActionResult> MyProfile(UserDetailViewModel request)
     {
         var nameSegments = request.FullName.Split(' ');
@@ -77,7 +80,6 @@ public class AccountController : Controller
     }
 
     [HttpGet]
-    [Authorize]
     public async Task<IActionResult> MyPosts(int page = 1, int pageSize = 10)
     {
         var posts = await _userApiClient.GetPostsByUserId(User.GetUserId(), page, pageSize);
@@ -183,6 +185,7 @@ public class AccountController : Controller
         return BadRequest();
     }
 
+    [AllowAnonymous]
     [HttpPost]
     public async Task<IActionResult> UploadImage()
     {
@@ -194,6 +197,19 @@ public class AccountController : Controller
         }
 
         return Json(new { url = imageUrl });
+    }
+
+    public async Task<IActionResult> MyUsers(int page = 1)
+    {
+        var pageSize = int.Parse(_configuration["PageIndexSize"]);
+        var users = await _userApiClient.GetUsersPaging(page, pageSize);
+
+        var items = new UserViewModel
+        {
+            Users = users
+        };
+
+        return View(items);
     }
 
     #region Helper Method

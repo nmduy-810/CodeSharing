@@ -72,5 +72,10 @@ public static class RouteMapConfig
             "signout",
             "/account/sign-out",
             new { controller = "Account", action = "SignOut" });
+        
+        endpoints.MapControllerRoute(
+            "myUsers",
+            "/my-users",
+            new { controller = "Account", action = "MyUsers" });
     }
 }

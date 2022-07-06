@@ -139,6 +139,13 @@
                 </tr>
             }
             </tbody>
+            <tfoot>
+            <tr>
+                <td>
+                   @await Component.InvokeAsync("Pager", Model)
+                </td>
+            </tr>
+            </tfoot>
         </table>
     </div>
     <button class="btn btn-success" onclick="location.href='@Url.Action("CreateNewPost", "Account")'">

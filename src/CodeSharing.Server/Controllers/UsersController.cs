@@ -49,6 +49,37 @@ public class UsersController : BaseController
         _logger.LogInformation("Successful execution of get users request");
         return Ok(items);
     }
+    
+    [HttpGet("paging")]
+    [ClaimRequirement(FunctionCodeConstants.SYSTEM_USER, CommandCodeConstants.VIEW)]
+    public async Task<IActionResult> GetUsersPaging(int pageIndex, int pageSize)
+    {
+        var query = _userManager.Users;
+        
+        var totalRecords = await query.CountAsync();
+        var items = await query.Skip((pageIndex - 1) * pageSize)
+            .Take(pageSize)
+            .Select(u => new UserVm()
+            {
+                Id = u.Id,
+                UserName = u.UserName,
+                FullName = string.Concat(u.FirstName, " ", u.LastName),
+                Birthday = u.Birthday,
+                Email = u.Email,
+                PhoneNumber = u.PhoneNumber,
+                FirstName = u.FirstName,
+                LastName = u.LastName,
+                CreateDate = u.CreateDate
+            })
+            .ToListAsync();
+
+        var pagination = new Pagination<UserVm>
+        {
+            Items = items,
+            TotalRecords = totalRecords,
+        };
+        return Ok(pagination);
+    }
 
     [HttpGet("{id}")]
     [ClaimRequirement(FunctionCodeConstants.SYSTEM_USER, CommandCodeConstants.VIEW)]
