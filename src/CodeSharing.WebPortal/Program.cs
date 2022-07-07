@@ -1,5 +1,6 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using CodeSharing.WebPortal.Attribute;
 using CodeSharing.WebPortal.Config;
 using CodeSharing.WebPortal.Interfaces;
 using CodeSharing.WebPortal.Services;
@@ -146,6 +147,7 @@ builder.Services.AddTransient<IContactApiClient, ContactApiClient>();
 builder.Services.AddTransient<IUserApiClient, UserApiClient>();
 builder.Services.AddTransient<IAboutApiClient, AboutApiClient>();
 builder.Services.AddTransient<IUploadApiClient, UploadApiClient>();
+builder.Services.AddScoped<ValidateReCaptchaAttribute>();
 
 // Security Headers
 builder.WebHost.UseKestrel(serverOptions =>
