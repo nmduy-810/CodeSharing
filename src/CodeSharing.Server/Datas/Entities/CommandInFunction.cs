@@ -9,10 +9,10 @@ public class CommandInFunction
     [Required]
     [MaxLength(50)]
     [Column(TypeName = "varchar(50)")]
-    public string CommandId { get; set; }
+    public string CommandId { get; set; } = default!;
 
     [Required]
     [MaxLength(50)]
     [Column(TypeName = "varchar(50)")]
-    public string FunctionId { get; set; }
+    public string FunctionId { get; set; } = default!;
 }

@@ -1,4 +1,4 @@
-using CodeSharing.Server.Services.Interfaces;
+using CodeSharing.Server.AdditionalServices.Interfaces;
 using CodeSharing.Utilities.Helpers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

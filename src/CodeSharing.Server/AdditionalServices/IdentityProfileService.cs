@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 
-namespace CodeSharing.Server.Services;
+namespace CodeSharing.Server.AdditionalServices;
 
 public class IdentityProfileService : IProfileService
 {

@@ -14,23 +14,23 @@ public class ActivityLog : IDateTracking
     [Required]
     [MaxLength(50)]
     [Column(TypeName = "varchar(50)")]
-    public string Action { get; set; }
+    public string Action { get; set; } = default!;
 
     [Required]
     [MaxLength(50)]
     [Column(TypeName = "varchar(50)")]
-    public string EntityName { get; set; }
+    public string EntityName { get; set; } = default!;
 
     [Required]
     [MaxLength(50)]
     [Column(TypeName = "varchar(50)")]
-    public string EntityId { get; set; }
+    public string EntityId { get; set; } = default!;
 
     [MaxLength(50)]
     [Column(TypeName = "varchar(50)")]
-    public string UserId { get; set; }
+    public string UserId { get; set; } = default!;
 
-    [MaxLength(500)] public string Content { get; set; }
+    [MaxLength(500)] public string Content { get; set; } = default!;
 
     public DateTime CreateDate { get; set; }
 

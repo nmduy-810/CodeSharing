@@ -1,9 +1,9 @@
 using System.Data;
-using CodeSharing.Server.Services.Interfaces;
+using CodeSharing.Server.AdditionalServices.Interfaces;
 using Dapper;
 using Microsoft.Data.SqlClient;
 
-namespace CodeSharing.Server.Services;
+namespace CodeSharing.Server.AdditionalServices;
 
 public class SequenceService : ISequenceService
 {

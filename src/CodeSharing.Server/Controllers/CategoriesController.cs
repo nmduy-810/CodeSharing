@@ -1,7 +1,7 @@
 using CodeSharing.Server.Authorization;
 using CodeSharing.Server.Datas.Entities;
 using CodeSharing.Server.Datas.Provider;
-using CodeSharing.Server.Services.Interfaces;
+using CodeSharing.Server.AdditionalServices.Interfaces;
 using CodeSharing.Utilities.Constants;
 using CodeSharing.Utilities.Helpers;
 using CodeSharing.ViewModels.Contents.Category;

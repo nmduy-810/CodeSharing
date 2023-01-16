@@ -15,27 +15,30 @@ public class Post : IDateTracking
     [Range(1, double.PositiveInfinity)]
     public int CategoryId { get; set; }
 
-    public string CoverImage { get; set; }
+    public string CoverImage { get; set; } = default!;
 
-    [Required] [MaxLength(500)] public string Title { get; set; }
+    [Required] [MaxLength(500)] 
+    public string Title { get; set; } = default!;
 
-    [Required] [MaxLength(500)] public string Summary { get; set; }
+    [Required] [MaxLength(500)] 
+    public string Summary { get; set; } = default!;
 
-    [Required] public string Content { get; set; }
+    [Required] 
+    public string Content { get; set; } = default!;
 
     [Required]
     [MaxLength(500)]
     [Column(TypeName = "varchar(500)")]
-    public string Slug { get; set; }
+    public string Slug { get; set; } = default!;
 
-    public string Note { get; set; }
+    public string Note { get; set; } = default!;
 
     [Required]
     [MaxLength(50)]
     [Column(TypeName = "varchar(50)")]
-    public string OwnerUserId { get; set; }
+    public string OwnerUserId { get; set; } = default!;
 
-    public string Labels { get; set; }
+    public string Labels { get; set; } = default!;
 
     public int? NumberOfComments { get; set; }
 

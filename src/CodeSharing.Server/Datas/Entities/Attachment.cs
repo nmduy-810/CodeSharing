@@ -11,14 +11,14 @@ public class Attachment : IDateTracking
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int Id { get; set; }
 
-    [Required] [MaxLength(200)] public string FileName { get; set; }
+    [Required] [MaxLength(200)] public string FileName { get; set; } = default!;
 
-    [Required] [MaxLength(200)] public string FilePath { get; set; }
+    [Required] [MaxLength(200)] public string FilePath { get; set; } = default!;
 
     [Required]
     [MaxLength(4)]
     [Column(TypeName = "varchar(4)")]
-    public string FileType { get; set; }
+    public string FileType { get; set; } = default!;
 
     [Required] public long FileSize { get; set; }
 

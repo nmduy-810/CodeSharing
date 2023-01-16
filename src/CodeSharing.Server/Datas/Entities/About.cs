@@ -10,8 +10,8 @@ public class About : IDateTracking
     [Key]
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int Id { get; set; }
-    public string Image { get; set; }
-    public string Description { get; set; }
+    public string Image { get; set; } = default!;
+    public string Description { get; set; } = default!;
     public DateTime CreateDate { get; set; }
     public DateTime? LastModifiedDate { get; set; }
 }

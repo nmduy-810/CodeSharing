@@ -1,6 +1,6 @@
-using CodeSharing.Server.Services.Interfaces;
+using CodeSharing.Server.AdditionalServices.Interfaces;
 
-namespace CodeSharing.Server.Services;
+namespace CodeSharing.Server.AdditionalServices;
 
 public class FileStorageService : IStorageService
 {

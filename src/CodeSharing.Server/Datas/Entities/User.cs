@@ -10,12 +10,12 @@ public class User : IdentityUser, IDateTracking
     [Required]
     [MaxLength(50)]
     [Column(TypeName = "nvarchar(50)")]
-    public string FirstName { get; set; }
+    public string FirstName { get; set; } = default!;
 
     [Required]
     [MaxLength(50)]
     [Column(TypeName = "nvarchar(50)")]
-    public string LastName { get; set; }
+    public string LastName { get; set; } = default!;
 
     [Required] public DateTime Birthday { get; set; }
 
