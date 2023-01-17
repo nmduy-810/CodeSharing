@@ -162,6 +162,9 @@ builder.Services.AddTransient<ISerializeService, SerializeService>();
 builder.Services
     .AddScoped<ICategoryRepository, CategoryRepository>()
     .AddScoped<ICategoryService, CategoryService>();
+builder.Services
+    .AddScoped<IAboutRepository, AboutRepository>()
+    .AddScoped<IAboutService, AboutService>();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
