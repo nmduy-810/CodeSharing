@@ -5,11 +5,8 @@ using CodeSharing.Server.Datas.Interfaces;
 namespace CodeSharing.Server.Datas.Entities;
 
 [Table("Categories")]
-public class Category : IDateTracking
+public class Category : EntityBase<int>, IDateTracking 
 {
-    [Key]
-    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-    public int Id { get; set; } 
     public int? ParentCategoryId { get; set; }
 
     [Required]

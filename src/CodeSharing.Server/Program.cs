@@ -158,7 +158,8 @@ builder.Services.Configure<MailSettings>(configuration.GetSection("MailSettings"
 builder.Services.AddTransient<IViewRenderService, ViewRenderService>();
 builder.Services.AddTransient<ISerializeService, SerializeService>();
 
-// Register Services
+// Register Services and Repositories
+builder.Services.AddScoped(typeof(IGenericRepository<,>), typeof(GenericRepository<,>));
 builder.Services
     .AddScoped<ICategoryRepository, CategoryRepository>()
     .AddScoped<ICategoryService, CategoryService>();
