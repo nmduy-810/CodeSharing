@@ -172,6 +172,9 @@ builder.Services
 builder.Services
     .AddScoped<IAboutRepository, AboutRepository>()
     .AddScoped<IAboutService, AboutService>();
+builder.Services
+    .AddScoped<IFunctionRepository, FunctionRepository>()
+    .AddScoped<IFunctionService, FunctionService>();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

@@ -47,9 +47,9 @@ public class ContactsController : BaseController
 
         return BadRequest(new ApiBadRequestResponse("Update CONTACT failed"));
     }
-
-    [HttpPost]
+    
     [AllowAnonymous]
+    [HttpPost]
     public async Task<IActionResult> PostSupport([FromBody] SupportCreateRequest request)
     {
         var result = await _supportService.PostSupport(request);

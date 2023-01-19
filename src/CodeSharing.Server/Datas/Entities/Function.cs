@@ -4,12 +4,12 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace CodeSharing.Server.Datas.Entities;
 
 [Table("Functions")]
-public class Function
+public class Function : EntityBase<string>
 {
     [Key]
     [MaxLength(50)]
     [Column(TypeName = "varchar(50)")]
-    public string Id { get; set; } = default!;
+    public new string Id { get; set; } = default!;
 
     [Required] [MaxLength(200)] 
     public string Name { get; set; } = default!;
