@@ -161,6 +161,12 @@ builder.Services.AddTransient<ISerializeService, SerializeService>();
 // Register Services and Repositories
 builder.Services.AddScoped(typeof(IGenericRepository<,>), typeof(GenericRepository<,>));
 builder.Services
+    .AddScoped<IContactRepository, ContactRepository>()
+    .AddScoped<IContactService, ContactService>();
+builder.Services
+    .AddScoped<ISupportRepository, SupportRepository>()
+    .AddScoped<ISupportService, SupportService>();
+builder.Services
     .AddScoped<ICategoryRepository, CategoryRepository>()
     .AddScoped<ICategoryService, CategoryService>();
 builder.Services

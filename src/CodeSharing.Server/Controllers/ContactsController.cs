@@ -1,97 +1,61 @@
-using CodeSharing.Server.Datas.Entities;
-using CodeSharing.Server.Datas.Provider;
+using CodeSharing.Server.Services.Interfaces;
 using CodeSharing.Utilities.Helpers;
 using CodeSharing.ViewModels.Contents.Contact;
 using CodeSharing.ViewModels.Contents.Support;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace CodeSharing.Server.Controllers;
 
 public class ContactsController : BaseController
 {
-    private readonly ApplicationDbContext _context;
-    private readonly ILogger<ContactsController> _logger;
+    private readonly IContactService _contactService;
+    private readonly ISupportService _supportService;
 
-    public ContactsController(ApplicationDbContext context, ILogger<ContactsController> logger)
+    public ContactsController(IContactService contactService, ISupportService supportService)
     {
-        _context = context;
-        _logger = logger ?? throw new ArgumentException(null, nameof(logger));
+        _contactService = contactService;
+        _supportService = supportService;
     }
 
-    [HttpGet]
     [AllowAnonymous]
+    [HttpGet]
     public async Task<IActionResult> GetContacts()
     {
-        var items = await _context.Contacts.Select(x => new ContactVm
-        {
-            Id = x.Id,
-            Phone = x.Phone,
-            Location = x.Location,
-            Email = x.Email
-        }).ToListAsync();
-
-        _logger.LogInformation("Successful execution of get contact request");
-        return Ok(items);
+        var result = await _contactService.GetContacts();
+        return Ok(result);
     }
 
-    [HttpGet("{id:int}")]
     [AllowAnonymous]
+    [HttpGet("{id:int}")]
     public async Task<IActionResult> GetById(int id)
     {
-        var contact = await _context.Contacts.FindAsync(id);
-        if (contact == null)
-            return NotFound(new ApiNotFoundResponse($"Cannot found contact for id = {id} in database"));
-
-        var items = new ContactVm
-        {
-            Id = contact.Id,
-            Phone = contact.Phone,
-            Email = contact.Email,
-            Location = contact.Location
-        };
-
-        _logger.LogInformation("Successful execution of get contact id request");
-        return Ok(items);
+        var result = await _contactService.GetById(id);
+        if (result == null)
+            return NotFound(new ApiNotFoundResponse($"Not found CONTACT item for id = {id} in database"));
+        
+        return Ok(result);
     }
 
+    [AllowAnonymous]
     [HttpPut("{id:int}")]
-    [AllowAnonymous]
-    public async Task<IActionResult> Update(int id, ContactCreateRequest request)
+    public async Task<IActionResult> PutContact(int id, ContactCreateRequest request)
     {
-        var contact = await _context.Contacts.FindAsync(id);
-        if (contact == null)
-            return NotFound(new ApiNotFoundResponse($"Cannot found contact for id = {id} in database"));
+        var result = await _contactService.PutContact(id, request);
+        if (result)
+            return NoContent();
 
-        contact.Phone = request.Phone;
-        contact.Email = request.Email;
-        contact.Location = request.Location;
-
-        _context.Contacts.Update(contact);
-
-        var result = await _context.SaveChangesAsync();
-        if (result > 0) return NoContent();
-
-        return BadRequest(new ApiBadRequestResponse("Update contact failed"));
+        return BadRequest(new ApiBadRequestResponse("Update CONTACT failed"));
     }
 
-    [AllowAnonymous]
     [HttpPost]
+    [AllowAnonymous]
     public async Task<IActionResult> PostSupport([FromBody] SupportCreateRequest request)
     {
-        var support = new Support
-        {
-            Name = request.Name,
-            Email = request.Email,
-            Message = request.Message,
-            Subject = request.Subject
-        };
+        var result = await _supportService.PostSupport(request);
+        if (result)
+            return Ok(result);
 
-        _context.Supports.Add(support);
-
-        var result = await _context.SaveChangesAsync();
-        if (result > 0) return Ok(result);
-        return BadRequest(new ApiBadRequestResponse("Create support failed"));
+        return BadRequest(new ApiBadRequestResponse("Insert SUPPORT failed"));
     }
 }
