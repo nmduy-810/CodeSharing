@@ -1,4 +1,5 @@
 using CodeSharing.Server.Datas.Provider;
+using CodeSharing.Server.Services.Interfaces;
 using CodeSharing.Utilities.Helpers;
 using CodeSharing.ViewModels.Contents.Label;
 using Microsoft.AspNetCore.Authorization;
@@ -11,29 +12,25 @@ public class LabelsController : BaseController
 {
     private readonly ApplicationDbContext _context;
     private readonly ILogger<LabelsController> _logger;
+    private readonly ILabelService _labelService;
 
-    public LabelsController(ApplicationDbContext context, ILogger<LabelsController> logger)
+    public LabelsController(ApplicationDbContext context, ILogger<LabelsController> logger, ILabelService labelService)
     {
         _context = context;
         _logger = logger ?? throw new ArgumentException(null, nameof(logger));
+        _labelService = labelService;
     }
 
-    [HttpGet]
     [AllowAnonymous]
+    [HttpGet]
     public async Task<List<LabelVm>> GetLabels()
     {
-        var items = await _context.Labels.Select(x => new LabelVm
-        {
-            Id = x.Id,
-            Name = x.Name
-        }).ToListAsync();
-
-        _logger.LogInformation("Successful execution of get popular labels request");
-        return items;
+        var result = await _labelService.GetLabels();
+        return result;
     }
 
-    [HttpGet("popular/{take:int}")]
     [AllowAnonymous]
+    [HttpGet("popular/{take:int}")]
     public async Task<List<LabelVm>> GetPopularLabels(int take)
     {
         var query = from l in _context.Labels
@@ -52,8 +49,7 @@ public class LabelsController : BaseController
             Id = x.Id,
             Name = x.Name
         }).ToListAsync();
-
-        _logger.LogInformation("Successful execution of get popular labels request");
+        
         return items;
     }
 
@@ -61,18 +57,11 @@ public class LabelsController : BaseController
     [AllowAnonymous]
     public async Task<IActionResult> GetById(string id)
     {
-        var label = await _context.Labels.FindAsync(id);
-        if (label == null)
-            return NotFound(new ApiNotFoundResponse($"Cannotfound label item for id = {id} in database"));
-
-        var labelVm = new LabelVm
-        {
-            Id = label.Id,
-            Name = label.Name
-        };
-
-        _logger.LogInformation("Successful execution of get label by id request");
-        return Ok(labelVm);
+        var result = await _labelService.GetById(id);
+        if (result == null)
+            return NotFound(new ApiNotFoundResponse($"Not found LABEL item for id = {id} in database"));
+        
+        return Ok(result);
     }
 
     [HttpGet("post/{postId}")]
