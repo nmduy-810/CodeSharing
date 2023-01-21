@@ -99,3 +99,13 @@ public class GenericRepository<T, TK> : IGenericRepository<T, TK> where T : Enti
         return _context.SaveChangesAsync();
     }
 }
+
+public class GenericRepository<TContext> : IGenericRepository<TContext> where TContext : DbContext
+{
+    protected readonly TContext _context;
+
+    protected GenericRepository(TContext context)
+    {
+        _context = context;
+    }
+}

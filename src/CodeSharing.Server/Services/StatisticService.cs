@@ -1,57 +1,34 @@
-using CodeSharing.Server.Datas.Provider;
+using CodeSharing.Server.Repositories.Intefaces;
 using CodeSharing.Server.Services.Interfaces;
 using CodeSharing.ViewModels.Statistics.Comment;
 using CodeSharing.ViewModels.Statistics.Post;
 using CodeSharing.ViewModels.Statistics.User;
-using Microsoft.EntityFrameworkCore;
 
 namespace CodeSharing.Server.Services;
 
 public class StatisticService : IStatisticService
 {
-    private readonly ApplicationDbContext _context;
+    private readonly IStatisticRepository _repository;
 
-    public StatisticService(ApplicationDbContext context)
+    public StatisticService(IStatisticRepository repository)
     {
-        _context = context;
+        _repository = repository;
     }
     public async Task<List<MonthlyNewCommentsVm>> GetMonthlyNewComments(int year)
     {
-        var items = await _context.Comments.Where(x => x.CreateDate.Date.Year == year)
-            .GroupBy(x => x.CreateDate.Date.Month)
-            .OrderBy(x => x.Key)
-            .Select(x => new MonthlyNewCommentsVm
-            {
-                Month = x.Key,
-                NumberOfComments = x.Count()
-            }).ToListAsync();
-
-        return items;
+        var result = await _repository.GetMonthlyNewComments(year);
+        return result;
     }
 
     public async Task<List<MonthlyNewPostsVm>> GetMonthlyNewPosts(int year)
     {
-        var items = await _context.Posts.Where(x => x.CreateDate.Date.Year == year)
-            .GroupBy(x => x.CreateDate.Date.Month)
-            .Select(x => new MonthlyNewPostsVm
-            {
-                Month = x.Key,
-                NumberOfNewPosts = x.Count()
-            }).ToListAsync();
-
-        return items;
+        var result = await _repository.GetMonthlyNewPosts(year);
+        return result;
     }
 
     public async Task<List<MonthlyNewRegisterUsersVm>> GetMonthlyNewRegisters(int year)
     {
-        var items = await _context.Users.Where(x => x.CreateDate.Date.Year == year)
-            .GroupBy(x => x.CreateDate.Date.Month)
-            .Select(x => new MonthlyNewRegisterUsersVm
-            {
-                Month = x.Key,
-                NumberOfRegisterUsers = x.Count()
-            }).ToListAsync();
-
-        return items;
+        var result = await _repository.GetMonthlyNewRegisters(year);
+        return result;
     }
 }

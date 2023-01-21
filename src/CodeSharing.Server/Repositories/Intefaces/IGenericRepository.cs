@@ -1,5 +1,6 @@
 using System.Linq.Expressions;
 using CodeSharing.Server.Datas.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace CodeSharing.Server.Repositories.Intefaces;
 
@@ -30,4 +31,9 @@ public interface IGenericRepository<T, TK> where T : EntityBase<TK>
     Task DeleteListAsync(IEnumerable<T> entities);
 
     Task<int> SaveChangesAsync();
+}
+
+public interface IGenericRepository<TContext> where TContext : DbContext
+{
+    
 }
