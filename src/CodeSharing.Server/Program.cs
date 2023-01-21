@@ -178,6 +178,7 @@ builder.Services
 builder.Services
     .AddScoped<ILabelRepository, LabelRepository>()
     .AddScoped<ILabelService, LabelService>();
+builder.Services.AddScoped<IUserService, UserService>();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
