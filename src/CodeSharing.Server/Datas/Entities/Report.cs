@@ -5,12 +5,8 @@ using CodeSharing.Server.Datas.Interfaces;
 namespace CodeSharing.Server.Datas.Entities;
 
 [Table("Reports")]
-public class Report : IDateTracking
+public class Report : EntityBase<int>, IDateTracking
 {
-    [Key]
-    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-    public int Id { get; set; }
-
     public int PostId { get; set; }
 
     [MaxLength(500)] public string Content { get; set; } = default!;

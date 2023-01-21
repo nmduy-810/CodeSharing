@@ -5,12 +5,8 @@ using CodeSharing.Server.Datas.Interfaces;
 namespace CodeSharing.Server.Datas.Entities;
 
 [Table("ActivityLogs")]
-public class ActivityLog : IDateTracking
+public class ActivityLog : EntityBase<int>, IDateTracking
 {
-    [Key]
-    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-    public int Id { get; set; }
-
     [Required]
     [MaxLength(50)]
     [Column(TypeName = "varchar(50)")]

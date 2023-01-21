@@ -5,12 +5,8 @@ using CodeSharing.Server.Datas.Interfaces;
 namespace CodeSharing.Server.Datas.Entities;
 
 [Table("Attachments")]
-public class Attachment : IDateTracking
+public class Attachment : EntityBase<int>, IDateTracking
 {
-    [Key]
-    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-    public int Id { get; set; }
-
     [Required] [MaxLength(200)] public string FileName { get; set; } = default!;
 
     [Required] [MaxLength(200)] public string FilePath { get; set; } = default!;

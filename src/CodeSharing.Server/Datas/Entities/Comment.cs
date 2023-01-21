@@ -5,13 +5,11 @@ using CodeSharing.Server.Datas.Interfaces;
 namespace CodeSharing.Server.Datas.Entities;
 
 [Table("Comments")]
-public class Comment : IDateTracking
+public class Comment : EntityBase<int>, IDateTracking
 {
-    [Key]
-    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-    public int Id { get; set; }
-
-    [MaxLength(500)] [Required] public string Content { get; set; } = default!;
+    [MaxLength(500)] 
+    [Required] 
+    public string Content { get; set; } = default!;
 
     [Required]
     [Range(1, double.PositiveInfinity)]
