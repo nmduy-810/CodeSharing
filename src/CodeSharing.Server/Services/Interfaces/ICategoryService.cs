@@ -1,5 +1,4 @@
 using CodeSharing.ViewModels.Contents.Category;
-using Microsoft.AspNetCore.Mvc;
 
 namespace CodeSharing.Server.Services.Interfaces;
 

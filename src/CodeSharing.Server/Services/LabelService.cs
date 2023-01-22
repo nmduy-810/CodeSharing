@@ -1,3 +1,5 @@
+using CodeSharing.Server.Datas.Provider;
+using CodeSharing.Server.Repositories;
 using CodeSharing.Server.Repositories.Intefaces;
 using CodeSharing.Server.Services.Interfaces;
 using CodeSharing.ViewModels.Contents.Label;
@@ -8,7 +10,7 @@ namespace CodeSharing.Server.Services;
 public class LabelService : ILabelService
 {
     private readonly ILabelRepository _repository;
-
+    
     public LabelService(ILabelRepository repository)
     {
         _repository = repository;
