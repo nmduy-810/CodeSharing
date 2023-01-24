@@ -1,30 +1,19 @@
 using CodeSharing.Server.Authorization;
-using CodeSharing.Server.Datas.Entities;
-using CodeSharing.Server.Datas.Provider;
 using CodeSharing.Server.Extensions;
 using CodeSharing.Server.Services.Interfaces;
 using CodeSharing.Utilities.Constants;
 using CodeSharing.Utilities.Helpers;
 using CodeSharing.ViewModels.Contents.Post;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CodeSharing.Server.Controllers;
 
 public partial class PostsController : BaseController
 {
-    private readonly ApplicationDbContext _context;
-    private readonly ILogger<PostsController> _logger;
-    private readonly UserManager<User> _userManager;
     private readonly IPostService _postService;
-    public PostsController(
-        ApplicationDbContext context,
-        ILogger<PostsController> logger, UserManager<User> userManager, IPostService postService)
+    public PostsController(IPostService postService)
     {
-        _context = context;
-        _logger = logger ?? throw new ArgumentException(null, nameof(logger));
-        _userManager = userManager;
         _postService = postService;
     }
 

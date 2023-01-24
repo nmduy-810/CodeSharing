@@ -6,6 +6,7 @@ using CodeSharing.Server.Services.Interfaces;
 using CodeSharing.Utilities.Commons;
 using CodeSharing.Utilities.Constants;
 using CodeSharing.Utilities.Helpers;
+using CodeSharing.ViewModels.Contents.Comment;
 using CodeSharing.ViewModels.Contents.Post;
 using CodeSharing.ViewModels.Contents.Report;
 using CodeSharing.ViewModels.Contents.Vote;
@@ -231,6 +232,54 @@ public class PostService : IPostService
     public async Task<bool> PostReport(int postId, ReportCreateRequest request, string userId)
     {
         var result = await _repository.PostReport(postId, request, userId);
+        return result;
+    }
+
+    public async Task<List<CommentVm>> GetRecentComments(int take)
+    {
+        var result = await _repository.GetRecentComments(take);
+        return result;
+    }
+
+    public async Task<IEnumerable<CommentVm>> GetCommentTreeByPostId(int postId, int pageIndex, int pageSize)
+    {
+        var result = await _repository.GetCommentTreeByPostId(postId, pageIndex, pageSize);
+        return result;
+    }
+
+    public async Task<List<CommentVm>> GetCommentsByPostId(int postId)
+    {
+        var result = await _repository.GetCommentsByPostId(postId);
+        return result;
+    }
+
+    public async Task<CommentVm?> GetCommentDetail(int commentId)
+    {
+        var result = await _repository.GetCommentDetail(commentId);
+        return result;
+    }
+
+    public async Task<List<CommentVm>> GetComments()
+    {
+        var result = await _repository.GetComments();
+        return result;
+    }
+
+    public async Task<bool> PostComment(int postId, CommentCreateRequest request, string userId)
+    {
+        var result = await _repository.PostComment(postId, request, userId);
+        return result;
+    }
+
+    public async Task<bool> PutComment(int commentId, CommentCreateRequest request, string userId)
+    {
+        var result = await _repository.PutComment(commentId, request, userId);
+        return result;
+    }
+
+    public async Task<bool> DeleteComment(int postId, int commentId)
+    {
+        var result = await _repository.DeleteComment(postId, commentId);
         return result;
     }
     

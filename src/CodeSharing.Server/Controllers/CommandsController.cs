@@ -1,31 +1,21 @@
-using CodeSharing.Server.Datas.Provider;
-using CodeSharing.ViewModels.Systems.Command;
+using CodeSharing.Server.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace CodeSharing.Server.Controllers;
 
 public class CommandsController : BaseController
 {
-    private readonly ApplicationDbContext _context;
-    private readonly ILogger<CommandsController> _logger;
+    private readonly ICommandService _commandService;
 
-    public CommandsController(ApplicationDbContext context, ILogger<CommandsController> logger)
+    public CommandsController( ICommandService commandService)
     {
-        _context = context;
-        _logger = logger ?? throw new ArgumentException(null, nameof(logger));
+        _commandService = commandService;
     }
 
     [HttpGet]
     public async Task<IActionResult> GetCommands()
     {
-        var items = await _context.Commands.Select(u => new CommandVm
-        {
-            Id = u.Id,
-            Name = u.Name
-        }).ToListAsync();
-
-        _logger.LogInformation("Successful execution of get commands request");
-        return Ok(items);
+        var result = await _commandService.GetCommands();
+        return Ok(result);
     }
 }

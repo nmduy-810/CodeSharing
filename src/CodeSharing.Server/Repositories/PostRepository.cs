@@ -5,6 +5,7 @@ using CodeSharing.Server.Datas.Provider;
 using CodeSharing.Server.Repositories.Intefaces;
 using CodeSharing.Utilities.Commons;
 using CodeSharing.Utilities.Helpers;
+using CodeSharing.ViewModels.Contents.Comment;
 using CodeSharing.ViewModels.Contents.Post;
 using CodeSharing.ViewModels.Contents.Report;
 using CodeSharing.ViewModels.Contents.Vote;
@@ -24,6 +25,8 @@ public class PostRepository : GenericRepository<ApplicationDbContext>, IPostRepo
         _storageService = storageService;
         _userManager = userManager;
     }
+
+    #region Posts
 
     public async Task<List<PostQuickVm>> GetPosts()
     {
@@ -376,32 +379,7 @@ public class PostRepository : GenericRepository<ApplicationDbContext>, IPostRepo
         var result = await _context.SaveChangesAsync();
         return result > 0;
     }
-
-    public async Task ProcessLabel(PostCreateRequest request, Post post)
-    {
-        foreach (var labelText in request.Labels)
-        {
-            var labelId = TextHelper.ToUnsignString(labelText);
-            var existingLabel = await _context.Labels.FindAsync(labelId);
-            if (existingLabel == null)
-            {
-                var labelEntity = new Label
-                {
-                    Id = labelId,
-                    Name = labelText
-                };
-                _context.Labels.Add(labelEntity);
-            }
-
-            if (await _context.LabelInPosts.FindAsync(labelId, post.Id) == null)
-                _context.LabelInPosts.Add(new LabelInPost
-                {
-                    PostId = post.Id,
-                    LabelId = labelId
-                });
-        }
-    }
-
+    
     public async Task<bool> Put(int id, PostCreateRequest request)
     {
         var post = await _context.Posts.FindAsync(id);
@@ -494,6 +472,10 @@ public class PostRepository : GenericRepository<ApplicationDbContext>, IPostRepo
         return result > 0;
     }
 
+    #endregion Posts
+
+    #region Votes
+
     public async Task<List<VoteVm>> GetVotes(int postId)
     {
         var votes = await _context.Votes
@@ -574,6 +556,10 @@ public class PostRepository : GenericRepository<ApplicationDbContext>, IPostRepo
         return result > 0;
     }
 
+    #endregion Votes
+
+    #region Report
+
     public async Task<bool> PostReport(int postId, ReportCreateRequest request, string userId)
     {
         var report = new Report
@@ -606,7 +592,213 @@ public class PostRepository : GenericRepository<ApplicationDbContext>, IPostRepo
         return result > 0;
     }
 
+    #endregion Report
+
+    #region Comments
+
+    public async Task<List<CommentVm>> GetRecentComments(int take)
+    {
+        var query = from c in _context.Comments
+            join u in _context.Users on c.OwnerUserId equals u.Id
+            join k in _context.Posts on c.PostId equals k.Id
+            orderby c.CreateDate descending
+            select new { c, u, k };
+
+        var comments = await query.Take(take).Select(x => new CommentVm
+        {
+            Id = x.c.Id,
+            CreateDate = x.c.CreateDate,
+            PostId = x.c.PostId,
+            OwnerUserId = x.c.OwnerUserId,
+            PostTitle = x.k.Title,
+            OwnerName = x.u.FirstName + " " + x.u.LastName,
+            PostSlug = x.k.Slug
+        }).ToListAsync();
+
+        return comments;
+    }
+
+    public async Task<IEnumerable<CommentVm>> GetCommentTreeByPostId(int postId, int pageIndex, int pageSize)
+    {
+        var query = from c in _context.Comments
+            join u in _context.Users on c.OwnerUserId equals u.Id
+            where c.PostId == postId
+            select new { c, u };
+
+        var flatComments = await query.Select(x => new CommentVm
+        {
+            Id = x.c.Id,
+            Content = x.c.Content,
+            CreateDate = x.c.CreateDate,
+            PostId = x.c.PostId,
+            OwnerUserId = x.c.OwnerUserId,
+            OwnerName = x.u.FirstName + " " + x.u.LastName,
+            ReplyId = x.c.ReplyId
+        }).ToListAsync();
+
+        var lookup = flatComments.ToLookup(c => c.ReplyId);
+        var rootCategories = flatComments.Where(x => x.ReplyId == null);
+
+        // Only loop through root categories
+        foreach (var c in rootCategories)
+            // You can skip the check if you want an empty list instead of null
+            // when there is no children
+            if (lookup.Contains(c.Id))
+                c.Children = lookup[c.Id].ToList();
+
+        return rootCategories;
+    }
+
+    public async Task<List<CommentVm>> GetCommentsByPostId(int postId)
+    {
+        var query = from p in _context.Posts
+            join c in _context.Comments on p.Id equals c.PostId
+            join u in _context.Users on c.OwnerUserId equals u.Id
+            where c.PostId == postId
+            select new { p, c, u };
+
+        var comments = await query.Select(x => new CommentVm
+        {
+            Id = x.c.Id,
+            Content = x.c.Content,
+            CreateDate = x.c.CreateDate,
+            PostId = x.c.PostId,
+            OwnerUserId = x.c.OwnerUserId,
+            OwnerName = x.u.FirstName + " " + x.u.LastName,
+            ReplyId = x.c.ReplyId
+        }).ToListAsync();
+
+        return comments;
+    }
+
+    public async Task<CommentVm?> GetCommentDetail(int commentId)
+    {
+        var comment = await _context.Comments.FindAsync(commentId);
+        if (comment == null)
+            return null;
+
+        var user = await _context.Users.FindAsync(comment.OwnerUserId);
+        var commentVm = new CommentVm
+        {
+            Id = comment.Id,
+            Content = comment.Content,
+            CreateDate = comment.CreateDate,
+            PostId = comment.PostId,
+            LastModifiedDate = comment.LastModifiedDate,
+            OwnerUserId = comment.OwnerUserId,
+            OwnerName = user?.FirstName + " " + user?.LastName
+        };
+
+        return commentVm;
+    }
+
+    public async Task<List<CommentVm>> GetComments()
+    {
+        var query = from p in _context.Posts
+            join c in _context.Comments on p.Id equals c.PostId
+            join u in _context.Users on c.OwnerUserId equals u.Id
+            select new { p, c, u };
+
+        var items = await query.Select(x => new CommentVm
+        {
+            Id = x.c.Id,
+            Content = x.c.Content,
+            CreateDate = x.c.CreateDate,
+            PostId = x.c.PostId,
+            PostTitle = x.p.Title,
+            OwnerUserId = x.c.OwnerUserId,
+            OwnerName = x.u.FirstName + " " + x.u.LastName,
+            ReplyId = x.c.ReplyId
+        }).ToListAsync();
+
+        return items;
+    }
+
+    public async Task<bool> PostComment(int postId, CommentCreateRequest request, string userId)
+    {
+        var comment = new Comment
+        {
+            Content = request.Content,
+            PostId = postId,
+            OwnerUserId = userId,
+            ReplyId = request.ReplyId
+        };
+        _context.Comments.Add(comment);
+
+        var post = await _context.Posts.FindAsync(postId);
+        if (post == null)
+            return false;
+
+        post.NumberOfComments = post.NumberOfComments.GetValueOrDefault(0) + 1;
+        _context.Posts.Update(post);
+
+        var result = await _context.SaveChangesAsync();
+        return result > 0;
+    }
+
+    public async Task<bool> PutComment(int commentId, CommentCreateRequest request, string userId)
+    {
+        var comment = await _context.Comments.FindAsync(commentId);
+        if (comment == null) 
+            return false;
+
+        if (comment.OwnerUserId != userId) 
+            return false;
+
+        comment.Content = request.Content;
+        _context.Comments.Update(comment);
+
+        var result = await _context.SaveChangesAsync();
+        return result > 0;
+    }
+
+    public async Task<bool> DeleteComment(int postId, int commentId)
+    {
+        var comment = await _context.Comments.FindAsync(commentId);
+        if (comment == null) 
+            return false;
+
+        _context.Comments.Remove(comment);
+
+        var post = await _context.Posts.FindAsync(postId);
+        if (post == null)
+            return false;
+
+        post.NumberOfComments = post.NumberOfVotes.GetValueOrDefault(0) - 1;
+        _context.Posts.Update(post);
+
+        var result = await _context.SaveChangesAsync();
+        return result > 0;
+    }
+
+    #endregion Comments
+    
     #region Helpers
+    
+    public async Task ProcessLabel(PostCreateRequest request, Post post)
+    {
+        foreach (var labelText in request.Labels)
+        {
+            var labelId = TextHelper.ToUnsignString(labelText);
+            var existingLabel = await _context.Labels.FindAsync(labelId);
+            if (existingLabel == null)
+            {
+                var labelEntity = new Label
+                {
+                    Id = labelId,
+                    Name = labelText
+                };
+                _context.Labels.Add(labelEntity);
+            }
+
+            if (await _context.LabelInPosts.FindAsync(labelId, post.Id) == null)
+                _context.LabelInPosts.Add(new LabelInPost
+                {
+                    PostId = post.Id,
+                    LabelId = labelId
+                });
+        }
+    }
 
     private async Task<string> SaveFile(IFormFile file)
     {

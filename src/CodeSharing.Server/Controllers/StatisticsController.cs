@@ -9,6 +9,7 @@ namespace CodeSharing.Server.Controllers;
 public class StatisticsController : BaseController
 {
     private readonly IStatisticService _statisticService;
+    
     public StatisticsController(IStatisticService statisticService)
     {
         _statisticService = statisticService;

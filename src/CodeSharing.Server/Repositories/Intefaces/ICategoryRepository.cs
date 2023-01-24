@@ -1,12 +1,17 @@
-using CodeSharing.Server.Datas.Entities;
+using CodeSharing.Server.Datas.Provider;
+using CodeSharing.ViewModels.Contents.Category;
 
 namespace CodeSharing.Server.Repositories.Intefaces;
 
-public interface ICategoryRepository : IGenericRepository<Category, int>
+public interface ICategoryRepository : IGenericRepository<ApplicationDbContext>
 {
-    Task<bool> PostCategory(Category category);
+    Task<List<CategoryVm>> GetCategories();
 
-    Task<bool> PutCategory(Category category);
+    Task<CategoryVm?> GetById(int id);
+    
+    Task<bool> PostCategory(CategoryCreateRequest request);
 
-    Task<bool> DeleteCategory(Category category);
+    Task<bool> PutCategory(int id, CategoryUpdateRequest request);
+
+    Task<bool> DeleteCategory(int id);
 }

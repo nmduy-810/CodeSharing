@@ -1,8 +1,13 @@
-using CodeSharing.Server.Datas.Entities;
+using CodeSharing.Server.Datas.Provider;
+using CodeSharing.ViewModels.Contents.Contact;
 
 namespace CodeSharing.Server.Repositories.Intefaces;
 
-public interface IContactRepository : IGenericRepository<Contact, int>
+public interface IContactRepository : IGenericRepository<ApplicationDbContext>
 {
-    Task<bool> PutContact(Contact contact);
+    Task<List<ContactVm>> GetContacts();
+
+    Task<ContactVm?> GetById(int id);
+    
+    Task<bool> PutContact(int id, ContactCreateRequest request);
 }

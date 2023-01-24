@@ -4,7 +4,7 @@ using CodeSharing.Server.Repositories.Intefaces;
 
 namespace CodeSharing.Server.Repositories;
 
-public class SupportRepository : GenericRepository<Support, int>, ISupportRepository
+public class SupportRepository : GenericRepository<ApplicationDbContext>, ISupportRepository
 {
     private readonly ILogger<SupportRepository> _logger;
     
@@ -17,8 +17,8 @@ public class SupportRepository : GenericRepository<Support, int>, ISupportReposi
     {
         try
         {
-            await CreateAsync(support);
-            var result = await SaveChangesAsync();
+            await _context.Supports.AddAsync(support);
+            var result = await _context.SaveChangesAsync();
             return result > 0;
         }
         catch (Exception e)

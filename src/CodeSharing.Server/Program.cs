@@ -187,6 +187,12 @@ builder.Services
 builder.Services
     .AddScoped<IPostRepository, PostRepository>()
     .AddScoped<IPostService, PostService>();
+builder.Services
+    .AddScoped<ICommandRepository, CommandRepository>()
+    .AddScoped<ICommandService, CommandService>();
+builder.Services
+    .AddScoped<IRoleRepository, RoleRepository>()
+    .AddScoped<IRoleService, RoleService>();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

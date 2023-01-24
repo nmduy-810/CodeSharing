@@ -1,12 +1,17 @@
-using CodeSharing.Server.Datas.Entities;
+using CodeSharing.Server.Datas.Provider;
+using CodeSharing.ViewModels.Contents.About;
 
 namespace CodeSharing.Server.Repositories.Intefaces;
 
-public interface IAboutRepository : IGenericRepository<About, int>
+public interface IAboutRepository : IGenericRepository<ApplicationDbContext>
 {
-    Task<bool> PostAbout(About about);
+    Task<List<AboutVm>> GetAbouts();
 
-    Task<bool> PutAbout(About about);
+    Task<AboutVm?> GetById(int id);
+    
+    Task<bool> PostAbout(AboutCreateRequest request);
 
-    Task<bool> DeleteAbout(About about);
+    Task<bool> PutAbout(int id, AboutCreateRequest request);
+
+    Task<bool> DeleteAbout(int id);
 }

@@ -1,10 +1,6 @@
-using CodeSharing.Server.Datas.Entities;
 using CodeSharing.Server.Repositories.Intefaces;
 using CodeSharing.Server.Services.Interfaces;
-using CodeSharing.Utilities.Helpers;
 using CodeSharing.ViewModels.Contents.Label;
-using CodeSharing.ViewModels.Contents.Post;
-using Microsoft.EntityFrameworkCore;
 
 namespace CodeSharing.Server.Services;
 
@@ -19,27 +15,25 @@ public class LabelService : ILabelService
 
     public async Task<List<LabelVm>> GetLabels()
     {
-        var items = await _repository.FindAll().Select(x => new LabelVm
-        {
-            Id = x.Id,
-            Name = x.Name
-        }).ToListAsync();
-        
-        return items;
+        var result = await _repository.GetLabels();
+        return result;
     }
 
     public async Task<LabelVm?> GetById(string id)
     {
-        var label = await _repository.GetByIdAsync(id);
-        if (label == null)
-            return null;
+        var result = await _repository.GetById(id);
+        return result;
+    }
 
-        var labelVm = new LabelVm
-        {
-            Id = label.Id,
-            Name = label.Name
-        };
+    public async Task<List<LabelInPostVm>?> GetLabelsByPostId(int postId)
+    {
+        var result = await _repository.GetLabelsByPostId(postId);
+        return result;
+    }
 
-        return labelVm;
+    public async Task<List<LabelVm>> GetPopularLabels(int take)
+    {
+        var result = await _repository.GetPopularLabels(take);
+        return result;
     }
 }

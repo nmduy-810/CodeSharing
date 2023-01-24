@@ -11,98 +11,38 @@ namespace CodeSharing.Server.Services;
 public class CategoryService : ICategoryService
 {
     private readonly ICategoryRepository _repository;
-    private readonly ICacheService _distributedCacheService;
-    public CategoryService(ICategoryRepository repository, ICacheService distributedCacheService)
+    public CategoryService(ICategoryRepository repository)
     {
         _repository = repository;
-        _distributedCacheService = distributedCacheService;
     }
 
     public async Task<List<CategoryVm>> GetCategories()
     {
-        // Check cached data have value in database
-        var cacheData = await _distributedCacheService.GetAsync<List<CategoryVm>>(CacheConstants.Categories);
-        
-        // If in database not data
-        if (cacheData == null)
-        {
-            var items = await _repository.FindAll().Select(x => new CategoryVm
-            {
-                Id = x.Id,
-                ParentCategoryId = x.ParentCategoryId,
-                Title = x.Title,
-                Slug = x.Slug,
-                SortOrder = x.SortOrder,
-                IsParent = x.IsParent
-            }).OrderBy(x => x.SortOrder).ToListAsync();
-
-            // Set categories data into cached with key
-            await _distributedCacheService.SetAsync("Categories", items);
-            cacheData = items;
-        }
-            
-        return cacheData;
+        var result = await _repository.GetCategories();
+        return result;
     }
 
     public async Task<CategoryVm?> GetById(int id)
     {
-        var category = await _repository.GetByIdAsync(id);
-        if (category == null)
-            return null;
-        
-        var item = new CategoryVm
-        {
-            Id = category.Id,
-            ParentCategoryId = category.ParentCategoryId,
-            Title = category.Title,
-            Slug = category.Slug,
-            SortOrder = category.SortOrder,
-            IsParent = category.IsParent
-        };
-        
-        return item;
+        var result = await _repository.GetById(id);
+        return result;
     }
 
     public async Task<bool> PostCategory(CategoryCreateRequest request)
     {
-        var item = new Category
-        {
-            ParentCategoryId = request.ParentCategoryId,
-            Title = request.Title,
-            Slug = request.Slug,
-            SortOrder = request.SortOrder,
-            IsParent = request.IsParent
-        };
-
-        var result = await _repository.PostCategory(item);
+        var result = await _repository.PostCategory(request);
         return result;
     }
 
     public async Task<bool> PutCategory(int id, CategoryUpdateRequest request)
     {
-        var category = await _repository.GetByIdAsync(id);
-        if (category == null)
-            return false;
-
-        if (id == request.ParentCategoryId)
-            return false;
-        
-        category.ParentCategoryId = request.ParentCategoryId;
-        category.Title = request.Title;
-        category.Slug = request.Slug;
-        category.SortOrder = request.SortOrder;
-        category.IsParent = request.IsParent;
-
-        var result = await _repository.PutCategory(category);
+        var result = await _repository.PutCategory(id, request);
         return result;
     }
 
     public async Task<bool> DeleteCategory(int id)
     {
-        var category = await _repository.GetByIdAsync(id);
-        if (category == null)
-            return false;
-
-        return await _repository.DeleteCategory(category);
+        var result = await _repository.DeleteCategory(id);
+        return result;
     }
 }
