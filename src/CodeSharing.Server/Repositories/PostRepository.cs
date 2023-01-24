@@ -6,6 +6,7 @@ using CodeSharing.Server.Repositories.Intefaces;
 using CodeSharing.Utilities.Commons;
 using CodeSharing.Utilities.Helpers;
 using CodeSharing.ViewModels.Contents.Post;
+using CodeSharing.ViewModels.Contents.Report;
 using CodeSharing.ViewModels.Contents.Vote;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -568,6 +569,38 @@ public class PostRepository : GenericRepository<ApplicationDbContext>, IPostRepo
 
         _context.Posts.Update(post);
         _context.Votes.Remove(vote);
+
+        var result = await _context.SaveChangesAsync();
+        return result > 0;
+    }
+
+    public async Task<bool> PostReport(int postId, ReportCreateRequest request, string userId)
+    {
+        var report = new Report
+        {
+            Content = request.Content,
+            PostId = postId,
+            ReportUserId = userId,
+            IsProcessed = false
+        };
+
+        _context.Reports.Add(report);
+
+        var post = await _context.Posts.FindAsync(postId);
+        if (post == null)
+            return false;
+
+        var user = await _userManager.FindByIdAsync(userId);
+        if (user != null)
+        {
+            var numberOfPosts = user.NumberOfPosts;
+            numberOfPosts += 1;
+            user.NumberOfReports = numberOfPosts;
+            await _userManager.UpdateAsync(user);
+        }
+
+        post.NumberOfReports = post.NumberOfReports.GetValueOrDefault(0) + 1;
+        _context.Posts.Update(post);
 
         var result = await _context.SaveChangesAsync();
         return result > 0;

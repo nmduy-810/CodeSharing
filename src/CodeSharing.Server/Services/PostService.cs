@@ -7,6 +7,7 @@ using CodeSharing.Utilities.Commons;
 using CodeSharing.Utilities.Constants;
 using CodeSharing.Utilities.Helpers;
 using CodeSharing.ViewModels.Contents.Post;
+using CodeSharing.ViewModels.Contents.Report;
 using CodeSharing.ViewModels.Contents.Vote;
 using Microsoft.AspNetCore.Identity;
 
@@ -227,7 +228,12 @@ public class PostService : IPostService
         return result;
     }
 
-
+    public async Task<bool> PostReport(int postId, ReportCreateRequest request, string userId)
+    {
+        var result = await _repository.PostReport(postId, request, userId);
+        return result;
+    }
+    
     #region Helpers
 
     private async Task<string> SaveFile(IFormFile file)

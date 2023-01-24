@@ -2,6 +2,7 @@ using CodeSharing.Server.Datas.Entities;
 using CodeSharing.Server.Datas.Provider;
 using CodeSharing.Utilities.Commons;
 using CodeSharing.ViewModels.Contents.Post;
+using CodeSharing.ViewModels.Contents.Report;
 using CodeSharing.ViewModels.Contents.Vote;
 
 namespace CodeSharing.Server.Repositories.Intefaces;
@@ -43,4 +44,6 @@ public interface IPostRepository : IGenericRepository<ApplicationDbContext>
     Task<int> PostVote(int postId, string userId);
 
     Task<bool> DeleteVote(int postId, string userId);
+
+    Task<bool> PostReport(int postId, ReportCreateRequest request, string userId);
 }

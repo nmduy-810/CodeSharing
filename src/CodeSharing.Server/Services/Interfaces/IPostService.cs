@@ -1,5 +1,6 @@
 using CodeSharing.Utilities.Commons;
 using CodeSharing.ViewModels.Contents.Post;
+using CodeSharing.ViewModels.Contents.Report;
 using CodeSharing.ViewModels.Contents.Vote;
 
 namespace CodeSharing.Server.Services.Interfaces;
@@ -39,4 +40,6 @@ public interface IPostService
     Task<int> PostVote(int postId, string userId);
 
     Task<bool> DeleteVote(int postId, string userId);
+
+    Task<bool> PostReport(int postId, ReportCreateRequest request, string userId);
 }
