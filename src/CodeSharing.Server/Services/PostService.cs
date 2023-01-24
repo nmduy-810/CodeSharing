@@ -7,6 +7,7 @@ using CodeSharing.Utilities.Commons;
 using CodeSharing.Utilities.Constants;
 using CodeSharing.Utilities.Helpers;
 using CodeSharing.ViewModels.Contents.Post;
+using CodeSharing.ViewModels.Contents.Vote;
 using Microsoft.AspNetCore.Identity;
 
 namespace CodeSharing.Server.Services;
@@ -207,6 +208,25 @@ public class PostService : IPostService
         var result = await _repository.UpdateViewCount(id);
         return result;
     }
+
+    public async Task<List<VoteVm>> GetVotes(int postId)
+    {
+        var result = await _repository.GetVotes(postId);
+        return result;
+    }
+
+    public async Task<int> PostVote(int postId, string userId)
+    {
+        var result = await _repository.PostVote(postId, userId);
+        return result;
+    }
+
+    public async Task<bool> DeleteVote(int postId, string userId)
+    {
+        var result = await _repository.DeleteVote(postId, userId);
+        return result;
+    }
+
 
     #region Helpers
 

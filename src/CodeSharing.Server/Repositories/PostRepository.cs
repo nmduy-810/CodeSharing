@@ -6,6 +6,8 @@ using CodeSharing.Server.Repositories.Intefaces;
 using CodeSharing.Utilities.Commons;
 using CodeSharing.Utilities.Helpers;
 using CodeSharing.ViewModels.Contents.Post;
+using CodeSharing.ViewModels.Contents.Vote;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace CodeSharing.Server.Repositories;
@@ -14,10 +16,12 @@ public class PostRepository : GenericRepository<ApplicationDbContext>, IPostRepo
 {
     private readonly IHttpContextAccessor _httpContextAccessor;
     private readonly IStorageService _storageService;
-    public PostRepository(ApplicationDbContext context, IHttpContextAccessor httpContextAccessor, IStorageService storageService) : base(context)
+    private readonly UserManager<User> _userManager;
+    public PostRepository(ApplicationDbContext context, IHttpContextAccessor httpContextAccessor, IStorageService storageService, UserManager<User> userManager) : base(context)
     {
         _httpContextAccessor = httpContextAccessor;
         _storageService = storageService;
+        _userManager = userManager;
     }
 
     public async Task<List<PostQuickVm>> GetPosts()
@@ -485,6 +489,86 @@ public class PostRepository : GenericRepository<ApplicationDbContext>, IPostRepo
 
         _context.Posts.Update(post);
         
+        var result = await _context.SaveChangesAsync();
+        return result > 0;
+    }
+
+    public async Task<List<VoteVm>> GetVotes(int postId)
+    {
+        var votes = await _context.Votes
+            .Where(x => x.PostId == postId)
+            .Select(x => new VoteVm
+            {
+                PostId = x.PostId,
+                UserId = x.UserId,
+                CreateDate = x.CreateDate,
+                LastModifiedDate = x.LastModifiedDate
+            }).ToListAsync();
+
+        return votes;
+    }
+
+    public async Task<int> PostVote(int postId, string userId)
+    {
+        // Find value of post
+        var post = await _context.Posts.FindAsync(postId);
+        if (post == null)
+            return 0;
+
+        // Get number of votes in current post
+        var numberOfVotes = await _context.Votes.CountAsync(x => x.PostId == postId);
+
+        // Find postId in votes table
+        var vote = await _context.Votes.FindAsync(postId, userId);
+
+        // Remove votes
+        if (vote != null)
+        {
+            _context.Votes.Remove(vote);
+            numberOfVotes -= 1;
+        }
+        else
+        {
+            vote = new Vote
+            {
+                PostId = postId,
+                UserId = userId
+            };
+
+            _context.Votes.Add(vote);
+            numberOfVotes += 1;
+        }
+        
+        // Update number of votes in user
+        var user = await _userManager.FindByIdAsync(userId);
+        if (user != null)
+        {
+            user.NumberOfVotes = numberOfVotes;
+            await _userManager.UpdateAsync(user);
+        }
+
+        post.NumberOfVotes = numberOfVotes;
+        _context.Posts.Update(post);
+
+        var result = await _context.SaveChangesAsync();
+        return result > 0 ? numberOfVotes : 0;
+    }
+
+    public async Task<bool> DeleteVote(int postId, string userId)
+    {
+        var vote = await _context.Votes.FindAsync(postId, userId);
+        if (vote == null) 
+            return false;
+
+        var post = await _context.Posts.FindAsync(postId);
+        if (post == null)
+            return false;
+
+        post.NumberOfVotes = post.NumberOfVotes.GetValueOrDefault(0) - 1;
+
+        _context.Posts.Update(post);
+        _context.Votes.Remove(vote);
+
         var result = await _context.SaveChangesAsync();
         return result > 0;
     }

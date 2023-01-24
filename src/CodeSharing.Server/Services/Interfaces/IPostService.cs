@@ -1,5 +1,6 @@
 using CodeSharing.Utilities.Commons;
 using CodeSharing.ViewModels.Contents.Post;
+using CodeSharing.ViewModels.Contents.Vote;
 
 namespace CodeSharing.Server.Services.Interfaces;
 
@@ -32,4 +33,10 @@ public interface IPostService
     Task<bool> Delete(int id);
 
     Task<bool> UpdateViewCount(int id);
+
+    Task< List<VoteVm>> GetVotes(int postId);
+
+    Task<int> PostVote(int postId, string userId);
+
+    Task<bool> DeleteVote(int postId, string userId);
 }
