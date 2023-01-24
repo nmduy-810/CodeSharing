@@ -17,7 +17,7 @@ public class UserRepository : GenericRepository<ApplicationDbContext>, IUserRepo
     private readonly UserManager<User> _userManager;
     private readonly RoleManager<IdentityRole> _roleManager;
     
-    protected UserRepository(ApplicationDbContext context, UserManager<User> userManager, RoleManager<IdentityRole> roleManager) : base(context)
+    public UserRepository(ApplicationDbContext context, UserManager<User> userManager, RoleManager<IdentityRole> roleManager) : base(context)
     {
         _userManager = userManager;
         _roleManager = roleManager;

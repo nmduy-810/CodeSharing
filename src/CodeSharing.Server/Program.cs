@@ -184,6 +184,9 @@ builder.Services
 builder.Services
     .AddScoped<IStatisticRepository, StatisticRepository>()
     .AddScoped<IStatisticService, StatisticService>();
+builder.Services
+    .AddScoped<IPostRepository, PostRepository>()
+    .AddScoped<IPostService, PostService>();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
