@@ -19,11 +19,14 @@ public class PostRepository : GenericRepository<ApplicationDbContext>, IPostRepo
     private readonly IHttpContextAccessor _httpContextAccessor;
     private readonly IStorageService _storageService;
     private readonly UserManager<User> _userManager;
-    public PostRepository(ApplicationDbContext context, IHttpContextAccessor httpContextAccessor, IStorageService storageService, UserManager<User> userManager) : base(context)
+    private readonly IUploadRepository _uploadRepository;
+    
+    public PostRepository(ApplicationDbContext context, IHttpContextAccessor httpContextAccessor, IStorageService storageService, UserManager<User> userManager, IUploadRepository uploadRepository) : base(context)
     {
         _httpContextAccessor = httpContextAccessor;
         _storageService = storageService;
         _userManager = userManager;
+        _uploadRepository = uploadRepository;
     }
 
     #region Posts
@@ -408,7 +411,7 @@ public class PostRepository : GenericRepository<ApplicationDbContext>, IPostRepo
         // Process Cover Image
         if (request.CoverImage != null)
         {
-            var coverImagePath = await SaveFile(request.CoverImage);
+            var coverImagePath = await _uploadRepository.SaveFile(request.CoverImage);
             post.CoverImage = coverImagePath;
         }
         
@@ -799,15 +802,5 @@ public class PostRepository : GenericRepository<ApplicationDbContext>, IPostRepo
                 });
         }
     }
-
-    private async Task<string> SaveFile(IFormFile file)
-    {
-        var originalFileName = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName?.Trim('"');
-        var fileName = FunctionBase.GenerateFileName("Image") + Path.GetExtension(originalFileName);
-        await _storageService.SaveFileAsync(file.OpenReadStream(), fileName);
-        var filePath = _storageService.GetFileUrl(fileName);
-        return filePath;
-    }
-
     #endregion
 }

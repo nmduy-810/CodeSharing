@@ -1,5 +1,3 @@
-using System.Net.Http.Headers;
-using CodeSharing.Server.AdditionalServices.Interfaces;
 using CodeSharing.Server.Datas.Entities;
 using CodeSharing.Server.Datas.Provider;
 using CodeSharing.Server.Repositories.Intefaces;
@@ -13,13 +11,13 @@ public class AboutRepository : GenericRepository<ApplicationDbContext>, IAboutRe
 {
     private readonly ILogger<AboutRepository> _logger;
     private readonly IHttpContextAccessor _httpContextAccessor;
-    private readonly IStorageService _storageService;
+    private readonly IUploadRepository _uploadRepository;
 
-    public AboutRepository(ApplicationDbContext context, ILogger<AboutRepository> logger, IHttpContextAccessor httpContextAccessor, IStorageService storageService) : base(context)
+    public AboutRepository(ApplicationDbContext context, ILogger<AboutRepository> logger, IHttpContextAccessor httpContextAccessor, IUploadRepository uploadRepository) : base(context)
     {
         _logger = logger ?? throw new ArgumentException(null, nameof(logger));
         _httpContextAccessor = httpContextAccessor;
-        _storageService = storageService;
+        _uploadRepository = uploadRepository;
     }
 
     public async Task<List<AboutVm>> GetAbouts()
@@ -61,7 +59,7 @@ public class AboutRepository : GenericRepository<ApplicationDbContext>, IAboutRe
         
             if (request.Image != null)
             {
-                var coverImagePath = await SaveFile(request.Image);
+                var coverImagePath = await _uploadRepository.SaveFile(request.Image);
                 item.Image = coverImagePath;
             }
             
@@ -87,7 +85,7 @@ public class AboutRepository : GenericRepository<ApplicationDbContext>, IAboutRe
             // Process Image
             if (request.Image != null)
             {
-                var coverImagePath = await SaveFile(request.Image);
+                var coverImagePath = await _uploadRepository.SaveFile(request.Image);
                 about.Image = coverImagePath;
             }
 
@@ -121,14 +119,5 @@ public class AboutRepository : GenericRepository<ApplicationDbContext>, IAboutRe
             _logger.LogError("{Message}", e.Message);
             return false;
         }
-    }
-    
-    private async Task<string> SaveFile(IFormFile file)
-    {
-        var originalFileName = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName?.Trim('"');
-        var fileName = FunctionBase.GenerateFileName("Image") + Path.GetExtension(originalFileName);
-        await _storageService.SaveFileAsync(file.OpenReadStream(), fileName);
-        var filePath = _storageService.GetFileUrl(fileName);
-        return filePath;
     }
 }
