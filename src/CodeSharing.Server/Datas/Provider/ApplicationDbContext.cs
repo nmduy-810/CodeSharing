@@ -12,22 +12,23 @@ public class ApplicationDbContext : IdentityDbContext<User>
     {
     }
 
-    public DbSet<ActivityLog> ActivityLogs { set; get; }
-    public DbSet<Attachment> Attachments { get; set; }
-    public DbSet<Category> Categories { set; get; }
-    public DbSet<Command> Commands { set; get; }
-    public DbSet<CommandInFunction> CommandInFunctions { set; get; }
-    public DbSet<Comment> Comments { set; get; }
-    public DbSet<Function> Functions { set; get; }
-    public DbSet<Post> Posts { set; get; }
-    public DbSet<Label> Labels { set; get; }
-    public DbSet<LabelInPost> LabelInPosts { set; get; }
-    public DbSet<Permission> Permissions { set; get; }
-    public DbSet<Report> Reports { set; get; }
-    public DbSet<Vote> Votes { set; get; }
-    public DbSet<Contact> Contacts { get; set; }
-    public DbSet<About> Abouts { get; set; }
-    public DbSet<Support> Supports { get; set; }
+    public DbSet<ActivityLog> ActivityLogs { set; get; } = default!;
+    
+    public DbSet<Attachment> Attachments { get; set; } = default!;
+    public DbSet<Category> Categories { set; get; } = default!;
+    public DbSet<Command> Commands { set; get; } = default!;
+    public DbSet<CommandInFunction> CommandInFunctions { set; get; } = default!;
+    public DbSet<Comment> Comments { set; get; } = default!;
+    public DbSet<Function> Functions { set; get; } = default!;
+    public DbSet<Post> Posts { set; get; } = default!;
+    public DbSet<Label> Labels { set; get; } = default!;
+    public DbSet<LabelInPost> LabelInPosts { set; get; } = default!;
+    public DbSet<Permission> Permissions { set; get; } = default!;
+    public DbSet<Report> Reports { set; get; } = default!;
+    public DbSet<Vote> Votes { set; get; } = default!;
+    public DbSet<Contact> Contacts { get; set; } = default!;
+    public DbSet<About> Abouts { get; set; } = default!;
+    public DbSet<Support> Supports { get; set; } = default!;
 
     protected override void OnModelCreating(ModelBuilder builder)
     {

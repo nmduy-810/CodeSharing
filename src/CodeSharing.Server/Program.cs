@@ -3,6 +3,10 @@ using CodeSharing.Server.Datas.Initialize;
 using CodeSharing.Server.Datas.Provider;
 using CodeSharing.Server.Extensions;
 using CodeSharing.Server.IdentityServer;
+using CodeSharing.Server.AdditionalServices;
+using CodeSharing.Server.AdditionalServices.Interfaces;
+using CodeSharing.Server.Repositories;
+using CodeSharing.Server.Repositories.Intefaces;
 using CodeSharing.Server.Services;
 using CodeSharing.Server.Services.Interfaces;
 using CodeSharing.ViewModels.Commons;
@@ -145,13 +149,51 @@ builder.Services.AddTransient<DbInitializer>();
 // Config use options
 builder.Services.AddOptions();
 
-// Register in Identity require have EmailSender
+// Register in Identity require have EmailSender (Additional Services)
 builder.Services.AddTransient<IEmailSender, EmailSenderService>();
 builder.Services.AddTransient<ISequenceService, SequenceService>();
 builder.Services.AddTransient<IStorageService, FileStorageService>();
 builder.Services.AddTransient<ICacheService, DistributedCacheService>();
 builder.Services.Configure<MailSettings>(configuration.GetSection("MailSettings"));
 builder.Services.AddTransient<IViewRenderService, ViewRenderService>();
+builder.Services.AddTransient<ISerializeService, SerializeService>();
+
+// Register Services and Repositories
+builder.Services.AddScoped(typeof(IGenericRepository<,>), typeof(GenericRepository<,>));
+builder.Services
+    .AddScoped<IContactRepository, ContactRepository>()
+    .AddScoped<IContactService, ContactService>();
+builder.Services
+    .AddScoped<ISupportRepository, SupportRepository>()
+    .AddScoped<ISupportService, SupportService>();
+builder.Services
+    .AddScoped<ICategoryRepository, CategoryRepository>()
+    .AddScoped<ICategoryService, CategoryService>();
+builder.Services
+    .AddScoped<IAboutRepository, AboutRepository>()
+    .AddScoped<IAboutService, AboutService>();
+builder.Services
+    .AddScoped<IFunctionRepository, FunctionRepository>()
+    .AddScoped<IFunctionService, FunctionService>();
+builder.Services
+    .AddScoped<ILabelRepository, LabelRepository>()
+    .AddScoped<ILabelService, LabelService>();
+builder.Services
+    .AddScoped<IUserRepository, UserRepository>()
+    .AddScoped<IUserService, UserService>();
+builder.Services
+    .AddScoped<IStatisticRepository, StatisticRepository>()
+    .AddScoped<IStatisticService, StatisticService>();
+builder.Services
+    .AddScoped<IPostRepository, PostRepository>()
+    .AddScoped<IPostService, PostService>();
+builder.Services
+    .AddScoped<ICommandRepository, CommandRepository>()
+    .AddScoped<ICommandService, CommandService>();
+builder.Services
+    .AddScoped<IRoleRepository, RoleRepository>()
+    .AddScoped<IRoleService, RoleService>();
+builder.Services.AddScoped<IUploadRepository, UploadRepository>();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

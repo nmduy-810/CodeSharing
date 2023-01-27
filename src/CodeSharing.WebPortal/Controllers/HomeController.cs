@@ -27,7 +27,7 @@ public class HomeController : Controller
         {
             LatestPosts = latestPosts
         };
-
+        
         return View(items);
     }
 

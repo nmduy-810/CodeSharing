@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.Extensions.Options;
 using MimeKit;
 
-namespace CodeSharing.Server.Services;
+namespace CodeSharing.Server.AdditionalServices;
 
 public class EmailSenderService : IEmailSender
 {
