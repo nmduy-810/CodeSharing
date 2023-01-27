@@ -1,4 +1,4 @@
-namespace CodeSharing.Server.Services.Interfaces;
+namespace CodeSharing.Server.AdditionalServices.Interfaces;
 
 public interface ICacheService
 {

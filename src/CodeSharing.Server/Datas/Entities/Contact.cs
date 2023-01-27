@@ -4,15 +4,13 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace CodeSharing.Server.Datas.Entities;
 
 [Table("Contacts")]
-public class Contact
+public class Contact : EntityBase<int>
 {
-    [Key]
-    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-    public int Id { get; set; }
+    [MaxLength(12)] 
+    public string Phone { get; set; } = default!;
 
-    [MaxLength(12)] public string Phone { get; set; }
+    public string Email { get; set; } = default!;
 
-    public string Email { get; set; }
-
-    [MaxLength(500)] public string Location { get; set; }
+    [MaxLength(500)] 
+    public string Location { get; set; } = default!;
 }

@@ -9,7 +9,7 @@ public class Command
     [MaxLength(50)]
     [Column(TypeName = "varchar(50)")]
     [Key]
-    public string Id { get; set; }
+    public string Id { get; set; } = default!;
 
-    [Required] [MaxLength(50)] public string Name { get; set; }
+    [Required] [MaxLength(50)] public string Name { get; set; } = default!;
 }

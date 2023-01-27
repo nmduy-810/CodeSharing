@@ -1,9 +1,9 @@
 using System.Text;
 using System.Text.Json;
-using CodeSharing.Server.Services.Interfaces;
+using CodeSharing.Server.AdditionalServices.Interfaces;
 using Microsoft.Extensions.Caching.Distributed;
 
-namespace CodeSharing.Server.Services;
+namespace CodeSharing.Server.AdditionalServices;
 
 public class DistributedCacheService : ICacheService
 {
