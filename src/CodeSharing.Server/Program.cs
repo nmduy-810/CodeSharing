@@ -200,6 +200,7 @@ builder.Services
     .AddScoped<IRoleRepository, RoleRepository>()
     .AddScoped<IRoleService, RoleService>();
 builder.Services.AddScoped<IUploadRepository, UploadRepository>();
+builder.Services.AddScoped(typeof(ICoreRepository<>), typeof(CoreRepository<>));
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

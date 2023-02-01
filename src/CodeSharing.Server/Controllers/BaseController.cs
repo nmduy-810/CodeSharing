@@ -10,7 +10,7 @@ namespace CodeSharing.Server.Controllers;
 [Authorize("Bearer")]
 public class BaseController : ControllerBase
 {
-    protected virtual IActionResult CodeSharingResult<T>(Result<T>? result)
+    protected virtual IActionResult CodeSharingResult<T>(Result<T> result)
     {
         if (result == null)
             return new NotFoundObjectResult(result);

@@ -25,8 +25,10 @@ public abstract class ErrorCodes
 
     public abstract class MessageCode
     {
-        public const string Ok = "OK";
         public const string ItemNotFound = "Item not found in database";
+        public const string ErrorProcessCreate = "Error process create";
+        public const string ErrorProcessUpdate = "Error process update";
+        public const string ErrorProcessDelete = "Error process delete";
     }
 
     public abstract class TitleCode

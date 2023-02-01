@@ -7,117 +7,98 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CodeSharing.Server.Repositories;
 
-public class AboutRepository : GenericRepository<ApplicationDbContext>, IAboutRepository
+public class AboutRepository : CoreRepository<About>, IAboutRepository
 {
     private readonly ILogger<AboutRepository> _logger;
     private readonly IHttpContextAccessor _httpContextAccessor;
-    private readonly IUploadRepository _uploadRepository;
 
-    public AboutRepository(ApplicationDbContext context, ILogger<AboutRepository> logger, IHttpContextAccessor httpContextAccessor, IUploadRepository uploadRepository) : base(context)
+    public AboutRepository(ApplicationDbContext context, ILogger<AboutRepository> logger, IHttpContextAccessor httpContextAccessor) : base(context)
     {
         _logger = logger ?? throw new ArgumentException(null, nameof(logger));
         _httpContextAccessor = httpContextAccessor;
-        _uploadRepository = uploadRepository;
     }
 
     public async Task<List<AboutVm>> GetAbouts()
     {
-        var items = await _context.Abouts.Select(x => new AboutVm
+        try
         {
-            Id = x.Id,
-            Image = FunctionBase.GetBaseUrl(_httpContextAccessor) + x.Image,
-            Description = x.Description
-        }).ToListAsync();
-
-        return items;
+            var items = await FindAll().Select(x => new AboutVm
+            {
+                Id = x.Id,
+                Image = FunctionBase.GetBaseUrl(_httpContextAccessor) + x.Image,
+                Description = x.Description
+            }).ToListAsync();
+            return items;
+        }
+        catch (Exception e)
+        {
+            _logger.LogError("{Message}", e.Message);
+            return new List<AboutVm>();
+        }
     }
 
     public async Task<AboutVm?> GetById(int id)
     {
-        var about = await _context.Abouts.FindAsync(id);
-        if (about == null)
-            return null;
-            
-        var item = new AboutVm
-        {
-            Id = about.Id,
-            Image = FunctionBase.GetBaseUrl(_httpContextAccessor) + about.Image,
-            Description = about.Description
-        };
-
-        return item;
-    }
-
-    public async Task<bool> PostAbout(AboutCreateRequest request)
-    {
         try
         {
-            var item = new About
+            var about = await FindByIdAsync(id);
+            if (about == null)
+                return null;
+            
+            var item = new AboutVm
             {
-                Description = request.Description
+                Id = about.Id,
+                Image = FunctionBase.GetBaseUrl(_httpContextAccessor) + about.Image,
+                Description = about.Description
             };
-        
-            if (request.Image != null)
-            {
-                var coverImagePath = await _uploadRepository.SaveFile(request.Image);
-                item.Image = coverImagePath;
-            }
-            
-            await _context.Abouts.AddAsync(item);
-            var result = await _context.SaveChangesAsync();
-            return result > 0;
+            return item;
         }
         catch (Exception e)
         {
             _logger.LogError("{Message}", e.Message);
-            return false;
+            return null;
         }
     }
-
-    public async Task<bool> PutAbout(int id, AboutCreateRequest request)
+    
+    public async Task<About?> PostAbout(About about)
     {
         try
         {
-            var about = await _context.Abouts.FindAsync(id);
-            if (about == null)
-                return false;
-            
-            // Process Image
-            if (request.Image != null)
-            {
-                var coverImagePath = await _uploadRepository.SaveFile(request.Image);
-                about.Image = coverImagePath;
-            }
-
-            about.Description = request.Description;
-
-            _context.Abouts.Update(about);
-            var result = await _context.SaveChangesAsync();
-            return result > 0;
+            var entity = await CreateAsync(about);
+            return await SaveChangesAsync() > 0 ? entity : null;
         }
         catch (Exception e)
         {
             _logger.LogError("{Message}", e.Message);
-            return false;
+            return null;
         }
     }
-
-    public async Task<bool> DeleteAbout(int id)
+    
+    public async Task<About?> PutAbout(About about)
     {
         try
         {
-            var about = await _context.Abouts.FindAsync(id);
-            if (about == null)
-                return false;
-
-            _context.Abouts.Remove(about);
-            var result = await _context.SaveChangesAsync();
-            return result > 0;
+            var entity = UpdateAsync(about);
+            return await SaveChangesAsync() > 0 ? entity : null;
         }
         catch (Exception e)
         {
             _logger.LogError("{Message}", e.Message);
-            return false;
+            return null;
+        }
+    }
+    
+    public async Task<About?> DeleteAbout(About about)
+    {
+        try
+        {
+            var entity = DeleteAsync(about);
+            return await SaveChangesAsync() > 0 ? entity : null;
+        }
+        catch (Exception e)
+        {
+            _logger.LogError("{Message}", e.Message);
+            return null;
         }
     }
 }

@@ -30,24 +30,30 @@ public class AboutsController : BaseController
     {
         return CodeSharingResult(await _aboutService.GetById(id));
     }
-
+    
     [AllowAnonymous]
     [HttpPost]
     [Consumes("multipart/form-data")]
+    [ProducesDefaultResponseType(typeof(Result<AboutVm>))]
     public async Task<IActionResult> PostAbout([FromForm] AboutCreateRequest request)
     {
         return CodeSharingResult(await _aboutService.PostAbout(request));
     }
-
+    
+    [AllowAnonymous]
     [HttpPut("{id:int}")]
     [Consumes("multipart/form-data")]
-    [AllowAnonymous]
+    [ProducesDefaultResponseType(typeof(Result<AboutVm>))]
     public async Task<IActionResult> PutAbout([FromRoute] int id, [FromForm] AboutCreateRequest request)
     {
-        var result = await _aboutService.PutAbout(id, request);
-        if (result) 
-            return NoContent();
-        
-        return BadRequest(new ApiBadRequestResponse("Update ABOUT failed"));
+        return CodeSharingResult(await _aboutService.PutAbout(id, request));
+    }
+    
+    [AllowAnonymous]
+    [HttpDelete("{id:int}")]
+    [ProducesDefaultResponseType(typeof(Result<AboutVm>))]
+    public async Task<IActionResult> DeleteAbout([FromRoute] int id)
+    {
+        return CodeSharingResult(await _aboutService.DeleteAbout(id));
     }
 }
