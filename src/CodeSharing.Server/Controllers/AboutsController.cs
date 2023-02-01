@@ -17,21 +17,18 @@ public class AboutsController : BaseController
 
     [AllowAnonymous]
     [HttpGet]
+    [ProducesDefaultResponseType(typeof(Result<List<AboutVm>>))]
     public async Task<IActionResult> GetAbouts()
     {
-        var result = await _aboutService.GetAbouts();
-        return Ok(result);
+        return CodeSharingResult(await _aboutService.GetAbouts());
     }
 
     [AllowAnonymous]
     [HttpGet("{id:int}")]
+    [ProducesDefaultResponseType(typeof(Result<AboutVm>))]
     public async Task<IActionResult> GetById([FromRoute] int id)
     {
-        var about = await _aboutService.GetById(id);
-        if (about == null) 
-            return NotFound(new ApiNotFoundResponse($"Not found ABOUT item for id = {id} in database"));
-        
-        return Ok(about);
+        return CodeSharingResult(await _aboutService.GetById(id));
     }
 
     [AllowAnonymous]
@@ -39,11 +36,7 @@ public class AboutsController : BaseController
     [Consumes("multipart/form-data")]
     public async Task<IActionResult> PostAbout([FromForm] AboutCreateRequest request)
     {
-        var result = await _aboutService.PostAbout(request);
-        if (result)
-            return Ok(result);
-
-        return BadRequest(new ApiBadRequestResponse("Insert ABOUT failed"));
+        return CodeSharingResult(await _aboutService.PostAbout(request));
     }
 
     [HttpPut("{id:int}")]

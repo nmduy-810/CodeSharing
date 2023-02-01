@@ -19,7 +19,7 @@ public class ClaimRequirementFilter : IAuthorizationFilter
     public void OnAuthorization(AuthorizationFilterContext context)
     {
         var permissionsClaim = context.HttpContext.User.Claims
-            .SingleOrDefault(c => c.Type == SystemConstants.Claims.Permissions);
+            .SingleOrDefault(c => c.Type == SystemConstant.Claims.Permissions);
         if (permissionsClaim != null)
         {
             var permissions = JsonConvert.DeserializeObject<List<string>>(permissionsClaim.Value);

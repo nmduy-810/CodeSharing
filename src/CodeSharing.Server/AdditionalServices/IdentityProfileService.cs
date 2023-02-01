@@ -52,7 +52,7 @@ public class IdentityProfileService : IProfileService
         claims.Add(new Claim(ClaimTypes.Name, user.UserName));
         claims.Add(new Claim(ClaimTypes.NameIdentifier, user.Id));
         claims.Add(new Claim(ClaimTypes.Role, string.Join(";", roles)));
-        claims.Add(new Claim(SystemConstants.Claims.Permissions, JsonConvert.SerializeObject(permissions)));
+        claims.Add(new Claim(SystemConstant.Claims.Permissions, JsonConvert.SerializeObject(permissions)));
 
         context.IssuedClaims = claims;
     }

@@ -1,6 +1,6 @@
 namespace CodeSharing.Utilities.Constants;
 
-public class CacheConstants
+public class CacheConstant
 {
     public const string LatestPosts = "LatestPosts";
     public const string PopularPosts = "PopularPosts";

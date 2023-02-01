@@ -22,7 +22,7 @@ public class CategoryRepository : GenericRepository<ApplicationDbContext>, ICate
     public async Task<List<CategoryVm>> GetCategories()
     {
         // Check cached data have value in database
-        var cacheData = await _distributedCacheService.GetAsync<List<CategoryVm>>(CacheConstants.Categories);
+        var cacheData = await _distributedCacheService.GetAsync<List<CategoryVm>>(CacheConstant.Categories);
         
         // If in database not data
         if (cacheData == null)
@@ -82,7 +82,7 @@ public class CategoryRepository : GenericRepository<ApplicationDbContext>, ICate
             if (result <= 0)
                 return false;
 
-            await _distributedCacheService.RemoveAsync(CacheConstants.Categories);
+            await _distributedCacheService.RemoveAsync(CacheConstant.Categories);
             return true;
 
         }
@@ -115,7 +115,7 @@ public class CategoryRepository : GenericRepository<ApplicationDbContext>, ICate
             if (result <= 0)
                 return false;
             
-            await _distributedCacheService.RemoveAsync(CacheConstants.Categories);
+            await _distributedCacheService.RemoveAsync(CacheConstant.Categories);
             return true;
         }
         catch (Exception e)
@@ -138,7 +138,7 @@ public class CategoryRepository : GenericRepository<ApplicationDbContext>, ICate
             if (result <= 0)
                 return false;
             
-            await _distributedCacheService.RemoveAsync(CacheConstants.Categories);
+            await _distributedCacheService.RemoveAsync(CacheConstant.Categories);
             return true;
         }
         catch (Exception e)

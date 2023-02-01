@@ -141,7 +141,7 @@ public class UserRepository : GenericRepository<ApplicationDbContext>, IUserRepo
         if (user == null)
             return false;
 
-        var adminUsers = await _userManager.GetUsersInRoleAsync(SystemConstants.Roles.Admin);
+        var adminUsers = await _userManager.GetUsersInRoleAsync(SystemConstant.Roles.Admin);
         var otherUsers = adminUsers.Where(x => x.Id != id).ToList();
         if (otherUsers.Count == 0)
             return false;
@@ -208,7 +208,7 @@ public class UserRepository : GenericRepository<ApplicationDbContext>, IUserRepo
         if (request.RoleNames.Length == 0)
             return false;
 
-        if (request.RoleNames.Length == 1 && request.RoleNames[0] == SystemConstants.Roles.Admin &&
+        if (request.RoleNames.Length == 1 && request.RoleNames[0] == SystemConstant.Roles.Admin &&
             user.UserName == "admin")
             return false;
 

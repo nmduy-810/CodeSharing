@@ -5,6 +5,7 @@ using CodeSharing.Server.Extensions;
 using CodeSharing.Server.IdentityServer;
 using CodeSharing.Server.AdditionalServices;
 using CodeSharing.Server.AdditionalServices.Interfaces;
+using CodeSharing.Server.Middleware;
 using CodeSharing.Server.Repositories;
 using CodeSharing.Server.Repositories.Intefaces;
 using CodeSharing.Server.Services;
@@ -141,6 +142,11 @@ builder.Services.AddRazorPages(options =>
             attributeRouteModel.Template = attributeRouteModel.Template?.Remove(0, "Identity".Length);
         }
     });
+});
+
+builder.Services.Configure<ApiBehaviorOptions>(options =>
+{
+    options.InvalidModelStateResponseFactory = ctx => new ModelStateFeatureFilter();
 });
 
 // Add DbInitializer using Seeding data
@@ -299,6 +305,8 @@ app.UseRouting();
 app.UseAuthorization();
 
 app.UseCors(CodeSharingSpecificOrigins);
+
+app.UseResponseFormatterMiddleware(); // show took (calculate amount times of the api executes)
 
 app.UseEndpoints(endpoints =>
 {

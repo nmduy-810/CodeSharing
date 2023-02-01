@@ -1,6 +1,6 @@
 namespace CodeSharing.Utilities.Constants;
 
-public class SystemConstants
+public class SystemConstant
 {
     public class Claims
     {

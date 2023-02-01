@@ -39,34 +39,34 @@ public class PostService : IPostService
 
     public async Task<List<PostQuickVm>> GetLatestPosts(int take)
     {
-        var cacheData = await _distributedCacheService.GetAsync<List<PostQuickVm>>(CacheConstants.LatestPosts);
+        var cacheData = await _distributedCacheService.GetAsync<List<PostQuickVm>>(CacheConstant.LatestPosts);
         if (cacheData != null)
             return cacheData;
         
         var result = await _repository.GetLatestPosts(take);
-        await _distributedCacheService.SetAsync(CacheConstants.LatestPosts, result, 2);
+        await _distributedCacheService.SetAsync(CacheConstant.LatestPosts, result, 2);
         return result;
     }
 
     public async Task<List<PostQuickVm>> GetPopularPosts(int take)
     {
-        var cacheData = await _distributedCacheService.GetAsync<List<PostQuickVm>>(CacheConstants.PopularPosts);
+        var cacheData = await _distributedCacheService.GetAsync<List<PostQuickVm>>(CacheConstant.PopularPosts);
         if (cacheData != null)
             return cacheData;
         
         var result = await _repository.GetPopularPosts(take);
-        await _distributedCacheService.SetAsync(CacheConstants.PopularPosts, result, 2);
+        await _distributedCacheService.SetAsync(CacheConstant.PopularPosts, result, 2);
         return result;
     }
 
     public async Task<List<PostQuickVm>> GetTrendingPosts(int take)
     {
-        var cacheData = await _distributedCacheService.GetAsync<List<PostQuickVm>>(CacheConstants.TrendingPosts);
+        var cacheData = await _distributedCacheService.GetAsync<List<PostQuickVm>>(CacheConstant.TrendingPosts);
         if (cacheData != null)
             return cacheData;
         
         var result = await _repository.GetTrendingPosts(take);
-        await _distributedCacheService.SetAsync(CacheConstants.TrendingPosts, result, 2);
+        await _distributedCacheService.SetAsync(CacheConstant.TrendingPosts, result, 2);
         return result;
     }
 
@@ -102,12 +102,12 @@ public class PostService : IPostService
 
     public async Task<Pagination<PostQuickVm>> GetPostsPaging(int pageIndex, int pageSize)
     {
-        var cacheData = await _distributedCacheService.GetAsync<Pagination<PostQuickVm>>(CacheConstants.PostsPaging);
+        var cacheData = await _distributedCacheService.GetAsync<Pagination<PostQuickVm>>(CacheConstant.PostsPaging);
         if (cacheData != null)
             return cacheData;
         
         var result = await _repository.GetPostsPaging(pageIndex, pageSize);
-        await _distributedCacheService.SetAsync(CacheConstants.PostsPaging, result, 2);
+        await _distributedCacheService.SetAsync(CacheConstant.PostsPaging, result, 2);
         return result;
     }
 
@@ -125,11 +125,11 @@ public class PostService : IPostService
         if (request.Labels.Length > 0)
         {
             // Remove cached previous save for post
-            await _distributedCacheService.RemoveAsync(CacheConstants.LatestPosts);
-            await _distributedCacheService.RemoveAsync(CacheConstants.PopularPosts);
-            await _distributedCacheService.RemoveAsync(CacheConstants.TrendingPosts);
-            await _distributedCacheService.RemoveAsync(CacheConstants.PostsPaging);
-            await _distributedCacheService.RemoveAsync(CacheConstants.Categories);
+            await _distributedCacheService.RemoveAsync(CacheConstant.LatestPosts);
+            await _distributedCacheService.RemoveAsync(CacheConstant.PopularPosts);
+            await _distributedCacheService.RemoveAsync(CacheConstant.TrendingPosts);
+            await _distributedCacheService.RemoveAsync(CacheConstant.PostsPaging);
+            await _distributedCacheService.RemoveAsync(CacheConstant.Categories);
             
             request.Labels = request.Labels[0].Split("#").Select(x => x.Trim())
                 .Where(x => !string.IsNullOrWhiteSpace(x))
@@ -182,11 +182,11 @@ public class PostService : IPostService
             return result;
 
         // Remove cached previous save for post
-        await _distributedCacheService.RemoveAsync(CacheConstants.LatestPosts);
-        await _distributedCacheService.RemoveAsync(CacheConstants.PopularPosts);
-        await _distributedCacheService.RemoveAsync(CacheConstants.TrendingPosts);
-        await _distributedCacheService.RemoveAsync(CacheConstants.PostsPaging);
-        await _distributedCacheService.RemoveAsync(CacheConstants.Categories);
+        await _distributedCacheService.RemoveAsync(CacheConstant.LatestPosts);
+        await _distributedCacheService.RemoveAsync(CacheConstant.PopularPosts);
+        await _distributedCacheService.RemoveAsync(CacheConstant.TrendingPosts);
+        await _distributedCacheService.RemoveAsync(CacheConstant.PostsPaging);
+        await _distributedCacheService.RemoveAsync(CacheConstant.Categories);
         return result;
     }
 
@@ -197,11 +197,11 @@ public class PostService : IPostService
             return result;
         
         // Remove cached previous save for post
-        await _distributedCacheService.RemoveAsync(CacheConstants.LatestPosts);
-        await _distributedCacheService.RemoveAsync(CacheConstants.PopularPosts);
-        await _distributedCacheService.RemoveAsync(CacheConstants.TrendingPosts);
-        await _distributedCacheService.RemoveAsync(CacheConstants.PostsPaging);
-        await _distributedCacheService.RemoveAsync(CacheConstants.Categories);
+        await _distributedCacheService.RemoveAsync(CacheConstant.LatestPosts);
+        await _distributedCacheService.RemoveAsync(CacheConstant.PopularPosts);
+        await _distributedCacheService.RemoveAsync(CacheConstant.TrendingPosts);
+        await _distributedCacheService.RemoveAsync(CacheConstant.PostsPaging);
+        await _distributedCacheService.RemoveAsync(CacheConstant.Categories);
         return result;
     }
 
