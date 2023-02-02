@@ -1,10 +1,10 @@
 using System.Net.Http.Headers;
+using CodeSharing.Core.Resources.Constants;
 using CodeSharing.Server.AdditionalServices.Interfaces;
 using CodeSharing.Server.Datas.Entities;
 using CodeSharing.Server.Repositories.Intefaces;
 using CodeSharing.Server.Services.Interfaces;
 using CodeSharing.Utilities.Commons;
-using CodeSharing.Utilities.Constants;
 using CodeSharing.Utilities.Helpers;
 using CodeSharing.ViewModels.Contents.Comment;
 using CodeSharing.ViewModels.Contents.Post;

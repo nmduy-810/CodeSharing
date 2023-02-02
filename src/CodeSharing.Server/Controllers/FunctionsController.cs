@@ -1,6 +1,6 @@
+using CodeSharing.Core.Resources.Constants;
 using CodeSharing.Server.Authorization;
 using CodeSharing.Server.Services.Interfaces;
-using CodeSharing.Utilities.Constants;
 using CodeSharing.Utilities.Helpers;
 using Microsoft.AspNetCore.Mvc;
 
@@ -16,7 +16,7 @@ public class FunctionsController : BaseController
     }
 
     [HttpGet]
-    [ClaimRequirement(FunctionCodeConstants.SYSTEM_FUNCTION, CommandCodeConstants.VIEW)]
+    [ClaimRequirement(FunctionCodeEnum.SYSTEM_FUNCTION, CommandCodeEnum.VIEW)]
     public async Task<IActionResult> GetFunctions()
     {
         var result = await _functionService.GetFunctions();
@@ -24,7 +24,7 @@ public class FunctionsController : BaseController
     }
 
     [HttpGet("{id}")]
-    [ClaimRequirement(FunctionCodeConstants.SYSTEM_FUNCTION, CommandCodeConstants.VIEW)]
+    [ClaimRequirement(FunctionCodeEnum.SYSTEM_FUNCTION, CommandCodeEnum.VIEW)]
     public async Task<IActionResult> GetById(string id)
     {
         var result = await _functionService.GetById(id);
@@ -35,7 +35,7 @@ public class FunctionsController : BaseController
     }
 
     [HttpGet("{functionId}/parents")]
-    [ClaimRequirement(FunctionCodeConstants.SYSTEM_FUNCTION, CommandCodeConstants.VIEW)]
+    [ClaimRequirement(FunctionCodeEnum.SYSTEM_FUNCTION, CommandCodeEnum.VIEW)]
     public async Task<IActionResult> GetFunctionsByParentId(string functionId)
     {
         var result = await _functionService.GetFunctionsByParentId(functionId);

@@ -1,3 +1,4 @@
+using CodeSharing.Server;
 using CodeSharing.Server.Datas.Entities;
 using CodeSharing.Server.Datas.Initialize;
 using CodeSharing.Server.Datas.Provider;
@@ -10,6 +11,8 @@ using CodeSharing.Server.Repositories;
 using CodeSharing.Server.Repositories.Intefaces;
 using CodeSharing.Server.Services;
 using CodeSharing.Server.Services.Interfaces;
+using CodeSharing.Core.Services.Utils;
+using CodeSharing.Core.Services.Utils.Interfaces;
 using CodeSharing.ViewModels.Commons;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
@@ -164,6 +167,8 @@ builder.Services.Configure<MailSettings>(configuration.GetSection("MailSettings"
 builder.Services.AddTransient<IViewRenderService, ViewRenderService>();
 builder.Services.AddTransient<ISerializeService, SerializeService>();
 
+builder.Services.AddAutoMapper(c => { c.AddProfile<EfCoreMapperProfile>(); });
+
 // Register Services and Repositories
 builder.Services.AddScoped(typeof(IGenericRepository<,>), typeof(GenericRepository<,>));
 builder.Services
@@ -201,6 +206,8 @@ builder.Services
     .AddScoped<IRoleService, RoleService>();
 builder.Services.AddScoped<IUploadRepository, UploadRepository>();
 builder.Services.AddScoped(typeof(ICoreRepository<>), typeof(CoreRepository<>));
+builder.Services.AddScoped<IBaseService, BaseService>();
+builder.Services.AddScoped<IUtils, Utils>();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

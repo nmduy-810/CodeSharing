@@ -1,8 +1,6 @@
 using CodeSharing.Server.Datas.Entities;
 using CodeSharing.Server.Datas.Provider;
 using CodeSharing.Server.Repositories.Intefaces;
-using CodeSharing.Utilities.Helpers;
-using CodeSharing.ViewModels.Contents.About;
 using Microsoft.EntityFrameworkCore;
 
 namespace CodeSharing.Server.Repositories;
@@ -18,40 +16,25 @@ public class AboutRepository : CoreRepository<About>, IAboutRepository
         _httpContextAccessor = httpContextAccessor;
     }
 
-    public async Task<List<AboutVm>> GetAbouts()
+    public async Task<List<About>> GetAbouts()
     {
         try
         {
-            var items = await FindAll().Select(x => new AboutVm
-            {
-                Id = x.Id,
-                Image = FunctionBase.GetBaseUrl(_httpContextAccessor) + x.Image,
-                Description = x.Description
-            }).ToListAsync();
-            return items;
+            return await FindAll().ToListAsync();
         }
         catch (Exception e)
         {
             _logger.LogError("{Message}", e.Message);
-            return new List<AboutVm>();
+            return new List<About>();
         }
     }
 
-    public async Task<AboutVm?> GetById(int id)
+    public async Task<About?> GetById(int id)
     {
         try
         {
             var about = await FindByIdAsync(id);
-            if (about == null)
-                return null;
-            
-            var item = new AboutVm
-            {
-                Id = about.Id,
-                Image = FunctionBase.GetBaseUrl(_httpContextAccessor) + about.Image,
-                Description = about.Description
-            };
-            return item;
+            return about ?? null;
         }
         catch (Exception e)
         {

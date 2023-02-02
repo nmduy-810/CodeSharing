@@ -1,6 +1,6 @@
-﻿namespace CodeSharing.Utilities.Constants;
+﻿namespace CodeSharing.Core.Resources.Constants;
 
-public enum FunctionCodeConstants
+public enum FunctionCodeEnum
 {
     DASHBOARD,
 

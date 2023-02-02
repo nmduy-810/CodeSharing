@@ -1,8 +1,8 @@
 using System.Net;
 
-namespace CodeSharing.Utilities.Commons;
+namespace CodeSharing.Core.Resources.Constants;
 
-public abstract class ErrorCodes
+public abstract class ErrorCodeConstant
 {
     public abstract class StatusCode
     {

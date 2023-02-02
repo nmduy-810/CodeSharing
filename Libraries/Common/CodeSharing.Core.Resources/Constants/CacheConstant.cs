@@ -1,4 +1,4 @@
-namespace CodeSharing.Utilities.Constants;
+namespace CodeSharing.Core.Resources.Constants;
 
 public class CacheConstant
 {

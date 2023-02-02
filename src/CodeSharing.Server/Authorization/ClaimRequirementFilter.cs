@@ -1,4 +1,4 @@
-using CodeSharing.Utilities.Constants;
+using CodeSharing.Core.Resources.Constants;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Newtonsoft.Json;
@@ -7,10 +7,10 @@ namespace CodeSharing.Server.Authorization;
 
 public class ClaimRequirementFilter : IAuthorizationFilter
 {
-    private readonly CommandCodeConstants _commandCode;
-    private readonly FunctionCodeConstants _functionCode;
+    private readonly CommandCodeEnum _commandCode;
+    private readonly FunctionCodeEnum _functionCode;
 
-    public ClaimRequirementFilter(FunctionCodeConstants functionCode, CommandCodeConstants commandCode)
+    public ClaimRequirementFilter(FunctionCodeEnum functionCode, CommandCodeEnum commandCode)
     {
         _functionCode = functionCode;
         _commandCode = commandCode;

@@ -1,6 +1,6 @@
+using CodeSharing.Core.Resources.Constants;
 using CodeSharing.Server.Authorization;
 using CodeSharing.Server.Services.Interfaces;
-using CodeSharing.Utilities.Constants;
 using CodeSharing.Utilities.Helpers;
 using CodeSharing.ViewModels.Systems.Role;
 using CodeSharing.ViewModels.Systems.User;
@@ -18,7 +18,7 @@ public class UsersController : BaseController
     }
 
     [HttpGet]
-    [ClaimRequirement(FunctionCodeConstants.SYSTEM_USER, CommandCodeConstants.VIEW)]
+    [ClaimRequirement(FunctionCodeEnum.SYSTEM_USER, CommandCodeEnum.VIEW)]
     public async Task<IActionResult> GetUsers()
     {
         var result = await _userService.GetUsers();
@@ -26,7 +26,7 @@ public class UsersController : BaseController
     }
     
     [HttpGet("paging")]
-    [ClaimRequirement(FunctionCodeConstants.SYSTEM_USER, CommandCodeConstants.VIEW)]
+    [ClaimRequirement(FunctionCodeEnum.SYSTEM_USER, CommandCodeEnum.VIEW)]
     public async Task<IActionResult> GetUsersPaging(int pageIndex, int pageSize)
     {
         var result = await _userService.GetUsersPaging(pageIndex, pageSize);
@@ -34,7 +34,7 @@ public class UsersController : BaseController
     }
 
     [HttpGet("{id}")]
-    [ClaimRequirement(FunctionCodeConstants.SYSTEM_USER, CommandCodeConstants.VIEW)]
+    [ClaimRequirement(FunctionCodeEnum.SYSTEM_USER, CommandCodeEnum.VIEW)]
     public async Task<IActionResult> GetById(string id)
     {
         var result = await _userService.GetById(id);
@@ -45,7 +45,7 @@ public class UsersController : BaseController
     }
 
     [HttpPost]
-    [ClaimRequirement(FunctionCodeConstants.SYSTEM_USER, CommandCodeConstants.CREATE)]
+    [ClaimRequirement(FunctionCodeEnum.SYSTEM_USER, CommandCodeEnum.CREATE)]
     public async Task<IActionResult> PostUser(UserCreateRequest request)
     {
         var result = await _userService.PostUser(request);
@@ -66,7 +66,7 @@ public class UsersController : BaseController
     }
 
     [HttpPut("{id}/change-password")]
-    [ClaimRequirement(FunctionCodeConstants.SYSTEM_USER, CommandCodeConstants.UPDATE)]
+    [ClaimRequirement(FunctionCodeEnum.SYSTEM_USER, CommandCodeEnum.UPDATE)]
     public async Task<IActionResult> PutUserPassword(string id, [FromBody] UserPasswordChangeRequest request)
     {
         var result = await _userService.PutUserPassword(id, request);
@@ -77,7 +77,7 @@ public class UsersController : BaseController
     }
 
     [HttpDelete("{id}")]
-    [ClaimRequirement(FunctionCodeConstants.SYSTEM_USER, CommandCodeConstants.DELETE)]
+    [ClaimRequirement(FunctionCodeEnum.SYSTEM_USER, CommandCodeEnum.DELETE)]
     public async Task<IActionResult> DeleteUser(string id)
     {
         var result = await _userService.DeleteUser(id);
@@ -95,7 +95,7 @@ public class UsersController : BaseController
     }
 
     [HttpGet("{userId}/roles")]
-    [ClaimRequirement(FunctionCodeConstants.SYSTEM_USER, CommandCodeConstants.VIEW)]
+    [ClaimRequirement(FunctionCodeEnum.SYSTEM_USER, CommandCodeEnum.VIEW)]
     public async Task<IActionResult> GetUserRoles(string userId)
     {
         var result = await _userService.GetUserRoles(userId);
@@ -103,7 +103,7 @@ public class UsersController : BaseController
     }
 
     [HttpPost("{userId}/roles")]
-    [ClaimRequirement(FunctionCodeConstants.SYSTEM_USER, CommandCodeConstants.UPDATE)]
+    [ClaimRequirement(FunctionCodeEnum.SYSTEM_USER, CommandCodeEnum.UPDATE)]
     public async Task<IActionResult> PostRolesToUserUser(string userId, [FromBody] RoleAssignRequest request)
     {
         var result = await _userService.PostRolesToUserUser(userId, request);
@@ -114,7 +114,7 @@ public class UsersController : BaseController
     }
 
     [HttpDelete("{userId}/roles")]
-    [ClaimRequirement(FunctionCodeConstants.SYSTEM_USER, CommandCodeConstants.VIEW)]
+    [ClaimRequirement(FunctionCodeEnum.SYSTEM_USER, CommandCodeEnum.VIEW)]
     public async Task<IActionResult> RemoveRolesFromUser(string userId, [FromQuery] RoleAssignRequest request)
     {
         var result = await _userService.RemoveRolesFromUser(userId, request);

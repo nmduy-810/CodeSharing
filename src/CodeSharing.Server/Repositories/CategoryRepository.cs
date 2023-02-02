@@ -1,8 +1,8 @@
+using CodeSharing.Core.Resources.Constants;
 using CodeSharing.Server.AdditionalServices.Interfaces;
 using CodeSharing.Server.Datas.Entities;
 using CodeSharing.Server.Datas.Provider;
 using CodeSharing.Server.Repositories.Intefaces;
-using CodeSharing.Utilities.Constants;
 using CodeSharing.ViewModels.Contents.Category;
 using Microsoft.EntityFrameworkCore;
 

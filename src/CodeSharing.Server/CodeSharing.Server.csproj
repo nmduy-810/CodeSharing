@@ -7,6 +7,8 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="AutoMapper" Version="12.0.1" />
+        <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.0" />
         <PackageReference Include="AWSSDK.Core" Version="3.7.10.11" />
         <PackageReference Include="AWSSDK.S3" Version="3.7.8.23" />
         <PackageReference Include="Dapper" Version="2.0.123" />
@@ -41,6 +43,9 @@
     </ItemGroup>
 
     <ItemGroup>
+        <ProjectReference Include="..\..\Libraries\Common\CodeSharing.Core.Models\CodeSharing.Core.Models.csproj" />
+        <ProjectReference Include="..\..\Libraries\Common\CodeSharing.Core.Resources\CodeSharing.Core.Resources.csproj" />
+        <ProjectReference Include="..\..\Libraries\CoreServices\CodeSharing.Core.Services\CodeSharing.Core.Services.csproj" />
         <ProjectReference Include="..\CodeSharing.Utilities\CodeSharing.Utilities.csproj" />
         <ProjectReference Include="..\CodeSharing.ViewModels\CodeSharing.ViewModels.csproj" />
     </ItemGroup>

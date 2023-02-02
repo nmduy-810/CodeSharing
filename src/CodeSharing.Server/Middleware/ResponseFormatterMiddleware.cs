@@ -1,6 +1,6 @@
 using System.Diagnostics;
 using System.Net;
-using CodeSharing.Utilities.Helpers;
+using CodeSharing.Core.Models.BaseModels;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 

@@ -1,4 +1,4 @@
-using CodeSharing.Utilities.Helpers;
+using CodeSharing.Core.Models.BaseModels;
 using CodeSharing.ViewModels.Contents.About;
 
 namespace CodeSharing.Server.Services.Interfaces;

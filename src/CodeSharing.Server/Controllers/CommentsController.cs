@@ -1,6 +1,6 @@
+using CodeSharing.Core.Resources.Constants;
 using CodeSharing.Server.Authorization;
 using CodeSharing.Server.Extensions;
-using CodeSharing.Utilities.Constants;
 using CodeSharing.Utilities.Helpers;
 using CodeSharing.ViewModels.Contents.Comment;
 using Microsoft.AspNetCore.Authorization;
@@ -45,7 +45,7 @@ public partial class PostsController
     }
 
     [HttpGet("{postId}/comments/{commentId}")]
-    [ClaimRequirement(FunctionCodeConstants.CONTENT_COMMENT, CommandCodeConstants.VIEW)]
+    [ClaimRequirement(FunctionCodeEnum.CONTENT_COMMENT, CommandCodeEnum.VIEW)]
     public async Task<IActionResult> GetCommentDetail(int commentId)
     {
         var result = await _postService.GetCommentDetail(commentId);
@@ -66,7 +66,7 @@ public partial class PostsController
     }
 
     [HttpPut("{postId}/comments/{commentId}")]
-    [ClaimRequirement(FunctionCodeConstants.CONTENT_COMMENT, CommandCodeConstants.UPDATE)]
+    [ClaimRequirement(FunctionCodeEnum.CONTENT_COMMENT, CommandCodeEnum.UPDATE)]
     public async Task<IActionResult> PutComment(int commentId, [FromBody] CommentCreateRequest request)
     {
         var result = await _postService.PutComment(commentId, request, User.GetUserId());
@@ -77,7 +77,7 @@ public partial class PostsController
     }
 
     [HttpDelete("{postId}/comments/{commentId}")]
-    [ClaimRequirement(FunctionCodeConstants.CONTENT_COMMENT, CommandCodeConstants.DELETE)]
+    [ClaimRequirement(FunctionCodeEnum.CONTENT_COMMENT, CommandCodeEnum.DELETE)]
     public async Task<IActionResult> DeleteComment(int postId, int commentId)
     {
         var result = await _postService.DeleteComment(postId, commentId);

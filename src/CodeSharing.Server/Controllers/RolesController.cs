@@ -1,6 +1,6 @@
+using CodeSharing.Core.Resources.Constants;
 using CodeSharing.Server.Authorization;
 using CodeSharing.Server.Services.Interfaces;
-using CodeSharing.Utilities.Constants;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CodeSharing.Server.Controllers;
@@ -15,7 +15,7 @@ public class RolesController : BaseController
     }
 
     [HttpGet]
-    [ClaimRequirement(FunctionCodeConstants.SYSTEM_ROLE, CommandCodeConstants.VIEW)]
+    [ClaimRequirement(FunctionCodeEnum.SYSTEM_ROLE, CommandCodeEnum.VIEW)]
     public async Task<IActionResult> GetRoles()
     {
         var result = await _roleService.GetRoles();
@@ -23,7 +23,7 @@ public class RolesController : BaseController
     }
 
     [HttpGet("{id}")]
-    [ClaimRequirement(FunctionCodeConstants.SYSTEM_ROLE, CommandCodeConstants.VIEW)]
+    [ClaimRequirement(FunctionCodeEnum.SYSTEM_ROLE, CommandCodeEnum.VIEW)]
     public async Task<IActionResult> GetById(string id)
     {
         var result = await _roleService.GetById(id);

@@ -1,7 +1,7 @@
+using CodeSharing.Core.Resources.Constants;
 using CodeSharing.Server.Authorization;
 using CodeSharing.Server.Extensions;
 using CodeSharing.Server.Services.Interfaces;
-using CodeSharing.Utilities.Constants;
 using CodeSharing.Utilities.Helpers;
 using CodeSharing.ViewModels.Contents.Post;
 using Microsoft.AspNetCore.Authorization;
@@ -102,7 +102,7 @@ public partial class PostsController : BaseController
 
     [HttpPost]
     [Consumes("multipart/form-data")]
-    [ClaimRequirement(FunctionCodeConstants.CONTENT_POST, CommandCodeConstants.CREATE)]
+    [ClaimRequirement(FunctionCodeEnum.CONTENT_POST, CommandCodeEnum.CREATE)]
     public async Task<IActionResult> Post([FromForm] PostCreateRequest request)
     {
         var result = await _postService.Post(request, User.GetUserId());
@@ -114,7 +114,7 @@ public partial class PostsController : BaseController
 
     [HttpPut("{id}")]
     [Consumes("multipart/form-data")]
-    [ClaimRequirement(FunctionCodeConstants.CONTENT_POST, CommandCodeConstants.UPDATE)]
+    [ClaimRequirement(FunctionCodeEnum.CONTENT_POST, CommandCodeEnum.UPDATE)]
     public async Task<IActionResult> Put(int id, [FromForm] PostCreateRequest request)
     {
         var result = await _postService.Put(id, request);
@@ -125,7 +125,7 @@ public partial class PostsController : BaseController
     }
 
     [HttpDelete("{id}")]
-    [ClaimRequirement(FunctionCodeConstants.CONTENT_POST, CommandCodeConstants.DELETE)]
+    [ClaimRequirement(FunctionCodeEnum.CONTENT_POST, CommandCodeEnum.DELETE)]
     public async Task<IActionResult> Delete(int id)
     {
         var result = await _postService.Delete(id);

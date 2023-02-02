@@ -1,18 +1,19 @@
+using CodeSharing.Core.Models.BaseModels;
+using CodeSharing.Core.Resources.Constants;
 using CodeSharing.Server.Datas.Entities;
 using CodeSharing.Server.Repositories.Intefaces;
 using CodeSharing.Server.Services.Interfaces;
-using CodeSharing.Utilities.Commons;
-using CodeSharing.Utilities.Helpers;
+using CodeSharing.Core.Services.Utils.Interfaces;
 using CodeSharing.ViewModels.Contents.About;
 
 namespace CodeSharing.Server.Services;
 
-public class AboutService : IAboutService
+public class AboutService : BaseService, IAboutService
 {
     private readonly IAboutRepository _repository;
     private readonly IUploadRepository _uploadRepository;
     
-    public AboutService(IAboutRepository repository, IUploadRepository uploadRepository)
+    public AboutService(IAboutRepository repository, IUploadRepository uploadRepository, IUtils utils) : base(utils)
     {
         _repository = repository;
         _uploadRepository = uploadRepository;
@@ -24,11 +25,11 @@ public class AboutService : IAboutService
         try
         {
             var data = await _repository.GetAbouts();
-            result.SetResult(data);
+            result.SetResult(_utils.Transform<List<About>, List<AboutVm>>(data));
         }
         catch (Exception e)
         {
-            result.Status = ErrorCodes.StatusCode.InternalServerError;
+            result.Status = ErrorCodeConstant.StatusCode.InternalServerError;
             result.Message = e.Message + "\n\n" + e.InnerException;
         }
         return result;
@@ -41,13 +42,16 @@ public class AboutService : IAboutService
         {
             var data = await _repository.GetById(id);
             if (data == null)
-                result.SetResult(null, ErrorCodes.MessageCode.ItemNotFound);
+            {
+                result.SetResult(null, ErrorCodeConstant.MessageCode.ItemNotFound);
+                return result;
+            }
             
-            result.SetResult(data);
+            result.SetResult(_utils.Transform<About, AboutVm>(data));
         }
         catch (Exception e)
         {
-            result.Status = ErrorCodes.StatusCode.InternalServerError;
+            result.Status = ErrorCodeConstant.StatusCode.InternalServerError;
             result.Message = e.Message + "\n\n" + e.InnerException;
         }
     
@@ -72,16 +76,13 @@ public class AboutService : IAboutService
 
             var data = await _repository.PostAbout(item);
             if (data != null)
-            {
-                var aboutVm = new AboutVm() { Id = data.Id, Description = data.Description, Image = data.Image };
-                result.SetResult(aboutVm);
-            }
+                result.SetResult(_utils.Transform<About, AboutVm>(data));
             else
-                result.SetResult(null, ErrorCodes.MessageCode.ErrorProcessCreate);
+                result.SetResult(null, ErrorCodeConstant.MessageCode.ErrorProcessCreate);
         }
         catch (Exception e)
         {
-            result.Status = ErrorCodes.StatusCode.InternalServerError;
+            result.Status = ErrorCodeConstant.StatusCode.InternalServerError;
             result.Message = e.Message + "\n\n" + e.InnerException;
         }
         return result;
@@ -95,7 +96,7 @@ public class AboutService : IAboutService
             var about = await _repository.FindByIdAsync(id);
             if (about == null)
             {
-                result.SetResult(null, ErrorCodes.MessageCode.ItemNotFound);
+                result.SetResult(null, ErrorCodeConstant.MessageCode.ItemNotFound);
                 return result;
             }
             
@@ -109,16 +110,13 @@ public class AboutService : IAboutService
             
             var data = await _repository.PutAbout(about);
             if (data != null)
-            {
-                var aboutVm = new AboutVm() { Id = data.Id, Description = data.Description, Image = data.Image };
-                result.SetResult(aboutVm);
-            }
+                result.SetResult(_utils.Transform<About, AboutVm>(data));
             else
-                result.SetResult(null, ErrorCodes.MessageCode.ErrorProcessUpdate);
+                result.SetResult(null, ErrorCodeConstant.MessageCode.ErrorProcessUpdate);
         }
         catch (Exception e)
         {
-            result.Status = ErrorCodes.StatusCode.InternalServerError;
+            result.Status = ErrorCodeConstant.StatusCode.InternalServerError;
             result.Message = e.Message + "\n\n" + e.InnerException;
         }
 
@@ -133,22 +131,19 @@ public class AboutService : IAboutService
             var about = await _repository.FindByIdAsync(id);
             if (about == null)
             {
-                result.SetResult(null, ErrorCodes.MessageCode.ItemNotFound);
+                result.SetResult(null, ErrorCodeConstant.MessageCode.ItemNotFound);
                 return result;
             }
 
             var data = await _repository.DeleteAbout(about);
             if (data != null)
-            {
-                var aboutVm = new AboutVm() { Id = data.Id, Description = data.Description, Image = data.Image };
-                result.SetResult(aboutVm);
-            }
+                result.SetResult(_utils.Transform<About, AboutVm>(data));
             else
-                result.SetResult(null, ErrorCodes.MessageCode.ErrorProcessDelete);
+                result.SetResult(null, ErrorCodeConstant.MessageCode.ErrorProcessDelete);
         }
         catch (Exception e)
         {
-            result.Status = ErrorCodes.StatusCode.InternalServerError;
+            result.Status = ErrorCodeConstant.StatusCode.InternalServerError;
             result.Message = e.Message + "\n\n" + e.InnerException;
         }
         return result;

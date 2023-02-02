@@ -1,8 +1,7 @@
-
-using CodeSharing.Utilities.Commons;
+using CodeSharing.Core.Resources.Constants;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 
-namespace CodeSharing.Utilities.Helpers;
+namespace CodeSharing.Core.Models.BaseModels;
 
 public class Result<T>
 {
@@ -42,15 +41,15 @@ public class Result<T>
             };
 
             Success = false;
-            Status = ErrorCodes.StatusCode.BadRequest;
-            Title = ErrorCodes.TitleCode.Failed;
+            Status = ErrorCodeConstant.StatusCode.BadRequest;
+            Title = ErrorCodeConstant.TitleCode.Failed;
         }
         else
         {
             Data = data;
             Success = true;
-            Status = ErrorCodes.StatusCode.Success;
-            Title = ErrorCodes.TitleCode.Success;
+            Status = ErrorCodeConstant.StatusCode.Success;
+            Title = ErrorCodeConstant.TitleCode.Success;
             
         }
     }

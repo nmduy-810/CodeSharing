@@ -1,6 +1,6 @@
+using CodeSharing.Core.Resources.Constants;
 using CodeSharing.Server.Authorization;
 using CodeSharing.Server.Services.Interfaces;
-using CodeSharing.Utilities.Constants;
 using CodeSharing.Utilities.Helpers;
 using CodeSharing.ViewModels.Contents.Category;
 using Microsoft.AspNetCore.Authorization;
@@ -37,7 +37,7 @@ public class CategoriesController : BaseController
     }
 
     [HttpPost]
-    [ClaimRequirement(FunctionCodeConstants.CONTENT_CATEGORY, CommandCodeConstants.CREATE)]
+    [ClaimRequirement(FunctionCodeEnum.CONTENT_CATEGORY, CommandCodeEnum.CREATE)]
     [ApiValidationFilter]
     public async Task<IActionResult> PostCategory([FromBody] CategoryCreateRequest request)
     {
@@ -49,7 +49,7 @@ public class CategoriesController : BaseController
     }
 
     [HttpPut("{id:int}")]
-    [ClaimRequirement(FunctionCodeConstants.CONTENT_CATEGORY, CommandCodeConstants.UPDATE)]
+    [ClaimRequirement(FunctionCodeEnum.CONTENT_CATEGORY, CommandCodeEnum.UPDATE)]
     [ApiValidationFilter]
     public async Task<IActionResult> PutCategory([FromRoute] int id, [FromBody] CategoryUpdateRequest request)
     {
@@ -61,7 +61,7 @@ public class CategoriesController : BaseController
     }
 
     [HttpDelete("{id:int}")]
-    [ClaimRequirement(FunctionCodeConstants.CONTENT_CATEGORY, CommandCodeConstants.DELETE)]
+    [ClaimRequirement(FunctionCodeEnum.CONTENT_CATEGORY, CommandCodeEnum.DELETE)]
     public async Task<IActionResult> DeleteCategory([FromRoute] int id)
     {
         var result = await _categoryService.DeleteCategory(id);

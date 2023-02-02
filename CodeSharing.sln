@@ -8,6 +8,20 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeSharing.Server", "src\C
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeSharing.WebPortal", "src\CodeSharing.WebPortal\CodeSharing.WebPortal.csproj", "{15B8D38D-8E45-44EB-88B2-1AF69F70DE79}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Libraries", "Libraries", "{E9A7168A-E060-4AEB-A28E-9CD3491018F0}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common", "Common", "{C28DF93D-E519-42F1-896E-24F66A2FAA2C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeSharing.Core", "Libraries\Common\CodeSharing.Core\CodeSharing.Core.csproj", "{200C7871-6297-4FBC-9FE2-0FE75441AFE6}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CoreServices", "CoreServices", "{32A1EC63-DB1D-4133-8BA1-5F81048D2399}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeSharing.Core.Services", "Libraries\CoreServices\CodeSharing.Core.Services\CodeSharing.Core.Services.csproj", "{F49DC9F7-01ED-46E5-9266-862A78EA35AD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeSharing.Core.Resources", "Libraries\Common\CodeSharing.Core.Resources\CodeSharing.Core.Resources.csproj", "{2783E5DC-A203-46FA-9267-B67157530024}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeSharing.Core.Models", "Libraries\Common\CodeSharing.Core.Models\CodeSharing.Core.Models.csproj", "{C81B11AD-846A-4DAC-8E0D-F074FA2D8FEE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -30,5 +44,29 @@ Global
 		{15B8D38D-8E45-44EB-88B2-1AF69F70DE79}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{15B8D38D-8E45-44EB-88B2-1AF69F70DE79}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{15B8D38D-8E45-44EB-88B2-1AF69F70DE79}.Release|Any CPU.Build.0 = Release|Any CPU
+		{200C7871-6297-4FBC-9FE2-0FE75441AFE6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{200C7871-6297-4FBC-9FE2-0FE75441AFE6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{200C7871-6297-4FBC-9FE2-0FE75441AFE6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{200C7871-6297-4FBC-9FE2-0FE75441AFE6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F49DC9F7-01ED-46E5-9266-862A78EA35AD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F49DC9F7-01ED-46E5-9266-862A78EA35AD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F49DC9F7-01ED-46E5-9266-862A78EA35AD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F49DC9F7-01ED-46E5-9266-862A78EA35AD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2783E5DC-A203-46FA-9267-B67157530024}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2783E5DC-A203-46FA-9267-B67157530024}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2783E5DC-A203-46FA-9267-B67157530024}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2783E5DC-A203-46FA-9267-B67157530024}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C81B11AD-846A-4DAC-8E0D-F074FA2D8FEE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C81B11AD-846A-4DAC-8E0D-F074FA2D8FEE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C81B11AD-846A-4DAC-8E0D-F074FA2D8FEE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C81B11AD-846A-4DAC-8E0D-F074FA2D8FEE}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{C28DF93D-E519-42F1-896E-24F66A2FAA2C} = {E9A7168A-E060-4AEB-A28E-9CD3491018F0}
+		{200C7871-6297-4FBC-9FE2-0FE75441AFE6} = {C28DF93D-E519-42F1-896E-24F66A2FAA2C}
+		{32A1EC63-DB1D-4133-8BA1-5F81048D2399} = {E9A7168A-E060-4AEB-A28E-9CD3491018F0}
+		{F49DC9F7-01ED-46E5-9266-862A78EA35AD} = {32A1EC63-DB1D-4133-8BA1-5F81048D2399}
+		{2783E5DC-A203-46FA-9267-B67157530024} = {C28DF93D-E519-42F1-896E-24F66A2FAA2C}
+		{C81B11AD-846A-4DAC-8E0D-F074FA2D8FEE} = {C28DF93D-E519-42F1-896E-24F66A2FAA2C}
 	EndGlobalSection
 EndGlobal

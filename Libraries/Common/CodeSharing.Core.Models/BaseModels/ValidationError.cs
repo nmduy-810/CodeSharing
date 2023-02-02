@@ -1,7 +1,7 @@
-using CodeSharing.Utilities.Commons;
+using CodeSharing.Core.Resources.Constants;
 using Newtonsoft.Json;
 
-namespace CodeSharing.Utilities.Helpers;
+namespace CodeSharing.Core.Models.BaseModels;
 
 public class ValidationError
 {
@@ -18,7 +18,7 @@ public class ValidationError
     public ValidationError(string? errorCode, string? rejectValue)
     {
 
-        Message = ErrorCodes.Collections.GetValueOrDefault(errorCode);
+        Message = ErrorCodeConstant.Collections!.GetValueOrDefault(errorCode);
         Code = errorCode;
         RejectValue = rejectValue;
     }
@@ -26,7 +26,7 @@ public class ValidationError
     public ValidationError(Exception ex, string? errorCode)
     {
 
-        Message = ErrorCodes.Collections.GetValueOrDefault(errorCode);
+        Message = ErrorCodeConstant.Collections!.GetValueOrDefault(errorCode);
         Code = errorCode;
         RejectValue = ex.Message;
     }
@@ -48,9 +48,9 @@ public class ValidationError
             return errorCode;
         }
         errorCode = errorMessages[0];
-        if (errorCode == ErrorCodes.StatusCode.SizeLimit)
+        if (errorCode == ErrorCodeConstant.StatusCode.SizeLimit)
         {
-            string? format = ErrorCodes.Collections.GetValueOrDefault(errorCode);
+            string? format = ErrorCodeConstant.Collections.GetValueOrDefault(errorCode);
             var max = errorMessages.FirstOrDefault(x => x != null && x.StartsWith("MAX"));
             var min = errorMessages.FirstOrDefault(x => x != null && x.StartsWith("MIN"));
             
@@ -68,14 +68,14 @@ public class ValidationError
                 return String.Format(format, min, max);
         }
 
-        if (errorCode == ErrorCodes.StatusCode.WrongFormat)
+        if (errorCode == ErrorCodeConstant.StatusCode.WrongFormat)
         {
-            string? format = ErrorCodes.Collections.GetValueOrDefault(errorCode);
+            string? format = ErrorCodeConstant.Collections.GetValueOrDefault(errorCode);
             if (format != null)
                 return String.Format(format, field);
         }
 
-        if (ErrorCodes.Collections.TryGetValue(errorCode, out string? errorMessage))
+        if (errorCode != null && ErrorCodeConstant.Collections.TryGetValue(errorCode, out string? errorMessage))
         {
             return errorMessage;
         }

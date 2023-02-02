@@ -1,5 +1,5 @@
 using System.Net;
-using CodeSharing.Utilities.Helpers;
+using CodeSharing.Core.Models.BaseModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 

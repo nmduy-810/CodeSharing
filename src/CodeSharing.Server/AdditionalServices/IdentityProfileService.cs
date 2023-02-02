@@ -1,7 +1,7 @@
 using System.Security.Claims;
+using CodeSharing.Core.Resources.Constants;
 using CodeSharing.Server.Datas.Entities;
 using CodeSharing.Server.Datas.Provider;
-using CodeSharing.Utilities.Constants;
 using IdentityServer4.Extensions;
 using IdentityServer4.Models;
 using IdentityServer4.Services;
