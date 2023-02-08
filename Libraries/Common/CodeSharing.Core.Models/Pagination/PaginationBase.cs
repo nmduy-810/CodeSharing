@@ -1,4 +1,4 @@
-namespace CodeSharing.Utilities.Commons;
+namespace CodeSharing.Core.Models.Pagination;
 
 public class PaginationBase
 {

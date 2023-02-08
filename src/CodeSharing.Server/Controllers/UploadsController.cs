@@ -1,3 +1,4 @@
+using CodeSharing.Core.Helpers;
 using CodeSharing.Server.AdditionalServices.Interfaces;
 using CodeSharing.Utilities.Helpers;
 using Microsoft.AspNetCore.Authorization;
@@ -29,10 +30,10 @@ public class UploadsController : BaseController
         if (upload.Length == 0)
             return Task.FromResult<IActionResult>(BadRequest("Empty file"));
 
-        var fileName = FunctionBase.GenerateFileName("Image") + Path.GetExtension(upload.FileName);
+        var fileName = FileHelper.GenerateFileName("Image") + Path.GetExtension(upload.FileName);
         _storageService.SaveFileAsync(upload.OpenReadStream(), fileName);
 
-        var imageUrl = FunctionBase.GetBaseUrl(_httpContextAccessor) + _storageService.GetFileUrl(fileName);
+        var imageUrl = HttpHelper.GetBaseUrl(_httpContextAccessor) + _storageService.GetFileUrl(fileName);
 
         return Task.FromResult<IActionResult>(Ok(new
         {

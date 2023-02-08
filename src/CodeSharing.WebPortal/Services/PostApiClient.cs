@@ -1,5 +1,5 @@
 using System.Net.Http.Headers;
-using CodeSharing.Utilities.Commons;
+using CodeSharing.Core.Models.Pagination;
 using CodeSharing.ViewModels.Contents.Comment;
 using CodeSharing.ViewModels.Contents.Post;
 using CodeSharing.ViewModels.Contents.Report;

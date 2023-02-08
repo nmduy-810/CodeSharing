@@ -1,9 +1,9 @@
-using System.Net.Http.Headers;
+using CodeSharing.Core.Helpers;
 using CodeSharing.Server.AdditionalServices.Interfaces;
 using CodeSharing.Server.Datas.Entities;
 using CodeSharing.Server.Datas.Provider;
 using CodeSharing.Server.Repositories.Intefaces;
-using CodeSharing.Utilities.Commons;
+using CodeSharing.Core.Models.Pagination;
 using CodeSharing.Utilities.Helpers;
 using CodeSharing.ViewModels.Contents.Comment;
 using CodeSharing.ViewModels.Contents.Post;
@@ -49,7 +49,7 @@ public class PostRepository : GenericRepository<ApplicationDbContext>, IPostRepo
             Title = x.p.Title,
             Summary = x.p.Summary,
             Content = x.p.Content,
-            CoverImage = FunctionBase.GetBaseUrl(_httpContextAccessor) + x.p.CoverImage,
+            CoverImage = HttpHelper.GetBaseUrl(_httpContextAccessor) + x.p.CoverImage,
             NumberOfComments = x.p.NumberOfComments,
             NumberOfVotes = x.p.NumberOfVotes,
             ViewCount = x.p.ViewCount,
@@ -83,7 +83,7 @@ public class PostRepository : GenericRepository<ApplicationDbContext>, IPostRepo
                 FullName = string.Concat(x.u.FirstName, " ", x.u.LastName),
                 NumberOfVotes = x.p.NumberOfVotes,
                 CreateDate = x.p.CreateDate,
-                CoverImage = FunctionBase.GetBaseUrl(_httpContextAccessor) + x.p.CoverImage
+                CoverImage = HttpHelper.GetBaseUrl(_httpContextAccessor) + x.p.CoverImage
             }).ToListAsync();
         
         return items;
@@ -111,7 +111,7 @@ public class PostRepository : GenericRepository<ApplicationDbContext>, IPostRepo
                 FullName = string.Concat(x.u.FirstName, " ", x.u.LastName),
                 NumberOfVotes = x.p.NumberOfVotes,
                 CreateDate = x.p.CreateDate,
-                CoverImage = FunctionBase.GetBaseUrl(_httpContextAccessor) + x.p.CoverImage
+                CoverImage = HttpHelper.GetBaseUrl(_httpContextAccessor) + x.p.CoverImage
             }).ToListAsync();
         
         return items;
@@ -139,7 +139,7 @@ public class PostRepository : GenericRepository<ApplicationDbContext>, IPostRepo
                 FullName = string.Concat(x.u.FirstName, " ", x.u.LastName),
                 NumberOfVotes = x.p.NumberOfVotes,
                 CreateDate = x.p.CreateDate,
-                CoverImage = FunctionBase.GetBaseUrl(_httpContextAccessor) + x.p.CoverImage
+                CoverImage = HttpHelper.GetBaseUrl(_httpContextAccessor) + x.p.CoverImage
             }).ToListAsync();
         
         return items;
@@ -179,7 +179,7 @@ public class PostRepository : GenericRepository<ApplicationDbContext>, IPostRepo
             NumberOfVotes = post.NumberOfVotes,
             NumberOfReports = post.NumberOfReports,
             ViewCount = post.ViewCount,
-            CoverImage = FunctionBase.GetBaseUrl(_httpContextAccessor) + post.CoverImage
+            CoverImage = HttpHelper.GetBaseUrl(_httpContextAccessor) + post.CoverImage
         };
 
         return items;
@@ -214,7 +214,7 @@ public class PostRepository : GenericRepository<ApplicationDbContext>, IPostRepo
                 NumberOfVotes = x.p.NumberOfVotes,
                 CreateDate = x.p.CreateDate,
                 NumberOfComments = x.p.NumberOfComments,
-                CoverImage = FunctionBase.GetBaseUrl(_httpContextAccessor) + x.p.CoverImage
+                CoverImage = HttpHelper.GetBaseUrl(_httpContextAccessor) + x.p.CoverImage
             }).ToListAsync();
 
         var pagination = new Pagination<PostQuickVm>
@@ -257,7 +257,7 @@ public class PostRepository : GenericRepository<ApplicationDbContext>, IPostRepo
                 NumberOfVotes = x.p.NumberOfVotes,
                 CreateDate = x.p.CreateDate,
                 NumberOfComments = x.p.NumberOfComments,
-                CoverImage = FunctionBase.GetBaseUrl(_httpContextAccessor) + x.p.CoverImage
+                CoverImage = HttpHelper.GetBaseUrl(_httpContextAccessor) + x.p.CoverImage
             }).ToListAsync();
 
         var pagination = new Pagination<PostQuickVm>
@@ -321,7 +321,7 @@ public class PostRepository : GenericRepository<ApplicationDbContext>, IPostRepo
                 NumberOfVotes = x.p.NumberOfVotes,
                 CreateDate = x.p.CreateDate,
                 NumberOfComments = x.p.NumberOfComments,
-                CoverImage = FunctionBase.GetBaseUrl(_httpContextAccessor) + x.p.CoverImage
+                CoverImage = HttpHelper.GetBaseUrl(_httpContextAccessor) + x.p.CoverImage
             })
             .ToListAsync();
 
@@ -361,7 +361,7 @@ public class PostRepository : GenericRepository<ApplicationDbContext>, IPostRepo
                 NumberOfVotes = x.p.NumberOfVotes,
                 CreateDate = x.p.CreateDate,
                 NumberOfComments = x.p.NumberOfComments,
-                CoverImage = FunctionBase.GetBaseUrl(_httpContextAccessor) + x.p.CoverImage
+                CoverImage = HttpHelper.GetBaseUrl(_httpContextAccessor) + x.p.CoverImage
             })
             .ToListAsync();
 

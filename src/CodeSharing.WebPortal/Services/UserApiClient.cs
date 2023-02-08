@@ -1,4 +1,4 @@
-using CodeSharing.Utilities.Commons;
+using CodeSharing.Core.Models.Pagination;
 using CodeSharing.ViewModels.Contents.Post;
 using CodeSharing.ViewModels.Systems.User;
 using CodeSharing.WebPortal.Interfaces;

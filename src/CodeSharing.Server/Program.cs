@@ -298,7 +298,7 @@ else
     app.UseXfo(options => options.Deny());
 }
 
-app.UseErrorWrapping();
+//app.UseErrorWrapping();
 
 app.UseStaticFiles();
 

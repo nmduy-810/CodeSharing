@@ -4,7 +4,7 @@ using Amazon.S3;
 using Amazon.S3.Model;
 using Amazon.S3.Transfer;
 
-namespace CodeSharing.Utilities.Helpers;
+namespace CodeSharing.Core.Models.Amazon;
 
 public static class AmazonS3Helper
 {

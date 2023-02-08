@@ -1,9 +1,9 @@
 using System.Text;
 using System.Text.RegularExpressions;
 
-namespace CodeSharing.Utilities.Helpers;
+namespace CodeSharing.Core.Helpers;
 
-public class TextHelper
+public static class TextHelper
 {
     public static string ToUnsignString(string input)
     {

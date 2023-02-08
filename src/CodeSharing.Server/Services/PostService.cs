@@ -1,11 +1,11 @@
 using System.Net.Http.Headers;
+using CodeSharing.Core.Helpers;
 using CodeSharing.Core.Resources.Constants;
 using CodeSharing.Server.AdditionalServices.Interfaces;
 using CodeSharing.Server.Datas.Entities;
 using CodeSharing.Server.Repositories.Intefaces;
 using CodeSharing.Server.Services.Interfaces;
-using CodeSharing.Utilities.Commons;
-using CodeSharing.Utilities.Helpers;
+using CodeSharing.Core.Models.Pagination;
 using CodeSharing.ViewModels.Contents.Comment;
 using CodeSharing.ViewModels.Contents.Post;
 using CodeSharing.ViewModels.Contents.Report;
@@ -288,7 +288,7 @@ public class PostService : IPostService
     private async Task<string> SaveFile(IFormFile file)
     {
         var originalFileName = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName?.Trim('"');
-        var fileName = FunctionBase.GenerateFileName("Image") + Path.GetExtension(originalFileName);
+        var fileName = FileHelper.GenerateFileName("Image") + Path.GetExtension(originalFileName);
         await _storageService.SaveFileAsync(file.OpenReadStream(), fileName);
         var filePath = _storageService.GetFileUrl(fileName);
         return filePath;

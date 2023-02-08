@@ -1,6 +1,6 @@
 using CodeSharing.Server.Repositories.Intefaces;
 using CodeSharing.Server.Services.Interfaces;
-using CodeSharing.Utilities.Commons;
+using CodeSharing.Core.Models.Pagination;
 using CodeSharing.ViewModels.Contents.Post;
 using CodeSharing.ViewModels.Systems.Function;
 using CodeSharing.ViewModels.Systems.Role;
