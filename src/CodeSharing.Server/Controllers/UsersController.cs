@@ -2,8 +2,8 @@ using CodeSharing.Core.Resources.Constants;
 using CodeSharing.Server.Authorization;
 using CodeSharing.Server.Services.Interfaces;
 using CodeSharing.Utilities.Helpers;
-using CodeSharing.ViewModels.Systems.Role;
-using CodeSharing.ViewModels.Systems.User;
+using CodeSharing.DTL.Models.Systems.Role;
+using CodeSharing.DTL.Models.Systems.User;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CodeSharing.Server.Controllers;

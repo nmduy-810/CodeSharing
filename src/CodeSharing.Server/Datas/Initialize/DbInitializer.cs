@@ -1,4 +1,4 @@
-using CodeSharing.Server.Datas.Entities;
+using CodeSharing.DTL.EFCoreEntities;
 using CodeSharing.Server.Datas.Provider;
 using Microsoft.AspNetCore.Identity;
 

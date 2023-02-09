@@ -1,5 +1,5 @@
-using CodeSharing.Server.Datas.Entities;
-using CodeSharing.Server.Datas.Interfaces;
+using CodeSharing.DTL.EFCoreEntities;
+using CodeSharing.DTL.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;

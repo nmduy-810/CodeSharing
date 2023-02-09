@@ -1,6 +1,6 @@
-using CodeSharing.ViewModels.Contents.Label;
-using CodeSharing.ViewModels.Contents.Post;
-using CodeSharing.ViewModels.Systems.User;
+using CodeSharing.DTL.Models.Contents.Label;
+using CodeSharing.DTL.Models.Contents.Post;
+using CodeSharing.DTL.Models.Systems.User;
 
 namespace CodeSharing.WebPortal.ViewModels;
 

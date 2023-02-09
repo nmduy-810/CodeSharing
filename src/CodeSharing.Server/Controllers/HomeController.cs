@@ -1,5 +1,5 @@
 using System.Diagnostics;
-using CodeSharing.ViewModels.Commons;
+using CodeSharing.DTL.Models.Commons;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CodeSharing.Server.Controllers;

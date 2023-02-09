@@ -1,5 +1,5 @@
-using CodeSharing.ViewModels.Contents.Category;
-using CodeSharing.ViewModels.Systems.User;
+using CodeSharing.DTL.Models.Contents.Category;
+using CodeSharing.DTL.Models.Systems.User;
 
 namespace CodeSharing.WebPortal.ViewModels;
 

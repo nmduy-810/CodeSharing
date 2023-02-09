@@ -1,4 +1,4 @@
-using CodeSharing.ViewModels.Contents.Contact;
+using CodeSharing.DTL.Models.Contents.Contact;
 
 namespace CodeSharing.Server.Services.Interfaces;
 

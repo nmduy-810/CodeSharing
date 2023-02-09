@@ -1,4 +1,3 @@
-using IdentityServer4;
 using IdentityServer4.Models;
 
 namespace CodeSharing.Server.IdentityServer;

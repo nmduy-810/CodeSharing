@@ -4,7 +4,7 @@
 #nullable disable
 
 using System.ComponentModel.DataAnnotations;
-using CodeSharing.Server.Datas.Entities;
+using CodeSharing.DTL.EFCoreEntities;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;

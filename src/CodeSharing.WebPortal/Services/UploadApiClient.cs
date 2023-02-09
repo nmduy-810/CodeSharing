@@ -1,5 +1,5 @@
 using System.Net.Http.Headers;
-using CodeSharing.ViewModels.Commons;
+using CodeSharing.DTL.Models.Commons;
 using CodeSharing.WebPortal.Interfaces;
 using Microsoft.AspNetCore.Authentication;
 using Newtonsoft.Json;

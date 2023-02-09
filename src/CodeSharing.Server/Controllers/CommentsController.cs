@@ -2,7 +2,7 @@ using CodeSharing.Core.Resources.Constants;
 using CodeSharing.Server.Authorization;
 using CodeSharing.Server.Extensions;
 using CodeSharing.Utilities.Helpers;
-using CodeSharing.ViewModels.Contents.Comment;
+using CodeSharing.DTL.Models.Contents.Comment;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 

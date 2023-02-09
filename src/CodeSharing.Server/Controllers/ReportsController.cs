@@ -1,6 +1,6 @@
 using CodeSharing.Server.Extensions;
 using CodeSharing.Utilities.Helpers;
-using CodeSharing.ViewModels.Contents.Report;
+using CodeSharing.DTL.Models.Contents.Report;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CodeSharing.Server.Controllers;

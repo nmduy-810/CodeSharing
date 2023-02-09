@@ -1,6 +1,6 @@
 using CodeSharing.Server.Datas.Provider;
 using CodeSharing.Server.Repositories.Intefaces;
-using CodeSharing.ViewModels.Systems.Command;
+using CodeSharing.DTL.Models.Systems.Command;
 using Microsoft.EntityFrameworkCore;
 
 namespace CodeSharing.Server.Repositories;

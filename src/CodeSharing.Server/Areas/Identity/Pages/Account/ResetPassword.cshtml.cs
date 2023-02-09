@@ -5,7 +5,7 @@
 
 using System.ComponentModel.DataAnnotations;
 using System.Text;
-using CodeSharing.Server.Datas.Entities;
+using CodeSharing.DTL.EFCoreEntities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;

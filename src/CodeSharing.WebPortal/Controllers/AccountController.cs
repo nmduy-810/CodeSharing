@@ -1,5 +1,5 @@
-using CodeSharing.ViewModels.Contents.Post;
-using CodeSharing.ViewModels.Systems.User;
+using CodeSharing.DTL.Models.Contents.Post;
+using CodeSharing.DTL.Models.Systems.User;
 using CodeSharing.WebPortal.Extensions;
 using CodeSharing.WebPortal.Interfaces;
 using CodeSharing.WebPortal.ViewModels;

@@ -1,4 +1,4 @@
-using CodeSharing.Server.Datas.Entities;
+using CodeSharing.DTL.EFCoreEntities;
 
 namespace CodeSharing.Server.Repositories.Intefaces;
 

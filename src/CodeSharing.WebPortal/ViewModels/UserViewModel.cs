@@ -1,5 +1,5 @@
 using CodeSharing.Core.Models.Pagination;
-using CodeSharing.ViewModels.Systems.User;
+using CodeSharing.DTL.Models.Systems.User;
 
 namespace CodeSharing.WebPortal.ViewModels;
 

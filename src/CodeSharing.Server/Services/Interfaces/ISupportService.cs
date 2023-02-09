@@ -1,4 +1,4 @@
-using CodeSharing.ViewModels.Contents.Support;
+using CodeSharing.DTL.Models.Contents.Support;
 
 namespace CodeSharing.Server.Services.Interfaces;
 

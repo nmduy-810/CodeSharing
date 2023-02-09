@@ -1,4 +1,4 @@
-using CodeSharing.ViewModels.Commons;
+using CodeSharing.DTL.Models.Commons;
 using MailKit.Net.Smtp;
 using MailKit.Security;
 using Microsoft.AspNetCore.Identity.UI.Services;

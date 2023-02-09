@@ -1,8 +1,8 @@
 using CodeSharing.Core.Resources.Constants;
+using CodeSharing.DTL.Models.Contents.Category;
 using CodeSharing.Server.Authorization;
 using CodeSharing.Server.Services.Interfaces;
 using CodeSharing.Utilities.Helpers;
-using CodeSharing.ViewModels.Contents.Category;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 

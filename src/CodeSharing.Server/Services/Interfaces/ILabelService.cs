@@ -1,4 +1,4 @@
-using CodeSharing.ViewModels.Contents.Label;
+using CodeSharing.DTL.Models.Contents.Label;
 
 namespace CodeSharing.Server.Services.Interfaces;
 

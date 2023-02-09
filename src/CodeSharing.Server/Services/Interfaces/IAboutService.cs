@@ -1,5 +1,5 @@
 using CodeSharing.Core.Models.BaseModels;
-using CodeSharing.ViewModels.Contents.About;
+using CodeSharing.DTL.Models.Contents.About;
 
 namespace CodeSharing.Server.Services.Interfaces;
 

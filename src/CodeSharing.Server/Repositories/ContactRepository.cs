@@ -1,7 +1,7 @@
-using CodeSharing.Server.Datas.Entities;
+using CodeSharing.DTL.EFCoreEntities;
 using CodeSharing.Server.Datas.Provider;
 using CodeSharing.Server.Repositories.Intefaces;
-using CodeSharing.ViewModels.Contents.Contact;
+using CodeSharing.DTL.Models.Contents.Contact;
 using Microsoft.EntityFrameworkCore;
 
 namespace CodeSharing.Server.Repositories;

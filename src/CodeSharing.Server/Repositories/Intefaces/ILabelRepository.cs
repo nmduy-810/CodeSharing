@@ -1,5 +1,5 @@
 using CodeSharing.Server.Datas.Provider;
-using CodeSharing.ViewModels.Contents.Label;
+using CodeSharing.DTL.Models.Contents.Label;
 
 namespace CodeSharing.Server.Repositories.Intefaces;
 

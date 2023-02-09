@@ -1,6 +1,6 @@
-using CodeSharing.ViewModels.Commons;
-using CodeSharing.ViewModels.Contents.Contact;
-using CodeSharing.ViewModels.Systems.User;
+using CodeSharing.DTL.Models.Commons;
+using CodeSharing.DTL.Models.Contents.Contact;
+using CodeSharing.DTL.Models.Systems.User;
 
 namespace CodeSharing.WebPortal.ViewModels;
 

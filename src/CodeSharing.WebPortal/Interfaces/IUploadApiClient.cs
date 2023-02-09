@@ -1,4 +1,4 @@
-using CodeSharing.ViewModels.Commons;
+using CodeSharing.DTL.Models.Commons;
 
 namespace CodeSharing.WebPortal.Interfaces;
 

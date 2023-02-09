@@ -17,6 +17,9 @@ public class ResponseFormatterMiddleware
 
     public async Task Invoke(HttpContext context)
     {
+        if (context.Request.Path.Value == "/Account/Login")
+            return;
+        
         var originBody = context.Response.Body;
         
         // create a stopwatch, using measure the time taken to process the request

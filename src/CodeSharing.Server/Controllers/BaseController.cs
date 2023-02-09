@@ -12,9 +12,6 @@ public class BaseController : ControllerBase
 {
     protected virtual IActionResult CodeSharingResult<T>(Result<T> result)
     {
-        if (result == null)
-            return new NotFoundObjectResult(result);
-        
         switch (result.Status)
         {
             case (int)HttpStatusCode.OK:

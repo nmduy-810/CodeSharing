@@ -1,4 +1,4 @@
-using CodeSharing.ViewModels.Contents.Category;
+using CodeSharing.DTL.Models.Contents.Category;
 using CodeSharing.WebPortal.Interfaces;
 
 namespace CodeSharing.WebPortal.Services;

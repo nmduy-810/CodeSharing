@@ -1,6 +1,6 @@
 using CodeSharing.Server.Repositories.Intefaces;
 using CodeSharing.Server.Services.Interfaces;
-using CodeSharing.ViewModels.Contents.Category;
+using CodeSharing.DTL.Models.Contents.Category;
 
 namespace CodeSharing.Server.Services;
 

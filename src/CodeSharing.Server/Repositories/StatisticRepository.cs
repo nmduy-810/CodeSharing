@@ -1,8 +1,8 @@
 using CodeSharing.Server.Datas.Provider;
 using CodeSharing.Server.Repositories.Intefaces;
-using CodeSharing.ViewModels.Statistics.Comment;
-using CodeSharing.ViewModels.Statistics.Post;
-using CodeSharing.ViewModels.Statistics.User;
+using CodeSharing.DTL.Models.Statistics.Comment;
+using CodeSharing.DTL.Models.Statistics.Post;
+using CodeSharing.DTL.Models.Statistics.User;
 using Microsoft.EntityFrameworkCore;
 
 namespace CodeSharing.Server.Repositories;

@@ -1,14 +1,14 @@
 using CodeSharing.Core.Helpers;
 using CodeSharing.Server.AdditionalServices.Interfaces;
-using CodeSharing.Server.Datas.Entities;
+using CodeSharing.DTL.EFCoreEntities;
 using CodeSharing.Server.Datas.Provider;
 using CodeSharing.Server.Repositories.Intefaces;
 using CodeSharing.Core.Models.Pagination;
 using CodeSharing.Utilities.Helpers;
-using CodeSharing.ViewModels.Contents.Comment;
-using CodeSharing.ViewModels.Contents.Post;
-using CodeSharing.ViewModels.Contents.Report;
-using CodeSharing.ViewModels.Contents.Vote;
+using CodeSharing.DTL.Models.Contents.Comment;
+using CodeSharing.DTL.Models.Contents.Post;
+using CodeSharing.DTL.Models.Contents.Report;
+using CodeSharing.DTL.Models.Contents.Vote;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 

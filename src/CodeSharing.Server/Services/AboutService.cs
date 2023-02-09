@@ -1,10 +1,10 @@
 using CodeSharing.Core.Models.BaseModels;
 using CodeSharing.Core.Resources.Constants;
-using CodeSharing.Server.Datas.Entities;
+using CodeSharing.DTL.EFCoreEntities;
 using CodeSharing.Server.Repositories.Intefaces;
 using CodeSharing.Server.Services.Interfaces;
 using CodeSharing.Core.Services.Utils.Interfaces;
-using CodeSharing.ViewModels.Contents.About;
+using CodeSharing.DTL.Models.Contents.About;
 
 namespace CodeSharing.Server.Services;
 

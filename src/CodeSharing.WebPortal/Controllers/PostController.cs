@@ -1,6 +1,6 @@
-using CodeSharing.ViewModels.Contents.Comment;
-using CodeSharing.ViewModels.Contents.Report;
-using CodeSharing.ViewModels.Contents.Vote;
+using CodeSharing.DTL.Models.Contents.Comment;
+using CodeSharing.DTL.Models.Contents.Report;
+using CodeSharing.DTL.Models.Contents.Vote;
 using CodeSharing.WebPortal.Extensions;
 using CodeSharing.WebPortal.Interfaces;
 using CodeSharing.WebPortal.ViewModels;

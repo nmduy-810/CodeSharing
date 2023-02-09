@@ -1,6 +1,6 @@
 using CodeSharing.Server.Repositories.Intefaces;
 using CodeSharing.Server.Services.Interfaces;
-using CodeSharing.ViewModels.Systems.Command;
+using CodeSharing.DTL.Models.Systems.Command;
 
 namespace CodeSharing.Server.Services;
 

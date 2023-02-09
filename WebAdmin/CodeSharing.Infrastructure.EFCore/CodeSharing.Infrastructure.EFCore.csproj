@@ -1,0 +1,30 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net6.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <Folder Include="Repositories\About" />
+      <Folder Include="Repositories\Category" />
+      <Folder Include="Repositories\Command" />
+      <Folder Include="Repositories\Contact" />
+      <Folder Include="Repositories\Core" />
+      <Folder Include="Repositories\Function" />
+      <Folder Include="Repositories\Generic" />
+      <Folder Include="Repositories\Label" />
+      <Folder Include="Repositories\Post" />
+      <Folder Include="Repositories\Role" />
+      <Folder Include="Repositories\Statistic" />
+      <Folder Include="Repositories\Support" />
+      <Folder Include="Repositories\Upload" />
+      <Folder Include="Repositories\User" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\CodeSharing.DTL\CodeSharing.DTL.csproj" />
+    </ItemGroup>
+
+</Project>

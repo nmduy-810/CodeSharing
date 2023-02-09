@@ -1,7 +1,7 @@
-using CodeSharing.Server.Datas.Entities;
+using CodeSharing.DTL.EFCoreEntities;
 using CodeSharing.Server.Repositories.Intefaces;
 using CodeSharing.Server.Services.Interfaces;
-using CodeSharing.ViewModels.Contents.Support;
+using CodeSharing.DTL.Models.Contents.Support;
 
 namespace CodeSharing.Server.Services;
 

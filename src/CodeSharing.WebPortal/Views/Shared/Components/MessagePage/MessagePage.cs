@@ -1,4 +1,4 @@
-using CodeSharing.ViewModels.Commons;
+using CodeSharing.DTL.Models.Commons;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CodeSharing.WebPortal.Views.Shared.Components.MessagePage;

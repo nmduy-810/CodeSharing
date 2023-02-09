@@ -1,4 +1,4 @@
-using CodeSharing.ViewModels.Systems.Role;
+using CodeSharing.DTL.Models.Systems.Role;
 
 namespace CodeSharing.Server.Services.Interfaces;
 

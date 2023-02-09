@@ -1,7 +1,7 @@
 using System.Data;
 using CodeSharing.Core.Resources.Constants;
 using CodeSharing.Server.Authorization;
-using CodeSharing.ViewModels.Systems.Permission;
+using CodeSharing.DTL.Models.Systems.Permission;
 using Dapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;

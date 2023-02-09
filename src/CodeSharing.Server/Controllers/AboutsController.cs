@@ -1,6 +1,6 @@
 using CodeSharing.Core.Models.BaseModels;
+using CodeSharing.DTL.Models.Contents.About;
 using CodeSharing.Server.Services.Interfaces;
-using CodeSharing.ViewModels.Contents.About;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 

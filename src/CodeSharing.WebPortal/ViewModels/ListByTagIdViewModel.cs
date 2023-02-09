@@ -1,6 +1,6 @@
 using CodeSharing.Core.Models.Pagination;
-using CodeSharing.ViewModels.Contents.Label;
-using CodeSharing.ViewModels.Contents.Post;
+using CodeSharing.DTL.Models.Contents.Label;
+using CodeSharing.DTL.Models.Contents.Post;
 
 namespace CodeSharing.WebPortal.ViewModels;
 

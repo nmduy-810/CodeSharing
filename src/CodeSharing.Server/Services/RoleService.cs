@@ -1,6 +1,6 @@
 using CodeSharing.Server.Repositories.Intefaces;
 using CodeSharing.Server.Services.Interfaces;
-using CodeSharing.ViewModels.Systems.Role;
+using CodeSharing.DTL.Models.Systems.Role;
 
 namespace CodeSharing.Server.Services;
 

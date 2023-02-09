@@ -1,5 +1,5 @@
 using CodeSharing.Server.Datas.Provider;
-using CodeSharing.ViewModels.Contents.Contact;
+using CodeSharing.DTL.Models.Contents.Contact;
 
 namespace CodeSharing.Server.Repositories.Intefaces;
 

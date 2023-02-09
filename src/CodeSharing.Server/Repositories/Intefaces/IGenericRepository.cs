@@ -1,5 +1,5 @@
 using System.Linq.Expressions;
-using CodeSharing.Server.Datas.Entities;
+using CodeSharing.DTL.EFCoreEntities;
 using Microsoft.EntityFrameworkCore;
 
 namespace CodeSharing.Server.Repositories.Intefaces;

@@ -1,10 +1,10 @@
 using CodeSharing.Server.Repositories.Intefaces;
 using CodeSharing.Server.Services.Interfaces;
 using CodeSharing.Core.Models.Pagination;
-using CodeSharing.ViewModels.Contents.Post;
-using CodeSharing.ViewModels.Systems.Function;
-using CodeSharing.ViewModels.Systems.Role;
-using CodeSharing.ViewModels.Systems.User;
+using CodeSharing.DTL.Models.Contents.Post;
+using CodeSharing.DTL.Models.Systems.Function;
+using CodeSharing.DTL.Models.Systems.Role;
+using CodeSharing.DTL.Models.Systems.User;
 
 namespace CodeSharing.Server.Services;
 

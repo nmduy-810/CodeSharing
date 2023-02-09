@@ -1,7 +1,7 @@
 using CodeSharing.Server.Services.Interfaces;
 using CodeSharing.Utilities.Helpers;
-using CodeSharing.ViewModels.Contents.Contact;
-using CodeSharing.ViewModels.Contents.Support;
+using CodeSharing.DTL.Models.Contents.Contact;
+using CodeSharing.DTL.Models.Contents.Support;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 

@@ -1,6 +1,6 @@
 using CodeSharing.Server.Repositories.Intefaces;
 using CodeSharing.Server.Services.Interfaces;
-using CodeSharing.ViewModels.Contents.Label;
+using CodeSharing.DTL.Models.Contents.Label;
 
 namespace CodeSharing.Server.Services;
 

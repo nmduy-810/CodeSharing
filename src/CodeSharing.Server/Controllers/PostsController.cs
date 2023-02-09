@@ -3,7 +3,7 @@ using CodeSharing.Server.Authorization;
 using CodeSharing.Server.Extensions;
 using CodeSharing.Server.Services.Interfaces;
 using CodeSharing.Utilities.Helpers;
-using CodeSharing.ViewModels.Contents.Post;
+using CodeSharing.DTL.Models.Contents.Post;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 

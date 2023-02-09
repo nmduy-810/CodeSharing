@@ -1,6 +1,6 @@
 using CodeSharing.Server.Repositories.Intefaces;
 using CodeSharing.Server.Services.Interfaces;
-using CodeSharing.ViewModels.Systems.Function;
+using CodeSharing.DTL.Models.Systems.Function;
 
 namespace CodeSharing.Server.Services;
 

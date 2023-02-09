@@ -1,6 +1,6 @@
 using System.Security.Claims;
 using CodeSharing.Core.Resources.Constants;
-using CodeSharing.Server.Datas.Entities;
+using CodeSharing.DTL.EFCoreEntities;
 using CodeSharing.Server.Datas.Provider;
 using IdentityServer4.Extensions;
 using IdentityServer4.Models;

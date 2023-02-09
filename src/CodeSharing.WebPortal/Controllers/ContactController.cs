@@ -1,12 +1,10 @@
-using CodeSharing.ViewModels.Commons;
-using CodeSharing.ViewModels.Contents.Support;
+using CodeSharing.DTL.Models.Commons;
+using CodeSharing.DTL.Models.Contents.Support;
 using CodeSharing.WebPortal.Attribute;
 using CodeSharing.WebPortal.Extensions;
 using CodeSharing.WebPortal.Interfaces;
 using CodeSharing.WebPortal.ViewModels;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
-using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace CodeSharing.WebPortal.Controllers;
 

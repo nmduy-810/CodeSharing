@@ -1,6 +1,6 @@
 using CodeSharing.Server.Repositories.Intefaces;
 using CodeSharing.Server.Services.Interfaces;
-using CodeSharing.ViewModels.Contents.Contact;
+using CodeSharing.DTL.Models.Contents.Contact;
 
 namespace CodeSharing.Server.Services;
 

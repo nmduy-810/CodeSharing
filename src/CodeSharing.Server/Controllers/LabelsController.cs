@@ -1,6 +1,6 @@
+using CodeSharing.DTL.Models.Contents.Label;
 using CodeSharing.Server.Services.Interfaces;
 using CodeSharing.Utilities.Helpers;
-using CodeSharing.ViewModels.Contents.Label;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
