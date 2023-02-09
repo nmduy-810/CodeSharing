@@ -109,7 +109,11 @@ public static class ServiceExtensions
     {
         // Setup Entity Framework
         services.AddDbContextPool<ApplicationDbContext>(
-            options => options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
+            options =>
+            {
+                options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"), 
+                    b => b.MigrationsAssembly("CodeSharing.Server"));
+            });
     }
 
     private static void AddIdentity(this IServiceCollection services,
