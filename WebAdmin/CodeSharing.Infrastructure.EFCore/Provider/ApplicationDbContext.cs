@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
-namespace CodeSharing.Server.Datas.Provider;
+namespace CodeSharing.Infrastructure.EFCore.Provider;
 
 public class ApplicationDbContext : IdentityDbContext<User>
 {

@@ -1,4 +1,4 @@
-using CodeSharing.Server.Datas.Provider;
+using CodeSharing.Infrastructure.EFCore.Provider;
 using CodeSharing.DTL.Models.Contents.Category;
 
 namespace CodeSharing.Server.Repositories.Intefaces;

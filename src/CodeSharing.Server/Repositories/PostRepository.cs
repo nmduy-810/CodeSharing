@@ -1,7 +1,7 @@
 using CodeSharing.Core.Helpers;
 using CodeSharing.Server.AdditionalServices.Interfaces;
 using CodeSharing.DTL.EFCoreEntities;
-using CodeSharing.Server.Datas.Provider;
+using CodeSharing.Infrastructure.EFCore.Provider;
 using CodeSharing.Server.Repositories.Intefaces;
 using CodeSharing.Core.Models.Pagination;
 using CodeSharing.Utilities.Helpers;

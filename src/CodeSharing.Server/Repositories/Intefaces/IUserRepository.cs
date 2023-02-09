@@ -1,4 +1,4 @@
-using CodeSharing.Server.Datas.Provider;
+using CodeSharing.Infrastructure.EFCore.Provider;
 using CodeSharing.Core.Models.Pagination;
 using CodeSharing.DTL.Models.Contents.Post;
 using CodeSharing.DTL.Models.Systems.Function;

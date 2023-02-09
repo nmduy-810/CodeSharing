@@ -48,6 +48,7 @@
         <ProjectReference Include="..\..\Libraries\Common\CodeSharing.Core.Resources\CodeSharing.Core.Resources.csproj" />
         <ProjectReference Include="..\..\Libraries\CoreServices\CodeSharing.Core.Services\CodeSharing.Core.Services.csproj" />
         <ProjectReference Include="..\..\WebAdmin\CodeSharing.DTL\CodeSharing.DTL.csproj" />
+        <ProjectReference Include="..\..\WebAdmin\CodeSharing.Infrastructure.EFCore\CodeSharing.Infrastructure.EFCore.csproj" />
         <ProjectReference Include="..\CodeSharing.Utilities\CodeSharing.Utilities.csproj" />
     </ItemGroup>
 

@@ -3,7 +3,7 @@ using CodeSharing.Server.AdditionalServices.Interfaces;
 using CodeSharing.DTL.EFCoreEntities;
 using CodeSharing.Server.Repositories.Intefaces;
 using CodeSharing.DTL.Models.Contents.Category;
-using CodeSharing.Server.Datas.Provider;
+using CodeSharing.Infrastructure.EFCore.Provider;
 using Microsoft.EntityFrameworkCore;
 
 namespace CodeSharing.Server.Repositories;

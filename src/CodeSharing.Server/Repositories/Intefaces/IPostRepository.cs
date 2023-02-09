@@ -1,5 +1,5 @@
 using CodeSharing.DTL.EFCoreEntities;
-using CodeSharing.Server.Datas.Provider;
+using CodeSharing.Infrastructure.EFCore.Provider;
 using CodeSharing.Core.Models.Pagination;
 using CodeSharing.DTL.Models.Contents.Comment;
 using CodeSharing.DTL.Models.Contents.Post;
