@@ -2,9 +2,9 @@
 
 #nullable disable
 
-namespace CodeSharing.Server.Datas.Migrations
+namespace CodeSharing.Server.Migrations
 {
-    public partial class UpdateEntityBaseForId : Migration
+    public partial class RefactorDatabase : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

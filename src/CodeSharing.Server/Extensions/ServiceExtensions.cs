@@ -12,11 +12,11 @@ using CodeSharing.Server.Repositories.Intefaces;
 using CodeSharing.Server.Services;
 using CodeSharing.Server.Services.Interfaces;
 using CodeSharing.DTL.Models.Commons;
+using CodeSharing.Infrastructure.EFCore;
 using CodeSharing.Infrastructure.EFCore.Provider;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 
 namespace CodeSharing.Server.Extensions;
@@ -103,19 +103,7 @@ public static class ServiceExtensions
         
         return services;
     }
-
-    private static void ConfigureApplicationDbContext(this IServiceCollection services,
-        IConfiguration configuration)
-    {
-        // Setup Entity Framework
-        services.AddDbContextPool<ApplicationDbContext>(
-            options =>
-            {
-                options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"), 
-                    b => b.MigrationsAssembly("CodeSharing.Server"));
-            });
-    }
-
+    
     private static void AddIdentity(this IServiceCollection services,
         IConfiguration configuration)
     {

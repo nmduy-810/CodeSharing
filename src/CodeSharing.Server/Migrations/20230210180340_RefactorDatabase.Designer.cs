@@ -9,11 +9,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace CodeSharing.Server.Datas.Migrations
+namespace CodeSharing.Server.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20220527154236_AdditionalSupportTableAgain")]
-    partial class AdditionalSupportTableAgain
+    [Migration("20230210180340_RefactorDatabase")]
+    partial class RefactorDatabase
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -26,13 +26,16 @@ namespace CodeSharing.Server.Datas.Migrations
 
             modelBuilder.HasSequence("PostSequence");
 
-            modelBuilder.Entity("CodeSharing.Server.Datas.Entities.About", b =>
+            modelBuilder.Entity("CodeSharing.DTL.EFCoreEntities.CdsAbout", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<DateTime>("CreateDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -42,12 +45,15 @@ namespace CodeSharing.Server.Datas.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<DateTime?>("LastModifiedDate")
+                        .HasColumnType("datetime2");
+
                     b.HasKey("Id");
 
-                    b.ToTable("Abouts");
+                    b.ToTable("Cds_Abouts");
                 });
 
-            modelBuilder.Entity("CodeSharing.Server.Datas.Entities.ActivityLog", b =>
+            modelBuilder.Entity("CodeSharing.DTL.EFCoreEntities.CdsActivityLog", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -88,10 +94,10 @@ namespace CodeSharing.Server.Datas.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ActivityLogs");
+                    b.ToTable("Cds_ActivityLogs");
                 });
 
-            modelBuilder.Entity("CodeSharing.Server.Datas.Entities.Attachment", b =>
+            modelBuilder.Entity("CodeSharing.DTL.EFCoreEntities.CdsAttachment", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -128,10 +134,10 @@ namespace CodeSharing.Server.Datas.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Attachments");
+                    b.ToTable("Cds_Attachments");
                 });
 
-            modelBuilder.Entity("CodeSharing.Server.Datas.Entities.Category", b =>
+            modelBuilder.Entity("CodeSharing.DTL.EFCoreEntities.CdsCategory", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -168,10 +174,10 @@ namespace CodeSharing.Server.Datas.Migrations
 
                     b.HasIndex("Slug");
 
-                    b.ToTable("Categories");
+                    b.ToTable("Cds_Categories");
                 });
 
-            modelBuilder.Entity("CodeSharing.Server.Datas.Entities.Command", b =>
+            modelBuilder.Entity("CodeSharing.DTL.EFCoreEntities.CdsCommand", b =>
                 {
                     b.Property<string>("Id")
                         .HasMaxLength(50)
@@ -184,10 +190,10 @@ namespace CodeSharing.Server.Datas.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Commands");
+                    b.ToTable("Cds_Commands");
                 });
 
-            modelBuilder.Entity("CodeSharing.Server.Datas.Entities.CommandInFunction", b =>
+            modelBuilder.Entity("CodeSharing.DTL.EFCoreEntities.CdsCommandInFunction", b =>
                 {
                     b.Property<string>("CommandId")
                         .HasMaxLength(50)
@@ -199,10 +205,10 @@ namespace CodeSharing.Server.Datas.Migrations
 
                     b.HasKey("CommandId", "FunctionId");
 
-                    b.ToTable("CommandInFunctions");
+                    b.ToTable("Cds_CommandInFunctions");
                 });
 
-            modelBuilder.Entity("CodeSharing.Server.Datas.Entities.Comment", b =>
+            modelBuilder.Entity("CodeSharing.DTL.EFCoreEntities.CdsComment", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -234,10 +240,10 @@ namespace CodeSharing.Server.Datas.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Comments");
+                    b.ToTable("Cds_Comments");
                 });
 
-            modelBuilder.Entity("CodeSharing.Server.Datas.Entities.Contact", b =>
+            modelBuilder.Entity("CodeSharing.DTL.EFCoreEntities.CdsContact", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -261,10 +267,10 @@ namespace CodeSharing.Server.Datas.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Contacts");
+                    b.ToTable("Cds_Contacts");
                 });
 
-            modelBuilder.Entity("CodeSharing.Server.Datas.Entities.Function", b =>
+            modelBuilder.Entity("CodeSharing.DTL.EFCoreEntities.CdsFunction", b =>
                 {
                     b.Property<string>("Id")
                         .HasMaxLength(50)
@@ -293,10 +299,10 @@ namespace CodeSharing.Server.Datas.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Functions");
+                    b.ToTable("Cds_Functions");
                 });
 
-            modelBuilder.Entity("CodeSharing.Server.Datas.Entities.Label", b =>
+            modelBuilder.Entity("CodeSharing.DTL.EFCoreEntities.CdsLabel", b =>
                 {
                     b.Property<string>("Id")
                         .HasMaxLength(50)
@@ -309,10 +315,10 @@ namespace CodeSharing.Server.Datas.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Labels");
+                    b.ToTable("Cds_Labels");
                 });
 
-            modelBuilder.Entity("CodeSharing.Server.Datas.Entities.LabelInPost", b =>
+            modelBuilder.Entity("CodeSharing.DTL.EFCoreEntities.CdsLabelInPost", b =>
                 {
                     b.Property<string>("LabelId")
                         .HasMaxLength(50)
@@ -323,10 +329,10 @@ namespace CodeSharing.Server.Datas.Migrations
 
                     b.HasKey("LabelId", "PostId");
 
-                    b.ToTable("LabelInPosts");
+                    b.ToTable("Cds_LabelInPosts");
                 });
 
-            modelBuilder.Entity("CodeSharing.Server.Datas.Entities.Permission", b =>
+            modelBuilder.Entity("CodeSharing.DTL.EFCoreEntities.CdsPermission", b =>
                 {
                     b.Property<string>("RoleId")
                         .HasMaxLength(50)
@@ -342,10 +348,10 @@ namespace CodeSharing.Server.Datas.Migrations
 
                     b.HasKey("RoleId", "FunctionId", "CommandId");
 
-                    b.ToTable("Permissions");
+                    b.ToTable("Cds_Permissions");
                 });
 
-            modelBuilder.Entity("CodeSharing.Server.Datas.Entities.Post", b =>
+            modelBuilder.Entity("CodeSharing.DTL.EFCoreEntities.CdsPost", b =>
                 {
                     b.Property<int>("Id")
                         .HasColumnType("int");
@@ -411,10 +417,10 @@ namespace CodeSharing.Server.Datas.Migrations
 
                     b.HasIndex("Slug");
 
-                    b.ToTable("Posts");
+                    b.ToTable("Cds_Posts");
                 });
 
-            modelBuilder.Entity("CodeSharing.Server.Datas.Entities.Report", b =>
+            modelBuilder.Entity("CodeSharing.DTL.EFCoreEntities.CdsReport", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -446,10 +452,10 @@ namespace CodeSharing.Server.Datas.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Reports");
+                    b.ToTable("Cds_Reports");
                 });
 
-            modelBuilder.Entity("CodeSharing.Server.Datas.Entities.Support", b =>
+            modelBuilder.Entity("CodeSharing.DTL.EFCoreEntities.CdsSupport", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -484,10 +490,10 @@ namespace CodeSharing.Server.Datas.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Supports");
+                    b.ToTable("Cds_Supports");
                 });
 
-            modelBuilder.Entity("CodeSharing.Server.Datas.Entities.User", b =>
+            modelBuilder.Entity("CodeSharing.DTL.EFCoreEntities.CdsUser", b =>
                 {
                     b.Property<string>("Id")
                         .HasMaxLength(50)
@@ -541,7 +547,7 @@ namespace CodeSharing.Server.Datas.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
-                    b.Property<int?>("NumberOfKnowledgeBases")
+                    b.Property<int?>("NumberOfPosts")
                         .HasColumnType("int");
 
                     b.Property<int?>("NumberOfReports")
@@ -582,7 +588,7 @@ namespace CodeSharing.Server.Datas.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
-            modelBuilder.Entity("CodeSharing.Server.Datas.Entities.Vote", b =>
+            modelBuilder.Entity("CodeSharing.DTL.EFCoreEntities.CdsVote", b =>
                 {
                     b.Property<int>("PostId")
                         .HasColumnType("int");
@@ -599,7 +605,7 @@ namespace CodeSharing.Server.Datas.Migrations
 
                     b.HasKey("PostId", "UserId");
 
-                    b.ToTable("Votes");
+                    b.ToTable("Cds_Votes");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -748,7 +754,7 @@ namespace CodeSharing.Server.Datas.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("CodeSharing.Server.Datas.Entities.User", null)
+                    b.HasOne("CodeSharing.DTL.EFCoreEntities.CdsUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -757,7 +763,7 @@ namespace CodeSharing.Server.Datas.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("CodeSharing.Server.Datas.Entities.User", null)
+                    b.HasOne("CodeSharing.DTL.EFCoreEntities.CdsUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -772,7 +778,7 @@ namespace CodeSharing.Server.Datas.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("CodeSharing.Server.Datas.Entities.User", null)
+                    b.HasOne("CodeSharing.DTL.EFCoreEntities.CdsUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -781,7 +787,7 @@ namespace CodeSharing.Server.Datas.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("CodeSharing.Server.Datas.Entities.User", null)
+                    b.HasOne("CodeSharing.DTL.EFCoreEntities.CdsUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
