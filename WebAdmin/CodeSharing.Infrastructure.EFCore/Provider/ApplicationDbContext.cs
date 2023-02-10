@@ -12,23 +12,23 @@ public class ApplicationDbContext : IdentityDbContext<CdsUser>
     {
     }
 
-    public DbSet<CdsActivityLog> ActivityLogs { set; get; } = default!;
+    public DbSet<CdsActivityLog> CdsActivityLogs { set; get; } = default!;
     
-    public DbSet<CdsAttachment> Attachments { get; set; } = default!;
-    public DbSet<CdsCategory> Categories { set; get; } = default!;
-    public DbSet<CdsCommand> Commands { set; get; } = default!;
-    public DbSet<CdsCommandInFunction> CommandInFunctions { set; get; } = default!;
-    public DbSet<CdsComment> Comments { set; get; } = default!;
-    public DbSet<CdsFunction> Functions { set; get; } = default!;
-    public DbSet<CdsPost> Posts { set; get; } = default!;
-    public DbSet<CdsLabel> Labels { set; get; } = default!;
-    public DbSet<CdsLabelInPost> LabelInPosts { set; get; } = default!;
-    public DbSet<CdsPermission> Permissions { set; get; } = default!;
-    public DbSet<CdsReport> Reports { set; get; } = default!;
-    public DbSet<CdsVote> Votes { set; get; } = default!;
-    public DbSet<CdsContact> Contacts { get; set; } = default!;
-    public DbSet<CdsAbout> Abouts { get; set; } = default!;
-    public DbSet<CdsSupport> Supports { get; set; } = default!;
+    public DbSet<CdsAttachment> CdsAttachments { get; set; } = default!;
+    public DbSet<CdsCategory> CdsCategories { set; get; } = default!;
+    public DbSet<CdsCommand> CdsCommands { set; get; } = default!;
+    public DbSet<CdsCommandInFunction> CdsCommandInFunctions { set; get; } = default!;
+    public DbSet<CdsComment> CdsComments { set; get; } = default!;
+    public DbSet<CdsFunction> CdsFunctions { set; get; } = default!;
+    public DbSet<CdsPost> CdsPosts { set; get; } = default!;
+    public DbSet<CdsLabel> CdsLabels { set; get; } = default!;
+    public DbSet<CdsLabelInPost> CdsLabelInPosts { set; get; } = default!;
+    public DbSet<CdsPermission> CdsPermissions { set; get; } = default!;
+    public DbSet<CdsReport> CdsReports { set; get; } = default!;
+    public DbSet<CdsVote> CdsVotes { set; get; } = default!;
+    public DbSet<CdsContact> CdsContacts { get; set; } = default!;
+    public DbSet<CdsAbout> CdsAbouts { get; set; } = default!;
+    public DbSet<CdsSupport> CdsSupports { get; set; } = default!;
 
     protected override void OnModelCreating(ModelBuilder builder)
     {

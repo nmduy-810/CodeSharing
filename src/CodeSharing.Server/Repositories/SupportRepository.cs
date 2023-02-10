@@ -17,7 +17,7 @@ public class SupportRepository : GenericRepository<ApplicationDbContext>, ISuppo
     {
         try
         {
-            await _context.Supports.AddAsync(support);
+            await _context.CdsSupports.AddAsync(support);
             var result = await _context.SaveChangesAsync();
             return result > 0;
         }

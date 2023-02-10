@@ -14,7 +14,7 @@ public class LabelRepository : GenericRepository<ApplicationDbContext>, ILabelRe
 
     public async Task<List<LabelVm>> GetLabels()
     {
-        var items = await _context.Labels.Select(x => new LabelVm
+        var items = await _context.CdsLabels.Select(x => new LabelVm
         {
             Id = x.Id,
             Name = x.Name
@@ -25,7 +25,7 @@ public class LabelRepository : GenericRepository<ApplicationDbContext>, ILabelRe
 
     public async Task<LabelVm?> GetById(string id)
     {
-        var label = await _context.Labels.FindAsync(id);
+        var label = await _context.CdsLabels.FindAsync(id);
         if (label == null)
             return null;
 
@@ -40,8 +40,8 @@ public class LabelRepository : GenericRepository<ApplicationDbContext>, ILabelRe
 
     public async Task<List<LabelInPostVm>?> GetLabelsByPostId(int postId)
     {
-        var post = from p in _context.Posts
-            join lip in _context.LabelInPosts on p.Id equals lip.PostId
+        var post = from p in _context.CdsPosts
+            join lip in _context.CdsLabelInPosts on p.Id equals lip.PostId
             where p.Id == postId
             select new { lip, p };
 
@@ -59,8 +59,8 @@ public class LabelRepository : GenericRepository<ApplicationDbContext>, ILabelRe
 
     public async Task<List<LabelVm>> GetPopularLabels(int take)
     {
-        var query = from l in _context.Labels
-            join lip in _context.LabelInPosts on l.Id equals lip.LabelId
+        var query = from l in _context.CdsLabels
+            join lip in _context.CdsLabelInPosts on l.Id equals lip.LabelId
             group new { l.Id, l.Name } by new { l.Id, l.Name }
             into g
             select new

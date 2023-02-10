@@ -13,7 +13,7 @@ public class FunctionRepository : GenericRepository<ApplicationDbContext>, IFunc
 
     public async Task<List<FunctionVm>> GetFunctions()
     {
-        var items = await _context.Functions.Select(u => new FunctionVm
+        var items = await _context.CdsFunctions.Select(u => new FunctionVm
         {
             Id = u.Id,
             Name = u.Name,
@@ -28,7 +28,7 @@ public class FunctionRepository : GenericRepository<ApplicationDbContext>, IFunc
 
     public async Task<FunctionVm?> GetById(string id)
     {
-        var function = await _context.Functions.FindAsync(id);
+        var function = await _context.CdsFunctions.FindAsync(id);
         if (function == null)
             return null;
 
@@ -47,7 +47,7 @@ public class FunctionRepository : GenericRepository<ApplicationDbContext>, IFunc
 
     public async Task<List<FunctionVm>> GetFunctionsByParentId(string functionId)
     {
-        var items = await _context.Functions
+        var items = await _context.CdsFunctions
             .Where(x => x.ParentId == functionId)
             .Select(u => new FunctionVm
             {

@@ -33,8 +33,8 @@ public class PostRepository : GenericRepository<ApplicationDbContext>, IPostRepo
 
     public async Task<List<PostQuickVm>> GetPosts()
     {
-        var posts = from p in _context.Posts
-            join c in _context.Categories on p.CategoryId equals c.Id
+        var posts = from p in _context.CdsPosts
+            join c in _context.CdsCategories on p.CategoryId equals c.Id
             join u in _context.Users on p.OwnerUserId equals u.Id
             orderby p.CreateDate descending
             select new { p, c, u };
@@ -62,8 +62,8 @@ public class PostRepository : GenericRepository<ApplicationDbContext>, IPostRepo
 
     public async Task<List<PostQuickVm>> GetLatestPosts(int take)
     {
-        var posts = from p in _context.Posts
-            join c in _context.Categories on p.CategoryId equals c.Id
+        var posts = from p in _context.CdsPosts
+            join c in _context.CdsCategories on p.CategoryId equals c.Id
             join u in _context.Users on p.OwnerUserId equals u.Id
             orderby p.CreateDate descending
             select new { p, c, u };
@@ -91,8 +91,8 @@ public class PostRepository : GenericRepository<ApplicationDbContext>, IPostRepo
 
     public async Task<List<PostQuickVm>> GetPopularPosts(int take)
     {
-        var posts = from p in _context.Posts
-            join c in _context.Categories on p.CategoryId equals c.Id
+        var posts = from p in _context.CdsPosts
+            join c in _context.CdsCategories on p.CategoryId equals c.Id
             join u in _context.Users on p.OwnerUserId equals u.Id
             orderby p.ViewCount descending
             select new { p, c, u };
@@ -119,8 +119,8 @@ public class PostRepository : GenericRepository<ApplicationDbContext>, IPostRepo
 
     public async Task<List<PostQuickVm>> GetTrendingPosts(int take)
     {
-        var posts = from p in _context.Posts
-            join c in _context.Categories on p.CategoryId equals c.Id
+        var posts = from p in _context.CdsPosts
+            join c in _context.CdsCategories on p.CategoryId equals c.Id
             join u in _context.Users on p.OwnerUserId equals u.Id
             orderby p.NumberOfVotes descending
             select new { p, c, u };
@@ -147,11 +147,11 @@ public class PostRepository : GenericRepository<ApplicationDbContext>, IPostRepo
 
     public async Task<PostVm?> GetById(int id)
     {
-        var post = await _context.Posts.FindAsync(id);
+        var post = await _context.CdsPosts.FindAsync(id);
         if (post == null) 
             return null;
 
-        var category = _context.Categories.FirstOrDefault(x => x.Id == post.CategoryId);
+        var category = _context.CdsCategories.FirstOrDefault(x => x.Id == post.CategoryId);
         if (category == null)
             return null;
 
@@ -187,8 +187,8 @@ public class PostRepository : GenericRepository<ApplicationDbContext>, IPostRepo
 
     public async Task<Pagination<PostQuickVm>> GetPostsByCategoryId(int? categoryId, int pageIndex, int pageSize)
     {
-        var query = from p in _context.Posts
-            join c in _context.Categories on p.CategoryId equals c.Id
+        var query = from p in _context.CdsPosts
+            join c in _context.CdsCategories on p.CategoryId equals c.Id
             join u in _context.Users on p.OwnerUserId equals u.Id
             select new { p, c, u };
 
@@ -230,10 +230,10 @@ public class PostRepository : GenericRepository<ApplicationDbContext>, IPostRepo
 
     public async Task<Pagination<PostQuickVm>> GetPostsByTagId(string tagId, int pageIndex, int pageSize)
     {
-        var query = from p in _context.Posts
-            join lip in _context.LabelInPosts on p.Id equals lip.PostId
-            join l in _context.Labels on lip.LabelId equals l.Id
-            join c in _context.Categories on p.CategoryId equals c.Id
+        var query = from p in _context.CdsPosts
+            join lip in _context.CdsLabelInPosts on p.Id equals lip.PostId
+            join l in _context.CdsLabels on lip.LabelId equals l.Id
+            join c in _context.CdsCategories on p.CategoryId equals c.Id
             join u in _context.Users on p.OwnerUserId equals u.Id
             where lip.LabelId == tagId
             select new { p, l, c, u };
@@ -273,8 +273,8 @@ public class PostRepository : GenericRepository<ApplicationDbContext>, IPostRepo
 
     public async Task<List<PostQuickVm>> GetTotalPostInCategory()
     {
-        var query = from c in _context.Categories
-            join p in _context.Posts on c.Id equals p.CategoryId
+        var query = from c in _context.CdsCategories
+            join p in _context.CdsPosts on c.Id equals p.CategoryId
             group new { c.Id, c.Title, c.Slug } by new { c.Id, c.Title, c.Slug }
             into g
             select new
@@ -298,8 +298,8 @@ public class PostRepository : GenericRepository<ApplicationDbContext>, IPostRepo
 
     public async Task<Pagination<PostQuickVm>> GetPostsPaging(string filter, int? categoryId, int pageIndex, int pageSize)
     {
-        var query = from p in _context.Posts
-            join c in _context.Categories on p.CategoryId equals c.Id
+        var query = from p in _context.CdsPosts
+            join c in _context.CdsCategories on p.CategoryId equals c.Id
             join u in _context.Users on p.OwnerUserId equals u.Id
             select new { p, c, u };
         if (!string.IsNullOrEmpty(filter)) query = query.Where(x => x.p.Title.Contains(filter));
@@ -338,8 +338,8 @@ public class PostRepository : GenericRepository<ApplicationDbContext>, IPostRepo
 
     public async Task<Pagination<PostQuickVm>> GetPostsPaging(int pageIndex, int pageSize)
     {
-        var query = from p in _context.Posts
-            join c in _context.Categories on p.CategoryId equals c.Id
+        var query = from p in _context.CdsPosts
+            join c in _context.CdsCategories on p.CategoryId equals c.Id
             join u in _context.Users on p.OwnerUserId equals u.Id
             orderby p.CreateDate descending
             select new { p, c, u };
@@ -378,14 +378,14 @@ public class PostRepository : GenericRepository<ApplicationDbContext>, IPostRepo
 
     public async Task<bool> Post(CdsPost post)
     {
-        _context.Posts.Add(post);
+        _context.CdsPosts.Add(post);
         var result = await _context.SaveChangesAsync();
         return result > 0;
     }
     
     public async Task<bool> Put(int id, PostCreateRequest request)
     {
-        var post = await _context.Posts.FindAsync(id);
+        var post = await _context.CdsPosts.FindAsync(id);
         if (post == null)
             return false;
         
@@ -420,38 +420,38 @@ public class PostRepository : GenericRepository<ApplicationDbContext>, IPostRepo
             await ProcessLabel(request, post);
         
         // Update post
-        _context.Posts.Update(post);
+        _context.CdsPosts.Update(post);
         var result = await _context.SaveChangesAsync();
         return result > 0;
     }
 
     public async Task<bool> Delete(int id)
     {
-        var post = await _context.Posts.FindAsync(id);
+        var post = await _context.CdsPosts.FindAsync(id);
         if (post == null)
             return false;
 
-        _context.Posts.Remove(post);
+        _context.CdsPosts.Remove(post);
         
         // Remove comments related post
-        var comments = await _context.Comments.Where(x => x.PostId == id).ToListAsync();
+        var comments = await _context.CdsComments.Where(x => x.PostId == id).ToListAsync();
         foreach (var comment in comments)
         {
-            _context.Comments.Remove(comment);
+            _context.CdsComments.Remove(comment);
         }
         
         // Remove label in post
-        var labelInPosts = await _context.LabelInPosts.Where(x => x.PostId == id).ToListAsync();
+        var labelInPosts = await _context.CdsLabelInPosts.Where(x => x.PostId == id).ToListAsync();
         foreach (var labelInPost in labelInPosts)
         {
-            _context.LabelInPosts.Remove(labelInPost);
+            _context.CdsLabelInPosts.Remove(labelInPost);
         }
         
         // Remove vote
-        var vote = _context.Votes.FirstOrDefault(x => x.PostId == id);
+        var vote = _context.CdsVotes.FirstOrDefault(x => x.PostId == id);
         if (vote != null)
         {
-            _context.Votes.Remove(vote);
+            _context.CdsVotes.Remove(vote);
         }
         
         var result = await _context.SaveChangesAsync();
@@ -460,7 +460,7 @@ public class PostRepository : GenericRepository<ApplicationDbContext>, IPostRepo
 
     public async Task<bool> UpdateViewCount(int id)
     {
-        var post = await _context.Posts.FindAsync(id);
+        var post = await _context.CdsPosts.FindAsync(id);
         if (post == null)
             return false;
 
@@ -469,7 +469,7 @@ public class PostRepository : GenericRepository<ApplicationDbContext>, IPostRepo
 
         post.ViewCount += 1;
 
-        _context.Posts.Update(post);
+        _context.CdsPosts.Update(post);
         
         var result = await _context.SaveChangesAsync();
         return result > 0;
@@ -481,7 +481,7 @@ public class PostRepository : GenericRepository<ApplicationDbContext>, IPostRepo
 
     public async Task<List<VoteVm>> GetVotes(int postId)
     {
-        var votes = await _context.Votes
+        var votes = await _context.CdsVotes
             .Where(x => x.PostId == postId)
             .Select(x => new VoteVm
             {
@@ -497,20 +497,20 @@ public class PostRepository : GenericRepository<ApplicationDbContext>, IPostRepo
     public async Task<int> PostVote(int postId, string userId)
     {
         // Find value of post
-        var post = await _context.Posts.FindAsync(postId);
+        var post = await _context.CdsPosts.FindAsync(postId);
         if (post == null)
             return 0;
 
         // Get number of votes in current post
-        var numberOfVotes = await _context.Votes.CountAsync(x => x.PostId == postId);
+        var numberOfVotes = await _context.CdsVotes.CountAsync(x => x.PostId == postId);
 
         // Find postId in votes table
-        var vote = await _context.Votes.FindAsync(postId, userId);
+        var vote = await _context.CdsVotes.FindAsync(postId, userId);
 
         // Remove votes
         if (vote != null)
         {
-            _context.Votes.Remove(vote);
+            _context.CdsVotes.Remove(vote);
             numberOfVotes -= 1;
         }
         else
@@ -521,7 +521,7 @@ public class PostRepository : GenericRepository<ApplicationDbContext>, IPostRepo
                 UserId = userId
             };
 
-            _context.Votes.Add(vote);
+            _context.CdsVotes.Add(vote);
             numberOfVotes += 1;
         }
         
@@ -534,7 +534,7 @@ public class PostRepository : GenericRepository<ApplicationDbContext>, IPostRepo
         }
 
         post.NumberOfVotes = numberOfVotes;
-        _context.Posts.Update(post);
+        _context.CdsPosts.Update(post);
 
         var result = await _context.SaveChangesAsync();
         return result > 0 ? numberOfVotes : 0;
@@ -542,18 +542,18 @@ public class PostRepository : GenericRepository<ApplicationDbContext>, IPostRepo
 
     public async Task<bool> DeleteVote(int postId, string userId)
     {
-        var vote = await _context.Votes.FindAsync(postId, userId);
+        var vote = await _context.CdsVotes.FindAsync(postId, userId);
         if (vote == null) 
             return false;
 
-        var post = await _context.Posts.FindAsync(postId);
+        var post = await _context.CdsPosts.FindAsync(postId);
         if (post == null)
             return false;
 
         post.NumberOfVotes = post.NumberOfVotes.GetValueOrDefault(0) - 1;
 
-        _context.Posts.Update(post);
-        _context.Votes.Remove(vote);
+        _context.CdsPosts.Update(post);
+        _context.CdsVotes.Remove(vote);
 
         var result = await _context.SaveChangesAsync();
         return result > 0;
@@ -573,9 +573,9 @@ public class PostRepository : GenericRepository<ApplicationDbContext>, IPostRepo
             IsProcessed = false
         };
 
-        _context.Reports.Add(report);
+        _context.CdsReports.Add(report);
 
-        var post = await _context.Posts.FindAsync(postId);
+        var post = await _context.CdsPosts.FindAsync(postId);
         if (post == null)
             return false;
 
@@ -589,7 +589,7 @@ public class PostRepository : GenericRepository<ApplicationDbContext>, IPostRepo
         }
 
         post.NumberOfReports = post.NumberOfReports.GetValueOrDefault(0) + 1;
-        _context.Posts.Update(post);
+        _context.CdsPosts.Update(post);
 
         var result = await _context.SaveChangesAsync();
         return result > 0;
@@ -601,9 +601,9 @@ public class PostRepository : GenericRepository<ApplicationDbContext>, IPostRepo
 
     public async Task<List<CommentVm>> GetRecentComments(int take)
     {
-        var query = from c in _context.Comments
+        var query = from c in _context.CdsComments
             join u in _context.Users on c.OwnerUserId equals u.Id
-            join k in _context.Posts on c.PostId equals k.Id
+            join k in _context.CdsPosts on c.PostId equals k.Id
             orderby c.CreateDate descending
             select new { c, u, k };
 
@@ -623,7 +623,7 @@ public class PostRepository : GenericRepository<ApplicationDbContext>, IPostRepo
 
     public async Task<IEnumerable<CommentVm>> GetCommentTreeByPostId(int postId, int pageIndex, int pageSize)
     {
-        var query = from c in _context.Comments
+        var query = from c in _context.CdsComments
             join u in _context.Users on c.OwnerUserId equals u.Id
             where c.PostId == postId
             select new { c, u };
@@ -654,8 +654,8 @@ public class PostRepository : GenericRepository<ApplicationDbContext>, IPostRepo
 
     public async Task<List<CommentVm>> GetCommentsByPostId(int postId)
     {
-        var query = from p in _context.Posts
-            join c in _context.Comments on p.Id equals c.PostId
+        var query = from p in _context.CdsPosts
+            join c in _context.CdsComments on p.Id equals c.PostId
             join u in _context.Users on c.OwnerUserId equals u.Id
             where c.PostId == postId
             select new { p, c, u };
@@ -676,7 +676,7 @@ public class PostRepository : GenericRepository<ApplicationDbContext>, IPostRepo
 
     public async Task<CommentVm?> GetCommentDetail(int commentId)
     {
-        var comment = await _context.Comments.FindAsync(commentId);
+        var comment = await _context.CdsComments.FindAsync(commentId);
         if (comment == null)
             return null;
 
@@ -697,8 +697,8 @@ public class PostRepository : GenericRepository<ApplicationDbContext>, IPostRepo
 
     public async Task<List<CommentVm>> GetComments()
     {
-        var query = from p in _context.Posts
-            join c in _context.Comments on p.Id equals c.PostId
+        var query = from p in _context.CdsPosts
+            join c in _context.CdsComments on p.Id equals c.PostId
             join u in _context.Users on c.OwnerUserId equals u.Id
             select new { p, c, u };
 
@@ -726,14 +726,14 @@ public class PostRepository : GenericRepository<ApplicationDbContext>, IPostRepo
             OwnerUserId = userId,
             ReplyId = request.ReplyId
         };
-        _context.Comments.Add(comment);
+        _context.CdsComments.Add(comment);
 
-        var post = await _context.Posts.FindAsync(postId);
+        var post = await _context.CdsPosts.FindAsync(postId);
         if (post == null)
             return false;
 
         post.NumberOfComments = post.NumberOfComments.GetValueOrDefault(0) + 1;
-        _context.Posts.Update(post);
+        _context.CdsPosts.Update(post);
 
         var result = await _context.SaveChangesAsync();
         return result > 0;
@@ -741,7 +741,7 @@ public class PostRepository : GenericRepository<ApplicationDbContext>, IPostRepo
 
     public async Task<bool> PutComment(int commentId, CommentCreateRequest request, string userId)
     {
-        var comment = await _context.Comments.FindAsync(commentId);
+        var comment = await _context.CdsComments.FindAsync(commentId);
         if (comment == null) 
             return false;
 
@@ -749,7 +749,7 @@ public class PostRepository : GenericRepository<ApplicationDbContext>, IPostRepo
             return false;
 
         comment.Content = request.Content;
-        _context.Comments.Update(comment);
+        _context.CdsComments.Update(comment);
 
         var result = await _context.SaveChangesAsync();
         return result > 0;
@@ -757,18 +757,18 @@ public class PostRepository : GenericRepository<ApplicationDbContext>, IPostRepo
 
     public async Task<bool> DeleteComment(int postId, int commentId)
     {
-        var comment = await _context.Comments.FindAsync(commentId);
+        var comment = await _context.CdsComments.FindAsync(commentId);
         if (comment == null) 
             return false;
 
-        _context.Comments.Remove(comment);
+        _context.CdsComments.Remove(comment);
 
-        var post = await _context.Posts.FindAsync(postId);
+        var post = await _context.CdsPosts.FindAsync(postId);
         if (post == null)
             return false;
 
         post.NumberOfComments = post.NumberOfVotes.GetValueOrDefault(0) - 1;
-        _context.Posts.Update(post);
+        _context.CdsPosts.Update(post);
 
         var result = await _context.SaveChangesAsync();
         return result > 0;
@@ -783,7 +783,7 @@ public class PostRepository : GenericRepository<ApplicationDbContext>, IPostRepo
         foreach (var labelText in request.Labels)
         {
             var labelId = TextHelper.ToUnsignString(labelText);
-            var existingLabel = await _context.Labels.FindAsync(labelId);
+            var existingLabel = await _context.CdsLabels.FindAsync(labelId);
             if (existingLabel == null)
             {
                 var labelEntity = new CdsLabel
@@ -791,11 +791,11 @@ public class PostRepository : GenericRepository<ApplicationDbContext>, IPostRepo
                     Id = labelId,
                     Name = labelText
                 };
-                _context.Labels.Add(labelEntity);
+                _context.CdsLabels.Add(labelEntity);
             }
 
-            if (await _context.LabelInPosts.FindAsync(labelId, post.Id) == null)
-                _context.LabelInPosts.Add(new CdsLabelInPost
+            if (await _context.CdsLabelInPosts.FindAsync(labelId, post.Id) == null)
+                _context.CdsLabelInPosts.Add(new CdsLabelInPost
                 {
                     PostId = post.Id,
                     LabelId = labelId

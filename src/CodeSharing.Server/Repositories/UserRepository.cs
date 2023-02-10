@@ -154,10 +154,10 @@ public class UserRepository : GenericRepository<ApplicationDbContext>, IUserRepo
     {
         var user = await _userManager.FindByIdAsync(userId);
         var roles = await _userManager.GetRolesAsync(user);
-        var query = from f in _context.Functions
-            join p in _context.Permissions on f.Id equals p.FunctionId
+        var query = from f in _context.CdsFunctions
+            join p in _context.CdsPermissions on f.Id equals p.FunctionId
             join r in _roleManager.Roles on p.RoleId equals r.Id
-            join a in _context.Commands on p.CommandId equals a.Id
+            join a in _context.CdsCommands on p.CommandId equals a.Id
             where roles.Contains(r.Name) && a.Id == "VIEW"
             select new FunctionVm
             {
@@ -218,8 +218,8 @@ public class UserRepository : GenericRepository<ApplicationDbContext>, IUserRepo
 
     public async Task<Pagination<PostQuickVm>> GetPostsByUserId(string userId, int pageIndex, int pageSize)
     {
-        var query = from p in _context.Posts
-            join c in _context.Categories on p.CategoryId equals c.Id
+        var query = from p in _context.CdsPosts
+            join c in _context.CdsCategories on p.CategoryId equals c.Id
             where p.OwnerUserId == userId
             orderby p.CreateDate descending
             select new { p, c };

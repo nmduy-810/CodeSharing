@@ -27,7 +27,7 @@ public class CategoryRepository : GenericRepository<ApplicationDbContext>, ICate
         // If in database not data
         if (cacheData == null)
         {
-            var items = await _context.Categories.Select(x => new CategoryVm
+            var items = await _context.CdsCategories.Select(x => new CategoryVm
             {
                 Id = x.Id,
                 ParentCategoryId = x.ParentCategoryId,
@@ -47,7 +47,7 @@ public class CategoryRepository : GenericRepository<ApplicationDbContext>, ICate
 
     public async Task<CategoryVm?> GetById(int id)
     {
-        var category = await _context.Categories.FindAsync(id);
+        var category = await _context.CdsCategories.FindAsync(id);
         if (category == null)
             return null;
         
@@ -77,7 +77,7 @@ public class CategoryRepository : GenericRepository<ApplicationDbContext>, ICate
                 IsParent = request.IsParent
             };
 
-            await _context.Categories.AddAsync(item);
+            await _context.CdsCategories.AddAsync(item);
             var result = await _context.SaveChangesAsync();
             if (result <= 0)
                 return false;
@@ -97,7 +97,7 @@ public class CategoryRepository : GenericRepository<ApplicationDbContext>, ICate
     {
         try
         {
-            var category = await _context.Categories.FindAsync(id);
+            var category = await _context.CdsCategories.FindAsync(id);
             if (category == null)
                 return false;
 
@@ -110,7 +110,7 @@ public class CategoryRepository : GenericRepository<ApplicationDbContext>, ICate
             category.SortOrder = request.SortOrder;
             category.IsParent = request.IsParent;
 
-            _context.Categories.Update(category);
+            _context.CdsCategories.Update(category);
             var result = await _context.SaveChangesAsync();
             if (result <= 0)
                 return false;
@@ -129,11 +129,11 @@ public class CategoryRepository : GenericRepository<ApplicationDbContext>, ICate
     {
         try
         {
-            var category = await _context.Categories.FindAsync(id);
+            var category = await _context.CdsCategories.FindAsync(id);
             if (category == null)
                 return false;
 
-            _context.Categories.Remove(category);
+            _context.CdsCategories.Remove(category);
             var result = await _context.SaveChangesAsync();
             if (result <= 0)
                 return false;

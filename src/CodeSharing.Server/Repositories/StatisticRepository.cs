@@ -15,7 +15,7 @@ public class StatisticRepository : GenericRepository<ApplicationDbContext>, ISta
     
     public async Task<List<MonthlyNewCommentsVm>> GetMonthlyNewComments(int year)
     {
-        var items = await _context.Comments.Where(x => x.CreateDate.Date.Year == year)
+        var items = await _context.CdsComments.Where(x => x.CreateDate.Date.Year == year)
             .GroupBy(x => x.CreateDate.Date.Month)
             .OrderBy(x => x.Key)
             .Select(x => new MonthlyNewCommentsVm
@@ -29,7 +29,7 @@ public class StatisticRepository : GenericRepository<ApplicationDbContext>, ISta
 
     public async Task<List<MonthlyNewPostsVm>> GetMonthlyNewPosts(int year)
     {
-        var items = await _context.Posts.Where(x => x.CreateDate.Date.Year == year)
+        var items = await _context.CdsPosts.Where(x => x.CreateDate.Date.Year == year)
             .GroupBy(x => x.CreateDate.Date.Month)
             .Select(x => new MonthlyNewPostsVm
             {

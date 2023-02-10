@@ -37,10 +37,10 @@ public class IdentityProfileService : IProfileService
         var claims = principal.Claims.ToList();
         var roles = await _userManager.GetRolesAsync(user);
 
-        var query = from p in _context.Permissions
-            join c in _context.Commands
+        var query = from p in _context.CdsPermissions
+            join c in _context.CdsCommands
                 on p.CommandId equals c.Id
-            join f in _context.Functions
+            join f in _context.CdsFunctions
                 on p.FunctionId equals f.Id
             join r in _roleManager.Roles on p.RoleId equals r.Id
             where roles.Contains(r.Name)

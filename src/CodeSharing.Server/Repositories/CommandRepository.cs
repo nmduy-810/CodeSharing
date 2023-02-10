@@ -13,7 +13,7 @@ public class CommandRepository : GenericRepository<ApplicationDbContext>, IComma
 
     public async Task<List<CommandVm>> GetCommands()
     {
-        var items = await _context.Commands.Select(u => new CommandVm
+        var items = await _context.CdsCommands.Select(u => new CommandVm
         {
             Id = u.Id,
             Name = u.Name

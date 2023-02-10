@@ -66,9 +66,9 @@ public class DbInitializer
 
         #region Function
 
-        if (!_context.Functions.Any())
+        if (!_context.CdsFunctions.Any())
         {
-            _context.Functions.AddRange(new List<CdsFunction>
+            _context.CdsFunctions.AddRange(new List<CdsFunction>
             {
                 new()
                 {
@@ -206,8 +206,8 @@ public class DbInitializer
             await _context.SaveChangesAsync();
         }
 
-        if (!_context.Commands.Any())
-            _context.Commands.AddRange(new List<CdsCommand>
+        if (!_context.CdsCommands.Any())
+            _context.CdsCommands.AddRange(new List<CdsCommand>
             {
                 new() { Id = "VIEW", Name = "Xem" },
                 new() { Id = "CREATE", Name = "Thêm" },
@@ -220,9 +220,9 @@ public class DbInitializer
 
         #region CommandInFunction
 
-        var functions = _context.Functions;
+        var functions = _context.CdsFunctions;
 
-        if (!_context.CommandInFunctions.Any())
+        if (!_context.CdsCommandInFunctions.Any())
             foreach (var function in functions)
             {
                 var createAction = new CdsCommandInFunction
@@ -230,52 +230,52 @@ public class DbInitializer
                     CommandId = "CREATE",
                     FunctionId = function.Id
                 };
-                _context.CommandInFunctions.Add(createAction);
+                _context.CdsCommandInFunctions.Add(createAction);
 
                 var updateAction = new CdsCommandInFunction
                 {
                     CommandId = "UPDATE",
                     FunctionId = function.Id
                 };
-                _context.CommandInFunctions.Add(updateAction);
+                _context.CdsCommandInFunctions.Add(updateAction);
                 var deleteAction = new CdsCommandInFunction
                 {
                     CommandId = "DELETE",
                     FunctionId = function.Id
                 };
-                _context.CommandInFunctions.Add(deleteAction);
+                _context.CdsCommandInFunctions.Add(deleteAction);
 
                 var viewAction = new CdsCommandInFunction
                 {
                     CommandId = "VIEW",
                     FunctionId = function.Id
                 };
-                _context.CommandInFunctions.Add(viewAction);
+                _context.CdsCommandInFunctions.Add(viewAction);
             }
 
-        if (!_context.Permissions.Any())
+        if (!_context.CdsPermissions.Any())
         {
             var adminRole = await _roleManager.FindByNameAsync(AdminRoleName);
             foreach (var function in functions)
             {
-                _context.Permissions.Add(new CdsPermission(function.Id, adminRole.Id, "CREATE"));
-                _context.Permissions.Add(new CdsPermission(function.Id, adminRole.Id, "UPDATE"));
-                _context.Permissions.Add(new CdsPermission(function.Id, adminRole.Id, "DELETE"));
-                _context.Permissions.Add(new CdsPermission(function.Id, adminRole.Id, "VIEW"));
+                _context.CdsPermissions.Add(new CdsPermission(function.Id, adminRole.Id, "CREATE"));
+                _context.CdsPermissions.Add(new CdsPermission(function.Id, adminRole.Id, "UPDATE"));
+                _context.CdsPermissions.Add(new CdsPermission(function.Id, adminRole.Id, "DELETE"));
+                _context.CdsPermissions.Add(new CdsPermission(function.Id, adminRole.Id, "VIEW"));
             }
 
             var memberRole = await _roleManager.FindByNameAsync(UserRoleName);
             foreach (var function in functions)
-                _context.Permissions.Add(new CdsPermission(function.Id, memberRole.Id, "VIEW"));
+                _context.CdsPermissions.Add(new CdsPermission(function.Id, memberRole.Id, "VIEW"));
         }
 
         #endregion CommandInFunction
 
         #region Category
 
-        if (!_context.Categories.Any())
+        if (!_context.CdsCategories.Any())
         {
-            _context.Categories.AddRange(new List<CdsCategory>
+            _context.CdsCategories.AddRange(new List<CdsCategory>
             {
                 new()
                 {
@@ -329,9 +329,9 @@ public class DbInitializer
 
         #region Labels
 
-        if (!_context.Labels.Any())
+        if (!_context.CdsLabels.Any())
         {
-            _context.Labels.AddRange(new List<CdsLabel>
+            _context.CdsLabels.AddRange(new List<CdsLabel>
             {
                 new()
                 {
@@ -380,8 +380,8 @@ public class DbInitializer
 
         #region Contact
 
-        if (!_context.Contacts.Any())
-            _context.Contacts.AddRange(new CdsContact
+        if (!_context.CdsContacts.Any())
+            _context.CdsContacts.AddRange(new CdsContact
             {
                 Email = "codesharing.contact@gmail.com",
                 Location = "Thành phố Hồ Chí Minh, Việt Nam",

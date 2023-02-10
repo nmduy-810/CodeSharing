@@ -17,7 +17,7 @@ public class ContactRepository : GenericRepository<ApplicationDbContext>, IConta
 
     public async Task<List<ContactVm>> GetContacts()
     {
-        var items = await _context.Contacts.Select(x => new ContactVm
+        var items = await _context.CdsContacts.Select(x => new ContactVm
         {
             Id = x.Id,
             Phone = x.Phone,
@@ -30,7 +30,7 @@ public class ContactRepository : GenericRepository<ApplicationDbContext>, IConta
 
     public async Task<ContactVm?> GetById(int id)
     {
-        var contact = await _context.Contacts.FindAsync(id);
+        var contact = await _context.CdsContacts.FindAsync(id);
         if (contact == null)
             return null;
 
@@ -49,7 +49,7 @@ public class ContactRepository : GenericRepository<ApplicationDbContext>, IConta
     {
         try
         {
-            var contact = await _context.Contacts.FindAsync(id);
+            var contact = await _context.CdsContacts.FindAsync(id);
             if (contact == null)
                 return false;
         
@@ -57,7 +57,7 @@ public class ContactRepository : GenericRepository<ApplicationDbContext>, IConta
             contact.Email = request.Email;
             contact.Location = request.Location;
             
-            _context.Contacts.Update(contact);
+            _context.CdsContacts.Update(contact);
             var result = await _context.SaveChangesAsync();
             return result > 0;
         }
