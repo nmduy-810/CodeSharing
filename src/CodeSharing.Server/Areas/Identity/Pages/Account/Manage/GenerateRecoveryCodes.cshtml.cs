@@ -13,10 +13,10 @@ namespace CodeSharing.Server.Areas.Identity.Pages.Account.Manage;
 public class GenerateRecoveryCodesModel : PageModel
 {
     private readonly ILogger<GenerateRecoveryCodesModel> _logger;
-    private readonly UserManager<User> _userManager;
+    private readonly UserManager<CdsUser> _userManager;
 
     public GenerateRecoveryCodesModel(
-        UserManager<User> userManager,
+        UserManager<CdsUser> userManager,
         ILogger<GenerateRecoveryCodesModel> logger)
     {
         _userManager = userManager;

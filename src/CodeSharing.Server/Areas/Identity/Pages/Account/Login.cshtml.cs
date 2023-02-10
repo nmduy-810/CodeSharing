@@ -15,10 +15,10 @@ namespace CodeSharing.Server.Areas.Identity.Pages.Account;
 public class LoginModel : PageModel
 {
     private readonly ILogger<LoginModel> _logger;
-    private readonly SignInManager<User> _signInManager;
-    private readonly UserManager<User> _userManager;
+    private readonly SignInManager<CdsUser> _signInManager;
+    private readonly UserManager<CdsUser> _userManager;
 
-    public LoginModel(SignInManager<User> signInManager, UserManager<User> userManager, ILogger<LoginModel> logger)
+    public LoginModel(SignInManager<CdsUser> signInManager, UserManager<CdsUser> userManager, ILogger<LoginModel> logger)
     {
         _signInManager = signInManager;
         _userManager = userManager;

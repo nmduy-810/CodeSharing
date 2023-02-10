@@ -14,12 +14,12 @@ namespace CodeSharing.Server.Areas.Identity.Pages.Account.Manage;
 public class DeletePersonalDataModel : PageModel
 {
     private readonly ILogger<DeletePersonalDataModel> _logger;
-    private readonly SignInManager<User> _signInManager;
-    private readonly UserManager<User> _userManager;
+    private readonly SignInManager<CdsUser> _signInManager;
+    private readonly UserManager<CdsUser> _userManager;
 
     public DeletePersonalDataModel(
-        UserManager<User> userManager,
-        SignInManager<User> signInManager,
+        UserManager<CdsUser> userManager,
+        SignInManager<CdsUser> signInManager,
         ILogger<DeletePersonalDataModel> logger)
     {
         _userManager = userManager;

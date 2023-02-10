@@ -13,14 +13,14 @@ namespace CodeSharing.Server.Areas.Identity.Pages.Account.Manage;
 
 public class ExternalLoginsModel : PageModel
 {
-    private readonly SignInManager<User> _signInManager;
-    private readonly UserManager<User> _userManager;
-    private readonly IUserStore<User> _userStore;
+    private readonly SignInManager<CdsUser> _signInManager;
+    private readonly UserManager<CdsUser> _userManager;
+    private readonly IUserStore<CdsUser> _userStore;
 
     public ExternalLoginsModel(
-        UserManager<User> userManager,
-        SignInManager<User> signInManager,
-        IUserStore<User> userStore)
+        UserManager<CdsUser> userManager,
+        SignInManager<CdsUser> signInManager,
+        IUserStore<CdsUser> userStore)
     {
         _userManager = userManager;
         _signInManager = signInManager;
@@ -63,7 +63,7 @@ public class ExternalLoginsModel : PageModel
             .ToList();
 
         string passwordHash = null;
-        if (_userStore is IUserPasswordStore<User> userPasswordStore)
+        if (_userStore is IUserPasswordStore<CdsUser> userPasswordStore)
             passwordHash = await userPasswordStore.GetPasswordHashAsync(user, HttpContext.RequestAborted);
 
         ShowRemoveButton = passwordHash != null || CurrentLogins.Count > 1;

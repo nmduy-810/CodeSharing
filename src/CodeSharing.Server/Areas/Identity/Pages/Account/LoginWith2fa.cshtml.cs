@@ -14,12 +14,12 @@ namespace CodeSharing.Server.Areas.Identity.Pages.Account;
 public class LoginWith2faModel : PageModel
 {
     private readonly ILogger<LoginWith2faModel> _logger;
-    private readonly SignInManager<User> _signInManager;
-    private readonly UserManager<User> _userManager;
+    private readonly SignInManager<CdsUser> _signInManager;
+    private readonly UserManager<CdsUser> _userManager;
 
     public LoginWith2faModel(
-        SignInManager<User> signInManager,
-        UserManager<User> userManager,
+        SignInManager<CdsUser> signInManager,
+        UserManager<CdsUser> userManager,
         ILogger<LoginWith2faModel> logger)
     {
         _signInManager = signInManager;

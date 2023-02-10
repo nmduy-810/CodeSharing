@@ -14,10 +14,10 @@ namespace CodeSharing.Server.Areas.Identity.Pages.Account;
 
 public class ConfirmEmailChangeModel : PageModel
 {
-    private readonly SignInManager<User> _signInManager;
-    private readonly UserManager<User> _userManager;
+    private readonly SignInManager<CdsUser> _signInManager;
+    private readonly UserManager<CdsUser> _userManager;
 
-    public ConfirmEmailChangeModel(UserManager<User> userManager, SignInManager<User> signInManager)
+    public ConfirmEmailChangeModel(UserManager<CdsUser> userManager, SignInManager<CdsUser> signInManager)
     {
         _userManager = userManager;
         _signInManager = signInManager;

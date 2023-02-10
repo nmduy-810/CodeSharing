@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CodeSharing.Server.Repositories;
 
-public class AboutRepository : CoreRepository<About>, IAboutRepository
+public class AboutRepository : CoreRepository<CdsAbout>, IAboutRepository
 {
     private readonly ILogger<AboutRepository> _logger;
     private readonly IHttpContextAccessor _httpContextAccessor;
@@ -16,7 +16,7 @@ public class AboutRepository : CoreRepository<About>, IAboutRepository
         _httpContextAccessor = httpContextAccessor;
     }
 
-    public async Task<List<About>> GetAbouts()
+    public async Task<List<CdsAbout>> GetAbouts()
     {
         try
         {
@@ -25,11 +25,11 @@ public class AboutRepository : CoreRepository<About>, IAboutRepository
         catch (Exception e)
         {
             _logger.LogError("{Message}", e.Message);
-            return new List<About>();
+            return new List<CdsAbout>();
         }
     }
 
-    public async Task<About?> GetById(int id)
+    public async Task<CdsAbout?> GetById(int id)
     {
         try
         {
@@ -43,7 +43,7 @@ public class AboutRepository : CoreRepository<About>, IAboutRepository
         }
     }
     
-    public async Task<About?> PostAbout(About about)
+    public async Task<CdsAbout?> PostAbout(CdsAbout about)
     {
         try
         {
@@ -57,7 +57,7 @@ public class AboutRepository : CoreRepository<About>, IAboutRepository
         }
     }
     
-    public async Task<About?> PutAbout(About about)
+    public async Task<CdsAbout?> PutAbout(CdsAbout about)
     {
         try
         {
@@ -71,7 +71,7 @@ public class AboutRepository : CoreRepository<About>, IAboutRepository
         }
     }
     
-    public async Task<About?> DeleteAbout(About about)
+    public async Task<CdsAbout?> DeleteAbout(CdsAbout about)
     {
         try
         {

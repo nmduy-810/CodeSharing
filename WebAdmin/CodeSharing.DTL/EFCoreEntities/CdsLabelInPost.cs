@@ -3,8 +3,8 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CodeSharing.DTL.EFCoreEntities;
 
-[Table("LabelInPosts")]
-public class LabelInPost
+[Table(CodeSharingDbConfig.Tables.CdsLabelInPost.TableName)]
+public class CdsLabelInPost
 {
     public int PostId { get; set; }
 

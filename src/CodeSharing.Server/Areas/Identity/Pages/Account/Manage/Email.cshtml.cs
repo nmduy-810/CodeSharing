@@ -18,12 +18,12 @@ namespace CodeSharing.Server.Areas.Identity.Pages.Account.Manage;
 public class EmailModel : PageModel
 {
     private readonly IEmailSender _emailSender;
-    private readonly SignInManager<User> _signInManager;
-    private readonly UserManager<User> _userManager;
+    private readonly SignInManager<CdsUser> _signInManager;
+    private readonly UserManager<CdsUser> _userManager;
 
     public EmailModel(
-        UserManager<User> userManager,
-        SignInManager<User> signInManager,
+        UserManager<CdsUser> userManager,
+        SignInManager<CdsUser> signInManager,
         IEmailSender emailSender)
     {
         _userManager = userManager;
@@ -57,7 +57,7 @@ public class EmailModel : PageModel
     [BindProperty]
     public InputModel Input { get; set; }
 
-    private async Task LoadAsync(User user)
+    private async Task LoadAsync(CdsUser user)
     {
         var email = await _userManager.GetEmailAsync(user);
         Email = email;

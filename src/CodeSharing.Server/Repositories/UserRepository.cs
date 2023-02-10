@@ -14,10 +14,10 @@ namespace CodeSharing.Server.Repositories;
 
 public class UserRepository : GenericRepository<ApplicationDbContext>, IUserRepository
 {
-    private readonly UserManager<User> _userManager;
+    private readonly UserManager<CdsUser> _userManager;
     private readonly RoleManager<IdentityRole> _roleManager;
     
-    public UserRepository(ApplicationDbContext context, UserManager<User> userManager, RoleManager<IdentityRole> roleManager) : base(context)
+    public UserRepository(ApplicationDbContext context, UserManager<CdsUser> userManager, RoleManager<IdentityRole> roleManager) : base(context)
     {
         _userManager = userManager;
         _roleManager = roleManager;
@@ -96,7 +96,7 @@ public class UserRepository : GenericRepository<ApplicationDbContext>, IUserRepo
 
     public async Task<bool> PostUser(UserCreateRequest request)
     {
-        var user = new User
+        var user = new CdsUser
         {
             Id = Guid.NewGuid().ToString(),
             Email = request.Email,

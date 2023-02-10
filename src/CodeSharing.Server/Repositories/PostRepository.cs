@@ -18,10 +18,10 @@ public class PostRepository : GenericRepository<ApplicationDbContext>, IPostRepo
 {
     private readonly IHttpContextAccessor _httpContextAccessor;
     private readonly IStorageService _storageService;
-    private readonly UserManager<User> _userManager;
+    private readonly UserManager<CdsUser> _userManager;
     private readonly IUploadRepository _uploadRepository;
     
-    public PostRepository(ApplicationDbContext context, IHttpContextAccessor httpContextAccessor, IStorageService storageService, UserManager<User> userManager, IUploadRepository uploadRepository) : base(context)
+    public PostRepository(ApplicationDbContext context, IHttpContextAccessor httpContextAccessor, IStorageService storageService, UserManager<CdsUser> userManager, IUploadRepository uploadRepository) : base(context)
     {
         _httpContextAccessor = httpContextAccessor;
         _storageService = storageService;
@@ -376,7 +376,7 @@ public class PostRepository : GenericRepository<ApplicationDbContext>, IPostRepo
         return pagination;
     }
 
-    public async Task<bool> Post(Post post)
+    public async Task<bool> Post(CdsPost post)
     {
         _context.Posts.Add(post);
         var result = await _context.SaveChangesAsync();
@@ -515,7 +515,7 @@ public class PostRepository : GenericRepository<ApplicationDbContext>, IPostRepo
         }
         else
         {
-            vote = new Vote
+            vote = new CdsVote
             {
                 PostId = postId,
                 UserId = userId
@@ -565,7 +565,7 @@ public class PostRepository : GenericRepository<ApplicationDbContext>, IPostRepo
 
     public async Task<bool> PostReport(int postId, ReportCreateRequest request, string userId)
     {
-        var report = new Report
+        var report = new CdsReport
         {
             Content = request.Content,
             PostId = postId,
@@ -719,7 +719,7 @@ public class PostRepository : GenericRepository<ApplicationDbContext>, IPostRepo
 
     public async Task<bool> PostComment(int postId, CommentCreateRequest request, string userId)
     {
-        var comment = new Comment
+        var comment = new CdsComment
         {
             Content = request.Content,
             PostId = postId,
@@ -778,7 +778,7 @@ public class PostRepository : GenericRepository<ApplicationDbContext>, IPostRepo
     
     #region Helpers
     
-    public async Task ProcessLabel(PostCreateRequest request, Post post)
+    public async Task ProcessLabel(PostCreateRequest request, CdsPost post)
     {
         foreach (var labelText in request.Labels)
         {
@@ -786,7 +786,7 @@ public class PostRepository : GenericRepository<ApplicationDbContext>, IPostRepo
             var existingLabel = await _context.Labels.FindAsync(labelId);
             if (existingLabel == null)
             {
-                var labelEntity = new Label
+                var labelEntity = new CdsLabel
                 {
                     Id = labelId,
                     Name = labelText
@@ -795,7 +795,7 @@ public class PostRepository : GenericRepository<ApplicationDbContext>, IPostRepo
             }
 
             if (await _context.LabelInPosts.FindAsync(labelId, post.Id) == null)
-                _context.LabelInPosts.Add(new LabelInPost
+                _context.LabelInPosts.Add(new CdsLabelInPost
                 {
                     PostId = post.Id,
                     LabelId = labelId

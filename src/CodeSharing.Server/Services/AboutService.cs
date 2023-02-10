@@ -25,7 +25,7 @@ public class AboutService : BaseService, IAboutService
         try
         {
             var data = await _repository.GetAbouts();
-            result.SetResult(_utils.Transform<List<About>, List<AboutVm>>(data));
+            result.SetResult(_utils.Transform<List<CdsAbout>, List<AboutVm>>(data));
         }
         catch (Exception e)
         {
@@ -47,7 +47,7 @@ public class AboutService : BaseService, IAboutService
                 return result;
             }
             
-            result.SetResult(_utils.Transform<About, AboutVm>(data));
+            result.SetResult(_utils.Transform<CdsAbout, AboutVm>(data));
         }
         catch (Exception e)
         {
@@ -63,7 +63,7 @@ public class AboutService : BaseService, IAboutService
         var result = new Result<AboutVm?>();
         try
         {
-            var item = new About
+            var item = new CdsAbout
             {
                 Description = request.Description
             };
@@ -76,7 +76,7 @@ public class AboutService : BaseService, IAboutService
 
             var data = await _repository.PostAbout(item);
             if (data != null)
-                result.SetResult(_utils.Transform<About, AboutVm>(data));
+                result.SetResult(_utils.Transform<CdsAbout, AboutVm>(data));
             else
                 result.SetResult(null, ErrorCodeConstant.MessageCode.ErrorProcessCreate);
         }
@@ -110,7 +110,7 @@ public class AboutService : BaseService, IAboutService
             
             var data = await _repository.PutAbout(about);
             if (data != null)
-                result.SetResult(_utils.Transform<About, AboutVm>(data));
+                result.SetResult(_utils.Transform<CdsAbout, AboutVm>(data));
             else
                 result.SetResult(null, ErrorCodeConstant.MessageCode.ErrorProcessUpdate);
         }
@@ -137,7 +137,7 @@ public class AboutService : BaseService, IAboutService
 
             var data = await _repository.DeleteAbout(about);
             if (data != null)
-                result.SetResult(_utils.Transform<About, AboutVm>(data));
+                result.SetResult(_utils.Transform<CdsAbout, AboutVm>(data));
             else
                 result.SetResult(null, ErrorCodeConstant.MessageCode.ErrorProcessDelete);
         }

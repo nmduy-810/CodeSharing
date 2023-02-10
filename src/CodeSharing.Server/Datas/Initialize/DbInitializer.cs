@@ -10,9 +10,9 @@ public class DbInitializer
     private const string UserRoleName = "Member";
     private readonly ApplicationDbContext _context;
     private readonly RoleManager<IdentityRole> _roleManager;
-    private readonly UserManager<User> _userManager;
+    private readonly UserManager<CdsUser> _userManager;
 
-    public DbInitializer(ApplicationDbContext context, UserManager<User> userManager,
+    public DbInitializer(ApplicationDbContext context, UserManager<CdsUser> userManager,
         RoleManager<IdentityRole> roleManager)
     {
         _context = context;
@@ -46,7 +46,7 @@ public class DbInitializer
 
         if (!_userManager.Users.Any())
         {
-            var admin = await _userManager.CreateAsync(new User
+            var admin = await _userManager.CreateAsync(new CdsUser
             {
                 Id = Guid.NewGuid().ToString(),
                 UserName = "admin",
@@ -68,7 +68,7 @@ public class DbInitializer
 
         if (!_context.Functions.Any())
         {
-            _context.Functions.AddRange(new List<Function>
+            _context.Functions.AddRange(new List<CdsFunction>
             {
                 new()
                 {
@@ -207,7 +207,7 @@ public class DbInitializer
         }
 
         if (!_context.Commands.Any())
-            _context.Commands.AddRange(new List<Command>
+            _context.Commands.AddRange(new List<CdsCommand>
             {
                 new() { Id = "VIEW", Name = "Xem" },
                 new() { Id = "CREATE", Name = "Thêm" },
@@ -225,27 +225,27 @@ public class DbInitializer
         if (!_context.CommandInFunctions.Any())
             foreach (var function in functions)
             {
-                var createAction = new CommandInFunction
+                var createAction = new CdsCommandInFunction
                 {
                     CommandId = "CREATE",
                     FunctionId = function.Id
                 };
                 _context.CommandInFunctions.Add(createAction);
 
-                var updateAction = new CommandInFunction
+                var updateAction = new CdsCommandInFunction
                 {
                     CommandId = "UPDATE",
                     FunctionId = function.Id
                 };
                 _context.CommandInFunctions.Add(updateAction);
-                var deleteAction = new CommandInFunction
+                var deleteAction = new CdsCommandInFunction
                 {
                     CommandId = "DELETE",
                     FunctionId = function.Id
                 };
                 _context.CommandInFunctions.Add(deleteAction);
 
-                var viewAction = new CommandInFunction
+                var viewAction = new CdsCommandInFunction
                 {
                     CommandId = "VIEW",
                     FunctionId = function.Id
@@ -258,15 +258,15 @@ public class DbInitializer
             var adminRole = await _roleManager.FindByNameAsync(AdminRoleName);
             foreach (var function in functions)
             {
-                _context.Permissions.Add(new Permission(function.Id, adminRole.Id, "CREATE"));
-                _context.Permissions.Add(new Permission(function.Id, adminRole.Id, "UPDATE"));
-                _context.Permissions.Add(new Permission(function.Id, adminRole.Id, "DELETE"));
-                _context.Permissions.Add(new Permission(function.Id, adminRole.Id, "VIEW"));
+                _context.Permissions.Add(new CdsPermission(function.Id, adminRole.Id, "CREATE"));
+                _context.Permissions.Add(new CdsPermission(function.Id, adminRole.Id, "UPDATE"));
+                _context.Permissions.Add(new CdsPermission(function.Id, adminRole.Id, "DELETE"));
+                _context.Permissions.Add(new CdsPermission(function.Id, adminRole.Id, "VIEW"));
             }
 
             var memberRole = await _roleManager.FindByNameAsync(UserRoleName);
             foreach (var function in functions)
-                _context.Permissions.Add(new Permission(function.Id, memberRole.Id, "VIEW"));
+                _context.Permissions.Add(new CdsPermission(function.Id, memberRole.Id, "VIEW"));
         }
 
         #endregion CommandInFunction
@@ -275,7 +275,7 @@ public class DbInitializer
 
         if (!_context.Categories.Any())
         {
-            _context.Categories.AddRange(new List<Category>
+            _context.Categories.AddRange(new List<CdsCategory>
             {
                 new()
                 {
@@ -331,7 +331,7 @@ public class DbInitializer
 
         if (!_context.Labels.Any())
         {
-            _context.Labels.AddRange(new List<Label>
+            _context.Labels.AddRange(new List<CdsLabel>
             {
                 new()
                 {
@@ -381,7 +381,7 @@ public class DbInitializer
         #region Contact
 
         if (!_context.Contacts.Any())
-            _context.Contacts.AddRange(new Contact
+            _context.Contacts.AddRange(new CdsContact
             {
                 Email = "codesharing.contact@gmail.com",
                 Location = "Thành phố Hồ Chí Minh, Việt Nam",

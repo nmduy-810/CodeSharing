@@ -14,12 +14,12 @@ namespace CodeSharing.Server.Areas.Identity.Pages.Account;
 public class LoginWithRecoveryCodeModel : PageModel
 {
     private readonly ILogger<LoginWithRecoveryCodeModel> _logger;
-    private readonly SignInManager<User> _signInManager;
-    private readonly UserManager<User> _userManager;
+    private readonly SignInManager<CdsUser> _signInManager;
+    private readonly UserManager<CdsUser> _userManager;
 
     public LoginWithRecoveryCodeModel(
-        SignInManager<User> signInManager,
-        UserManager<User> userManager,
+        SignInManager<CdsUser> signInManager,
+        UserManager<CdsUser> userManager,
         ILogger<LoginWithRecoveryCodeModel> logger)
     {
         _signInManager = signInManager;

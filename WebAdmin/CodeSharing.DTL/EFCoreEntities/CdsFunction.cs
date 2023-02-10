@@ -3,8 +3,8 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CodeSharing.DTL.EFCoreEntities;
 
-[Table("Functions")]
-public class Function : EntityBase<string>
+[Table(CodeSharingDbConfig.Tables.CdsFunction.TableName)]
+public class CdsFunction : EntityBase<string>
 {
     [Key]
     [MaxLength(50)]

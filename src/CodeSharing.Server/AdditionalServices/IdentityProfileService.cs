@@ -13,13 +13,13 @@ namespace CodeSharing.Server.AdditionalServices;
 
 public class IdentityProfileService : IProfileService
 {
-    private readonly IUserClaimsPrincipalFactory<User> _claimsPrincipalFactory;
+    private readonly IUserClaimsPrincipalFactory<CdsUser> _claimsPrincipalFactory;
     private readonly ApplicationDbContext _context;
     private readonly RoleManager<IdentityRole> _roleManager;
-    private readonly UserManager<User> _userManager;
+    private readonly UserManager<CdsUser> _userManager;
 
-    public IdentityProfileService(IUserClaimsPrincipalFactory<User> claimsPrincipalFactory,
-        UserManager<User> userManager, ApplicationDbContext context, RoleManager<IdentityRole> roleManager)
+    public IdentityProfileService(IUserClaimsPrincipalFactory<CdsUser> claimsPrincipalFactory,
+        UserManager<CdsUser> userManager, ApplicationDbContext context, RoleManager<IdentityRole> roleManager)
     {
         _claimsPrincipalFactory = claimsPrincipalFactory;
         _userManager = userManager;

@@ -68,7 +68,7 @@ public class CategoryRepository : GenericRepository<ApplicationDbContext>, ICate
     {
         try
         {
-            var item = new Category
+            var item = new CdsCategory
             {
                 ParentCategoryId = request.ParentCategoryId,
                 Title = request.Title,

@@ -20,9 +20,9 @@ namespace CodeSharing.Server.Areas.Identity.Pages.Account;
 public class ResendEmailConfirmationModel : PageModel
 {
     private readonly IEmailSender _emailSender;
-    private readonly UserManager<User> _userManager;
+    private readonly UserManager<CdsUser> _userManager;
 
-    public ResendEmailConfirmationModel(UserManager<User> userManager, IEmailSender emailSender)
+    public ResendEmailConfirmationModel(UserManager<CdsUser> userManager, IEmailSender emailSender)
     {
         _userManager = userManager;
         _emailSender = emailSender;

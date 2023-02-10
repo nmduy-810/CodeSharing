@@ -15,7 +15,7 @@ public class SupportService : ISupportService
     }
     public async Task<bool> PostSupport(SupportCreateRequest request)
     {
-        var support = new Support
+        var support = new CdsSupport
         {
             Name = request.Name,
             Email = request.Email,

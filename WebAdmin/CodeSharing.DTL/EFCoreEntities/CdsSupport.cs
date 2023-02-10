@@ -4,8 +4,8 @@ using CodeSharing.DTL.Interfaces;
 
 namespace CodeSharing.DTL.EFCoreEntities;
 
-[Table("Supports")]
-public class Support : EntityBase<int>, IDateTracking
+[Table(CodeSharingDbConfig.Tables.CdsSupport.TableName)]
+public class CdsSupport : EntityBase<int>, IDateTracking
 {
     [Required]
     [MaxLength(100)]

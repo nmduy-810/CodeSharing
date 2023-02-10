@@ -13,12 +13,12 @@ namespace CodeSharing.Server.Areas.Identity.Pages.Account.Manage;
 
 public class SetPasswordModel : PageModel
 {
-    private readonly SignInManager<User> _signInManager;
-    private readonly UserManager<User> _userManager;
+    private readonly SignInManager<CdsUser> _signInManager;
+    private readonly UserManager<CdsUser> _userManager;
 
     public SetPasswordModel(
-        UserManager<User> userManager,
-        SignInManager<User> signInManager)
+        UserManager<CdsUser> userManager,
+        SignInManager<CdsUser> signInManager)
     {
         _userManager = userManager;
         _signInManager = signInManager;

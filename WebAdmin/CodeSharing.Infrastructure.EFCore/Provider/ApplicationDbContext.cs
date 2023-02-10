@@ -6,53 +6,53 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CodeSharing.Infrastructure.EFCore.Provider;
 
-public class ApplicationDbContext : IdentityDbContext<User>
+public class ApplicationDbContext : IdentityDbContext<CdsUser>
 {
     public ApplicationDbContext(DbContextOptions options) : base(options)
     {
     }
 
-    public DbSet<ActivityLog> ActivityLogs { set; get; } = default!;
+    public DbSet<CdsActivityLog> ActivityLogs { set; get; } = default!;
     
-    public DbSet<Attachment> Attachments { get; set; } = default!;
-    public DbSet<Category> Categories { set; get; } = default!;
-    public DbSet<Command> Commands { set; get; } = default!;
-    public DbSet<CommandInFunction> CommandInFunctions { set; get; } = default!;
-    public DbSet<Comment> Comments { set; get; } = default!;
-    public DbSet<Function> Functions { set; get; } = default!;
-    public DbSet<Post> Posts { set; get; } = default!;
-    public DbSet<Label> Labels { set; get; } = default!;
-    public DbSet<LabelInPost> LabelInPosts { set; get; } = default!;
-    public DbSet<Permission> Permissions { set; get; } = default!;
-    public DbSet<Report> Reports { set; get; } = default!;
-    public DbSet<Vote> Votes { set; get; } = default!;
-    public DbSet<Contact> Contacts { get; set; } = default!;
-    public DbSet<About> Abouts { get; set; } = default!;
-    public DbSet<Support> Supports { get; set; } = default!;
+    public DbSet<CdsAttachment> Attachments { get; set; } = default!;
+    public DbSet<CdsCategory> Categories { set; get; } = default!;
+    public DbSet<CdsCommand> Commands { set; get; } = default!;
+    public DbSet<CdsCommandInFunction> CommandInFunctions { set; get; } = default!;
+    public DbSet<CdsComment> Comments { set; get; } = default!;
+    public DbSet<CdsFunction> Functions { set; get; } = default!;
+    public DbSet<CdsPost> Posts { set; get; } = default!;
+    public DbSet<CdsLabel> Labels { set; get; } = default!;
+    public DbSet<CdsLabelInPost> LabelInPosts { set; get; } = default!;
+    public DbSet<CdsPermission> Permissions { set; get; } = default!;
+    public DbSet<CdsReport> Reports { set; get; } = default!;
+    public DbSet<CdsVote> Votes { set; get; } = default!;
+    public DbSet<CdsContact> Contacts { get; set; } = default!;
+    public DbSet<CdsAbout> Abouts { get; set; } = default!;
+    public DbSet<CdsSupport> Supports { get; set; } = default!;
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);
 
         // Create Index for Slug column of Category table
-        builder.Entity<Category>(entity => entity.HasIndex(p => p.Slug));
+        builder.Entity<CdsCategory>(entity => entity.HasIndex(p => p.Slug));
 
-        builder.Entity<Post>(entity => entity.HasIndex(p => p.Slug));
+        builder.Entity<CdsPost>(entity => entity.HasIndex(p => p.Slug));
 
         // Set two primary key is LabelId, PostId in LabelInPost table
-        builder.Entity<LabelInPost>().HasKey(c => new { c.LabelId, c.PostId });
+        builder.Entity<CdsLabelInPost>().HasKey(c => new { c.LabelId, c.PostId });
 
         // Set max length is 50 for Id of IdentityRole table and dont enter unicode value
         builder.Entity<IdentityRole>().Property(x => x.Id).HasMaxLength(50).IsUnicode(false);
 
         // Set max length is for Id of User table and dont enter unicode value
-        builder.Entity<User>().Property(x => x.Id).HasMaxLength(50).IsUnicode(false);
+        builder.Entity<CdsUser>().Property(x => x.Id).HasMaxLength(50).IsUnicode(false);
 
-        builder.Entity<Permission>().HasKey(c => new { c.RoleId, c.FunctionId, c.CommandId });
+        builder.Entity<CdsPermission>().HasKey(c => new { c.RoleId, c.FunctionId, c.CommandId });
 
-        builder.Entity<Vote>().HasKey(c => new { c.PostId, c.UserId });
+        builder.Entity<CdsVote>().HasKey(c => new { c.PostId, c.UserId });
 
-        builder.Entity<CommandInFunction>().HasKey(c => new { c.CommandId, c.FunctionId });
+        builder.Entity<CdsCommandInFunction>().HasKey(c => new { c.CommandId, c.FunctionId });
 
         //Set sequence for Id of Post table.
         builder.HasSequence("PostSequence");

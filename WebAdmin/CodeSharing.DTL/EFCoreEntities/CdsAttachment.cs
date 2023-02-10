@@ -4,8 +4,8 @@ using CodeSharing.DTL.Interfaces;
 
 namespace CodeSharing.DTL.EFCoreEntities;
 
-[Table("Attachments")]
-public class Attachment : EntityBase<int>, IDateTracking
+[Table(CodeSharingDbConfig.Tables.CdsAttachment.TableName)]
+public class CdsAttachment : EntityBase<int>, IDateTracking
 {
     [Required] [MaxLength(200)] public string FileName { get; set; } = default!;
 

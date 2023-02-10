@@ -4,8 +4,8 @@ using CodeSharing.DTL.Interfaces;
 
 namespace CodeSharing.DTL.EFCoreEntities;
 
-[Table("Reports")]
-public class Report : EntityBase<int>, IDateTracking
+[Table(CodeSharingDbConfig.Tables.CdsReport.TableName)]
+public class CdsReport : EntityBase<int>, IDateTracking
 {
     public int PostId { get; set; }
 

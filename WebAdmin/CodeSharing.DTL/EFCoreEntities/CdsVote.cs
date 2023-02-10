@@ -4,8 +4,8 @@ using CodeSharing.DTL.Interfaces;
 
 namespace CodeSharing.DTL.EFCoreEntities;
 
-[Table("Votes")]
-public class Vote : IDateTracking
+[Table(CodeSharingDbConfig.Tables.CdsVote.TableName)]
+public class CdsVote : IDateTracking
 {
     public int PostId { get; set; }
 

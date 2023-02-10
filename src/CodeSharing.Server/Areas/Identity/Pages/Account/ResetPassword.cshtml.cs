@@ -15,9 +15,9 @@ namespace CodeSharing.Server.Areas.Identity.Pages.Account;
 
 public class ResetPasswordModel : PageModel
 {
-    private readonly UserManager<User> _userManager;
+    private readonly UserManager<CdsUser> _userManager;
 
-    public ResetPasswordModel(UserManager<User> userManager)
+    public ResetPasswordModel(UserManager<CdsUser> userManager)
     {
         _userManager = userManager;
     }

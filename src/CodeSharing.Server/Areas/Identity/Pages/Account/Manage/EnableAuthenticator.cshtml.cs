@@ -19,10 +19,10 @@ public class EnableAuthenticatorModel : PageModel
     private const string AuthenticatorUriFormat = "otpauth://totp/{0}:{1}?secret={2}&issuer={0}&digits=6";
     private readonly ILogger<EnableAuthenticatorModel> _logger;
     private readonly UrlEncoder _urlEncoder;
-    private readonly UserManager<User> _userManager;
+    private readonly UserManager<CdsUser> _userManager;
 
     public EnableAuthenticatorModel(
-        UserManager<User> userManager,
+        UserManager<CdsUser> userManager,
         ILogger<EnableAuthenticatorModel> logger,
         UrlEncoder urlEncoder)
     {
@@ -114,7 +114,7 @@ public class EnableAuthenticatorModel : PageModel
         return RedirectToPage("./TwoFactorAuthentication");
     }
 
-    private async Task LoadSharedKeyAndQrCodeUriAsync(User user)
+    private async Task LoadSharedKeyAndQrCodeUriAsync(CdsUser user)
     {
         // Load the authenticator key & QR code URI to display on the form
         var unformattedKey = await _userManager.GetAuthenticatorKeyAsync(user);

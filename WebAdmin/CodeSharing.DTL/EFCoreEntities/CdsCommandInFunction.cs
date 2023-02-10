@@ -3,8 +3,8 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CodeSharing.DTL.EFCoreEntities;
 
-[Table("CommandInFunctions")]
-public class CommandInFunction
+[Table(CodeSharingDbConfig.Tables.CdsCommandInFunction.TableName)]
+public class CdsCommandInFunction
 {
     [Required]
     [MaxLength(50)]

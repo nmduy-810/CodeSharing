@@ -13,12 +13,12 @@ namespace CodeSharing.Server.Areas.Identity.Pages.Account.Manage;
 
 public class IndexModel : PageModel
 {
-    private readonly SignInManager<User> _signInManager;
-    private readonly UserManager<User> _userManager;
+    private readonly SignInManager<CdsUser> _signInManager;
+    private readonly UserManager<CdsUser> _userManager;
 
     public IndexModel(
-        UserManager<User> userManager,
-        SignInManager<User> signInManager)
+        UserManager<CdsUser> userManager,
+        SignInManager<CdsUser> signInManager)
     {
         _userManager = userManager;
         _signInManager = signInManager;
@@ -44,7 +44,7 @@ public class IndexModel : PageModel
     [BindProperty]
     public InputModel Input { get; set; }
 
-    private async Task LoadAsync(User user)
+    private async Task LoadAsync(CdsUser user)
     {
         var userName = await _userManager.GetUserNameAsync(user);
         var phoneNumber = await _userManager.GetPhoneNumberAsync(user);

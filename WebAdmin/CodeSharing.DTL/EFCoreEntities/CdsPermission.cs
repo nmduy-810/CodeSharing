@@ -3,10 +3,10 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CodeSharing.DTL.EFCoreEntities;
 
-[Table("Permissions")]
-public class Permission
+[Table(CodeSharingDbConfig.Tables.CdsPermission.TableName)]
+public class CdsPermission
 {
-    public Permission(string functionId, string roleId, string commandId)
+    public CdsPermission(string functionId, string roleId, string commandId)
     {
         FunctionId = functionId;
         RoleId = roleId;

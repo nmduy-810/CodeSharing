@@ -4,8 +4,8 @@ using CodeSharing.DTL.Interfaces;
 
 namespace CodeSharing.DTL.EFCoreEntities;
 
-[Table("ActivityLogs")]
-public class ActivityLog : EntityBase<int>, IDateTracking
+[Table(CodeSharingDbConfig.Tables.CdsActivityLog.TableName)]
+public class CdsActivityLog : EntityBase<int>, IDateTracking
 {
     [Required]
     [MaxLength(50)]

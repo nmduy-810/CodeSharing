@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace CodeSharing.DTL.EFCoreEntities;
 
-public class User : IdentityUser, IDateTracking
+public class CdsUser : IdentityUser, IDateTracking
 {
     [Required]
     [MaxLength(50)]

@@ -4,8 +4,8 @@ using CodeSharing.DTL.Interfaces;
 
 namespace CodeSharing.DTL.EFCoreEntities;
 
-[Table("Categories")]
-public class Category : EntityBase<int>, IDateTracking 
+[Table(CodeSharingDbConfig.Tables.CdsCategory.TableName)]
+public class CdsCategory : EntityBase<int>, IDateTracking 
 {
     public int? ParentCategoryId { get; set; }
 

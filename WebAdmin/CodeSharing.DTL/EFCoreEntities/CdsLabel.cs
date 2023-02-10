@@ -3,8 +3,8 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CodeSharing.DTL.EFCoreEntities;
 
-[Table("Labels")]
-public class Label : EntityBase<string>
+[Table(CodeSharingDbConfig.Tables.CdsLabel.TableName)]
+public class CdsLabel : EntityBase<string>
 {
     [MaxLength(50)]
     [Column(TypeName = "varchar(50)")]

@@ -11,10 +11,10 @@ namespace CodeSharing.Server.Areas.Identity.Pages.Account.Manage;
 public class PersonalDataModel : PageModel
 {
     private readonly ILogger<PersonalDataModel> _logger;
-    private readonly UserManager<User> _userManager;
+    private readonly UserManager<CdsUser> _userManager;
 
     public PersonalDataModel(
-        UserManager<User> userManager,
+        UserManager<CdsUser> userManager,
         ILogger<PersonalDataModel> logger)
     {
         _userManager = userManager;

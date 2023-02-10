@@ -21,10 +21,10 @@ namespace CodeSharing.Server.Areas.Identity.Pages.Account;
 public class ForgotPasswordModel : PageModel
 {
     private readonly IEmailSender _emailSender;
-    private readonly UserManager<User> _userManager;
+    private readonly UserManager<CdsUser> _userManager;
     private readonly IViewRenderService _viewRenderService;
 
-    public ForgotPasswordModel(UserManager<User> userManager, IEmailSender emailSender,
+    public ForgotPasswordModel(UserManager<CdsUser> userManager, IEmailSender emailSender,
         IViewRenderService viewRenderService)
     {
         _userManager = userManager;

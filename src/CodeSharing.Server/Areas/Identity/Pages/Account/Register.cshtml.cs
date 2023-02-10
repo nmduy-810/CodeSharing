@@ -16,16 +16,16 @@ namespace CodeSharing.Server.Areas.Identity.Pages.Account;
 public class RegisterModel : PageModel
 {
     private readonly IEmailSender _emailSender;
-    private readonly IUserEmailStore<User> _emailStore;
+    private readonly IUserEmailStore<CdsUser> _emailStore;
     private readonly ILogger<RegisterModel> _logger;
-    private readonly SignInManager<User> _signInManager;
-    private readonly UserManager<User> _userManager;
-    private readonly IUserStore<User> _userStore;
+    private readonly SignInManager<CdsUser> _signInManager;
+    private readonly UserManager<CdsUser> _userManager;
+    private readonly IUserStore<CdsUser> _userStore;
 
     public RegisterModel(
-        UserManager<User> userManager,
-        IUserStore<User> userStore,
-        SignInManager<User> signInManager,
+        UserManager<CdsUser> userManager,
+        IUserStore<CdsUser> userStore,
+        SignInManager<CdsUser> signInManager,
         ILogger<RegisterModel> logger,
         IEmailSender emailSender)
     {
@@ -122,11 +122,11 @@ public class RegisterModel : PageModel
         return Page();
     }
 
-    private User CreateUser()
+    private CdsUser CreateUser()
     {
         try
         {
-            return Activator.CreateInstance<User>();
+            return Activator.CreateInstance<CdsUser>();
         }
         catch
         {
@@ -136,11 +136,11 @@ public class RegisterModel : PageModel
         }
     }
 
-    private IUserEmailStore<User> GetEmailStore()
+    private IUserEmailStore<CdsUser> GetEmailStore()
     {
         if (!_userManager.SupportsUserEmail)
             throw new NotSupportedException("The default UI requires a user store with email support.");
-        return (IUserEmailStore<User>)_userStore;
+        return (IUserEmailStore<CdsUser>)_userStore;
     }
 
     /// <summary>

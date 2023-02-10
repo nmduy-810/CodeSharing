@@ -13,11 +13,11 @@ namespace CodeSharing.Server.Areas.Identity.Pages.Account.Manage;
 public class TwoFactorAuthenticationModel : PageModel
 {
     private readonly ILogger<TwoFactorAuthenticationModel> _logger;
-    private readonly SignInManager<User> _signInManager;
-    private readonly UserManager<User> _userManager;
+    private readonly SignInManager<CdsUser> _signInManager;
+    private readonly UserManager<CdsUser> _userManager;
 
     public TwoFactorAuthenticationModel(
-        UserManager<User> userManager, SignInManager<User> signInManager, ILogger<TwoFactorAuthenticationModel> logger)
+        UserManager<CdsUser> userManager, SignInManager<CdsUser> signInManager, ILogger<TwoFactorAuthenticationModel> logger)
     {
         _userManager = userManager;
         _signInManager = signInManager;

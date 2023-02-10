@@ -3,8 +3,8 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CodeSharing.DTL.EFCoreEntities;
 
-[Table("Contacts")]
-public class Contact : EntityBase<int>
+[Table(CodeSharingDbConfig.Tables.CdsContact.TableName)]
+public class CdsContact : EntityBase<int>
 {
     [MaxLength(12)] 
     public string Phone { get; set; } = default!;

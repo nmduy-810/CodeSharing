@@ -120,7 +120,7 @@ public static class ServiceExtensions
         IConfiguration configuration)
     {
         // Setup Identity
-        services.AddIdentity<User, IdentityRole>()
+        services.AddIdentity<CdsUser, IdentityRole>()
             .AddEntityFrameworkStores<ApplicationDbContext>();
         
         services.AddIdentityServer(options =>
@@ -134,7 +134,7 @@ public static class ServiceExtensions
             .AddInMemoryClients(configuration.GetSection("IdentityServer:Clients"))
             .AddInMemoryIdentityResources(Config.Ids)
             .AddInMemoryApiScopes(Config.ApiScopes)
-            .AddAspNetIdentity<User>()
+            .AddAspNetIdentity<CdsUser>()
             .AddProfileService<IdentityProfileService>()
             .AddDeveloperSigningCredential();
     }
@@ -177,9 +177,9 @@ public static class ServiceExtensions
     private static void ConfigureTokenIdentityCore(this IServiceCollection services)
     {
         // Setup token when reset password using identity
-        services.AddIdentityCore<User>(options => options.SignIn.RequireConfirmedAccount = true)
+        services.AddIdentityCore<CdsUser>(options => options.SignIn.RequireConfirmedAccount = true)
             .AddEntityFrameworkStores<ApplicationDbContext>()
-            .AddTokenProvider<DataProtectorTokenProvider<User>>(TokenOptions.DefaultProvider);
+            .AddTokenProvider<DataProtectorTokenProvider<CdsUser>>(TokenOptions.DefaultProvider);
     }
 
     private static void ConfigureAuthentication(this IServiceCollection services, IConfiguration configuration)

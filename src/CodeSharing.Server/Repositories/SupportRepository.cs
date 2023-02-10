@@ -13,7 +13,7 @@ public class SupportRepository : GenericRepository<ApplicationDbContext>, ISuppo
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
     
-    public async Task<bool> PostSupport(Support support)
+    public async Task<bool> PostSupport(CdsSupport support)
     {
         try
         {

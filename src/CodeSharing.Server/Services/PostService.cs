@@ -20,9 +20,9 @@ public class PostService : IPostService
     private readonly ICacheService _distributedCacheService;
     private readonly ISequenceService _sequenceService;
     private readonly IStorageService _storageService;
-    private readonly UserManager<User> _userManager;
+    private readonly UserManager<CdsUser> _userManager;
 
-    public PostService(IPostRepository repository, ICacheService distributedCacheService, ISequenceService sequenceService, IStorageService storageService, UserManager<User> userManager)
+    public PostService(IPostRepository repository, ICacheService distributedCacheService, ISequenceService sequenceService, IStorageService storageService, UserManager<CdsUser> userManager)
     {
         _repository = repository;
         _distributedCacheService = distributedCacheService;
@@ -113,7 +113,7 @@ public class PostService : IPostService
 
     public async Task<bool> Post(PostCreateRequest request, string userId)
     {
-        var post = new Post
+        var post = new CdsPost
         {
             CategoryId = request.CategoryId,
             Title = request.Title,

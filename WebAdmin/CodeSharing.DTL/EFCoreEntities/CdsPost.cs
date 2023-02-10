@@ -4,8 +4,8 @@ using CodeSharing.DTL.Interfaces;
 
 namespace CodeSharing.DTL.EFCoreEntities;
 
-[Table("Posts")]
-public class Post : IDateTracking
+[Table(CodeSharingDbConfig.Tables.CdsPost.TableName)]
+public class CdsPost : IDateTracking
 {
     [Key]
     [DatabaseGenerated(DatabaseGeneratedOption.None)]

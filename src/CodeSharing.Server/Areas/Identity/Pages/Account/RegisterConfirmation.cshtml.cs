@@ -18,9 +18,9 @@ namespace CodeSharing.Server.Areas.Identity.Pages.Account;
 public class RegisterConfirmationModel : PageModel
 {
     private readonly IEmailSender _sender;
-    private readonly UserManager<User> _userManager;
+    private readonly UserManager<CdsUser> _userManager;
 
-    public RegisterConfirmationModel(UserManager<User> userManager, IEmailSender sender)
+    public RegisterConfirmationModel(UserManager<CdsUser> userManager, IEmailSender sender)
     {
         _userManager = userManager;
         _sender = sender;

@@ -3,8 +3,8 @@ using CodeSharing.DTL.Interfaces;
 
 namespace CodeSharing.DTL.EFCoreEntities;
 
-[Table("Abouts")]
-public class About : EntityBase<int>, IDateTracking
+[Table(CodeSharingDbConfig.Tables.CdsAbout.TableName)]
+public class CdsAbout : EntityBase<int>, IDateTracking
 {
     public string Image { get; set; } = default!;
     public string Description { get; set; } = default!;

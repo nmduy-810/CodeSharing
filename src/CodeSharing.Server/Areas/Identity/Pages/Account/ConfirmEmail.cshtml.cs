@@ -14,9 +14,9 @@ namespace CodeSharing.Server.Areas.Identity.Pages.Account;
 
 public class ConfirmEmailModel : PageModel
 {
-    private readonly UserManager<User> _userManager;
+    private readonly UserManager<CdsUser> _userManager;
 
-    public ConfirmEmailModel(UserManager<User> userManager)
+    public ConfirmEmailModel(UserManager<CdsUser> userManager)
     {
         _userManager = userManager;
     }

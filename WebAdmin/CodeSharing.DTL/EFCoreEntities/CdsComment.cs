@@ -4,8 +4,8 @@ using CodeSharing.DTL.Interfaces;
 
 namespace CodeSharing.DTL.EFCoreEntities;
 
-[Table("Comments")]
-public class Comment : EntityBase<int>, IDateTracking
+[Table(CodeSharingDbConfig.Tables.CdsComment.TableName)]
+public class CdsComment : EntityBase<int>, IDateTracking
 {
     [MaxLength(500)] 
     [Required] 

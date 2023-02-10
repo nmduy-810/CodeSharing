@@ -8,6 +8,6 @@ public class EfCoreMapperProfile : Profile
 {
     public EfCoreMapperProfile()
     {
-        CreateMap<About, AboutVm>().ReverseMap();
+        CreateMap<CdsAbout, AboutVm>().ReverseMap();
     }
 }

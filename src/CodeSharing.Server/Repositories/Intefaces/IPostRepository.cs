@@ -32,7 +32,7 @@ public interface IPostRepository : IGenericRepository<ApplicationDbContext>
 
     Task<Pagination<PostQuickVm>> GetPostsPaging(int pageIndex, int pageSize);
 
-    Task<bool> Post(Post post);
+    Task<bool> Post(CdsPost post);
     
     Task<bool> Put(int id, PostCreateRequest request);
 
@@ -78,5 +78,5 @@ public interface IPostRepository : IGenericRepository<ApplicationDbContext>
 
     #endregion Comment
     
-    Task ProcessLabel(PostCreateRequest request, Post post);
+    Task ProcessLabel(PostCreateRequest request, CdsPost post);
 }

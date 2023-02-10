@@ -5,5 +5,5 @@ namespace CodeSharing.Server.Repositories.Intefaces;
 
 public interface ISupportRepository : IGenericRepository<ApplicationDbContext>
 {
-    Task<bool> PostSupport(Support support);
+    Task<bool> PostSupport(CdsSupport support);
 }

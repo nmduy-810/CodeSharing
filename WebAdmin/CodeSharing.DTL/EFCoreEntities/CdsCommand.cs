@@ -3,8 +3,8 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CodeSharing.DTL.EFCoreEntities;
 
-[Table("Commands")]
-public class Command
+[Table(CodeSharingDbConfig.Tables.CdsCommand.TableName)]
+public class CdsCommand
 {
     [MaxLength(50)]
     [Column(TypeName = "varchar(50)")]

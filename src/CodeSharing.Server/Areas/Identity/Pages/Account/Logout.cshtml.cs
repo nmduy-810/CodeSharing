@@ -14,11 +14,11 @@ namespace CodeSharing.Server.Areas.Identity.Pages.Account;
 public class LogoutModel : PageModel
 {
     private readonly ILogger<LogoutModel> _logger;
-    private readonly SignInManager<User> _signInManager;
+    private readonly SignInManager<CdsUser> _signInManager;
 
     private IIdentityServerInteractionService _interaction;
 
-    public LogoutModel(SignInManager<User> signInManager, ILogger<LogoutModel> logger,
+    public LogoutModel(SignInManager<CdsUser> signInManager, ILogger<LogoutModel> logger,
         IIdentityServerInteractionService interaction)
     {
         _signInManager = signInManager;
