@@ -1,4 +1,4 @@
-namespace CodeSharing.Core.Services.Utils.Interfaces;
+namespace CodeSharing.Core.Services.Utils;
 
 public interface IUtils
 {

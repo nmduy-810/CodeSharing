@@ -1,5 +1,5 @@
 using CodeSharing.Server.Services.Interfaces;
-using CodeSharing.Core.Services.Utils.Interfaces;
+using CodeSharing.Core.Services.Utils;
 
 namespace CodeSharing.Server.Services;
 
