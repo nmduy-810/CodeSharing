@@ -1,19 +1,18 @@
 using CodeSharing.DTL.EFCoreEntities;
 using CodeSharing.Infrastructure.EFCore.Provider;
-using CodeSharing.Server.Repositories.Intefaces;
+using CodeSharing.Infrastructure.EFCore.Repositories.Core;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
-namespace CodeSharing.Server.Repositories;
+namespace CodeSharing.Infrastructure.EFCore.Repositories.About;
 
 public class AboutRepository : CoreRepository<CdsAbout>, IAboutRepository
 {
     private readonly ILogger<AboutRepository> _logger;
-    private readonly IHttpContextAccessor _httpContextAccessor;
 
-    public AboutRepository(ApplicationDbContext context, ILogger<AboutRepository> logger, IHttpContextAccessor httpContextAccessor) : base(context)
+    public AboutRepository(ApplicationDbContext context, ILogger<AboutRepository> logger) : base(context)
     {
         _logger = logger ?? throw new ArgumentException(null, nameof(logger));
-        _httpContextAccessor = httpContextAccessor;
     }
 
     public async Task<List<CdsAbout>> GetAbouts()

@@ -1,6 +1,7 @@
 using CodeSharing.DTL.EFCoreEntities;
+using CodeSharing.Infrastructure.EFCore.Repositories.Core;
 
-namespace CodeSharing.Server.Repositories.Intefaces;
+namespace CodeSharing.Infrastructure.EFCore.Repositories.About;
 
 public interface IAboutRepository : ICoreRepository<CdsAbout>
 {

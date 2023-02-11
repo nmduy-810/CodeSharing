@@ -7,11 +7,9 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <Folder Include="Repositories\About" />
       <Folder Include="Repositories\Category" />
       <Folder Include="Repositories\Command" />
       <Folder Include="Repositories\Contact" />
-      <Folder Include="Repositories\Core" />
       <Folder Include="Repositories\Function" />
       <Folder Include="Repositories\Generic" />
       <Folder Include="Repositories\Label" />

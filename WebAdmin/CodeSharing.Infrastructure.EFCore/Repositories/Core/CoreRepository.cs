@@ -1,9 +1,8 @@
 using System.Linq.Expressions;
 using CodeSharing.Infrastructure.EFCore.Provider;
-using CodeSharing.Server.Repositories.Intefaces;
 using Microsoft.EntityFrameworkCore;
 
-namespace CodeSharing.Server.Repositories;
+namespace CodeSharing.Infrastructure.EFCore.Repositories.Core;
 
 public class CoreRepository<TEntity> : ICoreRepository<TEntity> where TEntity : class
 {

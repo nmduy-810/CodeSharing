@@ -14,6 +14,8 @@ using CodeSharing.Server.Services.Interfaces;
 using CodeSharing.DTL.Models.Commons;
 using CodeSharing.Infrastructure.EFCore;
 using CodeSharing.Infrastructure.EFCore.Provider;
+using CodeSharing.Infrastructure.EFCore.Repositories.About;
+using CodeSharing.Infrastructure.EFCore.Repositories.Core;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;

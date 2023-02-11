@@ -5,6 +5,7 @@ using CodeSharing.Server.Repositories.Intefaces;
 using CodeSharing.Server.Services.Interfaces;
 using CodeSharing.Core.Services.Utils.Interfaces;
 using CodeSharing.DTL.Models.Contents.About;
+using CodeSharing.Infrastructure.EFCore.Repositories.About;
 
 namespace CodeSharing.Server.Services;
 

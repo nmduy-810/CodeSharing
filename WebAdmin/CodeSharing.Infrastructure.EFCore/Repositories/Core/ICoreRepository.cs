@@ -1,6 +1,6 @@
 using System.Linq.Expressions;
 
-namespace CodeSharing.Server.Repositories.Intefaces;
+namespace CodeSharing.Infrastructure.EFCore.Repositories.Core;
 
 public interface ICoreRepository<TEntity>
 {

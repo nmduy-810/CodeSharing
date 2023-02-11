@@ -31,7 +31,7 @@ public static class AmazonS3Helper
             fileUrl = $"{_serverUrl}/{_bucketName}/{filePath}";
             return true;
         }
-        catch (Exception e)
+        catch (Exception)
         {
             return false;
         }
