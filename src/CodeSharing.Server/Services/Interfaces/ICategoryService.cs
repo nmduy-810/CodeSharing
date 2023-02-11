@@ -1,16 +1,17 @@
+using CodeSharing.Core.Models.BaseModels;
 using CodeSharing.DTL.Models.Contents.Category;
 
 namespace CodeSharing.Server.Services.Interfaces;
 
 public interface ICategoryService
 {
-    Task<List<CategoryVm>> GetCategories();
+    Task<Result<List<CategoryVm>>> GetCategories();
     
-    Task<CategoryVm?> GetById(int id);
+    Task<Result<CategoryVm?>> GetById(int id);
     
-    Task<bool> PostCategory(CategoryCreateRequest request);
+    Task<Result<CategoryVm?>> PostCategory(CategoryCreateRequest request);
 
-    Task<bool> PutCategory(int id, CategoryUpdateRequest request);
+    Task<Result<CategoryVm?>> PutCategory(int id, CategoryUpdateRequest request);
 
-    Task<bool> DeleteCategory(int id);
+    Task<Result<CategoryVm?>> DeleteCategory(int id);
 }

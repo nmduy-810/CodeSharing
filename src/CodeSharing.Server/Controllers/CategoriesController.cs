@@ -21,19 +21,14 @@ public class CategoriesController : BaseController
     [HttpGet]
     public async Task<IActionResult> GetCategories()
     {
-        var result = await _categoryService.GetCategories();
-        return Ok(result);
+        return CodeSharingResult(await _categoryService.GetCategories());
     }
 
     [AllowAnonymous]
     [HttpGet("{id:int}")]
     public async Task<IActionResult> GetById([FromRoute] int id)
     {
-        var result = await _categoryService.GetById(id);
-        if (result == null)
-            return NotFound(new ApiNotFoundResponse($"Not found CATEGORY item for id = {id} in database"));
-        
-        return Ok(result);
+        return CodeSharingResult(await _categoryService.GetById(id));
     }
 
     [HttpPost]
@@ -41,11 +36,7 @@ public class CategoriesController : BaseController
     [ApiValidationFilter]
     public async Task<IActionResult> PostCategory([FromBody] CategoryCreateRequest request)
     {
-        var result = await _categoryService.PostCategory(request);
-        if (result)
-            return Ok(result);
-
-        return BadRequest(new ApiBadRequestResponse("Insert CATEGORY failed"));
+        return CodeSharingResult(await _categoryService.PostCategory(request));
     }
 
     [HttpPut("{id:int}")]
@@ -53,21 +44,13 @@ public class CategoriesController : BaseController
     [ApiValidationFilter]
     public async Task<IActionResult> PutCategory([FromRoute] int id, [FromBody] CategoryUpdateRequest request)
     {
-        var result = await _categoryService.PutCategory(id, request);
-        if (result)
-            return NoContent();
-
-        return BadRequest(new ApiBadRequestResponse("Update CATEGORY failed"));
+        return CodeSharingResult(await _categoryService.PutCategory(id, request));
     }
 
     [HttpDelete("{id:int}")]
     [ClaimRequirement(FunctionCodeEnum.CONTENT_CATEGORY, CommandCodeEnum.DELETE)]
     public async Task<IActionResult> DeleteCategory([FromRoute] int id)
     {
-        var result = await _categoryService.DeleteCategory(id);
-        if (result)
-            return Ok(result);
-        
-        return BadRequest(new ApiBadRequestResponse("Delete CATEGORY failed"));
+        return CodeSharingResult(await _categoryService.DeleteCategory(id));
     }
 }
