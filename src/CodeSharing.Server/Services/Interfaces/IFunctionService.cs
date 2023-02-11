@@ -1,12 +1,13 @@
+using CodeSharing.Core.Models.BaseModels;
 using CodeSharing.DTL.Models.Systems.Function;
 
 namespace CodeSharing.Server.Services.Interfaces;
 
 public interface IFunctionService
 {
-    Task<List<FunctionVm>> GetFunctions();
+    Task<Result<List<FunctionVm>>> GetFunctions();
 
-    Task<FunctionVm?> GetById(string id);
+    Task<Result<FunctionVm?>> GetById(string id);
 
-    Task<List<FunctionVm>> GetFunctionsByParentId(string functionId);
+    Task<Result<List<FunctionVm>>> GetFunctionsByParentId(string functionId);
 }

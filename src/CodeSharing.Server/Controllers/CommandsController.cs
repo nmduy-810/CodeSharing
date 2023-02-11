@@ -15,7 +15,6 @@ public class CommandsController : BaseController
     [HttpGet]
     public async Task<IActionResult> GetCommands()
     {
-        var result = await _commandService.GetCommands();
-        return Ok(result);
+        return CodeSharingResult(await _commandService.GetCommands());
     }
 }

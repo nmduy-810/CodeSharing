@@ -1,5 +1,4 @@
 using CodeSharing.DTL.EFCoreEntities;
-using CodeSharing.DTL.Models.Contents.Category;
 using CodeSharing.Infrastructure.EFCore.Repositories.Core;
 
 namespace CodeSharing.Infrastructure.EFCore.Repositories.Category;

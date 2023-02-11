@@ -22,30 +22,21 @@ public class ContactsController : BaseController
     [HttpGet]
     public async Task<IActionResult> GetContacts()
     {
-        var result = await _contactService.GetContacts();
-        return Ok(result);
+        return CodeSharingResult(await _contactService.GetContacts());
     }
 
     [AllowAnonymous]
     [HttpGet("{id:int}")]
     public async Task<IActionResult> GetById(int id)
     {
-        var result = await _contactService.GetById(id);
-        if (result == null)
-            return NotFound(new ApiNotFoundResponse($"Not found CONTACT item for id = {id} in database"));
-        
-        return Ok(result);
+        return CodeSharingResult(await _contactService.GetById(id));
     }
 
     [AllowAnonymous]
     [HttpPut("{id:int}")]
     public async Task<IActionResult> PutContact(int id, ContactCreateRequest request)
     {
-        var result = await _contactService.PutContact(id, request);
-        if (result)
-            return NoContent();
-
-        return BadRequest(new ApiBadRequestResponse("Update CONTACT failed"));
+        return CodeSharingResult(await _contactService.PutContact(id, request));
     }
     
     [AllowAnonymous]

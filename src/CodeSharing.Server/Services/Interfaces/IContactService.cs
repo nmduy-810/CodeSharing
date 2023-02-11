@@ -1,12 +1,13 @@
+using CodeSharing.Core.Models.BaseModels;
 using CodeSharing.DTL.Models.Contents.Contact;
 
 namespace CodeSharing.Server.Services.Interfaces;
 
 public interface IContactService
 {
-    Task<List<ContactVm>> GetContacts();
+    Task<Result<List<ContactVm>>> GetContacts();
 
-    Task<ContactVm?> GetById(int id);
+    Task<Result<ContactVm?>> GetById(int id);
 
-    Task<bool> PutContact(int id, ContactCreateRequest request);
+    Task<Result<ContactVm?>> PutContact(int id, ContactCreateRequest request);
 }
