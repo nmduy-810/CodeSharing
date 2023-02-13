@@ -30,7 +30,7 @@ namespace CodeSharing.Server.Extensions;
 
 public static class ServiceExtensions
 {
-    static string CodeSharingSpecificOrigins = "CodeSharingSpecificOrigins";
+    const string CodeSharingSpecificOrigins = "CodeSharingSpecificOrigins";
     
     public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
     {
@@ -242,7 +242,7 @@ public static class ServiceExtensions
     private static void ConfigureApiBehaviourOptions(this IServiceCollection services)
     {
         services.Configure<ApiBehaviorOptions>(options => { options.SuppressModelStateInvalidFilter = true; });
-        services.Configure<ApiBehaviorOptions>(options => { options.InvalidModelStateResponseFactory = ctx => new ModelStateFeatureFilter(); });
+        services.Configure<ApiBehaviorOptions>(options => { options.InvalidModelStateResponseFactory = _ => new ModelStateFeatureFilter(); });
     }
 
     private static void AddInfrastructureServices(this IServiceCollection services, IConfiguration configuration)

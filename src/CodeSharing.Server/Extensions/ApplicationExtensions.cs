@@ -1,4 +1,3 @@
-using CodeSharing.Server.Middleware;
 
 namespace CodeSharing.Server.Extensions;
 
