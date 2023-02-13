@@ -1,10 +1,13 @@
 using AutoMapper;
 using CodeSharing.DTL.EFCoreEntities;
+using CodeSharing.DTL.Models.Commons;
 using CodeSharing.DTL.Models.Contents.About;
 using CodeSharing.DTL.Models.Contents.Category;
 using CodeSharing.DTL.Models.Contents.Contact;
 using CodeSharing.DTL.Models.Systems.Command;
 using CodeSharing.DTL.Models.Systems.Function;
+using CodeSharing.DTL.Models.Systems.Role;
+using Microsoft.AspNetCore.Identity;
 
 namespace CodeSharing.DTL;
 
@@ -39,6 +42,18 @@ public class EfCoreMapperProfile : Profile
         #region Function
 
         CreateMap<CdsFunction, FunctionVm>().ReverseMap();
+
+        #endregion
+
+        #region Support
+
+        CreateMap<CdsSupport, SupportVm>().ReverseMap();
+
+        #endregion
+
+        #region Role
+
+        CreateMap<IdentityRole, RoleVm>().ReverseMap();
 
         #endregion
     }

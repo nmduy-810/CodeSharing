@@ -18,15 +18,13 @@ public class RolesController : BaseController
     [ClaimRequirement(FunctionCodeEnum.SYSTEM_ROLE, CommandCodeEnum.VIEW)]
     public async Task<IActionResult> GetRoles()
     {
-        var result = await _roleService.GetRoles();
-        return Ok(result);
+        return CodeSharingResult(await _roleService.GetRoles());
     }
 
     [HttpGet("{id}")]
     [ClaimRequirement(FunctionCodeEnum.SYSTEM_ROLE, CommandCodeEnum.VIEW)]
     public async Task<IActionResult> GetById(string id)
     {
-        var result = await _roleService.GetById(id);
-        return Ok(result);
+        return CodeSharingResult(await _roleService.GetById(id));
     }
 }
