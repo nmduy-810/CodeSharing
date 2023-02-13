@@ -1,10 +1,11 @@
 using CodeSharing.DTL.EFCoreEntities;
 using CodeSharing.Infrastructure.EFCore.Provider;
-using CodeSharing.Server.Repositories.Intefaces;
+using CodeSharing.Infrastructure.EFCore.Repositories.Core;
+using Microsoft.Extensions.Logging;
 
-namespace CodeSharing.Server.Repositories;
+namespace CodeSharing.Infrastructure.EFCore.Repositories.Support;
 
-public class SupportRepository : GenericRepository<ApplicationDbContext>, ISupportRepository
+public class SupportRepository : CoreRepository<CdsSupport>, ISupportRepository
 {
     private readonly ILogger<SupportRepository> _logger;
     
@@ -13,18 +14,17 @@ public class SupportRepository : GenericRepository<ApplicationDbContext>, ISuppo
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
     
-    public async Task<bool> PostSupport(CdsSupport support)
+    public async Task<CdsSupport?> PostSupport(CdsSupport support)
     {
         try
         {
-            await _context.CdsSupports.AddAsync(support);
-            var result = await _context.SaveChangesAsync();
-            return result > 0;
+            var entity = await CreateAsync(support);
+            return await SaveChangesAsync() > 0 ? entity : null;
         }
         catch (Exception e)
         {
             _logger.LogError("{Message}", e.Message);
-            return false;
+            return null;
         }
     }
 }

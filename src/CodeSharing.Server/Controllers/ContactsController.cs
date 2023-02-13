@@ -1,5 +1,4 @@
 using CodeSharing.Server.Services.Interfaces;
-using CodeSharing.Utilities.Helpers;
 using CodeSharing.DTL.Models.Contents.Contact;
 using CodeSharing.DTL.Models.Contents.Support;
 using Microsoft.AspNetCore.Authorization;
@@ -43,10 +42,6 @@ public class ContactsController : BaseController
     [HttpPost]
     public async Task<IActionResult> PostSupport([FromBody] SupportCreateRequest request)
     {
-        var result = await _supportService.PostSupport(request);
-        if (result)
-            return Ok(result);
-
-        return BadRequest(new ApiBadRequestResponse("Insert SUPPORT failed"));
+        return CodeSharingResult(await _supportService.PostSupport(request));
     }
 }

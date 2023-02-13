@@ -12,7 +12,6 @@
       <Folder Include="Repositories\Post" />
       <Folder Include="Repositories\Role" />
       <Folder Include="Repositories\Statistic" />
-      <Folder Include="Repositories\Support" />
       <Folder Include="Repositories\Upload" />
       <Folder Include="Repositories\User" />
     </ItemGroup>
