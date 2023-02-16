@@ -20,44 +20,54 @@ public class PostRepository : GenericRepository<ApplicationDbContext>, IPostRepo
     private readonly IStorageService _storageService;
     private readonly UserManager<CdsUser> _userManager;
     private readonly IUploadRepository _uploadRepository;
-    
-    public PostRepository(ApplicationDbContext context, IHttpContextAccessor httpContextAccessor, IStorageService storageService, UserManager<CdsUser> userManager, IUploadRepository uploadRepository) : base(context)
+    private readonly ILogger<PostRepository> _logger;
+
+    public PostRepository(ApplicationDbContext context, IHttpContextAccessor httpContextAccessor, IStorageService storageService, UserManager<CdsUser> userManager, IUploadRepository uploadRepository, ILogger<PostRepository> logger) : base(context)
     {
         _httpContextAccessor = httpContextAccessor;
         _storageService = storageService;
         _userManager = userManager;
         _uploadRepository = uploadRepository;
+        _logger = logger;
     }
 
     #region Posts
 
     public async Task<List<PostQuickVm>> GetPosts()
     {
-        var posts = from p in _context.CdsPosts
-            join c in _context.CdsCategories on p.CategoryId equals c.Id
-            join u in _context.Users on p.OwnerUserId equals u.Id
-            orderby p.CreateDate descending
-            select new { p, c, u };
-
-        var items = await posts.Select(x => new PostQuickVm
+        try
         {
-            Id = x.p.Id,
-            CategoryId = x.c.Id,
-            CategoryTitle = x.c.Title,
-            FullName = string.Concat(x.u.FirstName, " ", x.u.LastName),
-            Slug = x.p.Slug,
-            Title = x.p.Title,
-            Summary = x.p.Summary,
-            Content = x.p.Content,
-            CoverImage = HttpHelper.GetBaseUrl(_httpContextAccessor) + x.p.CoverImage,
-            NumberOfComments = x.p.NumberOfComments,
-            NumberOfVotes = x.p.NumberOfVotes,
-            ViewCount = x.p.ViewCount,
-            CreateDate = x.p.CreateDate,
-            LastModifiedDate = x.p.LastModifiedDate
-        }).ToListAsync();
+            var posts = from p in _context.CdsPosts
+                join c in _context.CdsCategories on p.CategoryId equals c.Id
+                join u in _context.Users on p.OwnerUserId equals u.Id
+                orderby p.CreateDate descending
+                select new { p, c, u };
 
-        return items;
+            var items = await posts.Select(x => new PostQuickVm
+            {
+                Id = x.p.Id,
+                CategoryId = x.c.Id,
+                CategoryTitle = x.c.Title,
+                FullName = string.Concat(x.u.FirstName, " ", x.u.LastName),
+                Slug = x.p.Slug,
+                Title = x.p.Title,
+                Summary = x.p.Summary,
+                Content = x.p.Content,
+                CoverImage = HttpHelper.GetBaseUrl(_httpContextAccessor) + x.p.CoverImage,
+                NumberOfComments = x.p.NumberOfComments,
+                NumberOfVotes = x.p.NumberOfVotes,
+                ViewCount = x.p.ViewCount,
+                CreateDate = x.p.CreateDate,
+                LastModifiedDate = x.p.LastModifiedDate
+            }).ToListAsync();
+
+            return items;
+        }
+        catch (Exception e)
+        {
+            _logger.LogError("{Message}", e.Message);
+            return new List<PostQuickVm>();
+        }
     }
 
     public async Task<List<PostQuickVm>> GetLatestPosts(int take)
