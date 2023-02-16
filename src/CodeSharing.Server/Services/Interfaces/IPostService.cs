@@ -1,3 +1,4 @@
+using CodeSharing.Core.Models.BaseModels;
 using CodeSharing.Core.Models.Pagination;
 using CodeSharing.DTL.Models.Contents.Comment;
 using CodeSharing.DTL.Models.Contents.Post;
@@ -10,25 +11,25 @@ public interface IPostService
 {
     #region Post
 
-    Task<List<PostQuickVm>> GetPosts();
+    Task<Result<List<PostQuickVm>>> GetPosts();
 
-    Task<List<PostQuickVm>> GetLatestPosts(int take);
+    Task<Result<List<PostQuickVm>>> GetLatestPosts(int take);
 
-    Task<List<PostQuickVm>> GetPopularPosts(int take);
+    Task<Result<List<PostQuickVm>>> GetPopularPosts(int take);
 
-    Task<List<PostQuickVm>> GetTrendingPosts(int take);
+    Task<Result<List<PostQuickVm>>> GetTrendingPosts(int take);
 
-    Task<PostVm?> GetById(int id);
+    Task<Result<PostVm?>> GetById(int id);
 
-    Task<Pagination<PostQuickVm>> GetPostsByCategoryId(int? categoryId, int pageIndex, int pageSize);
+    Task<Result<Pagination<PostQuickVm>>> GetPostsByCategoryId(int? categoryId, int pageIndex, int pageSize);
 
-    Task<Pagination<PostQuickVm>> GetPostsByTagId(string tagId, int pageIndex, int pageSize);
+    Task<Result<Pagination<PostQuickVm>>> GetPostsByTagId(string tagId, int pageIndex, int pageSize);
 
-    Task<List<PostQuickVm>> GetTotalPostInCategory();
+    Task<Result<List<PostQuickVm>>> GetTotalPostInCategory();
 
-    Task<Pagination<PostQuickVm>> GetPostsPaging(string filter, int? categoryId, int pageIndex, int pageSize);
+    Task<Result<Pagination<PostQuickVm>>> GetPostsPaging(string filter, int? categoryId, int pageIndex, int pageSize);
 
-    Task<Pagination<PostQuickVm>> GetPostsPaging(int pageIndex, int pageSize);
+    Task<Result<Pagination<PostQuickVm>>> GetPostsPaging(int pageIndex, int pageSize);
 
     Task<bool> Post(PostCreateRequest request, string userId);
     

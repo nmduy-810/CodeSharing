@@ -1,5 +1,6 @@
 using System.Net.Http.Headers;
 using CodeSharing.Core.Helpers;
+using CodeSharing.Core.Models.BaseModels;
 using CodeSharing.Core.Resources.Constants;
 using CodeSharing.Server.AdditionalServices.Interfaces;
 using CodeSharing.DTL.EFCoreEntities;
@@ -31,83 +32,201 @@ public class PostService : IPostService
         _userManager = userManager;
     }
 
-    public async Task<List<PostQuickVm>> GetPosts()
+    public async Task<Result<List<PostQuickVm>>> GetPosts()
     {
-        var result = await _repository.GetPosts();
+        var result = new Result<List<PostQuickVm>>();
+        try
+        {
+            var data = await _repository.GetPosts();
+            result.SetResult(data);
+        }
+        catch (Exception e)
+        {
+            result.Status = ErrorCodeConstant.StatusCode.InternalServerError;
+            result.Message = e.Message + "\n\n" + e.InnerException;
+        }
         return result;
     }
 
-    public async Task<List<PostQuickVm>> GetLatestPosts(int take)
+    public async Task<Result<List<PostQuickVm>>> GetLatestPosts(int take)
     {
-        var cacheData = await _distributedCacheService.GetAsync<List<PostQuickVm>>(CacheConstant.LatestPosts);
-        if (cacheData != null)
-            return cacheData;
+        var result = new Result<List<PostQuickVm>>();
+        try
+        {
+            var cacheData = await _distributedCacheService.GetAsync<List<PostQuickVm>>(CacheConstant.LatestPosts);
+            if (cacheData != null)
+            {
+                result.SetResult(cacheData);
+                return result;
+            }
         
-        var result = await _repository.GetLatestPosts(take);
-        await _distributedCacheService.SetAsync(CacheConstant.LatestPosts, result, 2);
+            var data = await _repository.GetLatestPosts(take);
+            await _distributedCacheService.SetAsync(CacheConstant.LatestPosts, result, 2);
+            result.SetResult(data);
+        }
+        catch (Exception e)
+        {
+            result.Status = ErrorCodeConstant.StatusCode.InternalServerError;
+            result.Message = e.Message + "\n\n" + e.InnerException;
+        }
         return result;
     }
 
-    public async Task<List<PostQuickVm>> GetPopularPosts(int take)
+    public async Task<Result<List<PostQuickVm>>> GetPopularPosts(int take)
     {
-        var cacheData = await _distributedCacheService.GetAsync<List<PostQuickVm>>(CacheConstant.PopularPosts);
-        if (cacheData != null)
-            return cacheData;
+        var result = new Result<List<PostQuickVm>>();
+        try
+        {
+            var cacheData = await _distributedCacheService.GetAsync<List<PostQuickVm>>(CacheConstant.PopularPosts);
+            if (cacheData != null)
+            {
+                result.SetResult(cacheData);
+                return result;
+            }
         
-        var result = await _repository.GetPopularPosts(take);
-        await _distributedCacheService.SetAsync(CacheConstant.PopularPosts, result, 2);
+            var data = await _repository.GetPopularPosts(take);
+            await _distributedCacheService.SetAsync(CacheConstant.PopularPosts, result, 2);
+            result.SetResult(data);
+        }
+        catch (Exception e)
+        {
+            result.Status = ErrorCodeConstant.StatusCode.InternalServerError;
+            result.Message = e.Message + "\n\n" + e.InnerException;
+        }
         return result;
     }
 
-    public async Task<List<PostQuickVm>> GetTrendingPosts(int take)
+    public async Task<Result<List<PostQuickVm>>> GetTrendingPosts(int take)
     {
-        var cacheData = await _distributedCacheService.GetAsync<List<PostQuickVm>>(CacheConstant.TrendingPosts);
-        if (cacheData != null)
-            return cacheData;
+        var result = new Result<List<PostQuickVm>>();
+        try
+        {
+            var cacheData = await _distributedCacheService.GetAsync<List<PostQuickVm>>(CacheConstant.TrendingPosts);
+            if (cacheData != null)
+            {
+                result.SetResult(cacheData);
+                return result;
+            }
         
-        var result = await _repository.GetTrendingPosts(take);
-        await _distributedCacheService.SetAsync(CacheConstant.TrendingPosts, result, 2);
+            var data = await _repository.GetTrendingPosts(take);
+            await _distributedCacheService.SetAsync(CacheConstant.TrendingPosts, result, 2);
+            result.SetResult(data);
+        }
+        catch (Exception e)
+        {
+            result.Status = ErrorCodeConstant.StatusCode.InternalServerError;
+            result.Message = e.Message + "\n\n" + e.InnerException;
+        }
         return result;
     }
 
-    public async Task<PostVm?> GetById(int id)
+    public async Task<Result<PostVm?>> GetById(int id)
     {
-        var result = await _repository.GetById(id);
+        var result = new Result<PostVm?>();
+        try
+        {
+            var data = await _repository.GetById(id);
+            if (data == null)
+            {
+                result.SetResult(null, ErrorCodeConstant.MessageCode.ItemNotFound);
+                return result;
+            }
+            
+            result.SetResult(data);
+        }
+        catch (Exception e)
+        {
+            result.Status = ErrorCodeConstant.StatusCode.InternalServerError;
+            result.Message = e.Message + "\n\n" + e.InnerException;
+        }
         return result;
     }
 
-    public async Task<Pagination<PostQuickVm>> GetPostsByCategoryId(int? categoryId, int pageIndex, int pageSize)
+    public async Task<Result<Pagination<PostQuickVm>>> GetPostsByCategoryId(int? categoryId, int pageIndex, int pageSize)
     {
-        var result = await _repository.GetPostsByCategoryId(categoryId, pageIndex, pageSize);
+        var result = new Result<Pagination<PostQuickVm>>();
+        try
+        {
+            var data = await _repository.GetPostsByCategoryId(categoryId, pageIndex, pageSize);
+            result.SetResult(data);
+        }
+        catch (Exception e)
+        {
+            result.Status = ErrorCodeConstant.StatusCode.InternalServerError;
+            result.Message = e.Message + "\n\n" + e.InnerException;
+        }
         return result;
     }
 
-    public async Task<Pagination<PostQuickVm>> GetPostsByTagId(string tagId, int pageIndex, int pageSize)
+    public async Task<Result<Pagination<PostQuickVm>>> GetPostsByTagId(string tagId, int pageIndex, int pageSize)
     {
-        var result = await _repository.GetPostsByTagId(tagId, pageIndex, pageSize);
+        var result = new Result<Pagination<PostQuickVm>>();
+        try
+        {
+            var data = await _repository.GetPostsByTagId(tagId, pageIndex, pageSize);
+            result.SetResult(data);
+        }
+        catch (Exception e)
+        {
+            result.Status = ErrorCodeConstant.StatusCode.InternalServerError;
+            result.Message = e.Message + "\n\n" + e.InnerException;
+        }
         return result;
     }
 
-    public async Task<List<PostQuickVm>> GetTotalPostInCategory()
+    public async Task<Result<List<PostQuickVm>>> GetTotalPostInCategory()
     {
-        var result = await _repository.GetTotalPostInCategory();
+        var result = new Result<List<PostQuickVm>>();
+        try
+        {
+            var data = await _repository.GetTotalPostInCategory();
+            result.SetResult(data);
+        }
+        catch (Exception e)
+        {
+            result.Status = ErrorCodeConstant.StatusCode.InternalServerError;
+            result.Message = e.Message + "\n\n" + e.InnerException;
+        }
         return result;
     }
 
-    public async Task<Pagination<PostQuickVm>> GetPostsPaging(string filter, int? categoryId, int pageIndex, int pageSize)
+    public async Task<Result<Pagination<PostQuickVm>>> GetPostsPaging(string filter, int? categoryId, int pageIndex, int pageSize)
     {
-        var result = await _repository.GetPostsPaging(filter, categoryId, pageIndex, pageSize);
+        var result = new Result<Pagination<PostQuickVm>>();
+        try
+        {
+            var data = await _repository.GetPostsPaging(filter, categoryId, pageIndex, pageSize);
+            result.SetResult(data);
+        }
+        catch (Exception e)
+        {
+            result.Status = ErrorCodeConstant.StatusCode.InternalServerError;
+            result.Message = e.Message + "\n\n" + e.InnerException;
+        }
         return result;
     }
 
-    public async Task<Pagination<PostQuickVm>> GetPostsPaging(int pageIndex, int pageSize)
+    public async Task<Result<Pagination<PostQuickVm>>> GetPostsPaging(int pageIndex, int pageSize)
     {
-        var cacheData = await _distributedCacheService.GetAsync<Pagination<PostQuickVm>>(CacheConstant.PostsPaging);
-        if (cacheData != null)
-            return cacheData;
+        var result = new Result<Pagination<PostQuickVm>>();
+        try
+        {
+            var cacheData = await _distributedCacheService.GetAsync<Pagination<PostQuickVm>>(CacheConstant.PostsPaging);
+            if (cacheData != null)
+            {
+                result.SetResult(cacheData);
+                return result;
+            }
         
-        var result = await _repository.GetPostsPaging(pageIndex, pageSize);
-        await _distributedCacheService.SetAsync(CacheConstant.PostsPaging, result, 2);
+            var data = await _repository.GetPostsPaging(pageIndex, pageSize);
+            await _distributedCacheService.SetAsync(CacheConstant.PostsPaging, result, 2);
+            result.SetResult(data);
+        }
+        catch (Exception e)
+        {
+            result.Status = ErrorCodeConstant.StatusCode.InternalServerError;
+            result.Message = e.Message + "\n\n" + e.InnerException;
+        }
         return result;
     }
 

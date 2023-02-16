@@ -21,43 +21,35 @@ public partial class PostsController : BaseController
     [AllowAnonymous]
     public async Task<IActionResult> GetPosts()
     {
-        var result = await _postService.GetPosts();
-        return Ok(result);
+        return CodeSharingResult(await _postService.GetPosts());
     }
 
     [HttpGet("latest/{take:int}")]
     [AllowAnonymous]
     public async Task<IActionResult> GetLatestPosts(int take)
     {
-        var result = await _postService.GetLatestPosts(take);
-        return Ok(result);
+        return CodeSharingResult(await _postService.GetLatestPosts(take));
     }
 
     [HttpGet("popular/{take:int}")]
     [AllowAnonymous]
     public async Task<IActionResult> GetPopularPosts(int take)
     {
-        var result = await _postService.GetPopularPosts(take);
-        return Ok(result);
+        return CodeSharingResult(await _postService.GetPopularPosts(take));
     }
 
     [HttpGet("trending/{take:int}")]
     [AllowAnonymous]
     public async Task<IActionResult> GetTrendingPosts(int take)
     {
-        var result = await _postService.GetTrendingPosts(take);
-        return Ok(result);
+        return CodeSharingResult(await _postService.GetTrendingPosts(take));
     }
 
     [HttpGet("{id}")]
     [AllowAnonymous]
     public async Task<IActionResult> GetById(int id)
     {
-        var result = await _postService.GetById(id);
-        if (result == null)
-            return NotFound(new ApiNotFoundResponse($"Not found POST item for id = {id} in database"));
-        
-        return Ok(result);
+        return CodeSharingResult(await _postService.GetById(id));
     }
 
     [HttpGet("category/{categoryId:int}")]
