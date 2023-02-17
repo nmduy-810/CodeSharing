@@ -1,5 +1,4 @@
 using CodeSharing.Server.Extensions;
-using CodeSharing.Utilities.Helpers;
 using CodeSharing.DTL.Models.Contents.Report;
 using Microsoft.AspNetCore.Mvc;
 
@@ -12,11 +11,7 @@ public partial class PostsController
     [HttpPost("{postId}/reports")]
     public async Task<IActionResult> PostReport(int postId, [FromBody] ReportCreateRequest request)
     {
-        var result = await _postService.PostReport(postId, request, User.GetUserId());
-        if (result) 
-            return Ok();
-        
-        return BadRequest(new ApiBadRequestResponse("Create REPORT failed"));
+        return CodeSharingResult(await _postService.PostReport(postId, request, User.GetUserId()));
     }
 
     #endregion Reports

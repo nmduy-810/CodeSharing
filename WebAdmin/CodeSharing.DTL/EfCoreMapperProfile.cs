@@ -4,6 +4,8 @@ using CodeSharing.DTL.Models.Commons;
 using CodeSharing.DTL.Models.Contents.About;
 using CodeSharing.DTL.Models.Contents.Category;
 using CodeSharing.DTL.Models.Contents.Contact;
+using CodeSharing.DTL.Models.Contents.Post;
+using CodeSharing.DTL.Models.Contents.Vote;
 using CodeSharing.DTL.Models.Systems.Command;
 using CodeSharing.DTL.Models.Systems.Function;
 using CodeSharing.DTL.Models.Systems.Role;
@@ -55,6 +57,18 @@ public class EfCoreMapperProfile : Profile
 
         CreateMap<IdentityRole, RoleVm>().ReverseMap();
 
+        #endregion
+
+        #region Post
+        
+        CreateMap<CdsPost, PostQuickVm>().ReverseMap();
+
+        #endregion
+
+        #region Vote
+
+        CreateMap<CdsVote, VoteVm>().ReverseMap();
+        
         #endregion
     }
 }

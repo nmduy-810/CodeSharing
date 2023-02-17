@@ -32,13 +32,13 @@ public interface IPostRepository : IGenericRepository<ApplicationDbContext>
 
     Task<Pagination<PostQuickVm>> GetPostsPaging(int pageIndex, int pageSize);
 
-    Task<bool> Post(CdsPost post);
+    Task<CdsPost?> Post(CdsPost post);
     
-    Task<bool> Put(int id, PostCreateRequest request);
+    Task<CdsPost?> Put(int id, PostCreateRequest request);
 
-    Task<bool> Delete(int id);
+    Task<CdsPost?> Delete(int id);
 
-    Task<bool> UpdateViewCount(int id);
+    Task<CdsPost?> UpdateViewCount(int id);
 
     #endregion Post
 
@@ -48,13 +48,13 @@ public interface IPostRepository : IGenericRepository<ApplicationDbContext>
 
     Task<int> PostVote(int postId, string userId);
 
-    Task<bool> DeleteVote(int postId, string userId);
+    Task<CdsVote?> DeleteVote(int postId, string userId);
 
     #endregion Vote
 
     #region Report
 
-    Task<bool> PostReport(int postId, ReportCreateRequest request, string userId); 
+    Task<CdsReport?> PostReport(int postId, ReportCreateRequest request, string userId); 
 
     #endregion Report
     
@@ -70,11 +70,11 @@ public interface IPostRepository : IGenericRepository<ApplicationDbContext>
 
     Task<List<CommentVm>> GetComments();
 
-    Task<bool> PostComment(int postId, CommentCreateRequest request, string userId);
+    Task<CdsComment?> PostComment(int postId, CommentCreateRequest request, string userId);
 
-    Task<bool> PutComment(int commentId, CommentCreateRequest request, string userId);
+    Task<CdsComment?> PutComment(int commentId, CommentCreateRequest request, string userId);
 
-    Task<bool> DeleteComment(int postId, int commentId);
+    Task<CdsComment?> DeleteComment(int postId, int commentId);
 
     #endregion Comment
     

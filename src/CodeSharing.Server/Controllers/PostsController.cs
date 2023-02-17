@@ -2,7 +2,6 @@ using CodeSharing.Core.Resources.Constants;
 using CodeSharing.Server.Authorization;
 using CodeSharing.Server.Extensions;
 using CodeSharing.Server.Services.Interfaces;
-using CodeSharing.Utilities.Helpers;
 using CodeSharing.DTL.Models.Contents.Post;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -56,40 +55,35 @@ public partial class PostsController : BaseController
     [AllowAnonymous]
     public async Task<IActionResult> GetPostsByCategoryId(int? categoryId, int pageIndex, int pageSize)
     {
-        var result = await _postService.GetPostsByCategoryId(categoryId, pageIndex, pageSize);
-        return Ok(result);
+        return CodeSharingResult(await _postService.GetPostsByCategoryId(categoryId, pageIndex, pageSize));
     }
 
     [HttpGet("tags/{tagId}")]
     [AllowAnonymous]
     public async Task<IActionResult> GetPostsByTagId(string tagId, int pageIndex, int pageSize)
     {
-        var result = await _postService.GetPostsByTagId(tagId, pageIndex, pageSize);
-        return Ok(result);
+        return CodeSharingResult(await _postService.GetPostsByTagId(tagId, pageIndex, pageSize));
     }
 
     [HttpGet("total-post")]
     [AllowAnonymous]
     public async Task<IActionResult> GetTotalPostInCategory()
     {
-        var result = await _postService.GetTotalPostInCategory();
-        return Ok(result);
+        return CodeSharingResult(await _postService.GetTotalPostInCategory());
     }
 
     [HttpGet("filter")]
     [AllowAnonymous]
     public async Task<IActionResult> GetPostsPaging(string filter, int? categoryId, int pageIndex, int pageSize)
     {
-        var result = await _postService.GetPostsPaging(filter, categoryId, pageIndex, pageSize);
-        return Ok(result);
+        return CodeSharingResult(await _postService.GetPostsPaging(filter, categoryId, pageIndex, pageSize));
     }
 
     [HttpGet("paging")]
     [AllowAnonymous]
     public async Task<IActionResult> GetPostsPaging(int pageIndex, int pageSize)
     {
-        var result = await _postService.GetPostsPaging(pageIndex, pageSize);
-        return Ok(result);
+        return CodeSharingResult(await _postService.GetPostsPaging(pageIndex, pageSize));
     }
 
     [HttpPost]
@@ -97,11 +91,7 @@ public partial class PostsController : BaseController
     [ClaimRequirement(FunctionCodeEnum.CONTENT_POST, CommandCodeEnum.CREATE)]
     public async Task<IActionResult> Post([FromForm] PostCreateRequest request)
     {
-        var result = await _postService.Post(request, User.GetUserId());
-        if (result)
-            return Ok(result);
-
-        return BadRequest(new ApiBadRequestResponse("Insert POST failed"));
+        return CodeSharingResult(await _postService.Post(request, User.GetUserId()));
     }
 
     [HttpPut("{id}")]
@@ -109,32 +99,20 @@ public partial class PostsController : BaseController
     [ClaimRequirement(FunctionCodeEnum.CONTENT_POST, CommandCodeEnum.UPDATE)]
     public async Task<IActionResult> Put(int id, [FromForm] PostCreateRequest request)
     {
-        var result = await _postService.Put(id, request);
-        if (result)
-            return NoContent();
-        
-        return BadRequest(new ApiBadRequestResponse("Update POST failed"));
+        return CodeSharingResult(await _postService.Put(id, request));
     }
 
     [HttpDelete("{id}")]
     [ClaimRequirement(FunctionCodeEnum.CONTENT_POST, CommandCodeEnum.DELETE)]
     public async Task<IActionResult> Delete(int id)
     {
-        var result = await _postService.Delete(id);
-        if (result)
-            return Ok(result);
-        
-        return BadRequest(new ApiBadRequestResponse("Delete POST failed"));
+       return CodeSharingResult(await _postService.Delete(id));
     }
 
     [HttpPut("{id}/view-count")]
     [AllowAnonymous]
     public async Task<IActionResult> UpdateViewCount(int id)
     {
-        var result = await _postService.UpdateViewCount(id);
-        if (result)
-            return Ok(result);
-        
-        return BadRequest(new ApiBadRequestResponse("Update view post failed"));
+        return CodeSharingResult(await _postService.UpdateViewCount(id));
     }
 }

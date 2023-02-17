@@ -1,5 +1,4 @@
 using CodeSharing.Server.Extensions;
-using CodeSharing.Utilities.Helpers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -13,30 +12,21 @@ public partial class PostsController
     [AllowAnonymous]
     public async Task<IActionResult> GetVotes(int postId)
     {
-        var result = await _postService.GetVotes(postId);
-        return Ok(result);
+        return CodeSharingResult(await _postService.GetVotes(postId));
     }
 
     [HttpPost("{postId}/votes")]
     [AllowAnonymous]
     public async Task<IActionResult> PostVote(int postId)
     {
-        var result = await _postService.PostVote(postId, User.GetUserId());
-        if (result > 0)
-            return Ok(result);
-        
-        return BadRequest(new ApiBadRequestResponse("VOTE failed"));
+        return CodeSharingResult(await _postService.PostVote(postId, User.GetUserId()));
     }
 
     [HttpDelete("{postId}/votes/{userId}")]
     [AllowAnonymous]
     public async Task<IActionResult> DeleteVote(int postId, string userId)
     {
-        var result = await _postService.DeleteVote(postId, userId);
-        if (result) 
-            return Ok();
-
-        return BadRequest(new ApiBadRequestResponse("Delete VOTE failed"));
+        return CodeSharingResult(await _postService.DeleteVote(postId, userId));
     }
 
     #endregion Votes

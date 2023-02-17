@@ -7,6 +7,7 @@ using CodeSharing.DTL.EFCoreEntities;
 using CodeSharing.Server.Repositories.Intefaces;
 using CodeSharing.Server.Services.Interfaces;
 using CodeSharing.Core.Models.Pagination;
+using CodeSharing.Core.Services.Utils;
 using CodeSharing.DTL.Models.Contents.Comment;
 using CodeSharing.DTL.Models.Contents.Post;
 using CodeSharing.DTL.Models.Contents.Report;
@@ -15,7 +16,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace CodeSharing.Server.Services;
 
-public class PostService : IPostService
+public class PostService : BaseService, IPostService
 {
     private readonly IPostRepository _repository;
     private readonly ICacheService _distributedCacheService;
@@ -23,7 +24,7 @@ public class PostService : IPostService
     private readonly IStorageService _storageService;
     private readonly UserManager<CdsUser> _userManager;
 
-    public PostService(IPostRepository repository, ICacheService distributedCacheService, ISequenceService sequenceService, IStorageService storageService, UserManager<CdsUser> userManager)
+    public PostService(IPostRepository repository, ICacheService distributedCacheService, ISequenceService sequenceService, IStorageService storageService, UserManager<CdsUser> userManager, IUtils utils) : base(utils)
     {
         _repository = repository;
         _distributedCacheService = distributedCacheService;
@@ -230,76 +231,100 @@ public class PostService : IPostService
         return result;
     }
 
-    public async Task<bool> Post(PostCreateRequest request, string userId)
+    public async Task<Result<PostQuickVm?>> Post(PostCreateRequest request, string userId)
     {
-        var post = new CdsPost
+        var result = new Result<PostQuickVm?>();
+        try
         {
-            CategoryId = request.CategoryId,
-            Title = request.Title,
-            Summary = request.Summary,
-            Content = request.Content,
-            Note = request.Note
-        };
+            var post = new CdsPost
+            {
+                CategoryId = request.CategoryId,
+                Title = request.Title,
+                Summary = request.Summary,
+                Content = request.Content,
+                Note = request.Note
+            };
 
-        if (request.Labels.Length > 0)
-        {
-            // Remove cached previous save for post
-            await _distributedCacheService.RemoveAsync(CacheConstant.LatestPosts);
-            await _distributedCacheService.RemoveAsync(CacheConstant.PopularPosts);
-            await _distributedCacheService.RemoveAsync(CacheConstant.TrendingPosts);
-            await _distributedCacheService.RemoveAsync(CacheConstant.PostsPaging);
-            await _distributedCacheService.RemoveAsync(CacheConstant.Categories);
+            if (request.Labels.Length > 0)
+            {
+                // Remove cached previous save for post
+                await _distributedCacheService.RemoveAsync(CacheConstant.LatestPosts);
+                await _distributedCacheService.RemoveAsync(CacheConstant.PopularPosts);
+                await _distributedCacheService.RemoveAsync(CacheConstant.TrendingPosts);
+                await _distributedCacheService.RemoveAsync(CacheConstant.PostsPaging);
+                await _distributedCacheService.RemoveAsync(CacheConstant.Categories);
+                
+                request.Labels = request.Labels[0].Split("#").Select(x => x.Trim())
+                    .Where(x => !string.IsNullOrWhiteSpace(x))
+                    .ToArray();
+
+                post.Labels = string.Join(',', request.Labels);
+                post.Labels = post.Labels.Trim().TrimStart(',');
+            }
             
-            request.Labels = request.Labels[0].Split("#").Select(x => x.Trim())
-                .Where(x => !string.IsNullOrWhiteSpace(x))
-                .ToArray();
-
-            post.Labels = string.Join(',', request.Labels);
-            post.Labels = post.Labels.Trim().TrimStart(',');
+            // Process Slug
+            if (string.IsNullOrEmpty(post.Slug)) 
+                post.Slug = TextHelper.ToUnsignString(post.Title);
+            
+            // Process Owner User Id
+            post.OwnerUserId = userId;
+            
+            // Id (using Sequence)
+            post.Id = await _sequenceService.GetPostNewId();
+            
+            // Process label
+            if (request.Labels.Length > 0) 
+                await _repository.ProcessLabel(request, post);
+            
+            // Process Cover Image
+            if (request.CoverImage != null)
+            {
+                var coverImagePath = await SaveFile(request.CoverImage);
+                post.CoverImage = coverImagePath;
+            }
+            
+            // Update number of post in user
+            var user = await _userManager.FindByIdAsync(post.OwnerUserId);
+            
+            if (user != null)
+            {
+                var numberOfPost = user.NumberOfPosts;
+                numberOfPost += 1;
+                user.NumberOfPosts = numberOfPost;
+                await _userManager.UpdateAsync(user);
+            }
+            
+            var data = await _repository.Post(post);
+            if (data != null)
+                result.SetResult(_utils.Transform<CdsPost, PostQuickVm>(data));
+            else
+                result.SetResult(null, ErrorCodeConstant.MessageCode.ErrorProcessCreate);
         }
-        
-        // Process Slug
-        if (string.IsNullOrEmpty(post.Slug)) 
-            post.Slug = TextHelper.ToUnsignString(post.Title);
-        
-        // Process Owner User Id
-        post.OwnerUserId = userId;
-        
-        // Id (using Sequence)
-        post.Id = await _sequenceService.GetPostNewId();
-        
-        // Process label
-        if (request.Labels.Length > 0) 
-            await _repository.ProcessLabel(request, post);
-        
-        // Process Cover Image
-        if (request.CoverImage != null)
+        catch (Exception e)
         {
-            var coverImagePath = await SaveFile(request.CoverImage);
-            post.CoverImage = coverImagePath;
+            result.Status = ErrorCodeConstant.StatusCode.InternalServerError;
+            result.Message = e.Message + "\n\n" + e.InnerException;
         }
-        
-        // Update number of post in user
-        var user = await _userManager.FindByIdAsync(post.OwnerUserId);
-        
-        if (user != null)
-        {
-            var numberOfPost = user.NumberOfPosts;
-            numberOfPost += 1;
-            user.NumberOfPosts = numberOfPost;
-            await _userManager.UpdateAsync(user);
-        }
-
-        var result = await _repository.Post(post);
         return result;
     }
 
-    public async Task<bool> Put(int id, PostCreateRequest request)
+    public async Task<Result<PostQuickVm?>> Put(int id, PostCreateRequest request)
     {
-        var result = await _repository.Put(id, request);
-        if (!result)
-            return result;
-
+        var result = new Result<PostQuickVm?>();
+        try
+        {
+            var data = await _repository.Put(id, request);
+            if (data != null)
+                result.SetResult(_utils.Transform<CdsPost, PostQuickVm>(data));
+            else
+                result.SetResult(null, ErrorCodeConstant.MessageCode.ErrorProcessUpdate);
+        }
+        catch (Exception e)
+        {
+            result.Status = ErrorCodeConstant.StatusCode.InternalServerError;
+            result.Message = e.Message + "\n\n" + e.InnerException;
+        }
+        
         // Remove cached previous save for post
         await _distributedCacheService.RemoveAsync(CacheConstant.LatestPosts);
         await _distributedCacheService.RemoveAsync(CacheConstant.PopularPosts);
@@ -309,11 +334,22 @@ public class PostService : IPostService
         return result;
     }
 
-    public async Task<bool> Delete(int id)
+    public async Task<Result<PostQuickVm?>> Delete(int id)
     {
-        var result = await _repository.Delete(id);
-        if (!result)
-            return result;
+        var result = new Result<PostQuickVm?>();
+        try
+        {
+            var data = await _repository.Delete(id);
+            if (data != null)
+                result.SetResult(_utils.Transform<CdsPost, PostQuickVm>(data));
+            else
+                result.SetResult(null, ErrorCodeConstant.MessageCode.ErrorProcessDelete);
+        }
+        catch (Exception e)
+        {
+            result.Status = ErrorCodeConstant.StatusCode.InternalServerError;
+            result.Message = e.Message + "\n\n" + e.InnerException;
+        }
         
         // Remove cached previous save for post
         await _distributedCacheService.RemoveAsync(CacheConstant.LatestPosts);
@@ -324,81 +360,242 @@ public class PostService : IPostService
         return result;
     }
 
-    public async Task<bool> UpdateViewCount(int id)
+    public async Task<Result<PostQuickVm?>> UpdateViewCount(int id)
     {
-        var result = await _repository.UpdateViewCount(id);
+        var result = new Result<PostQuickVm?>();
+        try
+        {
+            var data = await _repository.UpdateViewCount(id);
+            if (data != null)
+                result.SetResult(_utils.Transform<CdsPost, PostQuickVm>(data));
+            else
+                result.SetResult(null, ErrorCodeConstant.MessageCode.ErrorProcessUpdate);
+        }
+        catch (Exception e)
+        {
+            result.Status = ErrorCodeConstant.StatusCode.InternalServerError;
+            result.Message = e.Message + "\n\n" + e.InnerException;
+        }
+        
+        // Remove cached previous save for post
+        await _distributedCacheService.RemoveAsync(CacheConstant.LatestPosts);
+        await _distributedCacheService.RemoveAsync(CacheConstant.PopularPosts);
+        await _distributedCacheService.RemoveAsync(CacheConstant.TrendingPosts);
+        await _distributedCacheService.RemoveAsync(CacheConstant.PostsPaging);
+        await _distributedCacheService.RemoveAsync(CacheConstant.Categories);
         return result;
     }
 
-    public async Task<List<VoteVm>> GetVotes(int postId)
+    public async Task<Result<List<VoteVm>>> GetVotes(int postId)
     {
-        var result = await _repository.GetVotes(postId);
+        var result = new Result<List<VoteVm>>();
+        try
+        {
+            var data = await _repository.GetVotes(postId);
+            result.SetResult(data);
+        }
+        catch (Exception e)
+        {
+            result.Status = ErrorCodeConstant.StatusCode.InternalServerError;
+            result.Message = e.Message + "\n\n" + e.InnerException;
+        }
         return result;
     }
 
-    public async Task<int> PostVote(int postId, string userId)
+    public async Task<Result<int>> PostVote(int postId, string userId)
     {
-        var result = await _repository.PostVote(postId, userId);
+        var result = new Result<int>();
+        try
+        {
+            var data = await _repository.PostVote(postId, userId);
+            result.SetResult(data);
+        }
+        catch (Exception e)
+        {
+            result.Status = ErrorCodeConstant.StatusCode.InternalServerError;
+            result.Message = e.Message + "\n\n" + e.InnerException;
+        }
         return result;
     }
 
-    public async Task<bool> DeleteVote(int postId, string userId)
+    public async Task<Result<VoteVm?>> DeleteVote(int postId, string userId)
     {
-        var result = await _repository.DeleteVote(postId, userId);
+        var result = new Result<VoteVm?>();
+        try
+        {
+            var data = await _repository.DeleteVote(postId, userId);
+            if (data != null)
+                result.SetResult(_utils.Transform<CdsVote, VoteVm>(data));
+            else
+                result.SetResult(null, ErrorCodeConstant.MessageCode.ErrorProcessDelete);
+        }
+        catch (Exception e)
+        {
+            result.Status = ErrorCodeConstant.StatusCode.InternalServerError;
+            result.Message = e.Message + "\n\n" + e.InnerException;
+        }
         return result;
     }
 
-    public async Task<bool> PostReport(int postId, ReportCreateRequest request, string userId)
+    public async Task<Result<ReportVm?>> PostReport(int postId, ReportCreateRequest request, string userId)
     {
-        var result = await _repository.PostReport(postId, request, userId);
+        var result = new Result<ReportVm?>();
+        try
+        {
+            var data = await _repository.PostReport(postId, request, userId);
+            if (data != null)
+                result.SetResult(_utils.Transform<CdsReport, ReportVm>(data));
+            else
+                result.SetResult(null, ErrorCodeConstant.MessageCode.ErrorProcessCreate);
+        }
+        catch (Exception e)
+        {
+            result.Status = ErrorCodeConstant.StatusCode.InternalServerError;
+            result.Message = e.Message + "\n\n" + e.InnerException;
+        }
         return result;
     }
 
-    public async Task<List<CommentVm>> GetRecentComments(int take)
+    public async Task<Result<List<CommentVm>>> GetRecentComments(int take)
     {
-        var result = await _repository.GetRecentComments(take);
+        var result = new Result<List<CommentVm>>();
+        try
+        {
+            var data = await _repository.GetRecentComments(take);
+            result.SetResult(data);
+        }
+        catch (Exception e)
+        {
+            result.Status = ErrorCodeConstant.StatusCode.InternalServerError;
+            result.Message = e.Message + "\n\n" + e.InnerException;
+        }
         return result;
     }
 
-    public async Task<IEnumerable<CommentVm>> GetCommentTreeByPostId(int postId, int pageIndex, int pageSize)
+    public async Task<Result<IEnumerable<CommentVm>>> GetCommentTreeByPostId(int postId, int pageIndex, int pageSize)
     {
-        var result = await _repository.GetCommentTreeByPostId(postId, pageIndex, pageSize);
+        var result = new Result<IEnumerable<CommentVm>>();
+        try
+        {
+            var data = await _repository.GetCommentTreeByPostId(postId, pageIndex, pageSize);
+            result.SetResult(data);
+        }
+        catch (Exception e)
+        {
+            result.Status = ErrorCodeConstant.StatusCode.InternalServerError;
+            result.Message = e.Message + "\n\n" + e.InnerException;
+        }
         return result;
     }
 
-    public async Task<List<CommentVm>> GetCommentsByPostId(int postId)
+    public async Task<Result<List<CommentVm>>> GetCommentsByPostId(int postId)
     {
-        var result = await _repository.GetCommentsByPostId(postId);
+        var result = new Result<List<CommentVm>>();
+        try
+        {
+            var data = await _repository.GetCommentsByPostId(postId);
+            result.SetResult(data);
+        }
+        catch (Exception e)
+        {
+            result.Status = ErrorCodeConstant.StatusCode.InternalServerError;
+            result.Message = e.Message + "\n\n" + e.InnerException;
+        }
         return result;
     }
 
-    public async Task<CommentVm?> GetCommentDetail(int commentId)
+    public async Task<Result<CommentVm?>> GetCommentDetail(int commentId)
     {
-        var result = await _repository.GetCommentDetail(commentId);
+        var result = new Result<CommentVm?>();
+        try
+        {
+            var data = await _repository.GetCommentDetail(commentId);
+            if (data == null)
+            {
+                result.SetResult(null, ErrorCodeConstant.MessageCode.ItemNotFound);
+                return result;
+            }
+            
+            result.SetResult(data);
+        }
+        catch (Exception e)
+        {
+            result.Status = ErrorCodeConstant.StatusCode.InternalServerError;
+            result.Message = e.Message + "\n\n" + e.InnerException;
+        }
         return result;
     }
 
-    public async Task<List<CommentVm>> GetComments()
+    public async Task<Result<List<CommentVm>>> GetComments()
     {
-        var result = await _repository.GetComments();
+        var result = new Result<List<CommentVm>>();
+        try
+        {
+            var data = await _repository.GetComments();
+            result.SetResult(data);
+        }
+        catch (Exception e)
+        {
+            result.Status = ErrorCodeConstant.StatusCode.InternalServerError;
+            result.Message = e.Message + "\n\n" + e.InnerException;
+        }
         return result;
     }
 
-    public async Task<bool> PostComment(int postId, CommentCreateRequest request, string userId)
+    public async Task<Result<CommentVm?>> PostComment(int postId, CommentCreateRequest request, string userId)
     {
-        var result = await _repository.PostComment(postId, request, userId);
+        var result = new Result<CommentVm?>();
+        try
+        {
+            var data = await _repository.PostComment(postId, request, userId);
+            if (data != null)
+                result.SetResult(_utils.Transform<CdsComment, CommentVm>(data));
+            else
+                result.SetResult(null, ErrorCodeConstant.MessageCode.ErrorProcessCreate);
+        }
+        catch (Exception e)
+        {
+            result.Status = ErrorCodeConstant.StatusCode.InternalServerError;
+            result.Message = e.Message + "\n\n" + e.InnerException;
+        }
         return result;
     }
 
-    public async Task<bool> PutComment(int commentId, CommentCreateRequest request, string userId)
+    public async Task<Result<CommentVm?>> PutComment(int commentId, CommentCreateRequest request, string userId)
     {
-        var result = await _repository.PutComment(commentId, request, userId);
+        var result = new Result<CommentVm?>();
+        try
+        {
+            var data = await _repository.PutComment(commentId, request, userId);
+            if (data != null)
+                result.SetResult(_utils.Transform<CdsComment, CommentVm>(data));
+            else
+                result.SetResult(null, ErrorCodeConstant.MessageCode.ErrorProcessUpdate);
+        }
+        catch (Exception e)
+        {
+            result.Status = ErrorCodeConstant.StatusCode.InternalServerError;
+            result.Message = e.Message + "\n\n" + e.InnerException;
+        }
         return result;
     }
 
-    public async Task<bool> DeleteComment(int postId, int commentId)
+    public async Task<Result<CommentVm?>> DeleteComment(int postId, int commentId)
     {
-        var result = await _repository.DeleteComment(postId, commentId);
+        var result = new Result<CommentVm?>();
+        try
+        {
+            var data = await _repository.DeleteComment(postId, commentId);
+            if (data != null)
+                result.SetResult(_utils.Transform<CdsComment, CommentVm>(data));
+            else
+                result.SetResult(null, ErrorCodeConstant.MessageCode.ErrorProcessDelete);
+        }
+        catch (Exception e)
+        {
+            result.Status = ErrorCodeConstant.StatusCode.InternalServerError;
+            result.Message = e.Message + "\n\n" + e.InnerException;
+        }
         return result;
     }
     

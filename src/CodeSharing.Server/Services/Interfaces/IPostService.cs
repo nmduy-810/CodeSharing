@@ -1,5 +1,6 @@
 using CodeSharing.Core.Models.BaseModels;
 using CodeSharing.Core.Models.Pagination;
+using CodeSharing.DTL.EFCoreEntities;
 using CodeSharing.DTL.Models.Contents.Comment;
 using CodeSharing.DTL.Models.Contents.Post;
 using CodeSharing.DTL.Models.Contents.Report;
@@ -31,49 +32,49 @@ public interface IPostService
 
     Task<Result<Pagination<PostQuickVm>>> GetPostsPaging(int pageIndex, int pageSize);
 
-    Task<bool> Post(PostCreateRequest request, string userId);
+    Task<Result<PostQuickVm?>> Post(PostCreateRequest request, string userId);
     
-    Task<bool> Put(int id, PostCreateRequest request);
+    Task<Result<PostQuickVm?>> Put(int id, PostCreateRequest request);
 
-    Task<bool> Delete(int id);
+    Task<Result<PostQuickVm?>>Delete(int id);
 
-    Task<bool> UpdateViewCount(int id);
+    Task<Result<PostQuickVm?>> UpdateViewCount(int id);
 
     #endregion Post
     
     #region Vote
 
-    Task< List<VoteVm>> GetVotes(int postId);
+    Task<Result<List<VoteVm>>> GetVotes(int postId);
 
-    Task<int> PostVote(int postId, string userId);
+    Task<Result<int>> PostVote(int postId, string userId);
 
-    Task<bool> DeleteVote(int postId, string userId);
+    Task<Result<VoteVm?>> DeleteVote(int postId, string userId);
 
     #endregion Vote
 
     #region Report
 
-    Task<bool> PostReport(int postId, ReportCreateRequest request, string userId);
+    Task<Result<ReportVm?>>  PostReport(int postId, ReportCreateRequest request, string userId);
 
     #endregion Report
 
     #region Comment
 
-    Task<List<CommentVm>> GetRecentComments(int take);
+    Task<Result<List<CommentVm>>> GetRecentComments(int take);
 
-    Task< IEnumerable<CommentVm>> GetCommentTreeByPostId(int postId, int pageIndex, int pageSize);
+    Task<Result<IEnumerable<CommentVm>>> GetCommentTreeByPostId(int postId, int pageIndex, int pageSize);
 
-    Task< List<CommentVm>> GetCommentsByPostId(int postId);
+    Task<Result<List<CommentVm>>> GetCommentsByPostId(int postId);
 
-    Task<CommentVm?> GetCommentDetail(int commentId);
+    Task<Result<CommentVm?>> GetCommentDetail(int commentId);
 
-     Task<List<CommentVm>> GetComments();
+     Task<Result<List<CommentVm>>> GetComments();
 
-    Task<bool> PostComment(int postId, CommentCreateRequest request, string userId);
+    Task<Result<CommentVm?>> PostComment(int postId, CommentCreateRequest request, string userId);
 
-    Task<bool> PutComment(int commentId, CommentCreateRequest request, string userId);
+    Task<Result<CommentVm?>> PutComment(int commentId, CommentCreateRequest request, string userId);
 
-    Task<bool> DeleteComment(int postId, int commentId);
+    Task<Result<CommentVm?>> DeleteComment(int postId, int commentId);
 
     #endregion Comment
 }
