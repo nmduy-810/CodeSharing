@@ -1,6 +1,5 @@
 using CodeSharing.Core.Helpers;
 using CodeSharing.Server.AdditionalServices.Interfaces;
-using CodeSharing.Utilities.Helpers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 

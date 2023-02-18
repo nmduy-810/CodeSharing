@@ -18,7 +18,6 @@
     <ItemGroup>
         <ProjectReference Include="..\..\Libraries\Common\CodeSharing.Core.Models\CodeSharing.Core.Models.csproj" />
         <ProjectReference Include="..\..\WebAdmin\CodeSharing.DTL\CodeSharing.DTL.csproj" />
-        <ProjectReference Include="..\CodeSharing.Utilities\CodeSharing.Utilities.csproj" />
     </ItemGroup>
 
     <ItemGroup>
