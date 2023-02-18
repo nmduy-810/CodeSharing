@@ -30,7 +30,6 @@ public class RoleService : BaseService, IRoleService
             result.Status = ErrorCodeConstant.StatusCode.InternalServerError;
             result.Message = e.Message + "\n\n" + e.InnerException;
         }
-
         return result;
     }
 
@@ -45,7 +44,6 @@ public class RoleService : BaseService, IRoleService
                 result.SetResult(null, ErrorCodeConstant.MessageCode.ItemNotFound);
                 return result;
             }
-            
             result.SetResult(_utils.Transform<IdentityRole, RoleVm>(data));
         }
         catch (Exception e)
@@ -53,7 +51,6 @@ public class RoleService : BaseService, IRoleService
             result.Status = ErrorCodeConstant.StatusCode.InternalServerError;
             result.Message = e.Message + "\n\n" + e.InnerException;
         }
-    
         return result;
     }
 }

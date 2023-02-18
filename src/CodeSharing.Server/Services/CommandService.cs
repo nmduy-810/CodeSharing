@@ -30,7 +30,6 @@ public class CommandService : BaseService, ICommandService
             result.Status = ErrorCodeConstant.StatusCode.InternalServerError;
             result.Message = e.Message + "\n\n" + e.InnerException;
         }
-
         return result;
     }
 }

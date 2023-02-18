@@ -1,6 +1,8 @@
+using CodeSharing.Core.Models.BaseModels;
 using CodeSharing.Server.Repositories.Intefaces;
 using CodeSharing.Server.Services.Interfaces;
 using CodeSharing.Core.Models.Pagination;
+using CodeSharing.Core.Resources.Constants;
 using CodeSharing.DTL.Models.Contents.Post;
 using CodeSharing.DTL.Models.Systems.Function;
 using CodeSharing.DTL.Models.Systems.Role;
@@ -17,75 +19,200 @@ public class UserService : IUserService
         _repository = repository;
     }
     
-    public async Task<List<UserVm>> GetUsers()
+    public async Task<Result<List<UserVm>>> GetUsers()
     {
-        var result = await _repository.GetUsers();
+        var result = new Result<List<UserVm>>();
+        try
+        {
+            var data =  await _repository.GetUsers();
+            result.SetResult(data);
+        }
+        catch (Exception e)
+        {
+            result.Status = ErrorCodeConstant.StatusCode.InternalServerError;
+            result.Message = e.Message + "\n\n" + e.InnerException;
+        }
         return result;
     }
 
-    public async Task<Pagination<UserVm>> GetUsersPaging(int pageIndex, int pageSize)
+    public async Task<Result<Pagination<UserVm>>> GetUsersPaging(int pageIndex, int pageSize)
     {
-        var result = await _repository.GetUsersPaging(pageIndex, pageSize);
+        var result = new Result<Pagination<UserVm>>();
+        try
+        {
+            var data = await _repository.GetUsersPaging(pageIndex, pageSize);
+            result.SetResult(data);
+        }
+        catch (Exception e)
+        {
+            result.Status = ErrorCodeConstant.StatusCode.InternalServerError;
+            result.Message = e.Message + "\n\n" + e.InnerException;
+        }
         return result;
     }
 
-    public async Task<UserVm?> GetById(string id)
+    public async Task<Result<UserVm?>> GetById(string id)
     {
-        var result = await _repository.GetById(id);
+        var result = new Result<UserVm?>();
+        try
+        {
+            var data = await _repository.GetById(id);
+            if (data == null)
+            {
+                result.SetResult(null, ErrorCodeConstant.MessageCode.ItemNotFound);
+                return result;
+            }
+            result.SetResult(data);
+        }
+        catch (Exception e)
+        {
+            result.Status = ErrorCodeConstant.StatusCode.InternalServerError;
+            result.Message = e.Message + "\n\n" + e.InnerException;
+        }
         return result;
     }
 
-    public async Task<bool> PostUser(UserCreateRequest request)
+    public async Task<Result<bool>> PostUser(UserCreateRequest request)
     {
-        var result = await _repository.PostUser(request);
+        var result = new Result<bool>();
+        try
+        {
+            var data = await _repository.PostUser(request);
+            result.SetResult(data);
+        }
+        catch (Exception e)
+        {
+            result.Status = ErrorCodeConstant.StatusCode.InternalServerError;
+            result.Message = e.Message + "\n\n" + e.InnerException;
+        }
         return result;
     }
 
-    public async Task<bool> PutUser(string id, UserCreateRequest request)
+    public async Task<Result<bool>> PutUser(string id, UserCreateRequest request)
     {
-        var result = await _repository.PutUser(id, request);
+        var result = new Result<bool>();
+        try
+        {
+            var data = await _repository.PutUser(id, request);
+            result.SetResult(data);
+        }
+        catch (Exception e)
+        {
+            result.Status = ErrorCodeConstant.StatusCode.InternalServerError;
+            result.Message = e.Message + "\n\n" + e.InnerException;
+        }
         return result;
     }
 
-    public async Task<bool> PutUserPassword(string id, UserPasswordChangeRequest request)
+    public async Task<Result<bool>> PutUserPassword(string id, UserPasswordChangeRequest request)
     {
-        var result = await _repository.PutUserPassword(id, request);
+        var result = new Result<bool>();
+        try
+        {
+            var data = await _repository.PutUserPassword(id, request);
+            result.SetResult(data);
+        }
+        catch (Exception e)
+        {
+            result.Status = ErrorCodeConstant.StatusCode.InternalServerError;
+            result.Message = e.Message + "\n\n" + e.InnerException;
+        }
         return result;
     }
 
-    public async Task<bool> DeleteUser(string id)
+    public async Task<Result<bool>> DeleteUser(string id)
     {
-        var result = await _repository.DeleteUser(id);
+        var result = new Result<bool>();
+        try
+        {
+            var data = await _repository.DeleteUser(id);
+            result.SetResult(data);
+        }
+        catch (Exception e)
+        {
+            result.Status = ErrorCodeConstant.StatusCode.InternalServerError;
+            result.Message = e.Message + "\n\n" + e.InnerException;
+        }
         return result;
     }
 
-    public async Task<List<FunctionVm>> GetMenuByUserPermission(string userId)
+    public async Task<Result<List<FunctionVm>>> GetMenuByUserPermission(string userId)
     {
-        var result = await _repository.GetMenuByUserPermission(userId);
+        var result = new Result<List<FunctionVm>>();
+        try
+        {
+            var data = await _repository.GetMenuByUserPermission(userId);
+            result.SetResult(data);
+        }
+        catch (Exception e)
+        {
+            result.Status = ErrorCodeConstant.StatusCode.InternalServerError;
+            result.Message = e.Message + "\n\n" + e.InnerException;
+        }
         return result;
     }
 
-    public async Task<IList<string>?> GetUserRoles(string userId)
+    public async Task<Result<IList<string>?>> GetUserRoles(string userId)
     {
-        var result = await _repository.GetUserRoles(userId);
+        var result = new Result<IList<string>?>();
+        try
+        {
+            var data = await _repository.GetUserRoles(userId);
+            result.SetResult(data);
+        }
+        catch (Exception e)
+        {
+            result.Status = ErrorCodeConstant.StatusCode.InternalServerError;
+            result.Message = e.Message + "\n\n" + e.InnerException;
+        }
         return result;
     }
 
-    public async Task<bool> PostRolesToUserUser(string userId, RoleAssignRequest request)
+    public async  Task<Result<bool>> PostRolesToUserUser(string userId, RoleAssignRequest request)
     {
-        var result = await _repository.PostRolesToUserUser(userId, request);
+        var result = new Result<bool>();
+        try
+        {
+            var data = await _repository.PostRolesToUserUser(userId, request);
+            result.SetResult(data);
+        }
+        catch (Exception e)
+        {
+            result.Status = ErrorCodeConstant.StatusCode.InternalServerError;
+            result.Message = e.Message + "\n\n" + e.InnerException;
+        }
         return result;
     }
 
-    public async Task<bool> RemoveRolesFromUser(string userId, RoleAssignRequest request)
+    public async Task<Result<bool>> RemoveRolesFromUser(string userId, RoleAssignRequest request)
     {
-        var result = await _repository.RemoveRolesFromUser(userId, request);
+        var result = new Result<bool>();
+        try
+        {
+            var data = await _repository.RemoveRolesFromUser(userId, request);
+            result.SetResult(data);
+        }
+        catch (Exception e)
+        {
+            result.Status = ErrorCodeConstant.StatusCode.InternalServerError;
+            result.Message = e.Message + "\n\n" + e.InnerException;
+        }
         return result;
     }
 
-    public async Task<Pagination<PostQuickVm>> GetPostsByUserId(string userId, int pageIndex, int pageSize)
+    public async Task<Result<Pagination<PostQuickVm>>> GetPostsByUserId(string userId, int pageIndex, int pageSize)
     {
-        var result = await _repository.GetPostsByUserId(userId, pageIndex, pageSize);
+        var result = new Result<Pagination<PostQuickVm>>();
+        try
+        {
+            var data =  await _repository.GetPostsByUserId(userId, pageIndex, pageSize);
+            result.SetResult(data);
+        }
+        catch (Exception e)
+        {
+            result.Status = ErrorCodeConstant.StatusCode.InternalServerError;
+            result.Message = e.Message + "\n\n" + e.InnerException;
+        }
         return result;
     }
 }
