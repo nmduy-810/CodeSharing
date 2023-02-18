@@ -1,7 +1,5 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeSharing.Server", "src\CodeSharing.Server\CodeSharing.Server.csproj", "{39B0F4C4-20BA-4E9B-8C92-759FD339BFE9}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeSharing.WebPortal", "src\CodeSharing.WebPortal\CodeSharing.WebPortal.csproj", "{15B8D38D-8E45-44EB-88B2-1AF69F70DE79}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Libraries", "Libraries", "{E9A7168A-E060-4AEB-A28E-9CD3491018F0}"
@@ -24,16 +22,14 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeSharing.Infrastructure.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeSharing.DTL", "WebAdmin\CodeSharing.DTL\CodeSharing.DTL.csproj", "{62B5B177-9E46-42EE-8E8F-1C838A906405}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeSharing.Server", "WebAdmin\CodeSharing.Server\CodeSharing.Server.csproj", "{83F0EC7E-CC6C-4B40-93A7-DB09288BFC86}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{39B0F4C4-20BA-4E9B-8C92-759FD339BFE9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{39B0F4C4-20BA-4E9B-8C92-759FD339BFE9}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{39B0F4C4-20BA-4E9B-8C92-759FD339BFE9}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{39B0F4C4-20BA-4E9B-8C92-759FD339BFE9}.Release|Any CPU.Build.0 = Release|Any CPU
 		{15B8D38D-8E45-44EB-88B2-1AF69F70DE79}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{15B8D38D-8E45-44EB-88B2-1AF69F70DE79}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{15B8D38D-8E45-44EB-88B2-1AF69F70DE79}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -62,6 +58,10 @@ Global
 		{62B5B177-9E46-42EE-8E8F-1C838A906405}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{62B5B177-9E46-42EE-8E8F-1C838A906405}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{62B5B177-9E46-42EE-8E8F-1C838A906405}.Release|Any CPU.Build.0 = Release|Any CPU
+		{83F0EC7E-CC6C-4B40-93A7-DB09288BFC86}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{83F0EC7E-CC6C-4B40-93A7-DB09288BFC86}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{83F0EC7E-CC6C-4B40-93A7-DB09288BFC86}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{83F0EC7E-CC6C-4B40-93A7-DB09288BFC86}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{C28DF93D-E519-42F1-896E-24F66A2FAA2C} = {E9A7168A-E060-4AEB-A28E-9CD3491018F0}
@@ -72,5 +72,6 @@ Global
 		{C81B11AD-846A-4DAC-8E0D-F074FA2D8FEE} = {C28DF93D-E519-42F1-896E-24F66A2FAA2C}
 		{464C6ED7-F4E6-4F3F-B003-2F38272958CB} = {A5B1E263-73E2-4DD4-96ED-FF9A27C6A160}
 		{62B5B177-9E46-42EE-8E8F-1C838A906405} = {A5B1E263-73E2-4DD4-96ED-FF9A27C6A160}
+		{83F0EC7E-CC6C-4B40-93A7-DB09288BFC86} = {A5B1E263-73E2-4DD4-96ED-FF9A27C6A160}
 	EndGlobalSection
 EndGlobal
