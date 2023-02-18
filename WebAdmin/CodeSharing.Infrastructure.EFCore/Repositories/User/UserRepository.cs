@@ -1,16 +1,17 @@
 using CodeSharing.Core.Resources.Constants;
 using CodeSharing.DTL.EFCoreEntities;
 using CodeSharing.Infrastructure.EFCore.Provider;
-using CodeSharing.Server.Repositories.Intefaces;
 using CodeSharing.Core.Models.Pagination;
 using CodeSharing.DTL.Models.Contents.Post;
 using CodeSharing.DTL.Models.Systems.Function;
 using CodeSharing.DTL.Models.Systems.Role;
 using CodeSharing.DTL.Models.Systems.User;
+using CodeSharing.Infrastructure.EFCore.Repositories.Generic;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
-namespace CodeSharing.Server.Repositories;
+namespace CodeSharing.Infrastructure.EFCore.Repositories.User;
 
 public class UserRepository : GenericRepository<ApplicationDbContext>, IUserRepository
 {

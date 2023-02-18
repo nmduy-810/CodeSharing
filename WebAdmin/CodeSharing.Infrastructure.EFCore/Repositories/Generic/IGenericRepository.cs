@@ -2,7 +2,7 @@ using System.Linq.Expressions;
 using CodeSharing.DTL.EFCoreEntities;
 using Microsoft.EntityFrameworkCore;
 
-namespace CodeSharing.Server.Repositories.Intefaces;
+namespace CodeSharing.Infrastructure.EFCore.Repositories.Generic;
 
 public interface IGenericRepository<T, TK> where T : EntityBase<TK>
 {

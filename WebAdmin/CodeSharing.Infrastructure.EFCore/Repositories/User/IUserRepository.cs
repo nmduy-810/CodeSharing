@@ -4,8 +4,9 @@ using CodeSharing.DTL.Models.Contents.Post;
 using CodeSharing.DTL.Models.Systems.Function;
 using CodeSharing.DTL.Models.Systems.Role;
 using CodeSharing.DTL.Models.Systems.User;
+using CodeSharing.Infrastructure.EFCore.Repositories.Generic;
 
-namespace CodeSharing.Server.Repositories.Intefaces;
+namespace CodeSharing.Infrastructure.EFCore.Repositories.User;
 
 public interface IUserRepository : IGenericRepository<ApplicationDbContext>
 {

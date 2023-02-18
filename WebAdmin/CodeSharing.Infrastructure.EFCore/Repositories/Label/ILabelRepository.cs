@@ -1,7 +1,8 @@
 using CodeSharing.Infrastructure.EFCore.Provider;
 using CodeSharing.DTL.Models.Contents.Label;
+using CodeSharing.Infrastructure.EFCore.Repositories.Generic;
 
-namespace CodeSharing.Server.Repositories.Intefaces;
+namespace CodeSharing.Infrastructure.EFCore.Repositories.Label;
 
 public interface ILabelRepository : IGenericRepository<ApplicationDbContext>
 {

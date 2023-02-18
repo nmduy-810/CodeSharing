@@ -3,6 +3,7 @@ using CodeSharing.Server.Services.Interfaces;
 using CodeSharing.DTL.Models.Statistics.Comment;
 using CodeSharing.DTL.Models.Statistics.Post;
 using CodeSharing.DTL.Models.Statistics.User;
+using CodeSharing.Infrastructure.EFCore.Repositories.Statistic;
 
 namespace CodeSharing.Server.Services;
 

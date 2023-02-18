@@ -1,9 +1,10 @@
 using CodeSharing.Infrastructure.EFCore.Provider;
-using CodeSharing.Server.Repositories.Intefaces;
 using CodeSharing.DTL.Models.Contents.Label;
+using CodeSharing.Infrastructure.EFCore.Repositories.Generic;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
-namespace CodeSharing.Server.Repositories;
+namespace CodeSharing.Infrastructure.EFCore.Repositories.Label;
 
 public class LabelRepository : GenericRepository<ApplicationDbContext>, ILabelRepository
 {

@@ -1,10 +1,9 @@
 using System.Linq.Expressions;
 using CodeSharing.DTL.EFCoreEntities;
 using CodeSharing.Infrastructure.EFCore.Provider;
-using CodeSharing.Server.Repositories.Intefaces;
 using Microsoft.EntityFrameworkCore;
 
-namespace CodeSharing.Server.Repositories;
+namespace CodeSharing.Infrastructure.EFCore.Repositories.Generic;
 
 public class GenericRepository<T, TK> : IGenericRepository<T, TK> where T : EntityBase<TK>
 {

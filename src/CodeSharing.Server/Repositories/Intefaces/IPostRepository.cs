@@ -5,6 +5,7 @@ using CodeSharing.DTL.Models.Contents.Comment;
 using CodeSharing.DTL.Models.Contents.Post;
 using CodeSharing.DTL.Models.Contents.Report;
 using CodeSharing.DTL.Models.Contents.Vote;
+using CodeSharing.Infrastructure.EFCore.Repositories.Generic;
 
 namespace CodeSharing.Server.Repositories.Intefaces;
 

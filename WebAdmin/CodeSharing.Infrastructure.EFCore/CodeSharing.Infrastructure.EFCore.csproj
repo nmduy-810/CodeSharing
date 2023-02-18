@@ -7,15 +7,12 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <Folder Include="Repositories\Generic" />
-      <Folder Include="Repositories\Label" />
       <Folder Include="Repositories\Post" />
-      <Folder Include="Repositories\Statistic" />
       <Folder Include="Repositories\Upload" />
-      <Folder Include="Repositories\User" />
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\..\Libraries\Common\CodeSharing.Core.Models\CodeSharing.Core.Models.csproj" />
       <ProjectReference Include="..\CodeSharing.DTL\CodeSharing.DTL.csproj" />
     </ItemGroup>
 

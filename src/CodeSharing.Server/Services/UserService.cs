@@ -1,5 +1,4 @@
 using CodeSharing.Core.Models.BaseModels;
-using CodeSharing.Server.Repositories.Intefaces;
 using CodeSharing.Server.Services.Interfaces;
 using CodeSharing.Core.Models.Pagination;
 using CodeSharing.Core.Resources.Constants;
@@ -7,6 +6,7 @@ using CodeSharing.DTL.Models.Contents.Post;
 using CodeSharing.DTL.Models.Systems.Function;
 using CodeSharing.DTL.Models.Systems.Role;
 using CodeSharing.DTL.Models.Systems.User;
+using CodeSharing.Infrastructure.EFCore.Repositories.User;
 
 namespace CodeSharing.Server.Services;
 

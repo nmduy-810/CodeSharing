@@ -1,11 +1,11 @@
 using CodeSharing.Infrastructure.EFCore.Provider;
-using CodeSharing.Server.Repositories.Intefaces;
 using CodeSharing.DTL.Models.Statistics.Comment;
 using CodeSharing.DTL.Models.Statistics.Post;
 using CodeSharing.DTL.Models.Statistics.User;
+using CodeSharing.Infrastructure.EFCore.Repositories.Generic;
 using Microsoft.EntityFrameworkCore;
 
-namespace CodeSharing.Server.Repositories;
+namespace CodeSharing.Infrastructure.EFCore.Repositories.Statistic;
 
 public class StatisticRepository : GenericRepository<ApplicationDbContext>, IStatisticRepository
 {

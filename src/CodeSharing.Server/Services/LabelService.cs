@@ -3,6 +3,7 @@ using CodeSharing.Core.Resources.Constants;
 using CodeSharing.Server.Repositories.Intefaces;
 using CodeSharing.Server.Services.Interfaces;
 using CodeSharing.DTL.Models.Contents.Label;
+using CodeSharing.Infrastructure.EFCore.Repositories.Label;
 
 namespace CodeSharing.Server.Services;
 
