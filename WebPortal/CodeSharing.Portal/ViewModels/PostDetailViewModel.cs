@@ -6,7 +6,9 @@ namespace CodeSharing.Portal.ViewModels;
 
 public class PostDetailViewModel
 {
-    public PostVm Post { get; set; }
-    public List<LabelInPostVm> Label { get; set; }
-    public UserVm CurrentUser { get; set; }
+    public PostVm Post { get; set; }  = default!;
+    
+    public List<LabelInPostVm> Label { get; set; }  = default!;
+    
+    public UserVm CurrentUser { get; set; }  = default!;
 }

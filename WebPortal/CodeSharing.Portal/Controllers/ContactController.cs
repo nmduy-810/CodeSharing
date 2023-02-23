@@ -61,10 +61,6 @@ public class ContactController : Controller
             });
         }
         
-        var errors = ModelState.Select(x => x.Value?.Errors)
-            .Where(y=> y.Count > 0)
-            .ToList();
-
         var contact = await _contactApiClient.GetById(1);
         var items = new ContactViewModel
         {

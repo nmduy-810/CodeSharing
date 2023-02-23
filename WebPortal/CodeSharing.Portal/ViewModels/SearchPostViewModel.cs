@@ -5,6 +5,7 @@ namespace CodeSharing.Portal.ViewModels;
 
 public class SearchPostViewModel
 {
-    public Pagination<PostQuickVm> Data { set; get; }
-    public string Keyword { set; get; }
+    public Pagination<PostQuickVm> Data { set; get; }  = default!;
+    
+    public string Keyword { set; get; }  = default!;
 }

@@ -5,5 +5,5 @@ namespace CodeSharing.Portal.ViewModels;
 
 public class HomeViewModel
 {
-    public Pagination<PostQuickVm> LatestPosts { get; set; }
+    public Pagination<PostQuickVm> LatestPosts { get; set; }  = default!;
 }

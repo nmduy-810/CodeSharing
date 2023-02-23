@@ -6,6 +6,7 @@ namespace CodeSharing.Portal.ViewModels;
 
 public class ListByCategoryIdViewModel
 {
-    public Pagination<PostQuickVm> Data { get; set; }
-    public CategoryVm Category { get; set; }
+    public Pagination<PostQuickVm> Data { get; set; }  = default!;
+    
+    public CategoryVm Category { get; set; }  = default!;
 }

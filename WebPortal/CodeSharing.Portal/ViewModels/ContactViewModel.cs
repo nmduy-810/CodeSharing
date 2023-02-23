@@ -7,6 +7,8 @@ namespace CodeSharing.Portal.ViewModels;
 public class ContactViewModel
 {
     public ContactVm? Contact { get; set; }
+    
     public UserVm? CurrentUser { get; set; }
-    public SupportVm Support { get; set; }
+    
+    public SupportVm Support { get; set; }  = default!;
 }

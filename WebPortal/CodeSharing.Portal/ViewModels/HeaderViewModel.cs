@@ -5,6 +5,7 @@ namespace CodeSharing.Portal.ViewModels;
 
 public class HeaderViewModel
 {
-    public List<CategoryVm> Categories { get; set; }
-    public UserVm CurrentUser { get; set; }
+    public List<CategoryVm> Categories { get; set; }  = default!;
+    
+    public UserVm CurrentUser { get; set; }  = default!;
 }

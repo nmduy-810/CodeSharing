@@ -6,6 +6,7 @@ namespace CodeSharing.Portal.ViewModels;
 
 public class ListByTagIdViewModel
 {
-    public Pagination<PostQuickVm> Data { get; set; }
-    public LabelVm Label { get; set; }
+    public Pagination<PostQuickVm> Data { get; set; }  = default!;
+    
+    public LabelVm Label { get; set; }  = default!;
 }

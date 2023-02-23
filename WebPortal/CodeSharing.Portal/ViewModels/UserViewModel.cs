@@ -5,5 +5,5 @@ namespace CodeSharing.Portal.ViewModels;
 
 public class UserViewModel
 {
-    public Pagination<UserVm> Users { get; set; }
+    public Pagination<UserVm> Users { get; set; }  = default!;
 }

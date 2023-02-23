@@ -5,9 +5,13 @@ namespace CodeSharing.Portal.ViewModels;
 
 public class SideBarViewModel
 {
-    public List<PostQuickVm> PopularPosts { get; set; }
-    public List<PostQuickVm> LatestPosts { get; set; }
-    public List<PostQuickVm> TrendingPosts { get; set; }
-    public List<LabelVm> PopularLabels { get; set; }
-    public List<PostQuickVm> ExplorerTopics { get; set; }
+    public List<PostQuickVm> PopularPosts { get; set; }  = default!;
+    
+    public List<PostQuickVm> LatestPosts { get; set; }  = default!;
+    
+    public List<PostQuickVm> TrendingPosts { get; set; }  = default!;
+    
+    public List<LabelVm> PopularLabels { get; set; }  = default!;
+    
+    public List<PostQuickVm> ExplorerTopics { get; set; }  = default!;
 }

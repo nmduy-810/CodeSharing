@@ -4,5 +4,5 @@ namespace CodeSharing.Portal.ViewModels;
 
 public class AboutViewModel
 {
-    public AboutVm About { get; set; }
+    public AboutVm About { get; set; } = default!;
 }
