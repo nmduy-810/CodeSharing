@@ -223,7 +223,7 @@ public class AccountController : Controller
     public async Task LoadPopularLabels()
     {
         var popularLabels = await _labelApiClient.GetPopularLabels(10);
-        ViewBag.PopularLabels = popularLabels;
+        ViewBag.PopularLabels = popularLabels.Data;
     }
 
     #endregion Helper Method

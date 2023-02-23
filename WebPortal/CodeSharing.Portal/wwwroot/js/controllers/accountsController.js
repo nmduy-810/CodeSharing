@@ -8,7 +8,7 @@ let accountsController = function () {
             xhr;
             loader;
 
-            constructor(loader) {
+            constructor(loader) { 
                 // The file loader instance to use during the upload. It sounds scary but do not
                 // worry — the loader will be passed into the adapter later on in this guide.
                 this.loader = loader;

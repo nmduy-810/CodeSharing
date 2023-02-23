@@ -3,6 +3,7 @@ using CodeSharing.DTL.EFCoreEntities;
 using CodeSharing.DTL.Models.Commons;
 using CodeSharing.DTL.Models.Contents.About;
 using CodeSharing.DTL.Models.Contents.Category;
+using CodeSharing.DTL.Models.Contents.Comment;
 using CodeSharing.DTL.Models.Contents.Contact;
 using CodeSharing.DTL.Models.Contents.Post;
 using CodeSharing.DTL.Models.Contents.Vote;
@@ -69,6 +70,12 @@ public class EfCoreMapperProfile : Profile
 
         CreateMap<CdsVote, VoteVm>().ReverseMap();
         
+        #endregion
+
+        #region Comment
+
+        CreateMap<CdsComment, CommentVm>().ReverseMap();
+
         #endregion
     }
 }
