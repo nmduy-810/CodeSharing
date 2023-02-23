@@ -1,5 +1,6 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using CodeSharing.Core.Services.Serialize;
 using CodeSharing.Portal.Attribute;
 using CodeSharing.Portal.Config;
 using CodeSharing.Portal.Interfaces;
@@ -158,6 +159,7 @@ builder.Services.AddTransient<IContactApiClient, ContactApiClient>();
 builder.Services.AddTransient<IUserApiClient, UserApiClient>();
 builder.Services.AddTransient<IAboutApiClient, AboutApiClient>();
 builder.Services.AddTransient<IUploadApiClient, UploadApiClient>();
+builder.Services.AddTransient<ISerializeService, SerializeService>();
 builder.Services.AddScoped<ValidateReCaptchaAttribute>();
 
 // Security Headers

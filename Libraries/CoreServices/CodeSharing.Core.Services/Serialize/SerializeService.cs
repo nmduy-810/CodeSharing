@@ -31,4 +31,9 @@ public class SerializeService : ISerializeService
     {
         return JsonConvert.DeserializeObject<T>(text);
     }
+
+    public object? Deserialize(string value, Type type)
+    {
+        return JsonConvert.DeserializeObject(value, type, (JsonSerializerSettings?)null);
+    }
 }

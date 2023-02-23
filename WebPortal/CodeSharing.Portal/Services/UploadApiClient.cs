@@ -1,8 +1,8 @@
 using System.Net.Http.Headers;
+using CodeSharing.Core.Services.Serialize;
 using CodeSharing.DTL.Models.Commons;
 using CodeSharing.Portal.Interfaces;
 using Microsoft.AspNetCore.Authentication;
-using Newtonsoft.Json;
 
 namespace CodeSharing.Portal.Services;
 
@@ -11,13 +11,16 @@ public class UploadApiClient : BaseApiClient, IUploadApiClient
     private readonly IConfiguration _configuration;
     private readonly IHttpClientFactory _httpClientFactory;
     private readonly IHttpContextAccessor _httpContextAccessor;
-
+    private readonly ISerializeService _serializeService;
+    
     public UploadApiClient(IHttpClientFactory httpClientFactory, IConfiguration configuration,
-        IHttpContextAccessor httpContextAccessor) : base(httpClientFactory, configuration, httpContextAccessor)
+         IHttpContextAccessor httpContextAccessor, ISerializeService serializeService)
+                : base(httpClientFactory, configuration, httpContextAccessor, serializeService)
     {
         _httpClientFactory = httpClientFactory;
         _configuration = configuration;
         _httpContextAccessor = httpContextAccessor;
+        _serializeService = serializeService;
     }
 
     public async Task<UploadImageVm?> UploadImage(IFormFile? upload)
@@ -48,7 +51,7 @@ public class UploadApiClient : BaseApiClient, IUploadApiClient
         var response = await client.PostAsync("/api/uploads/UploadImage", requestContent);
         var body = await response.Content.ReadAsStringAsync();
         return response.IsSuccessStatusCode
-            ? JsonConvert.DeserializeObject<UploadImageVm>(body)
+            ? _serializeService.Deserialize<UploadImageVm>(body)
             : null;
     }
 }

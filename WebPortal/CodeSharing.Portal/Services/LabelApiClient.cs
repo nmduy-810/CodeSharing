@@ -1,4 +1,5 @@
 using CodeSharing.Core.Models.BaseModels;
+using CodeSharing.Core.Services.Serialize;
 using CodeSharing.DTL.Models.Contents.Label;
 using CodeSharing.Portal.Interfaces;
 
@@ -7,8 +8,8 @@ namespace CodeSharing.Portal.Services;
 public class LabelApiClient : BaseApiClient, ILabelApiClient
 {
     public LabelApiClient(IHttpClientFactory httpClientFactory, IConfiguration configuration,
-        IHttpContextAccessor httpContextAccessor)
-        : base(httpClientFactory, configuration, httpContextAccessor)
+        IHttpContextAccessor httpContextAccessor, ISerializeService serializeService)
+        : base(httpClientFactory, configuration, httpContextAccessor, serializeService)
     {
     }
 

@@ -1,8 +1,8 @@
 using System.Net.Http.Headers;
 using System.Text;
 using CodeSharing.Core.Models.BaseModels;
+using CodeSharing.Core.Services.Serialize;
 using Microsoft.AspNetCore.Authentication;
-using Newtonsoft.Json;
 
 namespace CodeSharing.Portal.Services;
 
@@ -11,13 +11,15 @@ public class BaseApiClient
     private readonly IConfiguration _configuration;
     private readonly IHttpClientFactory _httpClientFactory;
     private readonly IHttpContextAccessor _httpContextAccessor;
-
-    public BaseApiClient(IHttpClientFactory httpClientFactory, IConfiguration configuration,
-        IHttpContextAccessor httpContextAccessor)
+    private readonly ISerializeService _serializeService;
+    
+    protected BaseApiClient(IHttpClientFactory httpClientFactory, IConfiguration configuration,
+        IHttpContextAccessor httpContextAccessor, ISerializeService serializeService)
     {
         _httpClientFactory = httpClientFactory;
         _configuration = configuration;
         _httpContextAccessor = httpContextAccessor;
+        _serializeService = serializeService;
     }
 
     protected async Task<Result<List<T>>> GetListAsync<T>(string url, bool requiredLogin = false)
@@ -32,10 +34,9 @@ public class BaseApiClient
                 var token = await _httpContextAccessor.HttpContext.GetTokenAsync("access_token");
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             }
-
+        
         var response = await client.GetAsync(url);
-
-        var datas = (Result<List<T>>)JsonConvert.DeserializeObject(await response.Content.ReadAsStringAsync(),
+        var datas = (Result<List<T>>)_serializeService.Deserialize(await response.Content.ReadAsStringAsync(),
             typeof(Result<List<T>>))!;
 
         return datas;
@@ -58,7 +59,7 @@ public class BaseApiClient
 
         var body = await response.Content.ReadAsStringAsync();
 
-        var datas = JsonConvert.DeserializeObject<Result<T>>(body);
+        var datas = _serializeService.Deserialize<Result<T>>(body);
 
         return datas ?? new Result<T>();
     }
@@ -71,7 +72,7 @@ public class BaseApiClient
         StringContent? httpContent = null;
         if (requestContent != null)
         {
-            var json = JsonConvert.SerializeObject(requestContent);
+            var json = _serializeService.Serialize(requestContent);
             httpContent = new StringContent(json, Encoding.UTF8, "application/json");
         }
 
@@ -85,7 +86,7 @@ public class BaseApiClient
         var response = await client.PostAsync(url, httpContent);
         var body = await response.Content.ReadAsStringAsync();
         if (response.IsSuccessStatusCode)
-            return JsonConvert.DeserializeObject<Result<TResponse>>(body) ?? new Result<TResponse>();
+            return _serializeService.Deserialize<Result<TResponse>>(body) ?? new Result<TResponse>();
         
         throw new Exception(body);
     }
@@ -98,7 +99,7 @@ public class BaseApiClient
         HttpContent? httpContent = null;
         if (requestContent != null)
         {
-            var json = JsonConvert.SerializeObject(requestContent);
+            var json = _serializeService.Serialize(requestContent);
             httpContent = new StringContent(json, Encoding.UTF8, "application/json");
         }
 
@@ -115,7 +116,7 @@ public class BaseApiClient
             var body = await response.Content.ReadAsStringAsync();
 
             if (response.IsSuccessStatusCode)
-                return JsonConvert.DeserializeObject<Result<TResponse>>(body) ?? new Result<TResponse>();
+                return _serializeService.Deserialize<Result<TResponse>>(body) ?? new Result<TResponse>();
         
             throw new Exception(body);
         }
@@ -138,7 +139,7 @@ public class BaseApiClient
         var body = await response.Content.ReadAsStringAsync();
 
         if (response.IsSuccessStatusCode)
-            return JsonConvert.DeserializeObject<Result<TResponse>>(body) ?? new Result<TResponse>();
+            return _serializeService.Deserialize<Result<TResponse>>(body) ?? new Result<TResponse>();
         
         throw new Exception(body);
     }

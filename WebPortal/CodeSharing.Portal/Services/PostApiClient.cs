@@ -1,6 +1,7 @@
 using System.Net.Http.Headers;
 using CodeSharing.Core.Models.BaseModels;
 using CodeSharing.Core.Models.Pagination;
+using CodeSharing.Core.Services.Serialize;
 using CodeSharing.DTL.Models.Contents.Comment;
 using CodeSharing.DTL.Models.Contents.Post;
 using CodeSharing.DTL.Models.Contents.Report;
@@ -16,14 +17,16 @@ public class PostApiClient : BaseApiClient, IPostApiClient
     private readonly IConfiguration _configuration;
     private readonly IHttpClientFactory _httpClientFactory;
     private readonly IHttpContextAccessor _httpContextAccessor;
+    private readonly ISerializeService _serializeService;
 
     public PostApiClient(IHttpClientFactory httpClientFactory, IConfiguration configuration,
-        IHttpContextAccessor httpContextAccessor)
-        : base(httpClientFactory, configuration, httpContextAccessor)
+        IHttpContextAccessor httpContextAccessor, ISerializeService serializeService)
+        : base(httpClientFactory, configuration, httpContextAccessor, serializeService)
     {
         _httpClientFactory = httpClientFactory;
         _configuration = configuration;
         _httpContextAccessor = httpContextAccessor;
+        _serializeService = serializeService;
     }
 
     public async Task<Result<List<PostQuickVm>>> GetPopularPosts(int take)
@@ -152,9 +155,9 @@ public class PostApiClient : BaseApiClient, IPostApiClient
 
         var response = await client.PostAsync("/api/posts/", requestContent);
         var body = await response.Content.ReadAsStringAsync();
-        
+
         if (response.IsSuccessStatusCode)
-            return JsonConvert.DeserializeObject<Result<PostVm>>(body) ?? new Result<PostVm>();
+            return _serializeService.Deserialize<Result<PostVm>>(body) ?? new Result<PostVm>();
 
         return new Result<PostVm>();
     }
@@ -208,7 +211,7 @@ public class PostApiClient : BaseApiClient, IPostApiClient
         var body = await response.Content.ReadAsStringAsync();
         
         if (response.IsSuccessStatusCode)
-            return JsonConvert.DeserializeObject<Result<PostVm>>(body) ?? new Result<PostVm>();
+            return _serializeService.Deserialize<Result<PostVm>>(body) ?? new Result<PostVm>();
 
         return new Result<PostVm>();
     }

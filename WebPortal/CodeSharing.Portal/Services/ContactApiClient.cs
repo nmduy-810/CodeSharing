@@ -1,4 +1,5 @@
 using CodeSharing.Core.Models.BaseModels;
+using CodeSharing.Core.Services.Serialize;
 using CodeSharing.DTL.Models.Commons;
 using CodeSharing.DTL.Models.Contents.Contact;
 using CodeSharing.DTL.Models.Contents.Support;
@@ -9,8 +10,8 @@ namespace CodeSharing.Portal.Services;
 public class ContactApiClient : BaseApiClient, IContactApiClient
 {
     public ContactApiClient(IHttpClientFactory httpClientFactory, IConfiguration configuration,
-        IHttpContextAccessor httpContextAccessor)
-        : base(httpClientFactory, configuration, httpContextAccessor)
+        IHttpContextAccessor httpContextAccessor, ISerializeService serializeService)
+        : base(httpClientFactory, configuration, httpContextAccessor, serializeService)
     {
     }
 

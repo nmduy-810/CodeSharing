@@ -1,5 +1,6 @@
 using CodeSharing.Core.Models.BaseModels;
 using CodeSharing.Core.Models.Pagination;
+using CodeSharing.Core.Services.Serialize;
 using CodeSharing.DTL.Models.Contents.Post;
 using CodeSharing.DTL.Models.Systems.User;
 using CodeSharing.Portal.Interfaces;
@@ -10,8 +11,8 @@ namespace CodeSharing.Portal.Services;
 public class UserApiClient : BaseApiClient, IUserApiClient
 {
     public UserApiClient(IHttpClientFactory httpClientFactory, IConfiguration configuration,
-        IHttpContextAccessor httpContextAccessor)
-        : base(httpClientFactory, configuration, httpContextAccessor)
+        IHttpContextAccessor httpContextAccessor, ISerializeService serializeService)
+        : base(httpClientFactory, configuration, httpContextAccessor, serializeService)
     {
     }
 

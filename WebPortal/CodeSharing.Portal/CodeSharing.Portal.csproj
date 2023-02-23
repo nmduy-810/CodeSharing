@@ -17,6 +17,7 @@
 
     <ItemGroup>
         <ProjectReference Include="..\..\Libraries\Common\CodeSharing.Core.Models\CodeSharing.Core.Models.csproj" />
+        <ProjectReference Include="..\..\Libraries\CoreServices\CodeSharing.Core.Services\CodeSharing.Core.Services.csproj" />
         <ProjectReference Include="..\..\WebServer\CodeSharing.DTL\CodeSharing.DTL.csproj" />
     </ItemGroup>
 
