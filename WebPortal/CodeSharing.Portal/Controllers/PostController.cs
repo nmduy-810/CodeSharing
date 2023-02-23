@@ -33,12 +33,12 @@ public class PostController : Controller
 
         var items = new PostDetailViewModel
         {
-            Post = post,
-            Label = label
+            Post = post.Data,
+            Label = label.Data
         };
 
         if (User.Identity != null && User.Identity.IsAuthenticated)
-            items.CurrentUser = await _userApiClient.GetById(User.GetUserId());
+            items.CurrentUser = _userApiClient.GetById(User.GetUserId()).Result.Data;
 
         // Update view count when user clicked post
         await _postApiClient.UpdateViewCount(id);
@@ -53,8 +53,8 @@ public class PostController : Controller
         var data = await _postApiClient.GetPostsByCategoryId(id, page, pageSize);
         var items = new ListByCategoryIdViewModel
         {
-            Data = data,
-            Category = category
+            Data = data.Data,
+            Category = category.Data
         };
 
         return View(items);
@@ -67,8 +67,8 @@ public class PostController : Controller
         var data = await _postApiClient.GetPostsByTagId(id, page, pageSize);
         var items = new ListByTagIdViewModel
         {
-            Data = data,
-            Label = label
+            Data = data.Data,
+            Label = label.Data
         };
 
         return View(items);
@@ -77,10 +77,10 @@ public class PostController : Controller
     public async Task<IActionResult> Search(string keyword, int page = 1)
     {
         var pageSize = int.Parse(_configuration["PageSize"]);
-        var data = await _postApiClient.SearchPosts(keyword, page, pageSize);
+        var posts = await _postApiClient.SearchPosts(keyword, page, pageSize);
         var items = new SearchPostViewModel
         {
-            Data = data,
+            Data = posts.Data,
             Keyword = keyword
         };
         return View(items);

@@ -1,3 +1,4 @@
+using CodeSharing.Core.Models.BaseModels;
 using CodeSharing.DTL.Models.Contents.Category;
 using CodeSharing.Portal.Interfaces;
 
@@ -11,12 +12,12 @@ public class CategoryApiClient : BaseApiClient, ICategoryApiClient
     {
     }
 
-    public async Task<List<CategoryVm>> GetCategories()
+    public async Task<Result<List<CategoryVm>>> GetCategories()
     {
         return await GetListAsync<CategoryVm>("/api/categories");
     }
 
-    public async Task<CategoryVm> GetById(int id)
+    public async Task<Result<CategoryVm>> GetById(int id)
     {
         return await GetAsync<CategoryVm>($"/api/categories/{id}");
     }

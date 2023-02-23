@@ -25,7 +25,7 @@ public class HomeController : Controller
 
         var items = new HomeViewModel
         {
-            LatestPosts = latestPosts
+            LatestPosts = latestPosts.Data
         };
         
         return View(items);

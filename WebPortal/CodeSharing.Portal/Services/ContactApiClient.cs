@@ -1,3 +1,5 @@
+using CodeSharing.Core.Models.BaseModels;
+using CodeSharing.DTL.Models.Commons;
 using CodeSharing.DTL.Models.Contents.Contact;
 using CodeSharing.DTL.Models.Contents.Support;
 using CodeSharing.Portal.Interfaces;
@@ -12,13 +14,13 @@ public class ContactApiClient : BaseApiClient, IContactApiClient
     {
     }
 
-    public async Task<ContactVm> GetById(int id)
+    public async Task<Result<ContactVm>> GetById(int id)
     {
         return await GetAsync<ContactVm>($"/api/contacts/{id}");
     }
 
-    public async Task<bool> PostSupport(SupportCreateRequest request)
+    public async Task<Result<SupportVm>> PostSupport(SupportCreateRequest request)
     {
-        return await PostAsync<SupportCreateRequest, bool>("/api/contacts/", request, false);
+        return await PostAsync<SupportCreateRequest, SupportVm>("/api/contacts/", request, false);
     }
 }

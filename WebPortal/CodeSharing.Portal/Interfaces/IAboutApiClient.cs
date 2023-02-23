@@ -1,8 +1,9 @@
+using CodeSharing.Core.Models.BaseModels;
 using CodeSharing.DTL.Models.Contents.About;
 
 namespace CodeSharing.Portal.Interfaces;
 
 public interface IAboutApiClient
 {
-    Task<AboutVm> GetById(int id);
+    Task<Result<AboutVm>> GetById(int id);
 }

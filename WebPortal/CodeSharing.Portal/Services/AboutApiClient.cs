@@ -1,3 +1,4 @@
+using CodeSharing.Core.Models.BaseModels;
 using CodeSharing.DTL.Models.Contents.About;
 using CodeSharing.Portal.Interfaces;
 
@@ -10,7 +11,7 @@ public class AboutApiClient : BaseApiClient, IAboutApiClient
     {
     }
 
-    public async Task<AboutVm> GetById(int id)
+    public async Task<Result<AboutVm>> GetById(int id)
     {
         return await GetAsync<AboutVm>($"/api/abouts/{id}");
     }

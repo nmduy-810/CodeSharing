@@ -18,7 +18,7 @@ public class AboutController : Controller
         var about = await _aboutApiClient.GetById(1);
         var items = new AboutViewModel
         {
-            About = about
+            About = about.Data
         };
 
         return View(items);

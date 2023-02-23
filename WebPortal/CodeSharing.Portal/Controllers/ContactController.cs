@@ -25,12 +25,12 @@ public class ContactController : Controller
         var contact = await _contactApiClient.GetById(1);
         var items = new ContactViewModel
         {
-            Contact = contact
+            Contact = contact.Data
         };
 
         var user = User;
         if (user?.Identity != null && user.Identity.IsAuthenticated)
-            items.CurrentUser = await _userApiClient.GetById(user.GetUserId());
+            items.CurrentUser = _userApiClient.GetById(user.GetUserId()).Result.Data;
 
         return View(items);
     }
@@ -61,19 +61,19 @@ public class ContactController : Controller
             });
         }
         
-        var errors = ModelState.Select(x => x.Value.Errors)
-            .Where(y=>y.Count>0)
+        var errors = ModelState.Select(x => x.Value?.Errors)
+            .Where(y=> y.Count > 0)
             .ToList();
 
         var contact = await _contactApiClient.GetById(1);
         var items = new ContactViewModel
         {
-            Contact = contact
+            Contact = contact.Data
         };
 
         var user = User;
         if (user?.Identity != null && user.Identity.IsAuthenticated)
-            items.CurrentUser = await _userApiClient.GetById(user.GetUserId());
+            items.CurrentUser = _userApiClient.GetById(user.GetUserId()).Result.Data;
 
         return View(items);
     }

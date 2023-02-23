@@ -1,9 +1,11 @@
+using CodeSharing.Core.Models.BaseModels;
 using CodeSharing.DTL.Models.Contents.Category;
 
 namespace CodeSharing.Portal.Interfaces;
 
 public interface ICategoryApiClient
 {
-    Task<List<CategoryVm>> GetCategories();
-    Task<CategoryVm> GetById(int id);
+    Task<Result<List<CategoryVm>>> GetCategories();
+    
+    Task<Result<CategoryVm>> GetById(int id);
 }

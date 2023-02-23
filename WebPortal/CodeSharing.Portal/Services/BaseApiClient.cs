@@ -1,5 +1,6 @@
 using System.Net.Http.Headers;
 using System.Text;
+using CodeSharing.Core.Models.BaseModels;
 using Microsoft.AspNetCore.Authentication;
 using Newtonsoft.Json;
 
@@ -19,7 +20,7 @@ public class BaseApiClient
         _httpContextAccessor = httpContextAccessor;
     }
 
-    protected async Task<List<T>> GetListAsync<T>(string url, bool requiredLogin = false)
+    protected async Task<Result<List<T>>> GetListAsync<T>(string url, bool requiredLogin = false)
     {
         var client = _httpClientFactory.CreateClient();
         client.BaseAddress = new Uri(_configuration["ServerUrl"]);
@@ -34,13 +35,13 @@ public class BaseApiClient
 
         var response = await client.GetAsync(url);
 
-        var datas = (List<T>)JsonConvert.DeserializeObject(await response.Content.ReadAsStringAsync(),
-            typeof(List<T>))!;
+        var datas = (Result<List<T>>)JsonConvert.DeserializeObject(await response.Content.ReadAsStringAsync(),
+            typeof(Result<List<T>>))!;
 
         return datas;
     }
 
-    protected async Task<T> GetAsync<T>(string url, bool requiredLogin = false)
+    protected async Task<Result<T>> GetAsync<T>(string url, bool requiredLogin = false)
     {
         var client = _httpClientFactory.CreateClient();
         client.BaseAddress = new Uri(_configuration["ServerUrl"]);
@@ -57,12 +58,12 @@ public class BaseApiClient
 
         var body = await response.Content.ReadAsStringAsync();
 
-        var datas = JsonConvert.DeserializeObject<T>(body);
+        var datas = JsonConvert.DeserializeObject<Result<T>>(body);
 
-        return datas;
+        return datas ?? new Result<T>();
     }
 
-    protected async Task<TResponse> PostAsync<TRequest, TResponse>(string url, TRequest requestContent,
+    protected async Task<Result<TResponse>> PostAsync<TRequest, TResponse>(string url, TRequest requestContent,
         bool requiredLogin = true)
     {
         var client = _httpClientFactory.CreateClient();
@@ -84,16 +85,17 @@ public class BaseApiClient
         var response = await client.PostAsync(url, httpContent);
         var body = await response.Content.ReadAsStringAsync();
         if (response.IsSuccessStatusCode)
-            return JsonConvert.DeserializeObject<TResponse>(body);
+            return JsonConvert.DeserializeObject<Result<TResponse>>(body) ?? new Result<TResponse>();
+        
         throw new Exception(body);
     }
 
-    protected async Task<bool> PutAsync<TRequest, TResponse>(string url, TRequest requestContent,
+    protected async Task<Result<TResponse>> PutAsync<TRequest, TResponse>(string url, TRequest requestContent,
         bool requiredLogin = true)
     {
         var client = _httpClientFactory.CreateClient();
         client.BaseAddress = new Uri(_configuration["ServerUrl"]);
-        HttpContent httpContent = null;
+        HttpContent? httpContent = null;
         if (requestContent != null)
         {
             var json = JsonConvert.SerializeObject(requestContent);
@@ -113,15 +115,14 @@ public class BaseApiClient
             var body = await response.Content.ReadAsStringAsync();
 
             if (response.IsSuccessStatusCode)
-                return true;
-
+                return JsonConvert.DeserializeObject<Result<TResponse>>(body) ?? new Result<TResponse>();
+        
             throw new Exception(body);
         }
-
-        return false;
+        return new Result<TResponse>();
     }
 
-    protected async Task<bool> DeleteAsync<TRequest>(string url, bool requiredLogin = true)
+    protected async Task<Result<TResponse>> DeleteAsync<TResponse>(string url, bool requiredLogin = true)
     {
         var client = _httpClientFactory.CreateClient();
         client.BaseAddress = new Uri(_configuration["ServerUrl"]);
@@ -137,10 +138,8 @@ public class BaseApiClient
         var body = await response.Content.ReadAsStringAsync();
 
         if (response.IsSuccessStatusCode)
-            return true;
-
+            return JsonConvert.DeserializeObject<Result<TResponse>>(body) ?? new Result<TResponse>();
+        
         throw new Exception(body);
-
-        return false;
     }
 }

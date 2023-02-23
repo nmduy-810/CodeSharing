@@ -43,9 +43,9 @@ public class AccountController : Controller
     }
 
     [HttpGet]
-    public async Task<IActionResult> MyProfile()
+    public Task<IActionResult> MyProfile()
     {
-        var user = await _userApiClient.GetById(User.GetUserId());
+        var user = _userApiClient.GetById(User.GetUserId()).Result.Data;
 
         var items = new UserDetailViewModel
         {
@@ -56,7 +56,7 @@ public class AccountController : Controller
             Birthday = user.Birthday
         };
 
-        return View(items);
+        return Task.FromResult<IActionResult>(View(items));
     }
 
     [HttpPost]
@@ -80,10 +80,10 @@ public class AccountController : Controller
     }
 
     [HttpGet]
-    public async Task<IActionResult> MyPosts(int page = 1, int pageSize = 10)
+    public Task<IActionResult> MyPosts(int page = 1, int pageSize = 10)
     {
-        var posts = await _userApiClient.GetPostsByUserId(User.GetUserId(), page, pageSize);
-        return View(posts);
+        var posts = _userApiClient.GetPostsByUserId(User.GetUserId(), page, pageSize).Result.Data;
+        return Task.FromResult<IActionResult>(View(posts));
     }
 
     [HttpGet]
@@ -99,11 +99,8 @@ public class AccountController : Controller
     {
         if (ModelState.IsValid)
         {
-            var result = await _postApiClient.PostPost(request);
-            if (result)
-            {
-                return RedirectToAction("MyPosts", "Account");
-            }
+            await _postApiClient.PostPost(request);
+            return RedirectToAction("MyPosts", "Account");
         }
 
         await SetCategories();
@@ -114,7 +111,7 @@ public class AccountController : Controller
     [HttpGet]
     public async Task<IActionResult> EditPost(int id)
     {
-        var post = await _postApiClient.GetDetailsPost(id);
+        var post = _postApiClient.GetDetailsPost(id).Result.Data;
         await SetCategories();
         await LoadPopularLabels();
         
@@ -149,40 +146,31 @@ public class AccountController : Controller
     }
 
     [HttpPost]
-    public async Task<IActionResult> EditPost([FromForm] PostCreateRequest request)
+    public Task<IActionResult> EditPost([FromForm] PostCreateRequest request)
     {
         // Check label
         if (!string.IsNullOrEmpty(request.PreviewLabel)) request.Labels = new[] { request.PreviewLabel };
 
         if (ModelState.IsValid)
         {
-            return View(request);
+            return Task.FromResult<IActionResult>(View(request));
         }
 
         if (request.Id == null)
         {
-            return BadRequest();
+            return Task.FromResult<IActionResult>(BadRequest());
         }
 
-        var result = await _postApiClient.PutPost(request.Id.Value, request);
-        if (result)
-        {
-            return RedirectToAction("MyPosts", "Account");
-        }
-
-        return BadRequest();
+        _ = _postApiClient.PutPost(request.Id.Value, request).Result.Data;
+        return Task.FromResult<IActionResult>(RedirectToAction("MyPosts", "Account"));
     }
 
     [HttpGet]
     public async Task<IActionResult> DeletePost(int id)
     {
         var post = await _postApiClient.GetDetailsPost(id);
-        var response = await _postApiClient.DeletePost(post.Id);
-        if (response)
-        {
-            return RedirectToAction("MyPosts", "Account");
-        }
-        return BadRequest();
+        await _postApiClient.DeletePost(post.Data.Id);
+        return RedirectToAction("MyPosts", "Account");
     }
 
     [AllowAnonymous]
@@ -206,7 +194,7 @@ public class AccountController : Controller
 
         var items = new UserViewModel
         {
-            Users = users
+            Users = users.Data
         };
 
         return View(items);
@@ -217,7 +205,7 @@ public class AccountController : Controller
     private async Task SetCategories(int? selectedValue = null)
     {
         var categories = await _categoryApiClient.GetCategories();
-        var items = categories.Select(x => new SelectListItem
+        var items = categories.Data.Select(x => new SelectListItem
         {
             Text = x.Title,
             Value = x.Id.ToString()

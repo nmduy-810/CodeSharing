@@ -23,13 +23,13 @@ public class HeaderViewComponent : ViewComponent
 
         var items = new HeaderViewModel
         {
-            Categories = categories
+            Categories = categories.Data
         };
 
         var user = User as ClaimsPrincipal;
         if (user?.Identity != null && user.Identity.IsAuthenticated)
         {
-            items.CurrentUser = await _userApiClient.GetById(user.GetUserId());
+            items.CurrentUser = _userApiClient.GetById(user.GetUserId()).Result.Data;
         }
 
         return View(componentView, items);

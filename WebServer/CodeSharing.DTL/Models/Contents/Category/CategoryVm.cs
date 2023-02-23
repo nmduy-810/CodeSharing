@@ -8,6 +8,7 @@ public class CategoryVm
     public string ParentCategoryName { get; set; } = default!;
     public string Title { get; set; } = default!;
     public string Slug { get; set; } = default!;
+    
     public int SortOrder { get; set; }
     public bool IsParent { get; set; }
 }

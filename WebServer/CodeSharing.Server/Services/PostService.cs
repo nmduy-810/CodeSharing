@@ -62,7 +62,7 @@ public class PostService : BaseService, IPostService
             }
         
             var data = await _repository.GetLatestPosts(take);
-            await _distributedCacheService.SetAsync(CacheConstant.LatestPosts, result, 2);
+            await _distributedCacheService.SetAsync(CacheConstant.LatestPosts, data, 2);
             result.SetResult(data);
         }
         catch (Exception e)
@@ -86,7 +86,7 @@ public class PostService : BaseService, IPostService
             }
         
             var data = await _repository.GetPopularPosts(take);
-            await _distributedCacheService.SetAsync(CacheConstant.PopularPosts, result, 2);
+            await _distributedCacheService.SetAsync(CacheConstant.PopularPosts, data, 2);
             result.SetResult(data);
         }
         catch (Exception e)
@@ -110,7 +110,7 @@ public class PostService : BaseService, IPostService
             }
         
             var data = await _repository.GetTrendingPosts(take);
-            await _distributedCacheService.SetAsync(CacheConstant.TrendingPosts, result, 2);
+            await _distributedCacheService.SetAsync(CacheConstant.TrendingPosts, data, 2);
             result.SetResult(data);
         }
         catch (Exception e)
@@ -197,6 +197,7 @@ public class PostService : BaseService, IPostService
         try
         {
             var data = await _repository.GetPostsPaging(filter, categoryId, pageIndex, pageSize);
+            await _distributedCacheService.SetAsync(CacheConstant.PostsPaging, data, 2);
             result.SetResult(data);
         }
         catch (Exception e)
@@ -220,7 +221,7 @@ public class PostService : BaseService, IPostService
             }
         
             var data = await _repository.GetPostsPaging(pageIndex, pageSize);
-            await _distributedCacheService.SetAsync(CacheConstant.PostsPaging, result, 2);
+            await _distributedCacheService.SetAsync(CacheConstant.PostsPaging, data, 2);
             result.SetResult(data);
         }
         catch (Exception e)
