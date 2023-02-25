@@ -224,6 +224,19 @@ public class PostRepository : GenericRepository<ApplicationDbContext>, IPostRepo
         }
     }
 
+    public async Task<int> GetTotalPosts()
+    {
+        try
+        {
+           return await _context.CdsPosts.CountAsync();
+        }
+        catch (Exception e)
+        {
+            _logger.LogError("{Message}", e.Message);
+            return 0;
+        }
+    }
+
     public async Task<Pagination<PostQuickVm>> GetPostsByCategoryId(int? categoryId, int pageIndex, int pageSize)
     {
         try

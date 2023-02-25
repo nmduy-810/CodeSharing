@@ -41,6 +41,8 @@ public interface IPostRepository : IGenericRepository<ApplicationDbContext>
 
     Task<CdsPost?> UpdateViewCount(int id);
 
+    Task<int> GetTotalPosts();
+
     #endregion Post
 
     #region Vote

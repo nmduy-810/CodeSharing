@@ -23,7 +23,7 @@ public class PostService : BaseService, IPostService
     private readonly ISequenceService _sequenceService;
     private readonly IStorageService _storageService;
     private readonly UserManager<CdsUser> _userManager;
-
+    private const int PageSize = 10;
     public PostService(IPostRepository repository, ICacheService distributedCacheService, ISequenceService sequenceService, IStorageService storageService, UserManager<CdsUser> userManager, IUtils utils) : base(utils)
     {
         _repository = repository;
@@ -253,8 +253,14 @@ public class PostService : BaseService, IPostService
                 await _distributedCacheService.RemoveAsync(CacheConstant.LatestPosts);
                 await _distributedCacheService.RemoveAsync(CacheConstant.PopularPosts);
                 await _distributedCacheService.RemoveAsync(CacheConstant.TrendingPosts);
-                await _distributedCacheService.RemoveAsync(CacheConstant.PostsPaging);
                 await _distributedCacheService.RemoveAsync(CacheConstant.Categories);
+                
+                int numberOfPosts = await _repository.GetTotalPosts();
+                for (var pageIndex = 1; pageIndex <= Math.Ceiling((double)numberOfPosts / PageSize); pageIndex++)
+                {
+                    var cacheKey = $"{CacheConstant.PostsPaging}_{pageIndex}_{PageSize}";
+                    await _distributedCacheService.RemoveAsync(cacheKey);
+                }
                 
                 request.Labels = request.Labels[0].Split("#").Select(x => x.Trim())
                     .Where(x => !string.IsNullOrWhiteSpace(x))
@@ -331,7 +337,14 @@ public class PostService : BaseService, IPostService
         await _distributedCacheService.RemoveAsync(CacheConstant.LatestPosts);
         await _distributedCacheService.RemoveAsync(CacheConstant.PopularPosts);
         await _distributedCacheService.RemoveAsync(CacheConstant.TrendingPosts);
-        await _distributedCacheService.RemoveAsync(CacheConstant.PostsPaging);
+        
+        int numberOfPosts = await _repository.GetTotalPosts();
+        for (var pageIndex = 1; pageIndex <= Math.Ceiling((double)numberOfPosts / PageSize); pageIndex++)
+        {
+            var cacheKey = $"{CacheConstant.PostsPaging}_{pageIndex}_{PageSize}";
+            await _distributedCacheService.RemoveAsync(cacheKey);
+        }
+        
         await _distributedCacheService.RemoveAsync(CacheConstant.Categories);
         return result;
     }
@@ -357,7 +370,14 @@ public class PostService : BaseService, IPostService
         await _distributedCacheService.RemoveAsync(CacheConstant.LatestPosts);
         await _distributedCacheService.RemoveAsync(CacheConstant.PopularPosts);
         await _distributedCacheService.RemoveAsync(CacheConstant.TrendingPosts);
-        await _distributedCacheService.RemoveAsync(CacheConstant.PostsPaging);
+       
+        int numberOfPosts = await _repository.GetTotalPosts();
+        for (var pageIndex = 1; pageIndex <= Math.Ceiling((double)numberOfPosts / PageSize); pageIndex++)
+        {
+            var cacheKey = $"{CacheConstant.PostsPaging}_{pageIndex}_{PageSize}";
+            await _distributedCacheService.RemoveAsync(cacheKey);
+        }
+        
         await _distributedCacheService.RemoveAsync(CacheConstant.Categories);
         return result;
     }
