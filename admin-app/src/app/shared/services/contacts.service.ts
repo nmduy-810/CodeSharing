@@ -4,6 +4,7 @@ import { BaseService } from './base.service';
 import { catchError, map, tap } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { Contact } from '../models';
+import { ApiResponse } from '../interfaces/result.type';
 
 @Injectable({ providedIn: 'root' })
 export class ContactsService extends BaseService {
@@ -16,17 +17,17 @@ export class ContactsService extends BaseService {
     }
 
     get() {
-        return this.http.get<Contact[]>(`${environment.apiUrl}/api/contacts`, { headers: this._headers })
-            .pipe(map((response: Contact[]) => { return response; }), catchError(this.handleError));
+        return this.http.get<ApiResponse<Contact[]>>(`${environment.apiUrl}/api/contacts`, { headers: this._headers })
+            .pipe(map((response: ApiResponse<Contact[]>) => { return response.data; }), catchError(this.handleError));
     }
 
     getById(id: any) {
-        return this.http.get<Contact>(`${environment.apiUrl}/api/contacts/${id}`, { headers: this._headers })
-            .pipe(catchError(this.handleError));
+        return this.http.get<ApiResponse<Contact>>(`${environment.apiUrl}/api/contacts/${id}`, { headers: this._headers })
+        .pipe(map((response: ApiResponse<Contact>) => { return response.data; }), catchError(this.handleError));
     }
 
     update(id: number, request: Contact) {
         return this.http.put(`${environment.apiUrl}/api/contacts/${id}`, JSON.stringify(request), { headers: this._headers })
-            .pipe(catchError(this.handleError));
+            .pipe(map((response: ApiResponse<Contact>) => { return response.data; }), catchError(this.handleError));
     }
 }

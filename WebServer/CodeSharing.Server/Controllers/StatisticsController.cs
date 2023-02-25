@@ -18,23 +18,20 @@ public class StatisticsController : BaseController
     [ClaimRequirement(FunctionCodeEnum.STATISTIC, CommandCodeEnum.VIEW)]
     public async Task<IActionResult> GetMonthlyNewComments(int year)
     {
-        var result = await _statisticService.GetMonthlyNewComments(year);
-        return Ok(result);
+        return CodeSharingResult(await _statisticService.GetMonthlyNewComments(year));
     }
 
     [HttpGet("monthly-new-posts")]
     [ClaimRequirement(FunctionCodeEnum.STATISTIC, CommandCodeEnum.VIEW)]
     public async Task<IActionResult> GetMonthlyNewPosts(int year)
     {
-        var result = await _statisticService.GetMonthlyNewPosts(year);
-        return Ok(result);
+        return CodeSharingResult(await _statisticService.GetMonthlyNewPosts(year));
     }
 
     [HttpGet("monthly-new-registers")]
     [ClaimRequirement(FunctionCodeEnum.STATISTIC, CommandCodeEnum.VIEW)]
     public async Task<IActionResult> GetMonthlyNewRegisters(int year)
     {
-        var result = await _statisticService.GetMonthlyNewRegisters(year);
-        return Ok(result);
+        return CodeSharingResult(await _statisticService.GetMonthlyNewRegisters(year));
     }
 }

@@ -2,6 +2,7 @@ import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { catchError, map } from "rxjs/operators";
 import { environment } from "src/environments/environment";
+import { ApiResponse } from "../interfaces/result.type";
 import { Post } from "../models/post.model";
 import { BaseService } from "./base.service";
 
@@ -16,22 +17,18 @@ export class PostsService extends BaseService {
     }
 
     get() {
-        return this.http.get<Post[]>(`${environment.apiUrl}/api/posts`, { headers: this._headers })
-            .pipe(map((response: Post[]) => {
-                return response;
-            }), catchError(this.handleError));
+        return this.http.get<ApiResponse<Post[]>>(`${environment.apiUrl}/api/posts`, { headers: this._headers })
+            .pipe(map((response: ApiResponse<Post[]>) => { return response.data; }), catchError(this.handleError));
     }
 
     getById(id: any) {
-        return this.http.get<Post>(`${environment.apiUrl}/api/posts/${id}`, { headers: this._headers })
-            .pipe(catchError(this.handleError));
+        return this.http.get<ApiResponse<Post>>(`${environment.apiUrl}/api/posts/${id}`, { headers: this._headers })
+            .pipe(map((response: ApiResponse<Post>) => { return response.data; }), catchError(this.handleError));
     }
 
     getLatest() {
-        return this.http.get<Post[]>(`${environment.apiUrl}/api/posts/latest/5`, { headers: this._headers })
-            .pipe(map((response: Post[]) => {
-                return response;
-            }), catchError(this.handleError));
+        return this.http.get<ApiResponse<Post[]>>(`${environment.apiUrl}/api/posts/latest/5`, { headers: this._headers })
+            .pipe(map((response: ApiResponse<Post[]>) => { return response.data; }), catchError(this.handleError));
     }
 
     add(formData: FormData) {

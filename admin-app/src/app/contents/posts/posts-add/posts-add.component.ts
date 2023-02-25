@@ -75,7 +75,7 @@ export class PostsAddComponent implements OnInit, OnDestroy {
 
       this.subscription.push(this.postsService.add(formData).subscribe((response: any) => {
         console.log(response);
-        if (response.status === 201) {
+        if (response.status === 200) {
           this.notification.create('success', 'Confirm', 'Insert new post successfully!');
           this.router.navigateByUrl('/contents/posts');
         }
