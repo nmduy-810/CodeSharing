@@ -9,7 +9,7 @@ namespace CodeSharing.Infrastructure.EFCore.Repositories.About;
 public class AboutRepository : CoreRepository<CdsAbout>, IAboutRepository
 {
     private readonly ILogger<AboutRepository> _logger;
-
+    
     public AboutRepository(ApplicationDbContext context, ILogger<AboutRepository> logger) : base(context)
     {
         _logger = logger ?? throw new ArgumentException(null, nameof(logger));
@@ -19,7 +19,7 @@ public class AboutRepository : CoreRepository<CdsAbout>, IAboutRepository
     {
         try
         {
-            return await FindAll().ToListAsync();
+            return  await FindAll().ToListAsync();
         }
         catch (Exception e)
         {

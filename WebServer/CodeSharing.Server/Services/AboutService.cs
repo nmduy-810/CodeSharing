@@ -1,3 +1,4 @@
+using CodeSharing.Core.Helpers;
 using CodeSharing.Core.Models.BaseModels;
 using CodeSharing.Core.Resources.Constants;
 using CodeSharing.Core.Services.Utils;
@@ -13,11 +14,13 @@ public class AboutService : BaseService, IAboutService
 {
     private readonly IAboutRepository _repository;
     private readonly IUploadRepository _uploadRepository;
-    
-    public AboutService(IAboutRepository repository, IUploadRepository uploadRepository, IUtils utils) : base(utils)
+    private readonly IHttpContextAccessor _httpContextAccessor;
+
+    public AboutService(IAboutRepository repository, IUploadRepository uploadRepository, IUtils utils, IHttpContextAccessor httpContextAccessor) : base(utils)
     {
         _repository = repository;
         _uploadRepository = uploadRepository;
+        _httpContextAccessor = httpContextAccessor;
     }
 
     public async Task<Result<List<AboutVm>>> GetAbouts()
@@ -26,7 +29,13 @@ public class AboutService : BaseService, IAboutService
         try
         {
             var data = await _repository.GetAbouts();
-            result.SetResult(_utils.Transform<List<CdsAbout>, List<AboutVm>>(data));
+            var items = data.Select(x => new AboutVm
+            {
+                Description = x.Description,
+                Image = HttpHelper.GetBaseUrl(_httpContextAccessor) + x.Image,
+                Id = x.Id,
+            }).ToList();
+            result.SetResult(items);
         }
         catch (Exception e)
         {
@@ -47,8 +56,15 @@ public class AboutService : BaseService, IAboutService
                 result.SetResult(null, ErrorCodeConstant.MessageCode.ItemNotFound);
                 return result;
             }
+
+            var aboutVm = new AboutVm()
+            {
+                Description = data.Description,
+                Image = HttpHelper.GetBaseUrl(_httpContextAccessor) + data.Image,
+                Id = data.Id
+            };
             
-            result.SetResult(_utils.Transform<CdsAbout, AboutVm>(data));
+            result.SetResult(aboutVm);
         }
         catch (Exception e)
         {
