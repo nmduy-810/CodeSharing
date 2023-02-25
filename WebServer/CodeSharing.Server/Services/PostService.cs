@@ -213,7 +213,8 @@ public class PostService : BaseService, IPostService
         var result = new Result<Pagination<PostQuickVm>>();
         try
         {
-            var cacheData = await _distributedCacheService.GetAsync<Pagination<PostQuickVm>>(CacheConstant.PostsPaging);
+            var cacheKey = $"{CacheConstant.PostsPaging}_{pageIndex}_{pageSize}";
+            var cacheData = await _distributedCacheService.GetAsync<Pagination<PostQuickVm>>(cacheKey);
             if (cacheData != null)
             {
                 result.SetResult(cacheData);
@@ -221,7 +222,7 @@ public class PostService : BaseService, IPostService
             }
         
             var data = await _repository.GetPostsPaging(pageIndex, pageSize);
-            await _distributedCacheService.SetAsync(CacheConstant.PostsPaging, data, 2);
+            await _distributedCacheService.SetAsync(cacheKey, data, 2);
             result.SetResult(data);
         }
         catch (Exception e)
