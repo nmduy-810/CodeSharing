@@ -1,0 +1,70 @@
+﻿@model HomeViewModel
+
+@{
+    ViewData["Title"] = "Code Sharing · Chia sẻ mọi thứ bạn cần";
+    ViewData["Description"] = "Code Sharing · Trang chủ của Code Sharing · Nơi chia sẻ mọi thứ liên quan đến lập trình";
+}
+
+<div class="container-xl">
+    <div class="row gy-4">
+        <div class="col-lg-8">
+            <div class="row gy-4">
+                @if (Model.LatestPosts.Items.Count > 0)
+                {
+                    @foreach (var item in Model.LatestPosts.Items)
+                    {
+                        var detailPostUrl = "/post/" + item.Slug + "-" + item.Id + "/";
+                        var postsByCategoryUrl = "/category/" + item.CategorySlug + "-" + item.CategoryId;
+                        <div class="col-sm-6">
+                            <!-- post -->
+                            <div class="post post-grid rounded bordered fix-height">
+                                <div class="thumb top-rounded">
+                                    <a href="@postsByCategoryUrl" title="Xem tất cả bài viết trong @item.CategoryTitle" class="category-badge position-absolute">@Html.Raw(item.CategoryTitle)</a>
+                                    <span class="post-format">
+                                        <i class="icon-picture"></i>
+                                    </span>
+                                    <a href="@detailPostUrl" title="@item.Title">
+                                        <div class="inner">
+                                            <img src="@item.CoverImage" alt="@item.CoverImage"/>
+                                        </div>
+                                    </a>
+                                </div>
+                                <div class="details">
+                                    <ul class="meta list-inline mb-0">
+                                        <li class="list-inline-item">
+                                            <a href="/about">
+                                                <img src="~/images/other/logo.png" class="author" style="width: 30px; height: 30px;" alt="@Html.Raw(item.FullName)"/>@Html.Raw(item.FullName)
+                                            </a>
+                                        </li>
+                                        <li class="list-inline-item">@item.CreateDate.ToString("dd MMMM, yyyy")</li>
+                                    </ul>
+                                    <h5 class="post-title mb-3 mt-3">
+                                        <a href="@detailPostUrl" title="@item.Title">@Html.Raw(item.Title)</a>
+                                    </h5>
+                                    <p class="excerpt mb-0">@Html.Raw(item.Summary)</p>
+                                </div>
+                                <div class="post-bottom clearfix d-flex align-items-center">
+                                    <div class="social-share me-auto">
+                                        <button class="toggle-button icon-share"></button>
+                                        <ul class="icons list-unstyled list-inline mb-0">
+                                            <partial name="_SocialIcons"/>
+                                        </ul>
+                                    </div>
+                                    <div class="more-button float-end">
+                                        <a href="@detailPostUrl" title="@item.Title">
+                                            <span class="icon-options"></span>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                }
+            </div> 
+            @await Component.InvokeAsync("Pager", Model.LatestPosts)
+        </div>
+        <div class="col-lg-4">
+            <!-- sidebar --> @await Component.InvokeAsync("SideBar", "Default")
+        </div>
+    </div>
+</div>
