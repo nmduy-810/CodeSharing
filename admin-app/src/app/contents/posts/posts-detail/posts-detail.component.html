@@ -7,7 +7,8 @@
                     <nz-form-label [nzSm]="2">Danh mục</nz-form-label>
                     <nz-form-control nzErrorTip="Bạn chưa chọn danh mục!">
                         <nz-select class="w-100" nzPlaceHolder="Chọn danh mục" formControlName="categoryId">
-                            <nz-option *ngFor="let item of categories$" nzLabel="{{item.title}}" nzValue="{{item.id}}"> </nz-option>
+                            <nz-option *ngFor="let item of categories$" nzLabel="{{item.title}}" nzValue="{{item.id}}">
+                            </nz-option>
                         </nz-select>
                     </nz-form-control>
                 </nz-form-item>
@@ -20,7 +21,8 @@
                 <nz-form-item>
                     <nz-form-label [nzSm]="2">Tiêu đề</nz-form-label>
                     <nz-form-control nzErrorTip="Bạn chưa nhập tiêu đề!">
-                        <input nz-input (keyup)="generateSeoAlias()" placeholder="Tiêu đề bài viết" formControlName="title" />
+                        <input nz-input (keyup)="generateSeoAlias()" placeholder="Tiêu đề bài viết"
+                            formControlName="title" />
                     </nz-form-control>
                 </nz-form-item>
             </div>
@@ -32,7 +34,7 @@
                 <nz-form-item>
                     <nz-form-label [nzSm]="2">Tổng quan</nz-form-label>
                     <nz-form-control nzErrorTip="Bạn chưa nhập tổng quan bài viết!">
-                        <textarea nz-input placeholder="Tổng quan bài viết" formControlName="summary" ></textarea>
+                        <textarea nz-input placeholder="Tổng quan bài viết" formControlName="summary"></textarea>
                     </nz-form-control>
                 </nz-form-item>
             </div>
@@ -57,6 +59,10 @@
                     <nz-form-label [nzSm]="2">Hình đại diện</nz-form-label>
                     <nz-form-control nzErrorTip="Bạn chưa chọn hình đại diện bài viết!">
                         <input type="file" (change)="handleChange($event)" />
+                        <div *ngIf="imagePath">
+                            <br />
+                            <img [src]="imagePath" width="200px" />
+                        </div>
                     </nz-form-control>
                 </nz-form-item>
             </div>
@@ -68,8 +74,10 @@
                 <nz-form-item>
                     <nz-form-label [nzSm]="2">Nhãn</nz-form-label>
                     <nz-form-control nzErrorTip="Bạn chưa nhập nhãn bài viết!">
-                        <nz-mention [nzSuggestions]="suggestions" (nzOnSearchChange)="onSearchChange($event)" [nzPrefix]="['#']">
-                            <input placeholder="Nhãn bài viết (Nhập # để chọn nhãn)" nzMentionTrigger nz-input formControlName="labels" />
+                        <nz-mention [nzSuggestions]="suggestions" (nzOnSearchChange)="onSearchChange($event)"
+                            [nzPrefix]="['#']">
+                            <input placeholder="Nhãn bài viết (Nhập # để chọn nhãn)" nzMentionTrigger nz-input
+                                formControlName="labels" />
                         </nz-mention>
                     </nz-form-control>
                 </nz-form-item>
@@ -82,7 +90,8 @@
                 <nz-form-item>
                     <nz-form-label [nzSm]="2">Ghi chú</nz-form-label>
                     <nz-form-control nzErrorTip="Bạn chưa nhập ghi chú!">
-                        <textarea nz-input placeholder="Ghi chú" [nzAutosize]="{ minRows: 3, maxRows: 5 }" formControlName="note"></textarea>
+                        <textarea nz-input placeholder="Ghi chú" [nzAutosize]="{ minRows: 3, maxRows: 5 }"
+                            formControlName="note"></textarea>
                     </nz-form-control>
                 </nz-form-item>
             </div>
@@ -93,7 +102,8 @@
             <div class="col-md-12">
                 <nz-form-item>
                     <nz-form-control nzErrorTip="Bạn chưa nhập nội dung bài viết!">
-                        <ckeditor [editor]="Editor" formControlName="content" spellcheck="false" name="editor5" (ready)="onReady($event)"></ckeditor>
+                        <ckeditor [editor]="Editor" formControlName="content" spellcheck="false" name="editor5"
+                            (ready)="onReady($event)"></ckeditor>
                     </nz-form-control>
                 </nz-form-item>
             </div>
@@ -107,4 +117,3 @@
         </nz-form-item>
     </nz-card>
 </form>
-

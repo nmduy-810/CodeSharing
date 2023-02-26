@@ -4,6 +4,7 @@ import { BaseService } from './base.service';
 import { catchError, map, tap } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { About } from '../models';
+import { ApiResponse } from '../interfaces/result.type';
 
 @Injectable({ providedIn: 'root' })
 export class AboutsService extends BaseService {
@@ -16,13 +17,13 @@ export class AboutsService extends BaseService {
     }
 
     get() {
-        return this.http.get<About[]>(`${environment.apiUrl}/api/abouts`, { headers: this._headers })
-            .pipe(map((response: About[]) => { return response; }), catchError(this.handleError));
+        return this.http.get<ApiResponse<About[]>>(`${environment.apiUrl}/api/abouts`, { headers: this._headers })
+            .pipe(map((response: ApiResponse<About[]>) => { return response.data; }), catchError(this.handleError));
     }
 
     getById(id: any) {
-        return this.http.get<About>(`${environment.apiUrl}/api/abouts/${id}`, { headers: this._headers })
-            .pipe(catchError(this.handleError));
+        return this.http.get<ApiResponse<About>>(`${environment.apiUrl}/api/abouts/${id}`, { headers: this._headers })
+            .pipe(map((response: ApiResponse<About>) => { return response.data; }), catchError(this.handleError));
     }
 
     add(formData: FormData) {

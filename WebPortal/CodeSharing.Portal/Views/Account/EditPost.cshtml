@@ -1,0 +1,115 @@
+@model CodeSharing.DTL.Models.Contents.Post.PostCreateRequest
+
+@{
+    Layout = "_SubLayout";
+    ViewData["Title"] = "Cập nhật bài viết · Code Sharing";
+}
+
+@section scripts{
+    <script src="~/lib/ckeditor5-build-classic/build/ckeditor.js"></script>
+    <script src="~/js/controllers/accountsController.js" asp-append-version="true"></script>
+    <script>
+        let controller = new accountsController();
+        controller.initialize();
+    </script>
+    <script>
+        function populateLabelVal(val) {
+         let selection = $('#selection');
+         selection.val(selection.val() + val.concat(" "));    
+        }
+    </script>
+}
+
+<style>
+    .img-thumbnail {
+      border: 1px solid #ddd; /* Gray border */
+      border-radius: 4px;  /* Rounded border */
+      padding: 5px; /* Some padding */
+      width: 150px; /* Set a small width */
+    }
+    
+    /* Add a hover effect (blue shadow) */
+    img:hover {
+      box-shadow: 0 0 2px 1px rgba(0, 140, 186, 0.5);
+    }
+</style>
+
+<div class="section-header">
+    <h3 class="section-title">Cập nhật bài viết</h3>
+    <img src="~/images/wave.svg" class="wave" alt="wave"/>
+</div>
+
+<form action="/Account/EditPost" method="post" enctype="multipart/form-data" id="frm_edit_post" class="post-form">
+    <div class="messages">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <input type="hidden" asp-for="Id"/>
+    </div>
+
+    <div class="row">
+        <div class="column col-md-12">
+            <!--Category-->
+            <div class="form-group">
+                <h6>Danh mục</h6>
+                <select asp-for="CategoryId" style="height: 50px" required="required" class="form-control" asp-items="ViewBag.Categories"></select>
+                <div class="help-block with-errors"></div>
+            </div>
+
+            <!--Title-->
+            <div class="form-group">
+                <h6>Tiêu đề</h6>
+                @Html.TextBoxFor(model => model.Title, new { required = "required", @class = " form-control" })
+                <div class="help-block with-errors"></div>
+            </div>
+
+            <!--Summary-->
+            <div class="form-group">
+                <h6>Tổng quan</h6>
+                @Html.TextBoxFor(model => model.Summary, new { required = "required", @class = " form-control" })
+                <div class="help-block with-errors"></div>
+            </div>
+
+            <!--Cover image-->
+            <div class="form-group">
+                <h6>Hình đại diện</h6>
+                <input asp-for="CoverImage" type="file" id="img" name="img" accept="image/*">
+                <a target="_blank" href="@Model.PreviewCoverImage">
+                    <img class="img-thumbnail" src="@Model.PreviewCoverImage" alt="@Model.PreviewCoverImage">
+                </a>
+                <div class="help-block with-errors"></div>
+            </div>
+
+            <!--Label-->
+            <div class="form-group">
+                <h6>Nhãn</h6>
+                @Html.TextBoxFor(model => model.PreviewLabel, new { id = "selection", required = "required", @class = " form-control" })
+                <br>
+                <div class="widget-content">
+                    @foreach (var item in ViewBag.PopularLabels)
+                    {
+                        <a type="button" class="tag" onclick="populateLabelVal('#@item.Name'); return false;">#@item.Name</a>
+                    }
+                </div>
+                <div class="help-block with-errors"></div>
+            </div>
+
+            <!--Note-->
+            <div class="form-group">
+                <h6>Ghi chú</h6>
+                @Html.TextBoxFor(model => model.Note, new { required = "required", @class = " form-control" })
+                <div class="help-block with-errors"></div>
+            </div>
+
+            <!--Content-->
+            <div class="form-group">
+                <h6>Nội dung</h6>
+                <textarea asp-for="Content" id="txt_content" required="required" class="form-control" rows="10"></textarea>
+                <div class="help-block with-errors"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="span6 offset2 error-container" id="message-result"></div>
+
+    <button type="submit" name="submit" id="submit" value="Submit" class="btn btn-default">Cập nhật</button>
+    <!-- Send Button -->
+</form>

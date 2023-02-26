@@ -1,0 +1,15 @@
+@model CodeSharing.DTL.Models.Commons.Message
+
+@{
+    Layout = "_SubLayout";
+    ViewData["Title"] = Model.Title;
+}
+
+<div class="card text-center">
+    <h4 class="card-title text-secondary">@Model.Title</h4>
+    <div class="card-body">
+        <p class="card-text">@Html.Raw(Model.Htmlcontent)</p>
+        <p href="#">Chuyển hướng đến trang chủ trong 5 giây hoặc bấm vào đây để về <a href="@Model.Urlredirect">Trang chủ</a></p>
+    </div>
+    <div class="card-footer text-muted">Cám ơn bạn vì đã góp ý!</div>
+</div>

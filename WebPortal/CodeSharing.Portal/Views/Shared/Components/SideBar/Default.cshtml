@@ -1,0 +1,175 @@
+@model SideBarViewModel
+
+<div class="sidebar">
+    <!-- widget about -->
+    <div class="widget rounded">
+        <div class="widget-about data-bg-image text-center" data-bg-image="/images/map-bg.png">
+            <a href="/" class="d-block text-logo mb-4">Code Sharing</a>
+            <p class="mb-4">Nơi chia sẻ kiến thức lập trình miễn phí của cộng đồng, cập nhật liên tục các bài viết, tutorial, mã nguồn mới nhất về nhiều lĩnh vực lập trình.</p>
+            <ul class="social-icons list-unstyled list-inline mb-0">
+                <partial name="_SocialIcons"/>
+            </ul>
+        </div>
+    </div>
+    <!-- widget popular posts -->
+    <div class="post-tabs widget rounded bordered">
+        <ul class="nav nav-tabs nav-pills nav-fill" id="postsTab" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button aria-controls="popular" aria-selected="true" class="nav-link active" data-bs-target="#popular" data-bs-toggle="tab" id="popular-tab" role="tab" type="button">Xu hướng</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button aria-controls="recent" aria-selected="false" class="nav-link" data-bs-target="#recent" data-bs-toggle="tab" id="recent-tab" role="tab" type="button">Gần đây</button>
+            </li>
+        </ul>
+        <!-- tab contents -->
+        <div class="tab-content" id="postsTabContent">
+            <!-- loader -->
+            <div class="lds-dual-ring"></div>
+            <!-- trending posts -->
+            <div aria-labelledby="popular-tab" class="tab-pane fade show active" id="popular" role="tabpanel">
+                @foreach (var item in Model.TrendingPosts)
+                {
+                    var detailPostUrl = "/post/" + item.Slug + "-" + item.Id + "/";
+                    <!-- post -->
+                    <div class="post post-list-sm circle">
+                        <div class="thumb">
+                            <a href="@detailPostUrl" title="@item.Title">
+                                <div class="inner">
+                                    <img style="height: 60px; border-radius: 50%" src="@item.CoverImage" alt="@item.Title"/>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="details clearfix">
+                            <h6 class="post-title my-0">
+                                <a href="@detailPostUrl" title="@item.Title">@Html.Raw(item.Title)</a>
+                            </h6>
+                            <ul class="meta list-inline mt-1 mb-0">
+                                <li class="list-inline-item">@item.CreateDate.ToString("dd MMMM, yyyy")</li>
+                            </ul>
+                        </div>
+                    </div>
+                }
+            </div>
+            <!-- recent posts -->
+            <div aria-labelledby="recent-tab" class="tab-pane fade" id="recent" role="tabpanel">
+                @foreach (var item in Model.LatestPosts)
+                {
+                    var detailPostUrl = "/post/" + item.Slug + "-" + item.Id + "/";
+                    <!-- post -->
+                    <div class="post post-list-sm circle">
+                        <div class="thumb circle">
+                            <a href="@detailPostUrl" title="@item.Title">
+                                <div class="inner">
+                                    <img style="height: 60px; border-radius: 50%" src="@item.CoverImage" alt="@item.Title"/>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="details clearfix">
+                            <h6 class="post-title my-0">
+                                <a href="@detailPostUrl" title="@item.Title">@Html.Raw(item.Title)</a>
+                            </h6>
+                            <ul class="meta list-inline mt-1 mb-0">
+                                <li class="list-inline-item">@item.CreateDate.ToString("dd MMMM, yyyy")</li>
+                            </ul>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+    <!-- widget post carousel -->
+    <div class="widget rounded">
+        <div class="widget-header text-center">
+            <h3 class="widget-title">Nhiều người xem</h3>
+            <img src="~/images/wave.svg" class="wave" alt="wave"/>
+        </div>
+        <div class="widget-content">
+            <div class="post-carousel-widget">
+                @foreach (var item in Model.PopularPosts)
+                {
+                    var detailPostUrl = "/post/" + item.Slug + "-" + item.Id + "/";
+                    var postsByCategoryUrl = "/category/" + item.CategorySlug + "-" + item.CategoryId;
+                    <!-- post -->
+                    <div class="post post-carousel">
+                        <div class="thumb rounded">
+                            <a href="@postsByCategoryUrl" title="Xem tất cả bài viết trong @item.CategoryTitle" class="category-badge position-absolute">@item.CategoryTitle</a>
+                            <a href="@detailPostUrl" title="@item.Title">
+                                <div class="inner">
+                                    <img src="@item.CoverImage" alt="@item.Title"/>
+                                </div>
+                            </a>
+                        </div>
+                        <h5 class="post-title mb-0 mt-4">
+                            <a href="@detailPostUrl" title="@item.Title">@item.Title</a>
+                        </h5>
+                        <ul class="meta list-inline mt-2 mb-0">
+                            <li class="list-inline-item">
+                                <a href="#">@item.FullName</a>
+                            </li>
+                            <li class="list-inline-item">@item.CreateDate.ToString("dd MMMM, yyyy")</li>
+                        </ul>
+                    </div>
+                }
+            </div>
+            <!-- carousel arrows -->
+            <div class="slick-arrows-bot">
+                <button type="button" data-role="none" class="carousel-botNav-prev slick-custom-buttons" aria-label="Previous">
+                    <i class="icon-arrow-left"></i>
+                </button>
+                <button type="button" data-role="none" class="carousel-botNav-next slick-custom-buttons" aria-label="Next">
+                    <i class="icon-arrow-right"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+    <!-- widget newsletter -->
+    <div class="widget rounded">
+        <div class="widget-header text-center">
+            <h3 class="widget-title">Bản tin mới</h3>
+            <img src="~/images/wave.svg" class="wave" alt="wave"/>
+        </div>
+        <div class="widget-content">
+            <span class="newsletter-headline text-center mb-3">Hiện tại đã có 100 người đăng ký!</span>
+            <form>
+                <div class="mb-2">
+                    <input class="form-control w-100 text-center" placeholder="Địa chỉ email…" type="email">
+                </div>
+                <button class="btn btn-default btn-full" type="submit">Theo dõi</button>
+            </form>
+            <span class="newsletter-privacy text-center mt-3">Rất hân hạnh khi được chia sẻ kinh nghiệm cho mọi người</span>
+        </div>
+    </div>
+    <!-- widget advertisement -->
+    <div class="widget no-container rounded text-md-center">
+        <span class="ads-title">- Sponsored Ad -</span>
+        <a href="#" class="widget-ads">
+            <img src="~/images/ads/ad-360.png" alt="Advertisement"/>
+        </a>
+    </div>
+    <!-- widget tags -->
+    <div class="widget rounded">
+        <div class="widget-header text-center">
+            <h3 class="widget-title">Thông tin về mình</h3>
+            <img src="~/images/wave.svg" class="wave" alt="wave"/>
+        </div>
+        <div class="widget-content">
+            <p class="mb-4">Khi còn là sinh viên, mình đã từng có những thắc mắc nhưng không được ai giải đáp.</p>
+            <p>Nhờ blog này, mình mong muốn có thể mang đến những gì mình đã học được trong suốt quá trình học và làm việc.</p>
+            <p>Mong rằng những kiến thức tại đây sẽ giúp ích cho con đường sắp tới của các bạn.</p>
+        </div>
+    </div>
+    <!-- widget tags -->
+    <div class="widget rounded">
+        <div class="widget-header text-center">
+            <h3 class="widget-title">Nhãn</h3>
+            <img src="~/images/wave.svg" class="wave" alt="wave"/>
+        </div>
+        <div class="widget-content">
+            @foreach (var item in Model.PopularLabels)
+            {
+                var url = "/tag/" + item.Id;
+                <a href="@url" class="tag">#@Html.Raw(item.Name)</a>
+            }
+        </div>
+    </div>
+</div>

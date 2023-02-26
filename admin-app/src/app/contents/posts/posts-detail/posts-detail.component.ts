@@ -112,7 +112,7 @@ export class PostsDetailComponent implements OnInit, OnDestroy {
 
       this.subscription.push(this.postsService.update(this.postId, formData).subscribe((response: any) => {
         console.log(response);
-        if (response.status === 204) {
+        if (response.status === 200) {
           this.notification.create('success', 'Confirm', 'Update post successfully!');
           this.router.navigateByUrl('/contents/posts');
         }

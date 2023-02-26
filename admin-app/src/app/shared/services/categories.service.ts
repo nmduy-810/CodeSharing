@@ -5,6 +5,7 @@ import { catchError, map, tap } from 'rxjs/operators';
 import { Category } from '../models';
 import { environment } from 'src/environments/environment';
 import { Subject } from 'rxjs';
+import { ApiResponse } from '../interfaces/result.type';
 
 @Injectable({ providedIn: 'root' })
 export class CategoriesService extends BaseService {
@@ -17,27 +18,27 @@ export class CategoriesService extends BaseService {
     }
 
     get() {
-        return this.http.get<Category[]>(`${environment.apiUrl}/api/categories`, { headers: this._headers })
-            .pipe(map((response: Category[]) => { return response; }), catchError(this.handleError));
+        return this.http.get<ApiResponse<Category[]>>(`${environment.apiUrl}/api/categories`, { headers: this._headers })
+            .pipe(map((response: ApiResponse<Category[]>) => { return response.data; }), catchError(this.handleError));
     }
 
     getById(id: any) {
-        return this.http.get<Category>(`${environment.apiUrl}/api/categories/${id}`, { headers: this._headers })
-            .pipe(catchError(this.handleError));
+        return this.http.get<ApiResponse<Category>>(`${environment.apiUrl}/api/categories/${id}`, { headers: this._headers })
+            .pipe(map((response: ApiResponse<Category>) => { return response.data; }), catchError(this.handleError));
     }
 
     add(request: Category) {
         return this.http.post(`${environment.apiUrl}/api/categories`, JSON.stringify(request),  { headers: this._headers })
-            .pipe(catchError(this.handleError));
+            .pipe(map((response: ApiResponse<Category>) => { return response.data; }), catchError(this.handleError));
     }
 
     update(id: number, request: Category) {
         return this.http.put(`${environment.apiUrl}/api/categories/${id}`, JSON.stringify(request), { headers: this._headers })
-            .pipe(catchError(this.handleError));
+            .pipe(map((response: ApiResponse<Category>) => { return response.data; }), catchError(this.handleError));
     }
 
     delete(id: number) {
         return this.http.delete(environment.apiUrl + '/api/categories/' + id, { headers: this._headers })
-            .pipe(catchError(this.handleError));
+            .pipe(map((response: ApiResponse<Category>) => { return response.data; }), catchError(this.handleError));
     }
 }
