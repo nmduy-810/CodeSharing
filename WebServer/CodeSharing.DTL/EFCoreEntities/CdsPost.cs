@@ -51,4 +51,7 @@ public class CdsPost : IDateTracking
     public DateTime CreateDate { get; set; }
 
     public DateTime? LastModifiedDate { get; set; }
+    
+    public CdsCoverImage CdsCoverImage { get; set; }
+    public int? CoverImageId { get; set; }
 }

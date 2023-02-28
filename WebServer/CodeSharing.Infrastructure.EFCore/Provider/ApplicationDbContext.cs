@@ -46,6 +46,9 @@ public class ApplicationDbContext : IdentityDbContext<CdsUser>
     
     
     public DbSet<CdsSupport> CdsSupports { get; set; } = default!;
+    
+
+    public DbSet<CdsCoverImage> CdsCoverImages { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
@@ -73,6 +76,11 @@ public class ApplicationDbContext : IdentityDbContext<CdsUser>
 
         //Set sequence for Id of Post table.
         builder.HasSequence("PostSequence");
+
+        builder.Entity<CdsPost>()
+            .HasOne(x => x.CdsCoverImage)
+            .WithMany()
+            .HasForeignKey(x => x.CoverImageId);
     }
 
     public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)

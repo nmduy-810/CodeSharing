@@ -37,8 +37,9 @@ public class PostRepository : GenericRepository<ApplicationDbContext>, IPostRepo
             var posts = from p in _context.CdsPosts
                 join c in _context.CdsCategories on p.CategoryId equals c.Id
                 join u in _context.Users on p.OwnerUserId equals u.Id
+                join ci in _context.CdsCoverImages on p.CoverImageId equals ci.Id
                 orderby p.CreateDate descending
-                select new { p, c, u };
+                select new { p, c, u, ci };
 
             var items = await posts.Select(x => new PostQuickVm
             {
@@ -50,7 +51,7 @@ public class PostRepository : GenericRepository<ApplicationDbContext>, IPostRepo
                 Title = x.p.Title,
                 Summary = x.p.Summary,
                 Content = x.p.Content,
-                CoverImage = HttpHelper.GetBaseUrl(_httpContextAccessor) + x.p.CoverImage,
+                CoverImage = HttpHelper.GetBaseUrl(_httpContextAccessor) + x.ci.ImageUrl,
                 NumberOfComments = x.p.NumberOfComments,
                 NumberOfVotes = x.p.NumberOfVotes,
                 ViewCount = x.p.ViewCount,
@@ -74,8 +75,9 @@ public class PostRepository : GenericRepository<ApplicationDbContext>, IPostRepo
             var posts = from p in _context.CdsPosts
                 join c in _context.CdsCategories on p.CategoryId equals c.Id
                 join u in _context.Users on p.OwnerUserId equals u.Id
+                join ci in _context.CdsCoverImages on p.CoverImageId equals ci.Id
                 orderby p.CreateDate descending
-                select new { p, c, u };
+                select new { p, c, u, ci };
 
             var items = await posts
                 .Take(take)
@@ -92,7 +94,7 @@ public class PostRepository : GenericRepository<ApplicationDbContext>, IPostRepo
                     FullName = string.Concat(x.u.FirstName, " ", x.u.LastName),
                     NumberOfVotes = x.p.NumberOfVotes,
                     CreateDate = x.p.CreateDate,
-                    CoverImage = HttpHelper.GetBaseUrl(_httpContextAccessor) + x.p.CoverImage
+                    CoverImage = HttpHelper.GetBaseUrl(_httpContextAccessor) + x.ci.ImageUrl
                 }).ToListAsync();
         
             return items;
@@ -111,8 +113,9 @@ public class PostRepository : GenericRepository<ApplicationDbContext>, IPostRepo
             var posts = from p in _context.CdsPosts
                 join c in _context.CdsCategories on p.CategoryId equals c.Id
                 join u in _context.Users on p.OwnerUserId equals u.Id
+                join ci in _context.CdsCoverImages on p.CoverImageId equals ci.Id
                 orderby p.ViewCount descending
-                select new { p, c, u };
+                select new { p, c, u, ci };
 
             var items = await posts.Take(take)
                 .Select(x => new PostQuickVm
@@ -128,7 +131,7 @@ public class PostRepository : GenericRepository<ApplicationDbContext>, IPostRepo
                     FullName = string.Concat(x.u.FirstName, " ", x.u.LastName),
                     NumberOfVotes = x.p.NumberOfVotes,
                     CreateDate = x.p.CreateDate,
-                    CoverImage = HttpHelper.GetBaseUrl(_httpContextAccessor) + x.p.CoverImage
+                    CoverImage = HttpHelper.GetBaseUrl(_httpContextAccessor) + x.ci.ImageUrl
                 }).ToListAsync();
         
             return items;
@@ -147,8 +150,9 @@ public class PostRepository : GenericRepository<ApplicationDbContext>, IPostRepo
             var posts = from p in _context.CdsPosts
                 join c in _context.CdsCategories on p.CategoryId equals c.Id
                 join u in _context.Users on p.OwnerUserId equals u.Id
+                join ci in _context.CdsCoverImages on p.CoverImageId equals ci.Id
                 orderby p.NumberOfVotes descending
-                select new { p, c, u };
+                select new { p, c, u, ci };
 
             var items = await posts.Take(take)
                 .Select(x => new PostQuickVm
@@ -164,7 +168,7 @@ public class PostRepository : GenericRepository<ApplicationDbContext>, IPostRepo
                     FullName = string.Concat(x.u.FirstName, " ", x.u.LastName),
                     NumberOfVotes = x.p.NumberOfVotes,
                     CreateDate = x.p.CreateDate,
-                    CoverImage = HttpHelper.GetBaseUrl(_httpContextAccessor) + x.p.CoverImage
+                    CoverImage = HttpHelper.GetBaseUrl(_httpContextAccessor) + x.ci.ImageUrl
                 }).ToListAsync();
         
             return items;
@@ -192,6 +196,8 @@ public class PostRepository : GenericRepository<ApplicationDbContext>, IPostRepo
             if (fullName == null)
                 return null;
 
+            var coverImage = _context.CdsCoverImages.FirstOrDefault(x => x.Id == post.CoverImageId);
+
             var items = new PostVm
             {
                 Id = post.Id,
@@ -212,7 +218,7 @@ public class PostRepository : GenericRepository<ApplicationDbContext>, IPostRepo
                 NumberOfVotes = post.NumberOfVotes,
                 NumberOfReports = post.NumberOfReports,
                 ViewCount = post.ViewCount,
-                CoverImage = HttpHelper.GetBaseUrl(_httpContextAccessor) + post.CoverImage
+                CoverImage = HttpHelper.GetBaseUrl(_httpContextAccessor) + coverImage?.ImageUrl
             };
 
             return items;
@@ -244,7 +250,8 @@ public class PostRepository : GenericRepository<ApplicationDbContext>, IPostRepo
             var query = from p in _context.CdsPosts
                 join c in _context.CdsCategories on p.CategoryId equals c.Id
                 join u in _context.Users on p.OwnerUserId equals u.Id
-                select new { p, c, u };
+                join ci in _context.CdsCoverImages on p.CoverImageId equals ci.Id
+                select new { p, c, u, ci };
 
             // Get all post by category Id
             if (categoryId.HasValue) 
@@ -268,7 +275,7 @@ public class PostRepository : GenericRepository<ApplicationDbContext>, IPostRepo
                     NumberOfVotes = x.p.NumberOfVotes,
                     CreateDate = x.p.CreateDate,
                     NumberOfComments = x.p.NumberOfComments,
-                    CoverImage = HttpHelper.GetBaseUrl(_httpContextAccessor) + x.p.CoverImage
+                    CoverImage = HttpHelper.GetBaseUrl(_httpContextAccessor) + x.ci.ImageUrl
                 }).ToListAsync();
 
             var pagination = new Pagination<PostQuickVm>
@@ -297,8 +304,9 @@ public class PostRepository : GenericRepository<ApplicationDbContext>, IPostRepo
                 join l in _context.CdsLabels on lip.LabelId equals l.Id
                 join c in _context.CdsCategories on p.CategoryId equals c.Id
                 join u in _context.Users on p.OwnerUserId equals u.Id
+                join ci in _context.CdsCoverImages on p.CoverImageId equals ci.Id
                 where lip.LabelId == tagId
-                select new { p, l, c, u };
+                select new { p, l, c, u, ci };
 
             var totalRecords = await query.CountAsync();
 
@@ -319,7 +327,7 @@ public class PostRepository : GenericRepository<ApplicationDbContext>, IPostRepo
                     NumberOfVotes = x.p.NumberOfVotes,
                     CreateDate = x.p.CreateDate,
                     NumberOfComments = x.p.NumberOfComments,
-                    CoverImage = HttpHelper.GetBaseUrl(_httpContextAccessor) + x.p.CoverImage
+                    CoverImage = HttpHelper.GetBaseUrl(_httpContextAccessor) + x.ci.ImageUrl
                 }).ToListAsync();
 
             var pagination = new Pagination<PostQuickVm>
@@ -379,7 +387,8 @@ public class PostRepository : GenericRepository<ApplicationDbContext>, IPostRepo
             var query = from p in _context.CdsPosts
                 join c in _context.CdsCategories on p.CategoryId equals c.Id
                 join u in _context.Users on p.OwnerUserId equals u.Id
-                select new { p, c, u };
+                join ci in _context.CdsCoverImages on p.CoverImageId equals ci.Id
+                select new { p, c, u, ci };
             if (!string.IsNullOrEmpty(filter)) query = query.Where(x => x.p.Title.Contains(filter));
             if (categoryId.HasValue) query = query.Where(x => x.p.CategoryId == categoryId.Value);
             var totalRecords = await query.CountAsync();
@@ -399,7 +408,7 @@ public class PostRepository : GenericRepository<ApplicationDbContext>, IPostRepo
                     NumberOfVotes = x.p.NumberOfVotes,
                     CreateDate = x.p.CreateDate,
                     NumberOfComments = x.p.NumberOfComments,
-                    CoverImage = HttpHelper.GetBaseUrl(_httpContextAccessor) + x.p.CoverImage
+                    CoverImage = HttpHelper.GetBaseUrl(_httpContextAccessor) + x.ci.ImageUrl
                 })
                 .ToListAsync();
 
@@ -427,8 +436,9 @@ public class PostRepository : GenericRepository<ApplicationDbContext>, IPostRepo
             var query = from p in _context.CdsPosts
                 join c in _context.CdsCategories on p.CategoryId equals c.Id
                 join u in _context.Users on p.OwnerUserId equals u.Id
+                join ci in _context.CdsCoverImages on p.CoverImageId equals ci.Id
                 orderby p.CreateDate descending
-                select new { p, c, u };
+                select new { p, c, u, ci };
 
             var totalRecords = await query.CountAsync();
             var items = await query.Skip((pageIndex - 1) * pageSize)
@@ -447,7 +457,7 @@ public class PostRepository : GenericRepository<ApplicationDbContext>, IPostRepo
                     NumberOfVotes = x.p.NumberOfVotes,
                     CreateDate = x.p.CreateDate,
                     NumberOfComments = x.p.NumberOfComments,
-                    CoverImage = HttpHelper.GetBaseUrl(_httpContextAccessor) + x.p.CoverImage
+                    CoverImage = HttpHelper.GetBaseUrl(_httpContextAccessor) + x.ci.ImageUrl
                 })
                 .ToListAsync();
 
