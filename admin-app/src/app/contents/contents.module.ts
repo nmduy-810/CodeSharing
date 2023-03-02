@@ -45,7 +45,7 @@ import { PostsAddComponent } from './posts/posts-add/posts-add.component';
 import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
 import { NzMentionModule } from 'ng-zorro-antd/mention';
 import { CommentsDetailComponent } from './comments/comments-detail/comments-detail.component';
-
+import { CoverImageComponent } from './cover-image/cover-image.component';
 
 const antdModule = [
   NzButtonModule,
@@ -88,7 +88,7 @@ const antdModule = [
     ContactsDetailComponent,
     AboutsDetailComponent,
     CommentsDetailComponent,
-    
+    CoverImageComponent    
   ],
   imports: [
     SharedModule,

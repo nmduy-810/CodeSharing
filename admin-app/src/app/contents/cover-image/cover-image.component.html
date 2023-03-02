@@ -1,0 +1,48 @@
+<style>
+    .container {
+        width: 80%;
+        margin: auto;
+        display: flex;
+        flex-wrap: wrap;
+    }
+
+    img {
+        width: 45%;
+        height: 200px;
+        margin: 10px;
+    }
+
+    @media (max-width: 600px) {
+        img {
+            width: 45%;
+            margin: 5px;
+        }
+    }
+
+    .selected {
+        border: 2px solid yellow;
+    }
+</style>
+
+<nz-modal [(nzVisible)]="isModalVisible" [nzTitle]="modalTitle" [nzContent]="modalContent" [nzFooter]="modalFooter"
+    (nzOnCancel)="cancel()" nzWidth="50%" [nzBodyStyle]="{ overflowY: 'scroll', maxHeight: '500px' }">
+    <ng-template #modalTitle>Quản lý hình</ng-template>
+
+    <ng-template #modalContent>
+        <div class="container">
+            <!-- The images -->
+            <img *ngFor="let item of displayData" [src]="item.imageUrl" [ngClass]="{'selected': item.selected}"
+                (click)="onImageClick(item)">
+        </div>
+    </ng-template>
+
+    <ng-template #modalFooter>
+        <button (click)="cancel()" nz-button nzType="primary">Đóng</button>
+        <button (click)="save()" nz-button nzType="primary">Chọn</button>
+    </ng-template>
+
+</nz-modal>
+
+<a (click)="open()" nz-button nzType="default">
+    <span nz-icon nzType="cloud"></span>
+</a>
