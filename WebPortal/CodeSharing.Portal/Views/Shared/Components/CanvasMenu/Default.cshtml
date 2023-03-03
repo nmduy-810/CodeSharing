@@ -1,0 +1,62 @@
+@model CanvasMenuViewModel
+
+<div class="canvas-menu d-flex align-items-end flex-column">
+    <!-- close button -->
+    <button type="button" class="btn-close" aria-label="Close"></button>
+
+    <!-- logo -->
+    <div class="logo">
+        <a href="/about" class="d-block text-logo">
+            CodeSharing<span class="dot">.</span>
+        </a>
+    </div>
+
+    <!-- menu -->
+    <nav>
+        <ul class="vertical-menu">
+            <li class="active">
+                <a href="/">Home</a>
+            </li>
+            @foreach (var item in Model.Categories)
+            {
+                var url = "/category/" + item.Slug + "-" + item.Id;
+                if (item.ParentCategoryId == null && item.IsParent)
+                {
+                    <li>
+                        <a href="#">@item.Title</a>
+                        <ul class="submenu">
+                            @foreach (var subItem in Model.Categories.Where(x => x.ParentCategoryId == item.Id))
+                            {
+                                var subUrl = "/category/" + subItem.Slug + "-" + subItem.Id;
+                                <li><a href="@subUrl">@subItem.Title</a></li>
+                            }
+                        </ul>
+                    </li>
+                }
+                else if (item.ParentCategoryId == null && !item.IsParent)
+                {
+                    <li>
+                        <a href="@url">@item.Title</a>
+                    </li>
+                }
+            }
+            <li>
+                <a href="/about">Thông tin</a>
+            </li>
+
+            <li>
+                <a href="/contact">Liên hệ</a>
+            </li>
+        </ul>
+    </nav>
+
+    <!-- social icons -->
+    <ul class="social-icons list-unstyled list-inline mb-0 mt-auto w-100">
+        <li class="list-inline-item"><a href="#"><i class="fab fa-facebook-f"></i></a></li>
+        <li class="list-inline-item"><a href="#"><i class="fab fa-twitter"></i></a></li>
+        <li class="list-inline-item"><a href="#"><i class="fab fa-instagram"></i></a></li>
+        <li class="list-inline-item"><a href="#"><i class="fab fa-pinterest"></i></a></li>
+        <li class="list-inline-item"><a href="#"><i class="fab fa-medium"></i></a></li>
+        <li class="list-inline-item"><a href="#"><i class="fab fa-youtube"></i></a></li>
+    </ul>
+</div>
