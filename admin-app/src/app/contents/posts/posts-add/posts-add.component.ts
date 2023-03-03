@@ -25,7 +25,7 @@ export class PostsAddComponent implements OnInit, OnDestroy {
     'slug': new FormControl('', Validators.compose([Validators.required])),
     'content': new FormControl('', Validators.compose([Validators.required])),
     'labels': new FormControl('', Validators.compose([Validators.required])),
-    'note': new FormControl('', Validators.compose([Validators.required]))
+    'note': new FormControl('', Validators.compose([Validators.required])),
   });
 
   subscription: Subscription[] = [];
@@ -75,6 +75,10 @@ export class PostsAddComponent implements OnInit, OnDestroy {
       const formData = this.utilitiesService.ToFormData(formValues);
 
       formData.append('coverImage', this.selectedFile);
+
+      if (this.imageFromCloud > 0) {
+        formData.append('coverImageId', this.imageFromCloud.toString());
+      }
 
       this.subscription.push(this.postsService.add(formData).subscribe((response: any) => {
         console.log(response);

@@ -1,4 +1,5 @@
 using CodeSharing.Core.Helpers;
+using CodeSharing.DTL.EFCoreEntities;
 using CodeSharing.DTL.Models.Contents.CoverImage;
 using CodeSharing.Infrastructure.EFCore.Provider;
 using CodeSharing.Infrastructure.EFCore.Repositories.Generic;
@@ -34,6 +35,22 @@ public class CoverImageRepository : GenericRepository<ApplicationDbContext>, ICo
         {
             _logger.LogError("{Message}", e.Message);
             return new List<CoverImageVm>();
+        }
+    }
+
+    public async Task<int> PostCoverImage(CdsCoverImage request)
+    {
+        try
+        {
+            var coverImage = new CdsCoverImage() { ImageUrl = request.ImageUrl, CreateDate = DateTime.UtcNow };
+            _context.CdsCoverImages.Add(coverImage);
+            await _context.SaveChangesAsync(); // Save changes to the database
+            return coverImage.Id; // Return the ID of the inserted record
+        }
+        catch (Exception e)
+        {
+            _logger.LogError("{Message}", e.Message);
+            return 0;
         }
     }
 }

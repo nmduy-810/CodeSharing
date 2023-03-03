@@ -19,13 +19,15 @@ public class PostRepository : GenericRepository<ApplicationDbContext>, IPostRepo
     private readonly UserManager<CdsUser> _userManager;
     private readonly IUploadRepository _uploadRepository;
     private readonly ILogger<PostRepository> _logger;
-
-    public PostRepository(ApplicationDbContext context, IHttpContextAccessor httpContextAccessor, UserManager<CdsUser> userManager, IUploadRepository uploadRepository, ILogger<PostRepository> logger) : base(context)
+    private readonly ICoverImageRepository _coverImageRepository;
+    
+    public PostRepository(ApplicationDbContext context, IHttpContextAccessor httpContextAccessor, UserManager<CdsUser> userManager, IUploadRepository uploadRepository, ILogger<PostRepository> logger, ICoverImageRepository coverImageRepository) : base(context)
     {
         _httpContextAccessor = httpContextAccessor;
         _userManager = userManager;
         _uploadRepository = uploadRepository;
         _logger = logger;
+        _coverImageRepository = coverImageRepository;
     }
 
     #region Posts
@@ -218,7 +220,8 @@ public class PostRepository : GenericRepository<ApplicationDbContext>, IPostRepo
                 NumberOfVotes = post.NumberOfVotes,
                 NumberOfReports = post.NumberOfReports,
                 ViewCount = post.ViewCount,
-                CoverImage = HttpHelper.GetBaseUrl(_httpContextAccessor) + coverImage?.ImageUrl
+                CoverImage = HttpHelper.GetBaseUrl(_httpContextAccessor) + coverImage?.ImageUrl,
+                CoverImageId = post.CoverImageId
             };
 
             return items;
@@ -524,7 +527,16 @@ public class PostRepository : GenericRepository<ApplicationDbContext>, IPostRepo
             if (request.CoverImage != null)
             {
                 var coverImagePath = await _uploadRepository.SaveFile(request.CoverImage);
-                post.CoverImage = coverImagePath;
+                //Insert to cover image table
+                var coverImage = new CdsCoverImage() { ImageUrl = coverImagePath };
+                var coverImageId = _coverImageRepository.PostCoverImage(coverImage).Result;
+                
+                //Set coverImageId for post
+                post.CoverImageId = coverImageId;
+            }
+            else
+            {
+                post.CoverImageId = request.CoverImageId;
             }
         
             // Process label
