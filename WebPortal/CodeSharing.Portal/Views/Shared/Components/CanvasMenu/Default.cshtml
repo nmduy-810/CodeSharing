@@ -1,3 +1,5 @@
+@using System.Security.Claims
+@using Microsoft.AspNetCore.Mvc.TagHelpers
 @model CanvasMenuViewModel
 
 <div class="canvas-menu d-flex align-items-end flex-column">
@@ -40,13 +42,20 @@
                     </li>
                 }
             }
-            <li>
-                <a href="/about">Thông tin</a>
-            </li>
-
-            <li>
-                <a href="/contact">Liên hệ</a>
-            </li>
+            <li><a href="/about">Thông tin</a></li>
+            <li><a href="/contact">Liên hệ</a></li>
+            @if (User.Identity!.IsAuthenticated)
+            {
+                <li>
+                    <a href="/account/sign-out">Đăng xuất</a>
+                </li>
+            }
+            else
+            {
+                <li>
+                    <a asp-action="SignIn" asp-controller="Account">Đăng nhập</a>
+                </li>
+            }
         </ul>
     </nav>
 
