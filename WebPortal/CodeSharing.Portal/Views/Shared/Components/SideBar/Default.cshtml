@@ -77,6 +77,7 @@
             </div>
         </div>
     </div>
+    @await Component.InvokeAsync("WidgetCategory", "Default")
     <!-- widget post carousel -->
     <div class="widget rounded">
         <div class="widget-header text-center">
@@ -134,7 +135,7 @@
                 <div class="mb-2">
                     <input class="form-control w-100 text-center" placeholder="Địa chỉ email…" type="email">
                 </div>
-                <button class="btn btn-default btn-full" type="submit">Theo dõi</button>
+                <a onclick="showAlert()" class="btn btn-default btn-full">Theo dõi</a>
             </form>
             <span class="newsletter-privacy text-center mt-3">Rất hân hạnh khi được chia sẻ kinh nghiệm cho mọi người</span>
         </div>
@@ -173,3 +174,13 @@
         </div>
     </div>
 </div>
+
+<script>
+    function showAlert() {
+        Swal.fire(
+          'Thông báo',
+          'Chức năng đang được phát triển!',
+          'success'
+        )
+    }
+</script>
