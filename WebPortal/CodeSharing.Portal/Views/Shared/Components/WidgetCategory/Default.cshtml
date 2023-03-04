@@ -1,0 +1,19 @@
+@model WidgetCategoryViewModel
+
+<!-- widget categories -->
+<div class="widget rounded">
+    <div class="widget-header text-center">
+        <h3 class="widget-title">Khám phá</h3>
+        <img src="~/images/wave.svg" class="wave" alt="wave" />
+    </div>
+    <div class="widget-content">
+        <ul class="list">
+            @foreach (var item in Model.ExplorerTopics)
+            {
+                var postsByCategoryUrl = "/category/" + item.Slug + "-" + item.Id;
+                <li><a href="@postsByCategoryUrl">@item.Title</a><span>(@item.TotalPost)</span></li>
+            }
+        </ul>
+    </div>
+							
+</div>

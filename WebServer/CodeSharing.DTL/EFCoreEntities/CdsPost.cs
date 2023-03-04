@@ -15,8 +15,6 @@ public class CdsPost : IDateTracking
     [Range(1, double.PositiveInfinity)]
     public int CategoryId { get; set; }
 
-    public string CoverImage { get; set; } = default!;
-
     [Required] [MaxLength(500)] 
     public string Title { get; set; } = default!;
 
@@ -51,4 +49,7 @@ public class CdsPost : IDateTracking
     public DateTime CreateDate { get; set; }
 
     public DateTime? LastModifiedDate { get; set; }
+    
+    public CdsCoverImage CdsCoverImage { get; set; }
+    public int? CoverImageId { get; set; }
 }

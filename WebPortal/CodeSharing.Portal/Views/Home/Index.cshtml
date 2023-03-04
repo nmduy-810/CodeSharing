@@ -1,5 +1,9 @@
 ﻿@model HomeViewModel
 
+<style>
+   
+</style>
+
 @{
     ViewData["Title"] = "Code Sharing · sharing Code, Sharing knowledge";
     ViewData["Description"] = "Code Sharing · Trang chủ của Code Sharing · Nơi chia sẻ mọi thứ liên quan đến lập trình";
@@ -17,7 +21,7 @@
                         var postsByCategoryUrl = "/category/" + item.CategorySlug + "-" + item.CategoryId;
                         <div class="col-sm-6">
                             <!-- post -->
-                            <div class="post post-grid rounded bordered fix-height">
+                            <div class="post post-grid rounded bordered">
                                 <div class="thumb top-rounded">
                                     <a href="@postsByCategoryUrl" title="Xem tất cả bài viết trong @item.CategoryTitle" class="category-badge position-absolute">@Html.Raw(item.CategoryTitle)</a>
                                     <span class="post-format">

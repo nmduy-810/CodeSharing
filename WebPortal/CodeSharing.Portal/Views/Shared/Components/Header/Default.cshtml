@@ -18,13 +18,16 @@
                 <a href="/about" class="d-block text-logo">
                     CodeSharing<span class="dot">.</span>
                 </a>
-                <span class="slogan d-block">sharing Code, Sharing knowledge</span>
+                <span class="slogan d-block">/* sharing Code, Sharing knowledge */</span>
             </div>
             <div class="col-md-4 col-sm-12 col-xs-12">
                 <!-- header buttons -->
                 <div class="header-buttons float-md-end mt-4 mt-md-0">
                     <button class="search icon-button">
                         <i class="icon-magnifier"></i>
+                    </button>
+                    <button class="burger-menu icon-button ms-2 float-end float-md-none">
+                    	<span class="burger-icon"></span>
                     </button>
                 </div>
             </div>
@@ -36,7 +39,7 @@
                 <!-- menus -->
                 <ul class="navbar-nav">
                     <li class="nav-item active">
-                        <a class="nav-link" href="/">Trang chủ</a>
+                        <a class="nav-link" href="/">Home</a>
                     </li>
                     @foreach (var item in Model.Categories)
                     {

@@ -21,14 +21,12 @@ public class SideBarViewComponent : ViewComponent
         var latestPosts = await _postApiClient.GetLatestPosts(4);
         var trendingPosts = await _postApiClient.GetTrendingPosts(4);
         var popularLabels = await _labelApiClient.GetPopularLabels(5);
-        var explorerTopics = await _postApiClient.GetTotalPostInCategory();
         var items = new SideBarViewModel
         {
             PopularPosts = popularPosts.Data,
             LatestPosts = latestPosts.Data,
             TrendingPosts = trendingPosts.Data,
             PopularLabels = popularLabels.Data,
-            ExplorerTopics = explorerTopics.Data
         };
 
         return View("Default", items);

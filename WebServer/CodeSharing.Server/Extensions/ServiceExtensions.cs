@@ -302,5 +302,8 @@ public static class ServiceExtensions
         services.AddScoped(typeof(ICoreRepository<>), typeof(CoreRepository<>));
         services.AddScoped<IBaseService, BaseService>();
         services.AddScoped<IUtils, Utils>();
+        services
+            .AddScoped<ICoverImageRepository, CoverImageRepository>()
+            .AddScoped<ICoverImageService, CoverImageService>();
     }
 }

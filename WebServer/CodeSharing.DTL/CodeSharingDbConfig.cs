@@ -83,5 +83,10 @@ public static class CodeSharingDbConfig
         {
             public const string TableName = "Cds_Votes";
         }
+
+        public static class CdsCoverImage
+        {
+            public const string TableName = "Cds_CoverImages";
+        }
     }
 }
