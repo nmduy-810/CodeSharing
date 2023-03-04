@@ -3503,5 +3503,10 @@ button:focus {
     }
 }
 
+code {
+    font-size: 14px;
+    line-height: 28px;
+    color: red;
+}
 
 /*# sourceMappingURL=style.css.map */
