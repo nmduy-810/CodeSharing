@@ -24,7 +24,7 @@ public class BaseApiClient
 
     protected async Task<Result<List<T>>> GetListAsync<T>(string url, bool requiredLogin = false)
     {
-        var client = _httpClientFactory.CreateClient();
+        var client = _httpClientFactory.CreateClient("ServerUrl");
         client.BaseAddress = new Uri(_configuration["ServerUrl"]);
 
         // Have authorized
@@ -44,7 +44,7 @@ public class BaseApiClient
 
     protected async Task<Result<T>> GetAsync<T>(string url, bool requiredLogin = false)
     {
-        var client = _httpClientFactory.CreateClient();
+        var client = _httpClientFactory.CreateClient("ServerUrl");
         client.BaseAddress = new Uri(_configuration["ServerUrl"]);
 
         // Have authorized
@@ -67,7 +67,7 @@ public class BaseApiClient
     protected async Task<Result<TResponse>> PostAsync<TRequest, TResponse>(string url, TRequest requestContent,
         bool requiredLogin = true)
     {
-        var client = _httpClientFactory.CreateClient();
+        var client = _httpClientFactory.CreateClient("ServerUrl");
         client.BaseAddress = new Uri(_configuration["ServerUrl"]);
         StringContent? httpContent = null;
         if (requestContent != null)
@@ -94,7 +94,7 @@ public class BaseApiClient
     protected async Task<Result<TResponse>> PutAsync<TRequest, TResponse>(string url, TRequest requestContent,
         bool requiredLogin = true)
     {
-        var client = _httpClientFactory.CreateClient();
+        var client = _httpClientFactory.CreateClient("ServerUrl");
         client.BaseAddress = new Uri(_configuration["ServerUrl"]);
         HttpContent? httpContent = null;
         if (requestContent != null)
@@ -125,7 +125,7 @@ public class BaseApiClient
 
     protected async Task<Result<TResponse>> DeleteAsync<TResponse>(string url, bool requiredLogin = true)
     {
-        var client = _httpClientFactory.CreateClient();
+        var client = _httpClientFactory.CreateClient("ServerUrl");
         client.BaseAddress = new Uri(_configuration["ServerUrl"]);
 
         if (requiredLogin)
