@@ -50,7 +50,6 @@
     </ItemGroup>
 
     <ItemGroup>
-        <Folder Include="Migrations" />
         <Folder Include="wwwroot\user-attachments" />
     </ItemGroup>
 
