@@ -268,6 +268,29 @@ namespace CodeSharing.Server.Migrations
                     b.ToTable("Cds_Contacts");
                 });
 
+            modelBuilder.Entity("CodeSharing.DTL.EFCoreEntities.CdsCoverImage", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<DateTime>("CreateDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("ImageUrl")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(1000)");
+
+                    b.Property<DateTime?>("LastModifiedDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Cds_CoverImages");
+                });
+
             modelBuilder.Entity("CodeSharing.DTL.EFCoreEntities.CdsFunction", b =>
                 {
                     b.Property<string>("Id")
@@ -361,9 +384,8 @@ namespace CodeSharing.Server.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("CoverImage")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int?>("CoverImageId")
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("CreateDate")
                         .HasColumnType("datetime2");
@@ -412,6 +434,8 @@ namespace CodeSharing.Server.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CoverImageId");
 
                     b.HasIndex("Slug");
 
@@ -739,6 +763,15 @@ namespace CodeSharing.Server.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens", (string)null);
+                });
+
+            modelBuilder.Entity("CodeSharing.DTL.EFCoreEntities.CdsPost", b =>
+                {
+                    b.HasOne("CodeSharing.DTL.EFCoreEntities.CdsCoverImage", "CdsCoverImage")
+                        .WithMany()
+                        .HasForeignKey("CoverImageId");
+
+                    b.Navigation("CdsCoverImage");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

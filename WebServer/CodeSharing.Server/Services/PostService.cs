@@ -24,13 +24,16 @@ public class PostService : BaseService, IPostService
     private readonly IStorageService _storageService;
     private readonly UserManager<CdsUser> _userManager;
     private const int PageSize = 10;
-    public PostService(IPostRepository repository, ICacheService distributedCacheService, ISequenceService sequenceService, IStorageService storageService, UserManager<CdsUser> userManager, IUtils utils) : base(utils)
+    private readonly ICoverImageRepository _coverImageRepository;
+    public PostService(IPostRepository repository, ICacheService distributedCacheService, ISequenceService sequenceService, 
+        IStorageService storageService, UserManager<CdsUser> userManager, IUtils utils, ICoverImageRepository coverImageRepository) : base(utils)
     {
         _repository = repository;
         _distributedCacheService = distributedCacheService;
         _sequenceService = sequenceService;
         _storageService = storageService;
         _userManager = userManager;
+        _coverImageRepository = coverImageRepository;
     }
 
     public async Task<Result<List<PostQuickVm>>> GetPosts()
@@ -288,7 +291,16 @@ public class PostService : BaseService, IPostService
             if (request.CoverImage != null)
             {
                 var coverImagePath = await SaveFile(request.CoverImage);
-                post.CoverImage = coverImagePath;
+                //Insert to cover image table
+                var coverImage = new CdsCoverImage() { ImageUrl = coverImagePath };
+                var coverImageId = _coverImageRepository.PostCoverImage(coverImage).Result;
+                
+                //Set coverImageId for post
+                post.CoverImageId = coverImageId;
+            }
+            else
+            {
+                post.CoverImageId = request.CoverImageId;
             }
             
             // Update number of post in user

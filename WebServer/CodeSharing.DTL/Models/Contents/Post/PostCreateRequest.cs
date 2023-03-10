@@ -30,4 +30,6 @@ public class PostCreateRequest
     [Required(ErrorMessage = "Nhãn không được để trống")]
     public string[] Labels { get; set; } = Array.Empty<string>();
     public string? PreviewLabel { get; set; }
+
+    public int CoverImageId { get; set; }
 }

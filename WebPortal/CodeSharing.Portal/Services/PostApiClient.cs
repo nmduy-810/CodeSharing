@@ -110,7 +110,7 @@ public class PostApiClient : BaseApiClient, IPostApiClient
 
     public async Task<Result<PostVm>> PostPost(PostCreateRequest request)
     {
-        var client = _httpClientFactory.CreateClient();
+        var client = _httpClientFactory.CreateClient("BackendApi");
         client.BaseAddress = new Uri(_configuration["ServerUrl"]);
         using var requestContent = new MultipartFormDataContent();
 
@@ -164,7 +164,7 @@ public class PostApiClient : BaseApiClient, IPostApiClient
 
     public async Task<Result<PostVm>> PutPost(int id, PostCreateRequest request)
     {
-        var client = _httpClientFactory.CreateClient();
+        var client = _httpClientFactory.CreateClient("BackendApi");
         client.BaseAddress = new Uri(_configuration["ServerUrl"]);
         using var requestContent = new MultipartFormDataContent();
 

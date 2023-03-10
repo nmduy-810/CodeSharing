@@ -24,4 +24,5 @@ public class PostVm
     public int? NumberOfReports { get; set; }
     public List<AttachmentVm> Attachments { set; get; } = default!;
     public string CoverImage { get; set; } = default!;
+    public int? CoverImageId { get; set; }
 }

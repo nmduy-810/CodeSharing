@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { Category } from 'src/app/shared/models';
@@ -9,6 +9,7 @@ import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { Router } from '@angular/router';
 import { MentionOnSearchTypes } from 'ng-zorro-antd/mention';
 import { LabelsService } from 'src/app/shared/services/labels.service';
+import { CoverImageComponent } from '../../cover-image/cover-image.component';
 
 @Component({
   selector: 'app-posts-add',
@@ -24,7 +25,7 @@ export class PostsAddComponent implements OnInit, OnDestroy {
     'slug': new FormControl('', Validators.compose([Validators.required])),
     'content': new FormControl('', Validators.compose([Validators.required])),
     'labels': new FormControl('', Validators.compose([Validators.required])),
-    'note': new FormControl('', Validators.compose([Validators.required]))
+    'note': new FormControl('', Validators.compose([Validators.required])),
   });
 
   subscription: Subscription[] = [];
@@ -34,6 +35,8 @@ export class PostsAddComponent implements OnInit, OnDestroy {
 
   suggestions: string[] = [];
   tags = [];
+
+  imageFromCloud: number;
 
   constructor(
     private postsService: PostsService,
@@ -72,6 +75,10 @@ export class PostsAddComponent implements OnInit, OnDestroy {
       const formData = this.utilitiesService.ToFormData(formValues);
 
       formData.append('coverImage', this.selectedFile);
+
+      if (this.imageFromCloud > 0) {
+        formData.append('coverImageId', this.imageFromCloud.toString());
+      }
 
       this.subscription.push(this.postsService.add(formData).subscribe((response: any) => {
         console.log(response);
@@ -122,6 +129,11 @@ export class PostsAddComponent implements OnInit, OnDestroy {
   onSearchChange({ value, prefix }: MentionOnSearchTypes): void {
     console.log('nzOnSearchChange', value, prefix);
     this.suggestions =  this.tags;
+  }
+
+  onSelectedImageId(id: number) {
+    console.log(id);
+    this.imageFromCloud = id;
   }
 }
 

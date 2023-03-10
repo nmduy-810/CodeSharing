@@ -41,7 +41,7 @@ public class PostController : Controller
             items.CurrentUser = _userApiClient.GetById(User.GetUserId()).Result.Data;
 
         // Update view count when user clicked post
-        await _postApiClient.UpdateViewCount(id);
+        //await _postApiClient.UpdateViewCount(id);
 
         return View(items);
     }

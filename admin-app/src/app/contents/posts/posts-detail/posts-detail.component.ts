@@ -31,6 +31,10 @@ export class PostsDetailComponent implements OnInit, OnDestroy {
   selectedFile: File;
   imagePath: string;
 
+  coverImageId: number;
+
+  imageFromCloud : number;
+
   constructor(
     private postsService: PostsService,
     private utilitiesService: UtilitiesService,
@@ -82,10 +86,11 @@ export class PostsDetailComponent implements OnInit, OnDestroy {
         'slug': response.slug,
         'content': response.content,
         'labels': this.labels,
-        'note': response.note
+        'note': response.note,
       });
 
       this.imagePath = response.coverImage;
+      this.coverImageId = response.coverImageId;
       this.postForm.get('categoryId').setValue(response.categoryId.toString());
     }));
   }
@@ -109,6 +114,18 @@ export class PostsDetailComponent implements OnInit, OnDestroy {
       const formData = this.utilitiesService.ToFormData(formValues);
 
       formData.append('coverImage', this.selectedFile);
+
+      if (this.imageFromCloud > 0) {
+        if (this.imageFromCloud != this.coverImageId) {
+          formData.append('coverImageId', this.imageFromCloud.toString());
+        }
+        else {
+          formData.append('coverImageId', this.coverImageId.toString());
+        }
+      }
+      else {
+        formData.append('coverImageId', this.coverImageId.toString());
+      }
 
       this.subscription.push(this.postsService.update(this.postId, formData).subscribe((response: any) => {
         console.log(response);
@@ -159,6 +176,11 @@ export class PostsDetailComponent implements OnInit, OnDestroy {
   onSearchChange({ value, prefix }: MentionOnSearchTypes): void {
     console.log('nzOnSearchChange', value, prefix);
     this.suggestions =  this.tags;
+  }
+
+  onSelectedImageId(id: number) {
+    console.log(id);
+    this.imageFromCloud = id;
   }
 }
 

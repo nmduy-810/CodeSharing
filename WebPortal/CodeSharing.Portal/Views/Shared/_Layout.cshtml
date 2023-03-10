@@ -12,6 +12,8 @@
     <link rel="stylesheet" href="~/css/slick.css" type="text/css" media="all">
     <link rel="stylesheet" href="~/css/simple-line-icons.css" type="text/css" media="all">
     <link rel="stylesheet" href="~/css/style.css" type="text/css" media="all">
+    <link rel="stylesheet" href="~/css/prism.css" type="text/css" media="all"/>
+    <link rel="stylesheet" href="~/css/sweetalert2.min.css" type="text/css" media="all">
 </head>
 <body>
 <!-- preloader -->
@@ -67,6 +69,8 @@
 <!-- end site wrapper -->
 <!-- search popup area -->
 <partial name="_SearchPopup"/>
+<!-- canvas menu -->
+@await Component.InvokeAsync("CanvasMenu", "Default")
 <!-- JAVA SCRIPTS -->
 <script src="~/js/jquery.min.js"></script>
 <script src="~/js/popper.min.js"></script>
@@ -74,6 +78,8 @@
 <script src="~/js/slick.min.js"></script>
 <script src="~/js/jquery.sticky-sidebar.min.js"></script>
 <script src="~/js/custom.js"></script>
+<script src="~/js/prism.js"></script>
+<script src="~/js/sweetalert2.min.js"></script>
 @await RenderSectionAsync("scripts", false)
 </body>
 </html>
