@@ -34,5 +34,5 @@ public class PostCreateRequest
     
     public string? PreviewLabel { get; set; }
     
-    public int CoverImageId { get; set; }
+    public int? CoverImageId { get; set; }
 }
