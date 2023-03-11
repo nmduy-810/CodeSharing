@@ -201,7 +201,7 @@ public class PostApiClient : BaseApiClient, IPostApiClient
         }
         else
         {
-            requestContent.Add(new StringContent(request.CoverImageId.ToString()), "coverImageId");
+            requestContent.Add(new StringContent(request.CoverImageId.ToString()!), "coverImageId");
         }
 
         // Labels
