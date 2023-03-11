@@ -141,6 +141,10 @@ public class PostApiClient : BaseApiClient, IPostApiClient
             var bytes = new ByteArrayContent(data);
             requestContent.Add(bytes, "coverImage", request.CoverImage.FileName);
         }
+        else
+        {
+            requestContent.Add(new StringContent(request.CategoryId.ToString()), "coverImageId");
+        }
 
         // Labels
         if (request.Labels.Length > 0)
@@ -194,6 +198,10 @@ public class PostApiClient : BaseApiClient, IPostApiClient
 
             var bytes = new ByteArrayContent(data);
             requestContent.Add(bytes, "coverImage", request.CoverImage.FileName);
+        }
+        else
+        {
+            requestContent.Add(new StringContent(request.CoverImageId.ToString()), "coverImageId");
         }
 
         // Labels

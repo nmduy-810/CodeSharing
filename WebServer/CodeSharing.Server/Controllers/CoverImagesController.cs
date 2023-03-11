@@ -19,4 +19,11 @@ public class CoverImagesController : BaseController
     {
         return CodeSharingResult(await _coverImageService.GetCoverImages());
     }
+    
+    [AllowAnonymous]
+    [HttpGet("{id:int}")]
+    public async Task<IActionResult> GetCoverImageById([FromRoute] int id)
+    {
+        return CodeSharingResult(await _coverImageService.GetCoverImageById(id));
+    }
 }

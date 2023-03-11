@@ -19,7 +19,6 @@ public class CoverImageRepository : GenericRepository<ApplicationDbContext>, ICo
         _httpContextAccessor = httpContextAccessor;
     }
 
-
     public async Task<List<CoverImageVm>> GetCoverImages()
     {
         try
@@ -35,6 +34,30 @@ public class CoverImageRepository : GenericRepository<ApplicationDbContext>, ICo
         {
             _logger.LogError("{Message}", e.Message);
             return new List<CoverImageVm>();
+        }
+    }
+
+    public async Task<CoverImageVm?> GetCoverImageById(int id)
+    {
+        try
+        {
+            var coverImages = await _context.CdsCoverImages.FirstOrDefaultAsync(x => x.Id == id);
+            if (coverImages == null)
+                return null;
+
+            var coverImageVm = new CoverImageVm()
+            {
+                Id = coverImages.Id, 
+                ImageUrl = HttpHelper.GetBaseUrl(_httpContextAccessor) + coverImages.ImageUrl,
+                CreateDate = coverImages.CreateDate
+            };
+            
+            return coverImageVm;
+        }
+        catch (Exception e)
+        {
+            _logger.LogError("{Message}", e.Message);
+            return new CoverImageVm();
         }
     }
 

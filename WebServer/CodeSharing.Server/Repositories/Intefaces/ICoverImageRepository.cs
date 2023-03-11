@@ -9,5 +9,7 @@ public interface ICoverImageRepository : IGenericRepository<ApplicationDbContext
 {
     Task<List<CoverImageVm>> GetCoverImages();
 
+    Task<CoverImageVm?> GetCoverImageById(int id);
+
     Task<int> PostCoverImage(CdsCoverImage request);
 }

@@ -1,9 +1,9 @@
 using CodeSharing.Core.Models.BaseModels;
 using CodeSharing.DTL.Models.Contents.CoverImage;
 
-namespace CodeSharing.Server.Services.Interfaces;
+namespace CodeSharing.Portal.Interfaces;
 
-public interface ICoverImageService
+public interface ICoverImagesApiClient
 {
     Task<Result<List<CoverImageVm>>> GetCoverImages();
 

@@ -174,6 +174,7 @@ builder.Services.AddTransient<IAboutApiClient, AboutApiClient>();
 builder.Services.AddTransient<IUploadApiClient, UploadApiClient>();
 builder.Services.AddTransient<ISerializeService, SerializeService>();
 builder.Services.AddScoped<ValidateReCaptchaAttribute>();
+builder.Services.AddTransient<ICoverImagesApiClient, CoverImageApiClient>();
 
 // Security Headers
 builder.WebHost.UseKestrel(serverOptions =>

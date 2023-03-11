@@ -52,5 +52,5 @@ public class CdsPost : IDateTracking
 
     public CdsCoverImage CdsCoverImage { get; set; } = default!;
     
-    public int? CoverImageId { get; set; }
+    public int CoverImageId { get; set; }
 }
