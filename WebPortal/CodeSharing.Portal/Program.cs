@@ -18,18 +18,12 @@ var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
 
 // Add HttpClient
-//uilder.Services.AddHttpClient();
+//builder.Services.AddHttpClient();
 
 builder.Services.AddHttpClient("BackendApi").ConfigurePrimaryHttpMessageHandler(() =>
 {
     var handler = new HttpClientHandler();
-    var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
-
-    //if (environment == Environments.Development)
-    //{
-    //    handler.ServerCertificateCustomValidationCallback = (message, cert, chain, errors) => { return true; };
-    //}
-    handler.ServerCertificateCustomValidationCallback = (message, cert, chain, errors) => { return true; };
+    handler.ServerCertificateCustomValidationCallback = (message, cert, chain, errors) => true;
     return handler;
 });
 

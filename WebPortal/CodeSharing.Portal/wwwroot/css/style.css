@@ -29,18 +29,15 @@ Description: Minimal Blog and Magazine HTML Template
 19. Slick Settings
 20. Responsive Settings
 
-*/
-@import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500&display=swap");
 /*=================================================================*/
 /*                      BASE                              
 /*=================================================================*/
 body {
     color: #8F9BAD;
     background-color: #fff;
-    font-family: "Roboto", sans-serif;
+    font-family: "Montserrat", sans-serif;
     font-size: 15px;
-    line-height: 1.7;
+    line-height: 1.6;
     overflow-x: hidden;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -1586,8 +1583,10 @@ section {
 
 .post.post-grid .post-bottom {
     border-top: solid 1px #EBEBEB;
-    margin: 0 30px;
+    /*margin: 0 30px;*/
     padding: 20px 0;
+    margin-left: 30px;
+    margin-right: 30px;
 }
 
 .post.post-grid .post-bottom .icons {
@@ -2636,7 +2635,7 @@ button:focus {
     color: #FFF;
     border: 0;
     border-radius: 25px;
-    font-family: "Roboto", sans-serif;
+    font-family: "Montserrat", sans-serif;
     font-size: 14px;
     font-weight: 400;
     overflow: hidden;
@@ -3507,6 +3506,25 @@ code {
     font-size: 14px;
     line-height: 28px;
     color: red;
+}
+
+.post-grid {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.post-title {
+    flex-grow: 1;
+}
+
+.excerpt {
+    flex-grow: 2;
+}
+
+.post-bottom {
+    margin-top: auto;
+    align-items: flex-end;
 }
 
 /*# sourceMappingURL=style.css.map */
