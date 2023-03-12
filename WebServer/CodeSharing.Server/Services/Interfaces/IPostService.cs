@@ -38,7 +38,7 @@ public interface IPostService
 
     Task<Result<PostQuickVm?>>Delete(int id);
 
-    Task<Result<PostQuickVm?>> UpdateViewCount(int id);
+    Task<Result<bool>> UpdateViewCount(int postId);
 
     #endregion Post
     

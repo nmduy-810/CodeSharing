@@ -39,7 +39,6 @@
                 dataType: 'json',
                 success: function(result) {
                   // Handle the AJAX response here
-                  console.log('AJAX response:', result);
                   let thumbnailImg = document.querySelector('.img-thumbnail');
                   thumbnailImg.src = result.imageUrl;
                   thumbnailImg.alt = result.imageUrl;

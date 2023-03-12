@@ -596,28 +596,26 @@ public class PostRepository : GenericRepository<ApplicationDbContext>, IPostRepo
         }
     }
 
-    public async Task<CdsPost?> UpdateViewCount(int id)
+    public async Task<bool> UpdateViewCount(int postId)
     {
         try
         {
-            var post = await _context.CdsPosts.FindAsync(id);
+            var post = await _context.CdsPosts.FindAsync(postId);
             if (post == null)
-                return null;
+                return false;
 
-            if (post.ViewCount == null) 
-                post.ViewCount = 0;
+            post.ViewCount ??= 0; //shorthand -> if (post.ViewCount == 0 ) post.ViewCount = 0;
 
             post.ViewCount += 1;
 
-            var entity = _context.CdsPosts.Update(post);
-        
+            _context.CdsPosts.Update(post);
             var result = await _context.SaveChangesAsync();
-            return result > 0 ? entity.Entity : null;
+            return result > 0;
         }
         catch (Exception e)
         {
             _logger.LogError("{Message}", e.Message);
-            return null; 
+            return false; 
         }
     }
 

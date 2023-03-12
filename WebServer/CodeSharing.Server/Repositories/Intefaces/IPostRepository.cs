@@ -39,7 +39,7 @@ public interface IPostRepository : IGenericRepository<ApplicationDbContext>
 
     Task<CdsPost?> Delete(int id);
 
-    Task<CdsPost?> UpdateViewCount(int id);
+    Task<bool> UpdateViewCount(int postId);
 
     Task<int> GetTotalPosts();
 

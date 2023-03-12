@@ -11,8 +11,48 @@
     <script src="~/lib/mustache.js/mustache.min.js"></script>
     <script src="~/js/controllers/postsController.js" asp-append-version="true"></script>
     <script>
-        var controller = new postsController();
+        let controller = new postsController();
         controller.initialize();
+    </script>
+
+    <script>
+        const currentPostId = $('#hid_post_id').val();
+        console.log(currentPostId);
+        
+        let isViewCountUpdatedInSession = false;
+        
+        @*Xử lý cập nhật view count khi cuộn trang*@
+        if (localStorage.getItem(`isViewCountUpdated_${currentPostId}`) === 'true') {
+            isViewCountUpdatedInSession = true; /*Kiểm trong biến isViewCountUpdated trong localStorage đã được lưu trữ chưa, nếu rồi thì user đã cuộn trang*/
+        } else {
+            isViewCountUpdatedInSession = false;
+        }
+        
+        $(window).scroll(function () { 
+            const pageHeight = $(document).height(); // Lấy chiều cao của trang web
+            const windowHeight = $(window).height(); // Lấy chiều cao của trình duyệt
+            const scrollPosition = pageHeight * 0.5 - windowHeight * 0.5; // Tính toán vị trí cần cuộn đến để tới vị trí nửa trang
+            if ($(this).scrollTop() >= scrollPosition && !isViewCountUpdatedInSession) {
+                $.ajax({
+                    url: '@Url.Action("UpdateViewCount", "Post")',
+                    data: { postId: currentPostId },
+                    type: 'PUT',
+                    dataType: 'json',
+                    success: function(result) {
+                        // Đặt biến isViewCountUpdated thành true để không cập nhật lại số lần xem
+                        isViewCountUpdatedInSession = true;
+                        localStorage.setItem(`isViewCountUpdated_${currentPostId}`, 'true');
+                        setTimeout(function() {
+                            localStorage.removeItem(`isViewCountUpdated_${currentPostId}`);
+                        }, 60000); // 1 phút = 60000 ms
+                    },
+                    error: function(xhr, status, error) {
+                        // Handle the AJAX error here
+                        console.error('AJAX error:', error);
+                    }
+                });
+            }
+        });
     </script>
 }
 

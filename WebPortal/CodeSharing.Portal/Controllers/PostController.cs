@@ -39,10 +39,7 @@ public class PostController : Controller
 
         if (User.Identity != null && User.Identity.IsAuthenticated)
             items.CurrentUser = _userApiClient.GetById(User.GetUserId()).Result.Data;
-
-        // Update view count when user clicked post
-        //await _postApiClient.UpdateViewCount(id);
-
+        
         return View(items);
     }
 
@@ -84,6 +81,13 @@ public class PostController : Controller
             Keyword = keyword
         };
         return View(items);
+    }
+
+    public async Task<IActionResult> UpdateViewCount(int postId)
+    {
+        // Update view count when user clicked post
+        var result = await _postApiClient.UpdateViewCount(postId);
+        return Json(result.Data);
     }
 
     #region AJAX Methods (wwwroot/js/controller)

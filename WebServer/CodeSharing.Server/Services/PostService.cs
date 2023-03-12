@@ -394,16 +394,13 @@ public class PostService : BaseService, IPostService
         return result;
     }
 
-    public async Task<Result<PostQuickVm?>> UpdateViewCount(int id)
+    public async Task<Result<bool>> UpdateViewCount(int postId)
     {
-        var result = new Result<PostQuickVm?>();
+        var result = new Result<bool>();
         try
         {
-            var data = await _repository.UpdateViewCount(id);
-            if (data != null)
-                result.SetResult(_utils.Transform<CdsPost, PostQuickVm>(data));
-            else
-                result.SetResult(null, ErrorCodeConstant.MessageCode.ErrorProcessUpdate);
+            var data = await _repository.UpdateViewCount(postId);
+            result.SetResult(data);
         }
         catch (Exception e)
         {

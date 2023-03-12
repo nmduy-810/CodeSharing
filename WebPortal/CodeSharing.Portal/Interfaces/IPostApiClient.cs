@@ -35,7 +35,7 @@ public interface IPostApiClient
     
     Task<Result<int>> PostVote(VoteCreateRequest request);
     
-    Task<Result<PostQuickVm>> UpdateViewCount(int id);
+    Task<Result<bool>> UpdateViewCount(int id);
     
     Task<Result<ReportVm>> PostReport(ReportCreateRequest request);
     

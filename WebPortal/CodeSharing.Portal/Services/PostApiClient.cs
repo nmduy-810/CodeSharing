@@ -98,9 +98,9 @@ public class PostApiClient : BaseApiClient, IPostApiClient
         return await PostAsync<VoteCreateRequest, int>($"/api/posts/{request.PostId}/votes", request);
     }
 
-    public async Task<Result<PostQuickVm>> UpdateViewCount(int id)
+    public async Task<Result<bool>> UpdateViewCount(int postId)
     {
-        return await PutAsync<object, PostQuickVm>($"/api/posts/{id}/view-count", id, false);
+        return await PutAsync<object, bool>($"/api/posts/{postId}/view-count", postId, false);
     }
 
     public async Task<Result<ReportVm>> PostReport(ReportCreateRequest request)

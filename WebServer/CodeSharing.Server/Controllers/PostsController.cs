@@ -109,10 +109,10 @@ public partial class PostsController : BaseController
        return CodeSharingResult(await _postService.Delete(id));
     }
 
-    [HttpPut("{id}/view-count")]
+    [HttpPut("{postId}/view-count")]
     [AllowAnonymous]
-    public async Task<IActionResult> UpdateViewCount(int id)
+    public async Task<IActionResult> UpdateViewCount(int postId)
     {
-        return CodeSharingResult(await _postService.UpdateViewCount(id));
+        return CodeSharingResult(await _postService.UpdateViewCount(postId));
     }
 }
