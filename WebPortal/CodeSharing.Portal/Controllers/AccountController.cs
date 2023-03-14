@@ -101,16 +101,8 @@ public class AccountController : Controller
     [HttpPost]
     public async Task<IActionResult> CreateNewPost([FromForm] PostCreateRequest request)
     {
-        if (ModelState.IsValid)
-        {
-            await _postApiClient.PostPost(request);
-            return RedirectToAction("MyPosts", "Account");
-        }
-
-        await SetCategories();
-        await LoadPopularLabels();
-        await LoadAvailableCoverImages();
-        return View(request);
+        await _postApiClient.PostPost(request);
+        return RedirectToAction("MyPosts", "Account");
     }
 
     [HttpGet]

@@ -31,7 +31,7 @@
 </style>
 
 @section scripts{
-    <script src="~/lib/ckeditor5-build-classic/build/ckeditor.js" xmlns="http://www.w3.org/1999/html"></script>
+    <script src="~/lib/ckeditor5-build-classic/build/ckeditor.js" asp-append-version="true"></script>
     <script src="~/js/controllers/accountsController.js" asp-append-version="true"></script>
     <script>
         let controller = new accountsController();
@@ -81,7 +81,81 @@
           // Close the modal dialog
           $('#insertAvailableCoverImagesModal').modal('hide');
         });
-               
+        
+        // Create New Post
+        let CreateNewPost = function() {
+            let formData = new FormData();
+        
+            let categoryId = $("#CategoryId").val();
+            if (categoryId === '') {
+                showSweetAlert('warning', 'Cảnh báo', 'Bạn chưa chọn Category', 'top-end', 'my-swal');
+                return;
+            }
+        
+            let title = $("#Title").val();
+            if (title === '') {
+                showSweetAlert('warning', 'Cảnh báo', 'Bạn chưa nhập Title', 'top-end', 'my-swal');
+                return;
+            }
+        
+            let summary = $("#Summary").val();
+            if (summary === '') {
+                showSweetAlert('warning', 'Cảnh báo', 'Bạn chưa nhập Summary', 'top-end', 'my-swal');
+                return;
+            }
+        
+            let coverImage = document.getElementById('CoverImage').files;
+            formData.append('CoverImage', coverImage);
+            console.log(coverImage);
+            
+            let availableImageId = $("#coverImageId").val();
+            formData.append('CoverImageId', availableImageId);
+           
+            let labels = $("#selection").val();
+            if (labels === '') {
+                showSweetAlert('warning', 'Cảnh báo', 'Bạn chưa chọn Tag', 'top-end', 'my-swal');
+                return;
+            }
+        
+            let note = $("#Note").val();
+            if (note === '') {
+                showSweetAlert('warning', 'Cảnh báo', 'Bạn chưa chọn Note', 'top-end', 'my-swal');
+                return;
+            }
+        
+            let editorDiv = document.querySelector('.ck-editor__editable'); // Lấy div chứa trình soạn thảo
+            let content = editorDiv.innerHTML; // Lấy nội dung của trình soạn thảo CKEditor
+            
+            formData.append('CategoryId', categoryId);
+            formData.append('Title', title);
+            formData.append('Summary', summary);
+            formData.append('Labels', labels);
+            formData.append('Note', note);
+            formData.append('Content', content);
+            
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("CreateNewPost", "Account")',
+                data: formData,
+                contentType: false,
+                processData: false, 
+                beforeSend: function() {
+                },
+                success: function(response) {
+                    if (response) {
+                        console.log(response);
+                         window.location.href = '/Account/MyPosts';
+                    } else {
+                        showSweetAlert('error', 'Lỗi', `Thêm dữ liệu thất bại`, 'top-end', 'my-swal');
+                    }
+                },
+                error: function(response) {
+                    showSweetAlert('error', 'Lỗi', `${response.Message}`, 'top-end', 'my-swal');
+                },
+                complete: function() {
+                }
+            });
+        };
     </script>
 }
 
@@ -90,7 +164,7 @@
     <img src="~/images/wave.svg" class="wave" alt="wave"/>
 </div>
 
-<form asp-action="CreateNewPost" method="post" enctype="multipart/form-data" id="frm_new_post" class="post-form">
+<form method="post" enctype="multipart/form-data" id="frm_new_post" class="post-form">
     @Html.AntiForgeryToken()
     @Html.HiddenFor(model => model.Id)
     <input type="hidden" id="coverImageId" name="CoverImageId" value="">
@@ -99,22 +173,19 @@
             <!--Category-->
             <div class="form-group">
                 <h6>Danh mục</h6>
-                <select asp-for="CategoryId" style="height: 50px" class="form-control" asp-items="ViewBag.Categories"></select>
-                <span asp-validation-for="@Model.CategoryId"></span>
+                <select id="CategoryId" style="height: 50px" class="form-control" asp-items="ViewBag.Categories"></select>
             </div>
 
             <!--Title-->
             <div class="form-group">
                 <h6>Tiêu đề</h6>
-                <input asp-for="@Model.Title" class="form-control">
-                <span asp-validation-for="@Model.Title"></span>
+                <input id="Title" class="form-control">
             </div>
 
             <!--Summary-->
             <div class="form-group">
                 <h6>Tổng quan</h6>
-                <input asp-for="@Model.Summary" class="form-control">
-                <span asp-validation-for="@Model.Summary"></span>
+                <input id="Summary" class="form-control">
             </div>
 
             <!--Cover image-->
@@ -122,7 +193,7 @@
                 <div class="col-md-4">
                     <div class="form-group">
                         <h6>Hình đại diện</h6>
-                        <input asp-for="CoverImage" type="file" accept="image/*">
+                        <input id="CoverImage" type="file" name="CoverImage" accept="image/*">
                     </div>
                 </div>
                 <div class="col-md-4">
@@ -140,7 +211,7 @@
             <!--Label-->
             <div class="form-group">
                 <h6>Nhãn</h6>
-                <input asp-for="@Model.Labels" class="form-control" id="selection">
+                <input class="form-control" id="selection">
                 <br>
                 <div class="widget-content">
                     @foreach (var item in ViewBag.PopularLabels)
@@ -148,26 +219,23 @@
                         <a type="button" class="tag" onclick="populateLabelVal('#@item.Name'); return false;">#@item.Name</a>
                     }
                 </div>
-                <span asp-validation-for="@Model.Labels"></span>
             </div>
 
             <!--Note-->
             <div class="form-group">
                 <h6>Ghi chú</h6>
-                <input asp-for="@Model.Note" class="form-control">
-                <span asp-validation-for="@Model.Note"></span>
+                <input id="Note" class="form-control">
             </div>
 
             <!--Content-->
             <div class="form-group">
                 <h6>Nội dung</h6>
-                <textarea asp-for="@Model.Content" id="txt_content" class="form-control" rows="10"></textarea>
-                <span asp-validation-for="@Model.Content"></span>
+                <textarea id="txt_content" class="form-control" rows="10"></textarea>
             </div>
         </div>
     </div>
 
-    <button type="submit" name="submit" id="submit" value="Submit" class="btn btn-default" asp-page-handler="Account">Thêm mới</button>
+    <a class="btn btn-default" type="submit" onclick="CreateNewPost()">Thêm mới</a>
     <!-- Send Button -->
 </form>
 
