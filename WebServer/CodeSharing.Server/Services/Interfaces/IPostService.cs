@@ -32,9 +32,9 @@ public interface IPostService
 
     Task<Result<Pagination<PostQuickVm>>> GetPostsPaging(int pageIndex, int pageSize);
 
-    Task<Result<PostQuickVm?>> Post(PostCreateRequest request, string userId);
+    Task<Result<int>> Post(PostCreateRequest request, string userId);
     
-    Task<Result<PostQuickVm?>> Put(int id, PostCreateRequest request);
+    Task<Result<int>> Put(int id, PostCreateRequest request);
 
     Task<Result<PostQuickVm?>>Delete(int id);
 

@@ -39,9 +39,9 @@ public interface IPostApiClient
     
     Task<Result<ReportVm>> PostReport(ReportCreateRequest request);
     
-    Task<Result<PostVm>> PostPost(PostCreateRequest request);
+    Task<Result<int>> PostPost(PostCreateRequest request);
     
-    Task<Result<PostVm>> PutPost(int id, PostCreateRequest request);
+    Task<Result<int>> PutPost(int id, PostCreateRequest request);
     
     Task<Result<PostVm>> DeletePost(int id);
 }

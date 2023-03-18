@@ -25,6 +25,7 @@ public class PostService : BaseService, IPostService
     private readonly UserManager<CdsUser> _userManager;
     private const int PageSize = 10;
     private readonly ICoverImageRepository _coverImageRepository;
+    
     public PostService(IPostRepository repository, ICacheService distributedCacheService, ISequenceService sequenceService, 
         IStorageService storageService, UserManager<CdsUser> userManager, IUtils utils, ICoverImageRepository coverImageRepository) : base(utils)
     {
@@ -236,9 +237,9 @@ public class PostService : BaseService, IPostService
         return result;
     }
 
-    public async Task<Result<PostQuickVm?>> Post(PostCreateRequest request, string userId)
+    public async Task<Result<int>> Post(PostCreateRequest request, string userId)
     {
-        var result = new Result<PostQuickVm?>();
+        var result = new Result<int>();
         try
         {
             var post = new CdsPost
@@ -315,10 +316,10 @@ public class PostService : BaseService, IPostService
             }
             
             var data = await _repository.Post(post);
-            if (data != null)
-                result.SetResult(_utils.Transform<CdsPost, PostQuickVm>(data));
+            if (data > 0)
+                result.SetResult(data);
             else
-                result.SetResult(null, ErrorCodeConstant.MessageCode.ErrorProcessCreate);
+                result.SetResult(data, ErrorCodeConstant.MessageCode.ErrorProcessCreate);
         }
         catch (Exception e)
         {
@@ -328,16 +329,16 @@ public class PostService : BaseService, IPostService
         return result;
     }
 
-    public async Task<Result<PostQuickVm?>> Put(int id, PostCreateRequest request)
+    public async Task<Result<int>> Put(int id, PostCreateRequest request)
     {
-        var result = new Result<PostQuickVm?>();
+        var result = new Result<int>();
         try
         {
             var data = await _repository.Put(id, request);
-            if (data != null)
-                result.SetResult(_utils.Transform<CdsPost, PostQuickVm>(data));
+            if (data > 0)
+                result.SetResult(data);
             else
-                result.SetResult(null, ErrorCodeConstant.MessageCode.ErrorProcessUpdate);
+                result.SetResult(data, ErrorCodeConstant.MessageCode.ErrorProcessUpdate);
         }
         catch (Exception e)
         {

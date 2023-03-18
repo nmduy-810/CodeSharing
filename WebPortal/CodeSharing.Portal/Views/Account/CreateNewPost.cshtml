@@ -104,8 +104,10 @@
                 return;
             }
         
-            let coverImage = document.getElementById('CoverImage').files;
-            formData.append('CoverImage', coverImage);
+            const coverImage = document.getElementById('CoverImage').files;
+            if (coverImage.length > 0) {
+                formData.append('CoverImage', coverImage[0]);
+            }
             console.log(coverImage);
             
             let availableImageId = $("#coverImageId").val();
@@ -156,6 +158,21 @@
                 }
             });
         };
+        
+        function confirmCreateNewPost() {
+            Swal.fire({
+                title: 'Bạn có chắc không?',
+                text: 'Bạn có muốn tạo bài viết mới?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Quất!',
+                cancelButtonText: 'Không, cám ơn'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    CreateNewPost();
+                }
+            });
+        }
     </script>
 }
 
@@ -235,7 +252,7 @@
         </div>
     </div>
 
-    <a class="btn btn-default" type="submit" onclick="CreateNewPost()">Thêm mới</a>
+    <a class="btn btn-default" type="submit" onclick="confirmCreateNewPost()">Thêm mới</a>
     <!-- Send Button -->
 </form>
 

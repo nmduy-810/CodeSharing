@@ -46,9 +46,8 @@ public class ApplicationDbContext : IdentityDbContext<CdsUser>
     
     
     public DbSet<CdsSupport> CdsSupports { get; set; } = default!;
-    
 
-    public DbSet<CdsCoverImage> CdsCoverImages { get; set; }
+    public DbSet<CdsCoverImage> CdsCoverImages { get; set; } = default!;
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
