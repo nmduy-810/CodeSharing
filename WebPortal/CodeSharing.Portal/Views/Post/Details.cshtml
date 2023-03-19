@@ -16,41 +16,39 @@
     </script>
 
     <script>
-        const currentPostId = $('#hid_post_id').val();
-        let isViewCountUpdatedInSession = false;
+        const button = document.querySelector('.btn-like-it');
+        const numberOfVotes = parseInt(document.querySelector('.like-it').textContent, 10);
         
-        @*Xử lý cập nhật view count khi cuộn trang*@
-        if (localStorage.getItem(`isViewCountUpdated_${currentPostId}`) === 'true') {
-            isViewCountUpdatedInSession = true; /*Kiểm trong biến isViewCountUpdated trong localStorage đã được lưu trữ chưa, nếu rồi thì user đã cuộn trang*/
-        } else {
-            isViewCountUpdatedInSession = false;
+        // Set liked state if numberOfVotes is 1
+        if (numberOfVotes === 1) {
+            button.classList.add('liked');
         }
         
-        $(window).scroll(function () { 
-            const pageHeight = $(document).height(); // Lấy chiều cao của trang web
-            const windowHeight = $(window).height(); // Lấy chiều cao của trình duyệt
-            const scrollPosition = pageHeight * 0.5 - windowHeight * 0.5; // Tính toán vị trí cần cuộn đến để tới vị trí nửa trang
-            if ($(this).scrollTop() >= scrollPosition && !isViewCountUpdatedInSession) {
-                $.ajax({
-                    url: '@Url.Action("UpdateViewCount", "Post")',
-                    data: { postId: currentPostId },
-                    type: 'PUT',
-                    dataType: 'json',
-                    success: function(result) {
-                        // Đặt biến isViewCountUpdated thành true để không cập nhật lại số lần xem
-                        isViewCountUpdatedInSession = true;
-                        localStorage.setItem(`isViewCountUpdated_${currentPostId}`, 'true');
-                        setTimeout(function() {
-                            localStorage.removeItem(`isViewCountUpdated_${currentPostId}`);
-                        }, 60000); // 1 phút = 60000 ms
-                    },
-                    error: function(xhr, status, error) {
-                        // Handle the AJAX error here
-                        console.error('AJAX error:', error);
-                    }
+        button.addEventListener('click', e => {
+            button.classList.toggle('liked');
+            if (button.classList.contains('liked')) {
+                gsap.fromTo(button, {
+                    '--hand-rotate': 8
+                }, {
+                    ease: 'none',
+                    keyframes: [{
+                        '--hand-rotate': -45,
+                        duration: .16,
+                        ease: 'none'
+                    }, {
+                        '--hand-rotate': 15,
+                        duration: .12,
+                        ease: 'none'
+                    }, {
+                        '--hand-rotate': 0,
+                        duration: .2,
+                        ease: 'none',
+                        clearProps: true
+                    }]
                 });
             }
         });
+
     </script>
 }
 
@@ -119,11 +117,14 @@
 
             @if (User.Identity.IsAuthenticated)
             {
-                <form class="text-right" id="frm_vote" action="#" method="post">
+                <form class="like-container text-right" id="frm_vote" action="#" method="post">
                     <input type="hidden" name="postId" value="@Model.Post.Id">
-                    <button class="btn" style="background-color: rgb(7, 55, 99); color: white; border: none; cursor: pointer; padding:  2px 12px 3px 12px; text-decoration: none;">
-                        <i class="icon-like" style="vertical-align: middle !important;"></i>
-                        <span style="vertical-align: text-top;" class="like-it">@Model.Post.NumberOfVotes.GetValueOrDefault(0).ToString("N0")</span>
+                    <button type="submit" class="btn-like-it">
+                        <div class="hand">
+                            <div class="thumb"></div>
+                        </div>
+                        <span>Like<span>d</span></span>
+                        <span class="like-it">@Model.Post.NumberOfVotes.GetValueOrDefault(0).ToString("N0")</span>
                     </button>
                 </form>
             }
@@ -191,9 +192,9 @@
         </script>
 
         <script id="tmpl_comments" type="x-tmpl-mustache">
-            <li class="comment rounded" id="li-comment-2">
+            <li class="comment rounded" id="li-comment-2" style="padding:15px;">
                 <div class="thumb">
-                    <img src="https://i.ibb.co/wS1X4b5/user.png" width="70px" height="70px" alt="{{ownerName}}"/>
+                    <img src="https://i.ibb.co/wS1X4b5/user.png" width="60px" height="60px" alt="{{ownerName}}"/>
                 </div>
                 <div class="details">
                     <h4 class="name">
