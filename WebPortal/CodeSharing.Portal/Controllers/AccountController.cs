@@ -99,10 +99,10 @@ public class AccountController : Controller
     }
 
     [HttpPost]
-    public async Task<IActionResult> CreateNewPost([FromForm] PostCreateRequest request)
+    public Task<IActionResult> CreateNewPost([FromForm] PostCreateRequest request)
     {
-        await _postApiClient.PostPost(request);
-        return RedirectToAction("MyPosts", "Account");
+         _postApiClient.PostPost(request);
+         return Task.FromResult<IActionResult>(RedirectToAction("MyPosts", "Account"));
     }
 
     [HttpGet]
