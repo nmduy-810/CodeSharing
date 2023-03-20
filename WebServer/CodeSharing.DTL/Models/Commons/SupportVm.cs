@@ -8,11 +8,12 @@ public class SupportVm
     public string Name { get; set; } = default!;
     
     [Required(ErrorMessage = "Bạn chưa nhập email nè")]
+    [EmailAddress]
     public string Email { get; set; } = default!;
     
-    [Required(ErrorMessage = "Tiêu đề giúp mình có thể hỗ trợ bạn nhanh hơn á")]
+    [Required(ErrorMessage = "Bạn chưa nhập tiêu đề thì phải")]
     public string Subject { get; set; } = default!;
     
-    [Required(ErrorMessage = "Đừng quên nhập nội dung để mình còn hỗ trợ bạn nhé")]
+    [Required(ErrorMessage = "Đừng quên nhập nội dung để mình còn hỗ trợ hoặc trao đổi bạn nhé")]
     public string Message { get; set; } = default!;
 }
