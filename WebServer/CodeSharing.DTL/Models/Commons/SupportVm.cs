@@ -8,7 +8,7 @@ public class SupportVm
     public string Name { get; set; } = default!;
     
     [Required(ErrorMessage = "Bạn chưa nhập email nè")]
-    [EmailAddress]
+    [EmailAddress(ErrorMessage = "Email không đúng định dạng")]
     public string Email { get; set; } = default!;
     
     [Required(ErrorMessage = "Bạn chưa nhập tiêu đề thì phải")]
