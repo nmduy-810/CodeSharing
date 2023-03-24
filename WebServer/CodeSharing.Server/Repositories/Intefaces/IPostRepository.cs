@@ -33,13 +33,13 @@ public interface IPostRepository : IGenericRepository<ApplicationDbContext>
 
     Task<Pagination<PostQuickVm>> GetPostsPaging(int pageIndex, int pageSize);
 
-    Task<CdsPost?> Post(CdsPost post);
+    Task<int> Post(CdsPost post);
     
-    Task<CdsPost?> Put(int id, PostCreateRequest request);
+    Task<int> Put(int id, PostCreateRequest request);
 
     Task<CdsPost?> Delete(int id);
 
-    Task<CdsPost?> UpdateViewCount(int id);
+    Task<bool> UpdateViewCount(int postId);
 
     Task<int> GetTotalPosts();
 

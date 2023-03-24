@@ -17,6 +17,44 @@
          let selection = $('#selection');
          selection.val(selection.val() + val.concat(" "));    
         }
+        
+        // Handle available cover images
+        let availableCoverImages = document.querySelectorAll('.cover-image-container img'); 
+        availableCoverImages.forEach(function (img) {
+            img.addEventListener('click', function() { // Add click event listener to each image
+                availableCoverImages.forEach(function (img) {
+                   img.classList.remove('selected'); // Remove the 'selected' class from all images
+                });
+                this.classList.add('selected'); // Add the 'selected' class to the clicked image
+            });
+        });
+        
+        document.getElementById('chooseAvailableCoverImagesButton').addEventListener('click', function() {
+          // Get the selected image ID
+          let selectedImageId = document.querySelector('.cover-image-container img.selected').getAttribute('data-id');
+          $.ajax({
+                url: '@Url.Action("GetAvailableCoverImage", "Account")',
+                data: { id: selectedImageId },
+                type: 'GET',
+                dataType: 'json',
+                success: function(result) {
+                  // Handle the AJAX response here
+                  let thumbnailImg = document.querySelector('.img-thumbnail');
+                  thumbnailImg.src = result.imageUrl;
+                  thumbnailImg.alt = result.imageUrl;
+                  thumbnailImg.style.display = "block";
+                },
+                error: function(xhr, status, error) {
+                  // Handle the AJAX error here
+                  console.error('AJAX error:', error);
+                }
+          });
+          
+          $("#coverImageId").val(selectedImageId);
+          
+          // Close the modal dialog
+          $('#insertAvailableCoverImagesModal').modal('hide');
+        });
     </script>
 }
 
@@ -32,6 +70,28 @@
     img:hover {
       box-shadow: 0 0 2px 1px rgba(0, 140, 186, 0.5);
     }
+    
+    .cover-image-container {
+          width: 80%;
+          max-width: 1000px;
+          margin: auto;
+          display: flex;
+          flex-wrap: wrap;
+          justify-content: space-between;
+          overflow-y: auto;
+          max-height: 500px;
+        }
+        
+        /* Style the images */
+        .cover-image-container img {
+          width: calc(50% - 10px);
+          height: auto;
+          margin-bottom: 20px;
+        }
+        
+        .selected {
+              border: 3px solid blue;
+        }
 </style>
 
 <div class="section-header">
@@ -40,6 +100,9 @@
 </div>
 
 <form action="/Account/EditPost" method="post" enctype="multipart/form-data" id="frm_edit_post" class="post-form">
+    @Html.AntiForgeryToken()
+    <input type="hidden" id="coverImageId" name="CoverImageId" value="@Model.CoverImageId">
+    
     <div class="messages">
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
         <input type="hidden" asp-for="Id"/>
@@ -69,13 +132,26 @@
             </div>
 
             <!--Cover image-->
-            <div class="form-group">
-                <h6>Hình đại diện</h6>
-                <input asp-for="CoverImage" type="file" id="img" name="img" accept="image/*">
-                <a target="_blank" href="@Model.PreviewCoverImage">
-                    <img class="img-thumbnail" src="@Model.PreviewCoverImage" alt="@Model.PreviewCoverImage">
-                </a>
-                <div class="help-block with-errors"></div>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <h6>Hình đại diện</h6>
+                        <input asp-for="CoverImage" type="file" id="img" name="CoverImage" accept="image/*">
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <h6>Hình đại diện có sẵn</h6>
+                        <a class="btn btn-default" title="Thêm hình" type="button" data-bs-toggle="modal" data-bs-target="#insertAvailableCoverImagesModal">Chọn hình</a>
+                    </div>
+                </div>
+
+                <div class="col-md-2">
+                    <h6></h6>
+                    <a target="_blank" href="@Model.PreviewCoverImage">
+                        <img class="img-thumbnail" src="@Model.PreviewCoverImage" alt="@Model.PreviewCoverImage">
+                    </a>
+                </div>
             </div>
 
             <!--Label-->
@@ -113,3 +189,28 @@
     <button type="submit" name="submit" id="submit" value="Submit" class="btn btn-default">Cập nhật</button>
     <!-- Send Button -->
 </form>
+
+
+<!--Available Cover Images Modal-->
+<div class="modal fade" id="insertAvailableCoverImagesModal" tabindex="-1" role="dialog" aria-labelledby="insertAvailableCoverImagesModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header flex-column">
+                <h4 class="modal-title w-100">Chọn hình ảnh</h4>	
+            </div>
+            <div class="modal-body">
+                <div class="cover-image-container">
+                    <!-- The images -->
+                    @foreach (var item in ViewBag.AvailableCoverImages)
+                    {
+                        <img src="@item.ImageUrl" alt="@item.ImageUrl" data-id="@item.Id">
+                    }
+                </div>
+            </div>
+            <div class="modal-footer justify-content-center">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                <button id="chooseAvailableCoverImagesButton" type="button" class="btn btn-danger" >Chọn</button>
+            </div>
+        </div>
+    </div>
+</div>

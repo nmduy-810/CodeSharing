@@ -481,28 +481,28 @@ public class PostRepository : GenericRepository<ApplicationDbContext>, IPostRepo
         }
     }
 
-    public async Task<CdsPost?> Post(CdsPost post)
+    public async Task<int> Post(CdsPost post)
     {
         try
         {
-            var entity = await _context.CdsPosts.AddAsync(post);
+            await _context.CdsPosts.AddAsync(post);
             var result = await _context.SaveChangesAsync();
-            return result > 0 ? entity.Entity : null;
+            return result;
         }
         catch (Exception e)
         {
             _logger.LogError("{Message}", e.Message);
-            return null;
+            return 0;
         }
     }
     
-    public async Task<CdsPost?> Put(int id, PostCreateRequest request)
+    public async Task<int> Put(int id, PostCreateRequest request)
     {
         try
         {
             var post = await _context.CdsPosts.FindAsync(id);
             if (post == null)
-                return null;
+                return 0;
         
             // Set post with new data
             post.CategoryId = request.CategoryId;
@@ -544,14 +544,14 @@ public class PostRepository : GenericRepository<ApplicationDbContext>, IPostRepo
                 await ProcessLabel(request, post);
         
             // Update post
-            var entity = _context.CdsPosts.Update(post);
+            _context.CdsPosts.Update(post);
             var result = await _context.SaveChangesAsync();
-            return result > 0 ? entity.Entity : null;
+            return result;
         }
         catch (Exception e)
         {
             _logger.LogError("{Message}", e.Message);
-            return null;
+            return 0;
         }
     }
 
@@ -596,28 +596,26 @@ public class PostRepository : GenericRepository<ApplicationDbContext>, IPostRepo
         }
     }
 
-    public async Task<CdsPost?> UpdateViewCount(int id)
+    public async Task<bool> UpdateViewCount(int postId)
     {
         try
         {
-            var post = await _context.CdsPosts.FindAsync(id);
+            var post = await _context.CdsPosts.FindAsync(postId);
             if (post == null)
-                return null;
+                return false;
 
-            if (post.ViewCount == null) 
-                post.ViewCount = 0;
+            post.ViewCount ??= 0; //shorthand -> if (post.ViewCount == 0 ) post.ViewCount = 0;
 
             post.ViewCount += 1;
 
-            var entity = _context.CdsPosts.Update(post);
-        
+            _context.CdsPosts.Update(post);
             var result = await _context.SaveChangesAsync();
-            return result > 0 ? entity.Entity : null;
+            return result > 0;
         }
         catch (Exception e)
         {
             _logger.LogError("{Message}", e.Message);
-            return null; 
+            return false; 
         }
     }
 

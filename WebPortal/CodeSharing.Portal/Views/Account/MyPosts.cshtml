@@ -101,6 +101,9 @@
 
 <div class="m-4">
     <h3 class="text-center">Quản Lý Bài Viết</h3>
+    <button class="btn btn-success" onclick="location.href='@Url.Action("CreateNewPost", "Account")'">
+        <i class="fa fa-edit"></i> Tạo bài viết mới
+    </button>
     <div class="table-responsive">
         <table class="table table-hover">
             <thead>
@@ -148,9 +151,6 @@
             </tfoot>
         </table>
     </div>
-    <button class="btn btn-success" onclick="location.href='@Url.Action("CreateNewPost", "Account")'">
-        <i class="fa fa-edit"></i> Thêm mới
-    </button>
 </div>
 
 <!-- Report modal -->

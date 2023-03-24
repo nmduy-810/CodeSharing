@@ -5,8 +5,33 @@
     ViewData["Title"] = "Tạo mới bài viết · Code Sharing";
 }
 
+<style>
+    .cover-image-container {
+      width: 80%;
+      max-width: 1000px;
+      margin: auto;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      overflow-y: auto;
+      max-height: 500px;
+    }
+    
+    /* Style the images */
+    .cover-image-container img {
+      width: calc(50% - 10px);
+      height: auto;
+      margin-bottom: 20px;
+    }
+    
+    .selected {
+      border: 3px solid blue;
+    }
+    
+</style>
+
 @section scripts{
-<script src="~/lib/ckeditor5-build-classic/build/ckeditor.js" xmlns="http://www.w3.org/1999/html"></script>
+    <script src="~/lib/ckeditor5-build-classic/build/ckeditor.js" asp-append-version="true"></script>
     <script src="~/js/controllers/accountsController.js" asp-append-version="true"></script>
     <script>
         let controller = new accountsController();
@@ -17,6 +42,137 @@
          let selection = $('#selection');
          selection.val(selection.val() + val.concat(" "));    
         }
+        
+        // Handle available cover images
+        let availableCoverImages = document.querySelectorAll('.cover-image-container img'); 
+        availableCoverImages.forEach(function (img) {
+            img.addEventListener('click', function() { // Add click event listener to each image
+                availableCoverImages.forEach(function (img) {
+                   img.classList.remove('selected'); // Remove the 'selected' class from all images
+                });
+                this.classList.add('selected'); // Add the 'selected' class to the clicked image
+            });
+        });
+        
+        document.getElementById('chooseAvailableCoverImagesButton').addEventListener('click', function() {
+          // Get the selected image ID
+          let selectedImageId = document.querySelector('.cover-image-container img.selected').getAttribute('data-id');
+          
+          $.ajax({
+                url: '@Url.Action("GetAvailableCoverImage", "Account")',
+                data: { id: selectedImageId },
+                type: 'GET',
+                dataType: 'json',
+                success: function(result) {
+                  // Handle the AJAX response here
+                  let thumbnailImg = document.querySelector('.img-thumbnail');
+                  thumbnailImg.src = result.imageUrl;
+                  thumbnailImg.alt = result.imageUrl;
+                  thumbnailImg.style.display = "block";
+                },
+                error: function(xhr, status, error) {
+                  // Handle the AJAX error here
+                  console.error('AJAX error:', error);
+                }
+          });
+          
+          $("#coverImageId").val(selectedImageId);
+          
+          // Close the modal dialog
+          $('#insertAvailableCoverImagesModal').modal('hide');
+        });
+        
+        // Create New Post
+        let CreateNewPost = function() {
+            let formData = new FormData();
+        
+            let categoryId = $("#CategoryId").val();
+            if (categoryId === '') {
+                showSweetAlert('warning', 'Cảnh báo', 'Bạn chưa chọn Category', 'top-end', 'my-swal');
+                return;
+            }
+        
+            let title = $("#Title").val();
+            if (title === '') {
+                showSweetAlert('warning', 'Cảnh báo', 'Bạn chưa nhập Title', 'top-end', 'my-swal');
+                return;
+            }
+        
+            let summary = $("#Summary").val();
+            if (summary === '') {
+                showSweetAlert('warning', 'Cảnh báo', 'Bạn chưa nhập Summary', 'top-end', 'my-swal');
+                return;
+            }
+        
+            const coverImage = document.getElementById('CoverImage').files;
+            if (coverImage.length > 0) {
+                formData.append('CoverImage', coverImage[0]);
+            }
+            console.log(coverImage);
+            
+            let availableImageId = $("#coverImageId").val();
+            formData.append('CoverImageId', availableImageId);
+           
+            let labels = $("#selection").val();
+            if (labels === '') {
+                showSweetAlert('warning', 'Cảnh báo', 'Bạn chưa chọn Tag', 'top-end', 'my-swal');
+                return;
+            }
+        
+            let note = $("#Note").val();
+            if (note === '') {
+                showSweetAlert('warning', 'Cảnh báo', 'Bạn chưa chọn Note', 'top-end', 'my-swal');
+                return;
+            }
+        
+            let editorDiv = document.querySelector('.ck-editor__editable'); // Lấy div chứa trình soạn thảo
+            let content = editorDiv.innerHTML; // Lấy nội dung của trình soạn thảo CKEditor
+            
+            formData.append('CategoryId', categoryId);
+            formData.append('Title', title);
+            formData.append('Summary', summary);
+            formData.append('Labels', labels);
+            formData.append('Note', note);
+            formData.append('Content', content);
+            
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("CreateNewPost", "Account")',
+                data: formData,
+                contentType: false,
+                processData: false, 
+                beforeSend: function() {
+                },
+                success: function(response) {
+                    if (response) {
+                        console.log(response);
+                         window.location.href = '/Account/MyPosts';
+                    } else {
+                        showSweetAlert('error', 'Lỗi', `Thêm dữ liệu thất bại`, 'top-end', 'my-swal');
+                    }
+                },
+                error: function(response) {
+                    showSweetAlert('error', 'Lỗi', `${response.Message}`, 'top-end', 'my-swal');
+                },
+                complete: function() {
+                }
+            });
+        };
+        
+        function confirmCreateNewPost() {
+            Swal.fire({
+                title: 'Bạn có chắc không?',
+                text: 'Bạn có muốn tạo bài viết mới?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Quất!',
+                cancelButtonText: 'Không, cám ơn'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    CreateNewPost();
+                }
+            });
+        }
     </script>
 }
 
@@ -25,42 +181,54 @@
     <img src="~/images/wave.svg" class="wave" alt="wave"/>
 </div>
 
-<form asp-action="CreateNewPost" method="post" enctype="multipart/form-data" id="frm_new_post" class="post-form">
+<form method="post" enctype="multipart/form-data" id="frm_new_post" class="post-form">
+    @Html.AntiForgeryToken()
     @Html.HiddenFor(model => model.Id)
+    <input type="hidden" id="coverImageId" name="CoverImageId" value="">
     <div class="row">
         <div class="column col-md-12">
             <!--Category-->
             <div class="form-group">
                 <h6>Danh mục</h6>
-                <select asp-for="CategoryId" style="height: 50px" class="form-control" asp-items="ViewBag.Categories"></select>
-                <span asp-validation-for="@Model.CategoryId"></span>
+                <select id="CategoryId" style="height: 50px" class="form-control" asp-items="ViewBag.Categories"></select>
             </div>
 
             <!--Title-->
             <div class="form-group">
                 <h6>Tiêu đề</h6>
-                <input asp-for="@Model.Title" class="form-control">
-                <span asp-validation-for="@Model.Title"></span>
+                <input id="Title" class="form-control">
             </div>
 
             <!--Summary-->
             <div class="form-group">
                 <h6>Tổng quan</h6>
-                <input asp-for="@Model.Summary" class="form-control">
-                <span asp-validation-for="@Model.Summary"></span>
+                <input id="Summary" class="form-control">
             </div>
 
             <!--Cover image-->
-            <div class="form-group">
-                <h6>Hình đại diện</h6>
-                <input asp-for="CoverImage" type="file" accept="image/*">
-                <span asp-validation-for="@Model.CoverImage"></span>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <h6>Hình đại diện</h6>
+                        <input id="CoverImage" type="file" name="CoverImage" accept="image/*">
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <h6>Hình đại diện có sẵn</h6>
+                        <a class="btn btn-default" title="Thêm hình" type="button" data-bs-toggle="modal" data-bs-target="#insertAvailableCoverImagesModal">Chọn hình</a>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <h6></h6>
+                    <img class="img-thumbnail" src="" alt="" style="display: none">
+                </div>
             </div>
-
+            
             <!--Label-->
             <div class="form-group">
                 <h6>Nhãn</h6>
-                <input asp-for="@Model.Labels" class="form-control" id="selection">
+                <input class="form-control" id="selection">
                 <br>
                 <div class="widget-content">
                     @foreach (var item in ViewBag.PopularLabels)
@@ -68,25 +236,46 @@
                         <a type="button" class="tag" onclick="populateLabelVal('#@item.Name'); return false;">#@item.Name</a>
                     }
                 </div>
-                <span asp-validation-for="@Model.Labels"></span>
             </div>
 
             <!--Note-->
             <div class="form-group">
                 <h6>Ghi chú</h6>
-                <input asp-for="@Model.Note" class="form-control">
-                <span asp-validation-for="@Model.Note"></span>
+                <input id="Note" class="form-control">
             </div>
 
             <!--Content-->
             <div class="form-group">
                 <h6>Nội dung</h6>
-                <textarea asp-for="@Model.Content" id="txt_content" class="form-control" rows="10"></textarea>
-                <span asp-validation-for="@Model.Content"></span>
+                <textarea id="txt_content" class="form-control" rows="10"></textarea>
             </div>
         </div>
     </div>
 
-    <button type="submit" name="submit" id="submit" value="Submit" class="btn btn-default" asp-page-handler="Account">Tạo mới</button>
+    <a class="btn btn-default" type="submit" onclick="confirmCreateNewPost()">Thêm mới</a>
     <!-- Send Button -->
 </form>
+
+<!--Available Cover Images Modal-->
+<div class="modal fade" id="insertAvailableCoverImagesModal" tabindex="-1" role="dialog" aria-labelledby="insertAvailableCoverImagesModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header flex-column">
+                <h4 class="modal-title w-100">Chọn hình ảnh</h4>	
+            </div>
+            <div class="modal-body">
+                <div class="cover-image-container">
+                    <!-- The images -->
+                    @foreach (var item in ViewBag.AvailableCoverImages)
+                    {
+                        <img src="@item.ImageUrl" alt="@item.ImageUrl" data-id="@item.Id">
+                    }
+                </div>
+            </div>
+            <div class="modal-footer justify-content-center">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                <button id="chooseAvailableCoverImagesButton" type="button" class="btn btn-danger" >Chọn</button>
+            </div>
+        </div>
+    </div>
+</div>

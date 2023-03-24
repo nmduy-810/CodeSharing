@@ -19,9 +19,11 @@ public class AccountController : Controller
     private readonly IUserApiClient _userApiClient;
     private readonly ILabelApiClient _labelApiClient;
     private readonly IConfiguration _configuration;
+    private readonly ICoverImagesApiClient _coverImagesApiClient;
 
     public AccountController(IUserApiClient userApiClient, IPostApiClient postApiClient,
-        ICategoryApiClient categoryApiClient, IUploadApiClient uploadApiClient, ILabelApiClient labelApiClient, IConfiguration configuration)
+        ICategoryApiClient categoryApiClient, IUploadApiClient uploadApiClient, ILabelApiClient labelApiClient, 
+        IConfiguration configuration, ICoverImagesApiClient coverImagesApiClient)
     {
         _userApiClient = userApiClient;
         _postApiClient = postApiClient;
@@ -29,6 +31,7 @@ public class AccountController : Controller
         _uploadApiClient = uploadApiClient;
         _labelApiClient = labelApiClient;
         _configuration = configuration;
+        _coverImagesApiClient = coverImagesApiClient;
     }
 
     [AllowAnonymous]
@@ -91,21 +94,15 @@ public class AccountController : Controller
     {
         await SetCategories();
         await LoadPopularLabels();
+        await LoadAvailableCoverImages();
         return View();
     }
 
     [HttpPost]
-    public async Task<IActionResult> CreateNewPost([FromForm] PostCreateRequest request)
+    public Task<IActionResult> CreateNewPost([FromForm] PostCreateRequest request)
     {
-        if (ModelState.IsValid)
-        {
-            await _postApiClient.PostPost(request);
-            return RedirectToAction("MyPosts", "Account");
-        }
-
-        await SetCategories();
-        await LoadPopularLabels();
-        return View(request);
+         _postApiClient.PostPost(request);
+         return Task.FromResult<IActionResult>(RedirectToAction("MyPosts", "Account"));
     }
 
     [HttpGet]
@@ -114,6 +111,7 @@ public class AccountController : Controller
         var post = _postApiClient.GetDetailsPost(id).Result.Data;
         await SetCategories();
         await LoadPopularLabels();
+        await LoadAvailableCoverImages();
         
         var items = new PostCreateRequest
         {
@@ -123,7 +121,8 @@ public class AccountController : Controller
             Content = post.Content,
             Note = post.Note,
             PreviewCoverImage = post.CoverImage,
-            Slug = post.Slug
+            Slug = post.Slug,
+            CoverImageId = post.CoverImageId
         };
 
         var tagList = new List<string>();
@@ -151,16 +150,11 @@ public class AccountController : Controller
         // Check label
         if (!string.IsNullOrEmpty(request.PreviewLabel)) request.Labels = new[] { request.PreviewLabel };
 
-        if (ModelState.IsValid)
-        {
-            return Task.FromResult<IActionResult>(View(request));
-        }
-
         if (request.Id == null)
         {
             return Task.FromResult<IActionResult>(BadRequest());
         }
-
+       
         _ = _postApiClient.PutPost(request.Id.Value, request).Result.Data;
         return Task.FromResult<IActionResult>(RedirectToAction("MyPosts", "Account"));
     }
@@ -224,6 +218,21 @@ public class AccountController : Controller
     {
         var popularLabels = await _labelApiClient.GetPopularLabels(10);
         ViewBag.PopularLabels = popularLabels.Data;
+    }
+
+    public async Task LoadAvailableCoverImages()
+    {
+        var availableCoverImages = await _coverImagesApiClient.GetCoverImages();
+        ViewBag.AvailableCoverImages = availableCoverImages.Data;
+    }
+
+    public async Task<IActionResult> GetAvailableCoverImage(int id)
+    {
+        // Call the API to get the available cover images
+        var availableCoverImages = await _coverImagesApiClient.GetCoverImageById(id);
+    
+        // Return the available cover images as a JSON response
+        return Json(availableCoverImages.Data);
     }
 
     #endregion Helper Method

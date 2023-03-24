@@ -30,4 +30,21 @@ public class CoverImageService : BaseService, ICoverImageService
         }
         return result;
     }
+    
+    public async Task<Result<CoverImageVm>> GetCoverImageById(int id)
+    {
+        var result = new Result<CoverImageVm>();
+        try
+        {
+            var data = await _repository.GetCoverImageById(id);
+            if (data != null)
+                result.SetResult(data);
+        }
+        catch (Exception e)
+        {
+            result.Status = ErrorCodeConstant.StatusCode.InternalServerError;
+            result.Message = e.Message + "\n\n" + e.InnerException;
+        }
+        return result;
+    }
 }

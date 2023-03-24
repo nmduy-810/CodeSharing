@@ -620,6 +620,14 @@
         <_ContentIncludedByDefault Remove="wwwroot\lib\ckeditor\skins\moono-lisa\readme.md" />
         <_ContentIncludedByDefault Remove="wwwroot\lib\ckeditor\styles.js" />
         <_ContentIncludedByDefault Remove="wwwroot\lib\ckeditor\vendor\promise.js" />
+        <_ContentIncludedByDefault Remove="wwwroot\images\insta\insta-1.jpg" />
+        <_ContentIncludedByDefault Remove="wwwroot\images\insta\insta-2.jpg" />
+        <_ContentIncludedByDefault Remove="wwwroot\images\insta\insta-3.jpg" />
+        <_ContentIncludedByDefault Remove="wwwroot\images\insta\insta-4.jpg" />
+        <_ContentIncludedByDefault Remove="wwwroot\images\insta\insta-5.jpg" />
+        <_ContentIncludedByDefault Remove="wwwroot\images\insta\insta-6.jpg" />
+        <_ContentIncludedByDefault Remove="wwwroot\images\widgets\widget-carousel-1.jpg" />
+        <_ContentIncludedByDefault Remove="wwwroot\images\widgets\widget-carousel-2.jpg" />
     </ItemGroup>
 
     <ItemGroup>

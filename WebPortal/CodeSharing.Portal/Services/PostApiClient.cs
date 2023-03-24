@@ -98,9 +98,9 @@ public class PostApiClient : BaseApiClient, IPostApiClient
         return await PostAsync<VoteCreateRequest, int>($"/api/posts/{request.PostId}/votes", request);
     }
 
-    public async Task<Result<PostQuickVm>> UpdateViewCount(int id)
+    public async Task<Result<bool>> UpdateViewCount(int postId)
     {
-        return await PutAsync<object, PostQuickVm>($"/api/posts/{id}/view-count", id, false);
+        return await PutAsync<object, bool>($"/api/posts/{postId}/view-count", postId, false);
     }
 
     public async Task<Result<ReportVm>> PostReport(ReportCreateRequest request)
@@ -108,7 +108,7 @@ public class PostApiClient : BaseApiClient, IPostApiClient
         return await PostAsync<ReportCreateRequest, ReportVm>($"/api/posts/{request.PostId}/reports", request);
     }
 
-    public async Task<Result<PostVm>> PostPost(PostCreateRequest request)
+    public async Task<Result<int>> PostPost(PostCreateRequest request)
     {
         var client = _httpClientFactory.CreateClient("BackendApi");
         client.BaseAddress = new Uri(_configuration["ServerUrl"]);
@@ -140,6 +140,10 @@ public class PostApiClient : BaseApiClient, IPostApiClient
 
             var bytes = new ByteArrayContent(data);
             requestContent.Add(bytes, "coverImage", request.CoverImage.FileName);
+        }
+        else
+        {
+            requestContent.Add(new StringContent(request.CoverImageId.ToString()!), "coverImageId");
         }
 
         // Labels
@@ -157,12 +161,12 @@ public class PostApiClient : BaseApiClient, IPostApiClient
         var body = await response.Content.ReadAsStringAsync();
 
         if (response.IsSuccessStatusCode)
-            return _serializeService.Deserialize<Result<PostVm>>(body) ?? new Result<PostVm>();
-
-        return new Result<PostVm>();
+            return _serializeService.Deserialize<Result<int>>(body) ?? new Result<int>();
+        else
+            return new Result<int>();
     }
 
-    public async Task<Result<PostVm>> PutPost(int id, PostCreateRequest request)
+    public async Task<Result<int>> PutPost(int id, PostCreateRequest request)
     {
         var client = _httpClientFactory.CreateClient("BackendApi");
         client.BaseAddress = new Uri(_configuration["ServerUrl"]);
@@ -195,6 +199,10 @@ public class PostApiClient : BaseApiClient, IPostApiClient
             var bytes = new ByteArrayContent(data);
             requestContent.Add(bytes, "coverImage", request.CoverImage.FileName);
         }
+        else
+        {
+            requestContent.Add(new StringContent(request.CoverImageId.ToString()!), "coverImageId");
+        }
 
         // Labels
         if (request.Labels.Length > 0)
@@ -211,9 +219,9 @@ public class PostApiClient : BaseApiClient, IPostApiClient
         var body = await response.Content.ReadAsStringAsync();
         
         if (response.IsSuccessStatusCode)
-            return _serializeService.Deserialize<Result<PostVm>>(body) ?? new Result<PostVm>();
+            return _serializeService.Deserialize<Result<int>>(body) ?? new Result<int>();
 
-        return new Result<PostVm>();
+        return new Result<int>();
     }
 
     public async Task<Result<PostVm>> DeletePost(int id)

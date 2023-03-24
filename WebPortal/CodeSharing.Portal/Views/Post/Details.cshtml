@@ -11,8 +11,44 @@
     <script src="~/lib/mustache.js/mustache.min.js"></script>
     <script src="~/js/controllers/postsController.js" asp-append-version="true"></script>
     <script>
-        var controller = new postsController();
+        let controller = new postsController();
         controller.initialize();
+    </script>
+
+    <script>
+        const button = document.querySelector('.btn-like-it');
+        const numberOfVotes = parseInt(document.querySelector('.like-it').textContent, 10);
+        
+        // Set liked state if numberOfVotes is 1
+        if (numberOfVotes === 1) {
+            button.classList.add('liked');
+        }
+        
+        button.addEventListener('click', e => {
+            button.classList.toggle('liked');
+            if (button.classList.contains('liked')) {
+                gsap.fromTo(button, {
+                    '--hand-rotate': 8
+                }, {
+                    ease: 'none',
+                    keyframes: [{
+                        '--hand-rotate': -45,
+                        duration: .16,
+                        ease: 'none'
+                    }, {
+                        '--hand-rotate': 15,
+                        duration: .12,
+                        ease: 'none'
+                    }, {
+                        '--hand-rotate': 0,
+                        duration: .2,
+                        ease: 'none',
+                        clearProps: true
+                    }]
+                });
+            }
+        });
+
     </script>
 }
 
@@ -81,11 +117,14 @@
 
             @if (User.Identity.IsAuthenticated)
             {
-                <form class="text-right" id="frm_vote" action="#" method="post">
+                <form class="like-container text-right" id="frm_vote" action="#" method="post">
                     <input type="hidden" name="postId" value="@Model.Post.Id">
-                    <button class="btn" style="background-color: rgb(7, 55, 99); color: white; border: none; cursor: pointer; padding:  2px 12px 3px 12px; text-decoration: none;">
-                        <i class="icon-like" style="vertical-align: middle !important;"></i>
-                        <span style="vertical-align: text-top;" class="like-it">@Model.Post.NumberOfVotes.GetValueOrDefault(0).ToString("N0")</span>
+                    <button type="submit" class="btn-like-it">
+                        <div class="hand">
+                            <div class="thumb"></div>
+                        </div>
+                        <span>Like<span>d</span></span>
+                        <span class="like-it">@Model.Post.NumberOfVotes.GetValueOrDefault(0).ToString("N0")</span>
                     </button>
                 </form>
             }
@@ -153,9 +192,9 @@
         </script>
 
         <script id="tmpl_comments" type="x-tmpl-mustache">
-            <li class="comment rounded" id="li-comment-2">
+            <li class="comment rounded" id="li-comment-2" style="padding:15px;">
                 <div class="thumb">
-                    <img src="https://i.ibb.co/wS1X4b5/user.png" width="70px" height="70px" alt="{{ownerName}}"/>
+                    <img src="https://i.ibb.co/wS1X4b5/user.png" width="60px" height="60px" alt="{{ownerName}}"/>
                 </div>
                 <div class="details">
                     <h4 class="name">
